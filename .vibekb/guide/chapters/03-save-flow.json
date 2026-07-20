@@ -1,0 +1,65 @@
+{
+  "id": "save-flow",
+  "number": 3,
+  "question": "What happens when an idea is saved?",
+  "title": "What happens when an idea is saved?",
+  "summary": "A form submission is validated in PHP, written to SQLite, reloaded, and shown back on screen.",
+  "scenes": [
+    {
+      "type": "flow",
+      "variant": "save-sequence",
+      "label": "Save path",
+      "description": "What happens from submit to updated screen.",
+      "steps": [
+        {
+          "title": "User submits the form",
+          "text": "The browser sends the idea fields to a PHP entry script."
+        },
+        {
+          "title": "PHP validates the input",
+          "text": "Required fields are checked before anything is written."
+        },
+        {
+          "title": "The idea is written to SQLite",
+          "text": "A prepared statement inserts or updates the idea row."
+        },
+        {
+          "title": "The application loads the saved record",
+          "text": "After a safe redirect, PHP reads the idea back from the database."
+        },
+        {
+          "title": "The updated idea appears on screen",
+          "text": "Templates render the list or detail from the loaded record."
+        }
+      ]
+    },
+    {
+      "type": "developer-detail",
+      "label": "What should a developer know?",
+      "summary": "Keep read and write paths aligned when fields change.",
+      "points": [
+        {
+          "title": "Read and write paths must stay aligned",
+          "text": "If a form can save a field, the SELECT used by list and detail views must return it too."
+        },
+        {
+          "title": "New fields require matching database changes",
+          "text": "A column must exist in SQLite before INSERT/UPDATE and SELECT can use it."
+        },
+        {
+          "title": "Production migrations are currently manual",
+          "text": "Schema SQL is applied by hand on each environment. Local success does not prove production has the column."
+        },
+        {
+          "title": "A successful write does not guarantee the field is included in later reads",
+          "text": "Agents often update the form and forget either the write statement or the read statement. Fix both in one pass."
+        }
+      ],
+      "sources": [
+        { "collection": "debugging", "slug": "fields-disappear" },
+        { "collection": "decisions", "slug": "manual-migrations" },
+        { "collection": "overview", "slug": "how-the-project-works" }
+      ]
+    }
+  ]
+}

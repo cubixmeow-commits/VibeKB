@@ -6,7 +6,10 @@
 # runtime folders, or deployment requirements change. See AGENTS.md.
 #
 # Note: rsync of ./ includes the hidden .vibekb/ knowledge directory required
-# by the PHP publication engine. Do not add --exclude='.vibekb/'.
+# by the Project Guide and technical reference engines (including .vibekb/guide/).
+# Do not add --exclude='.vibekb/'.
+# Runtime paths that must deploy: index.php, assets/, guide/, edition/, .vibekb/
+# docs/ remains excluded (authoring docs only; not required at runtime).
 
 deployment:
   tasks:

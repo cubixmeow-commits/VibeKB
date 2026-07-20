@@ -7,5 +7,5 @@
         <h1>Not found</h1>
         <p class="lede"><?= e($notFoundMessage ?? 'The requested page does not exist in this edition.') ?></p>
     </header>
-    <p><a class="text-link" href="<?= e(edition_url()) ?>">Return to Current Edition</a></p>
+    <p><a class="text-link" href="<?= e(edition_url()) ?>">Return to technical reference</a></p>
 </article>

@@ -1,0 +1,18 @@
+{
+  "title": "SaaS Idea Manager Project Guide",
+  "short_title": "Project Guide",
+  "subtitle": "Give me five minutes and I will explain this project.",
+  "intro": "A guided visual explanation of SaaS Idea Manager—what it is, how someone uses it, and what a developer should know before changing it.",
+  "version": "1",
+  "storage_key": "vibekb-project-guide-saas-idea-manager",
+  "chapters": [
+    "01-what-is-this",
+    "02-user-journey",
+    "03-save-flow",
+    "04-simplicity",
+    "05-system-picture",
+    "06-problems",
+    "07-change-safely",
+    "08-developer-details"
+  ]
+}
