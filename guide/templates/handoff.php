@@ -10,7 +10,7 @@ $handoff = $content->handoff();
 $sessions = $content->sessions();
 ?>
 <article class="view view-doc">
-    <header class="page-head">
+    <header class="page-head reading-column">
         <p class="eyebrow">AI handoff</p>
         <h1>Start here before you change anything</h1>
         <p class="lede">Everything the next human or AI session needs to avoid reconstructing the project incorrectly.</p>
@@ -26,7 +26,7 @@ $sessions = $content->sessions();
                 <?php endif; ?>
                 <span class="muted">Updated <?= h((string) ($handoff['meta']['updated'] ?? 'unknown')) ?></span>
             </div>
-            <div class="prose"><?= $handoff['html'] ?></div>
+            <div class="prose reading-column"><?= $handoff['html'] ?></div>
         </section>
     <?php endif; ?>
 

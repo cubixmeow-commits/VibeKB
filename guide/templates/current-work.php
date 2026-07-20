@@ -9,8 +9,8 @@
 $work = $content->currentWork();
 ?>
 <article class="view view-doc">
-    <header class="page-head">
-        <p class="eyebrow">Current AI work</p>
+    <header class="page-head reading-column">
+        <p class="eyebrow">Current work</p>
         <h1>What AI is changing right now</h1>
         <p class="lede">The active development objective, its impact, and how far along it is — before, during, and after the change.</p>
     </header>
@@ -39,8 +39,8 @@ $work = $content->currentWork();
             </dl>
         </section>
 
-        <section class="doc-section">
-            <div class="prose"><?= $work['html'] ?></div>
+        <section class="doc-section content-section">
+            <div class="prose reading-column"><?= $work['html'] ?></div>
         </section>
     <?php endif; ?>
 

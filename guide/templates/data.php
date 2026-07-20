@@ -22,25 +22,29 @@ foreach ($content->allFunctionality() as $rid => $rec) {
 ksort($storeUse);
 ?>
 <article class="view view-doc">
-    <header class="page-head">
+    <header class="page-head reading-column">
         <p class="eyebrow">Data &amp; storage</p>
         <h1>What the software stores</h1>
         <p class="lede">Where data comes from, where it goes, and what it means to the application.</p>
     </header>
 
     <?php if ($storage !== null): ?>
-        <section class="doc-section"><div class="prose"><?= $storage['html'] ?></div></section>
+        <section class="doc-section content-section"><div class="prose reading-column"><?= $storage['html'] ?></div></section>
     <?php endif; ?>
 
     <?php if ($dataFlow !== null): ?>
-        <section class="doc-section">
-            <h2><?= h((string) ($dataFlow['meta']['title'] ?? 'How data flows')) ?></h2>
-            <div class="prose"><?= $dataFlow['html'] ?></div>
+        <section class="doc-section content-section">
+            <header class="section-intro reading-column">
+                <h2><?= h((string) ($dataFlow['meta']['title'] ?? 'How data flows')) ?></h2>
+            </header>
+            <div class="prose reading-column"><?= $dataFlow['html'] ?></div>
         </section>
     <?php endif; ?>
 
-    <section class="doc-section" aria-labelledby="data-use">
-        <h2 id="data-use">Which functionality touches each store</h2>
+    <section class="doc-section content-section wide-section" aria-labelledby="data-use">
+        <header class="section-intro reading-column">
+            <h2 id="data-use">Which functionality touches each store</h2>
+        </header>
         <?php if ($storeUse === []): ?>
             <p class="muted">No data stores are declared by functionality records.</p>
         <?php else: ?>
