@@ -281,7 +281,7 @@ foreach ($previewStems as $stem) {
                 <p class="hp-lead">
                     Here&#39;s what your project could look like once you actually understand it.
                     Flip through chapters the way you&#39;d open a mysterious weekend build and finally ask: wait—what did we ship?
-                    <span class="hp-note" style="display:block;margin-top:0.5rem;">Inside the guide, the real project name is <?= homepage_e($sampleRealName) ?>—a small PHP and SQLite app.</span>
+                    <span class="hp-sample-aside">Inside the guide, the real project name is <?= homepage_e($sampleRealName) ?>—a small PHP and SQLite app.</span>
                 </p>
 
                 <div class="hp-guide-preview" data-guide-preview>
