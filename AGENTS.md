@@ -16,6 +16,14 @@ documentation generator, code browser, or AI activity log.**
 
 See [PRODUCT.md](./PRODUCT.md) and [CLAUDE.md](./CLAUDE.md).
 
+## The canonical example is SousMeow (real, not bundled)
+
+The `.vibekb/` content models the real **SousMeow** app
+(`cubixmeow-commits/dev-portfolio-v2`, `projects/sousmeow`), derived read-only.
+SousMeow is not bundled into VibeKB and must never be modified. Re-verify any
+functionality claim against the SousMeow source before changing it; do not mark
+something `verified-from-source` you did not trace.
+
 ## Required workflow for meaningful work
 
 1. Understand current functionality (read `.vibekb/` + the handoff).

@@ -125,8 +125,53 @@ live status counts, the active AI task) so the page demonstrates the product
 with its own content. It degrades gracefully if content is missing and links
 deep into the guide.
 
+## SousMeow migration (follow-on pass — done)
+
+The fictional "SaaS Idea Manager" sample was replaced with a **real,
+source-grounded example: SousMeow** (`cubixmeow-commits/dev-portfolio-v2`,
+`projects/sousmeow`), a guided AI-workflow platform. VibeKB remains the product;
+SousMeow is the real application it explains, derived read-only and **not**
+bundled.
+
+**Repository assessment (from source):** SousMeow is a custom PHP 8 MVC (14
+controllers, 11 models, 15 services, both SQLite and MySQL schemas, extensive
+`docs/`). Its defining trait: it **never calls an AI** — it builds prompts, the
+user runs them in their own AI, pastes the answer back, confirms human Quality
+Checks, approves behind an all-checks gate, and exports a Project Kit.
+
+**Records created (25 functionality across 9 groups):** explore-discovery (5),
+accounts-auth (5), projects-progress (3), pantry-inputs (1), cookbook-runner (3),
+artifacts-quality (2), export-kit (1), administration (2), system-deployment (3).
+Plus 6 system docs, ~31 curated important files, 5 decisions, 5 constraints,
+2 assumptions, 4 warnings, 3 discoveries, 1 change, current-work, handoff, and a
+session record.
+
+**Flagship source-trace (Run a Cookbook):** `app/routes.php`, `public/index.php`,
+`app/Core/Database.php`, `app/Controllers/ProjectController.php`,
+`app/Controllers/RunnerController.php`, `app/Services/PromptBuilder.php`,
+`app/Controllers/ExportController.php`, `app/Services/ProjectKit.php`,
+`database/schema.sqlite.sql`.
+
+**Honesty calls:** `reset-password` and `demo-simulation` are `partial`;
+`manage-account`, `seed-and-sync-content`, `demo-simulation`, and a few Model
+queries are `inferred-from-source` (not line-traced). Two discoveries record
+real drift: the README's stale "22 Cookbooks" (source has 31 executable + 2
+preview) and the web-vs-CLI password-reset gap.
+
+**Homepage/guide:** the homepage now carries a "Live software example" card with
+metrics computed from the loaded content (functions, groups, % verified, active
+warnings) and links to the SousMeow guide and repository; the guide overview
+states the read-only provenance. Design language unchanged (cream + teal,
+jQuery widgets).
+
+**Validation:** VibeKB content validation clean (no unresolved errors); `php -l`
+clean; all guide views and every SousMeow functionality detail load; unknown
+views/ids 404; no live SaaS Idea Manager references remain (only historical
+notes in `work/` describing the migration).
+
 ## Recommended next task
 
-**Build the polished showcase example and onboarding experience** — a richer,
-fully-worked sample project and a first-run/onboarding flow, on top of this
-working V1 product and its redesigned homepage.
+**Trace the `inferred-from-source` SousMeow areas directly** —
+`app/Controllers/AccountController.php` (`manage-account`), `scripts/seed.php`
+(`seed-and-sync-content`), and the `Simulation*` services (`demo-simulation`) —
+and promote their verification states (or correct them), then re-run validation.

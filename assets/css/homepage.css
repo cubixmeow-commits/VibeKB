@@ -912,3 +912,29 @@ html:not(.js) .hp-guide-panel {
 .hp-status--warn { background: #f6ead4; color: #8a4b12; }
 .hp-status--danger { background: #f6dede; color: #b02a2a; }
 .hp-status--muted { background: #e6ede6; color: #66736d; }
+
+/* --- Live software example card (hero) --- */
+.hp-example-card {
+  background: var(--hp-surface);
+  border: 1px solid var(--hp-line);
+  border-radius: var(--hp-radius);
+  padding: 1.4rem 1.5rem;
+  box-shadow: var(--hp-shadow);
+  border-top: 5px solid var(--hp-accent);
+}
+.hp-example-label {
+  text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.72rem;
+  font-weight: 700; color: var(--hp-accent-deep); margin: 0 0 0.35rem;
+}
+.hp-example-name { font-size: 1.5rem; margin: 0 0 0.35rem; font-family: var(--hp-display); }
+.hp-example-desc { margin: 0 0 1rem; color: var(--hp-ink-soft); font-size: 0.96rem; }
+.hp-example-metrics {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem 1rem; margin: 0 0 1rem;
+}
+.hp-example-metrics div { display: flex; flex-direction: column; }
+.hp-example-metrics dt { font-size: 1.5rem; font-weight: 700; line-height: 1; color: var(--hp-ink); font-family: var(--hp-display); }
+.hp-example-metrics dd { margin: 0.2rem 0 0; font-size: 0.8rem; color: var(--hp-muted); }
+.hp-example-work { margin: 0 0 1rem; font-size: 0.9rem; color: var(--hp-ink-soft); display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.hp-example-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 0.9rem; }
+.hp-example-note { margin: 0; font-size: 0.82rem; color: var(--hp-muted); border-top: 1px solid var(--hp-line); padding-top: 0.75rem; }
+@media (max-width: 520px) { .hp-example-metrics { grid-template-columns: 1fr 1fr; } }

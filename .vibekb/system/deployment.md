@@ -2,34 +2,44 @@
 id: system-deployment
 type: system
 title: Deployment
-summary: Plain PHP synced to a cPanel subfolder; the SQLite file lives on the server and is never overwritten by a deploy.
+summary: Plain PHP 8 on Hostinger shared hosting; only public/ is web-served, config/storage sit above it, and a CLI seed sets up the catalog and admin.
 updated: 2026-07-16
+verification: verified-from-source
 ---
 
 ## How it ships
 
-The app is plain PHP with no build step. It is deployed by syncing the
-repository into a cPanel public folder (optionally a subfolder such as
-`/ideas/`). Because there is no compilation, what is in the repo is what runs.
+SousMeow is plain PHP 8 plus MySQL or SQLite — no Node, no Composer, no
+workers. The `projects/sousmeow` folder is uploaded and the domain document root
+points at `sousmeow/public`. `app/`, `config/`, `database/`, `scripts/`, and
+`storage/` must sit **above** the document root. `public/.htaccess` routes clean
+URLs through `index.php` (mod_rewrite).
 
-## What must not be overwritten
+## Configure
 
-The live SQLite database sits on the server (for example under `data/`) and is
-**excluded** from the deploy sync so a `--delete` rsync can never remove it.
-This is the single most important deployment rule.
+Copy `config/config.example.php` to `config/config.php` (gitignored) and set:
+`app.env = 'production'`, `app.base_url`, `app.base_path` (if under a
+subdirectory), `session.secure = true`, and the DB driver (SQLite file in
+`storage/`, or MySQL from hPanel). `.env` can override sensitive values;
+environment variables take precedence.
 
-## Configuration on the server
+## Seed
 
-`IDEAS_DB_PATH` is set in the server environment to point at the persistent
-database location, outside the deploy tree if possible.
+`php scripts/seed.php --admin-email you@domain` applies the schema, syncs the
+catalog (upsert by slug — safe to re-run after deploys), and prints the admin's
+temporary password once. `--status` reports catalog health; `--fresh` wipes all
+data; `--reset-password` rotates a password. The script is CLI-only (404 over
+HTTP).
 
-## Subfolder-safe
+## Subfolder-aware
 
-All in-app links are relative and derived from the request path, so the app
-works whether it is served from the web root or a subfolder. No rewrite rules
-are required.
+The front controller strips `app.base_path`, so the app runs at the domain root
+or under a subdirectory (e.g. `/iain/projects/sousmeow/public`). Email links use
+`APP_URL` + `APP_BASE_PATH`; a mismatch causes "page not found" links
+(`scripts/print-url-config.php` diagnoses it).
 
-## The constraint behind all of this
+## The constraints behind this
 
-Everything here follows from the `php82-cpanel-subfolder` constraint: PHP 8.2,
-shared hosting, subfolder deploy, no Node, no build.
+Everything here follows from `php8-shared-hosting`, `public-root-subfolder`,
+`sqlite-and-mysql`, and `cli-only-admin`. Requires PHP 8.1+ with
+`pdo_sqlite`/`pdo_mysql`, `mbstring`, and `zip`.

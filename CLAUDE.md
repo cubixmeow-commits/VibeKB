@@ -31,6 +31,16 @@ See [PRODUCT.md](./PRODUCT.md) for the full definition.
 - `MAINTENANCE.md` — the workflow for changing a feature.
 - `INITIALIZE.md` — the process for adding VibeKB to another repository.
 
+## The canonical example is SousMeow (real, not bundled)
+
+The `.vibekb/` content models **SousMeow**, a real application at
+`cubixmeow-commits/dev-portfolio-v2` (`projects/sousmeow`). It was derived
+**read-only**; SousMeow is **not** bundled into VibeKB, and VibeKB must never
+modify the SousMeow repository. This model can go stale — **re-verify a claim
+against the SousMeow source before changing it**, and never mark something
+`verified-from-source` you did not actually trace. Some records are honestly
+`inferred-from-source` (see `.vibekb/work/handoff.md`).
+
 ## The required workflow for meaningful work
 
 Follow this whenever you change behaviour. (For the example content model it is

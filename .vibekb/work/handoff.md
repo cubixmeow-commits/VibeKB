@@ -2,58 +2,64 @@
 id: handoff
 type: handoff
 title: Current handoff
-summary: Core idea capture, browse, view, and status change are solid. Export needs verification. Do not add auth or auto-migrations.
+summary: SousMeow is now the canonical VibeKB example, source-grounded read-only. The full Run-a-Cookbook loop is verified; a few areas remain inferred and should be traced next.
 updated: 2026-07-20
 verification_state: mixed
 ---
 
-## What the software currently does
+## What the software (SousMeow) currently does
 
-Captures ideas, lists them by priority, opens a full detail view, moves ideas
-through a fixed status lifecycle, and exports everything as CSV. Single
-operator, SQLite, plain PHP on cPanel.
+SousMeow packages proven workflows as Cookbooks of Recipes. A user stocks a
+Pantry, runs each Recipe's prompt in their own AI, pastes the answer back,
+confirms human Quality Checks, approves, and exports a Project Kit. SousMeow
+never calls an AI. It runs as plain PHP 8 on Hostinger shared hosting with
+SQLite (dev) or MySQL (production).
 
 ## Current functionality state
 
-- **Solid (implemented, verified):** create-idea, view-idea,
-  change-idea-status, initialize-database.
-- **Partial:** browse-ideas (list and ordering work; no UI to reorder
-  priority).
-- **Experimental / unverified:** export-ideas (CSV escaping not yet tested).
+- **Verified from source (solid):** discovery (home, marketplace, categories,
+  collections), auth (register, sign-in, verify), the full Runner (run-recipe,
+  build-prompt, paste-response, review-quality-checks, approve-and-version),
+  export-project-kit, admin overview, routing/security, database access.
+- **Partial:** `reset-password` (web flow depends on SMTP the default deploy
+  lacks); `demo-simulation` (paste-example verified; bulk simulation inferred).
+- **Inferred from source:** `manage-account` (AccountController not line-traced),
+  `seed-and-sync-content` (scripts/seed.php not line-traced), the `Router`,
+  and some Model queries.
 
-## Current work
+## Provenance note (important)
 
-Verifying CSV export escaping — see the current-work record. In progress, not
-yet verified.
+This model was derived by reading SousMeow read-only. SousMeow is **not** bundled
+into VibeKB. It can go stale — **re-verify against the SousMeow source
+(`cubixmeow-commits/dev-portfolio-v2`, `projects/sousmeow`) before changing any
+functionality claim.**
 
-## Changes completed
+## Changes completed this pass
 
-The status lifecycle (`added-status-field`) shipped on 2026-07-18 and was
-verified manually.
+- Replaced the entire SaaS Idea Manager sample with the SousMeow model.
+- Homepage live-example + guide overview now feature SousMeow with counts
+  computed from the loaded content.
 
 ## Verification completed
 
-- create/view/status flows: verified manually.
-- Schema migrations: verified from source.
-- Export escaping: **not** verified — this is the open item.
-
-## Incomplete work
-
-- Priority reordering UI (browse-ideas is partial).
-- Automated tests generally (only manual verification exists).
+- Flagship "Run a Cookbook" source-traced end to end (files listed in the
+  session record).
+- VibeKB validation clean; `php -l` clean; all views load; 404s behave.
 
 ## Active warnings
 
-- `read-write-path-drift` — change read and write paths together.
-- `half-auth-not-multiuser` — do not add login without ownership.
-- `no-silent-migrations` — never auto-migrate on a page load.
+- `read-write-path-coupling` — change Pantry/Artifact read and write paths together.
+- `pasted-response-is-untrusted` — keep pasted content escaped, including in kit.html.
+- `password-reset-depends-on-smtp` — web reset silently no-ops without SMTP.
+- `legacy-category-column` — never read `cookbooks.category`.
 
 ## Assumptions requiring verification
 
-- `low-volume-single-writer` — untested above a few hundred ideas.
+- `ai-output-is-markdownish` — confirm output-contract parsing against real responses.
 
 ## Exact next recommended action
 
-Add a test that exports a note containing a comma, a double quote, and a
-newline; fix `public/export.php` if it fails; then update the `export-ideas`
-record to reflect the real status.
+Trace `app/Controllers/AccountController.php`, `scripts/seed.php`, and the
+`Simulation*` services in the SousMeow source, then promote `manage-account`,
+`seed-and-sync-content`, and `demo-simulation` from inferred to verified (or
+correct them). Re-run VibeKB validation afterward.

@@ -1,41 +1,63 @@
 ---
 id: project-identity
 type: project
-title: SaaS Idea Manager
-summary: A single-user PHP + SQLite web app for capturing, reviewing, and prioritising SaaS product ideas.
-one_liner: Capture a SaaS idea in seconds and keep every idea in one prioritised list.
-intended_users: One builder (the operator) exploring product ideas on their own machine or a personal cPanel site.
-primary_outcome: Nothing you thought of gets lost, and you can see which ideas matter most at a glance.
-stack_language: PHP 8.2
-stack_database: SQLite
-stack_hosting: cPanel shared hosting (subfolder deploy)
-stack_frontend: Server-rendered PHP templates, progressive enhancement
-updated: 2026-07-18
+title: SousMeow
+summary: A guided AI cooking companion that packages proven workflows as Cookbooks of step-by-step Recipes — and never calls an AI itself.
+one_liner: Run step-by-step AI workflows using the AI subscription you already have, with human review at every step.
+intended_users: Makers and independent creators who use a chat AI (ChatGPT, Claude, Gemini, etc.) and want reliable, reviewed output instead of a black box.
+primary_outcome: A finished, human-reviewed deliverable — exported as a clean Project Kit (Markdown files, an offline HTML reader, and a manifest).
+stack_language: PHP 8 (custom MVC, no framework)
+stack_database: SQLite (local dev) and MySQL (production) — same schema, two dialects
+stack_hosting: Hostinger shared hosting; document root is public/, app/config/storage sit above it
+stack_frontend: Server-rendered PHP views, progressive-enhancement JS, self-hosted assets
+source_repository: cubixmeow-commits/dev-portfolio-v2 (projects/sousmeow)
+verification: verified-from-source
+updated: 2026-07-20
 ---
 
 ## What the software is
 
-The SaaS Idea Manager is a small web application for one person. It lets the
-operator write down a product idea — a title, some notes, and a status — and
-keeps every idea in a single list ordered by priority. There are no accounts,
-no teams, and no cloud services. It runs as plain PHP against a local SQLite
-file.
+SousMeow is a web app that turns a proven workflow into a **Cookbook** made of
+ordered **Recipes**. You stock a **Pantry** with facts about your project; each
+Recipe turns those facts into a precise prompt; you run that prompt in the AI
+you already pay for; you paste the answer back; you confirm human **Quality
+Checks**; and you approve the result. When every Recipe is approved, the whole
+project exports as a **Project Kit**.
+
+The defining architectural fact: **SousMeow deliberately never calls an AI
+itself.** There are no API keys and no token billing. The product is structure,
+review discipline, immutable version history, and a finished deliverable —
+never a black box.
+
+> Verified from source: `README.md`, `app/routes.php`, `app/Controllers/RunnerController.php`,
+> `app/Services/PromptBuilder.php`, `app/Services/ProjectKit.php`.
 
 ## Who uses it
 
-A single builder. The app assumes one trusted operator and does not implement
-authentication or per-user ownership. See the `single-user-no-auth`
-constraint.
+Independent makers who use a chat AI and want dependable, reviewed output. An
+account is required to run a Cookbook (email verification gates the write
+actions). Admins exist only through the CLI seed script.
 
 ## Current scope
 
-- Create, view, browse, and re-prioritise ideas.
-- Change an idea's status through its lifecycle.
-- Export the full list as CSV.
+- Discovery: a marketing home, a searchable marketplace, categories, and
+  curated collections over a catalog of Cookbooks.
+- The Runner: the core create → pantry → run → review → approve → export loop.
+- Accounts: registration, email verification, login, account settings, data
+  export, and account deletion.
+- A portfolio **Demo Mode / simulation** that can populate hundreds of
+  simulated creators and a public activity dashboard — all clearly labelled.
 
-## Explicit non-goals
+## Explicit non-goals (v1, from the source)
 
-- Multiple users or authentication.
-- File uploads or rich media.
-- Real-time collaboration or an external API.
-- A JavaScript build step or SPA front end.
+- No AI API calls, no API keys, no token markup.
+- No payment SDK or checkout (marketplace previews are honest "coming soon").
+- No Node build step, no Composer, no Docker, no background workers.
+- Cookbooks are seeded from versioned files, not authored through the web UI.
+
+## About this VibeKB model
+
+SousMeow is the **real application** VibeKB is explaining here. It is not
+bundled into VibeKB. Everything below was derived by reading the SousMeow
+source read-only. File paths are relative to `projects/sousmeow/` in the
+[source repository](https://github.com/cubixmeow-commits/dev-portfolio-v2).

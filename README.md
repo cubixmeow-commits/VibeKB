@@ -34,8 +34,13 @@ Overview · Functionality Index · Functionality Detail · How It Works ·
 Data & Storage · Files That Matter · Current AI Work · Changes · Why It Works
 This Way · AI Handoff · Reference.
 
-The included `.vibekb/` content models a small example application (a SaaS Idea
-Manager) so every view is demonstrated with realistic, connected content.
+The included `.vibekb/` content models a **real** application — **SousMeow**, a
+guided AI-workflow platform — so every view is demonstrated with realistic,
+source-grounded content. SousMeow is the canonical example VibeKB explains; it
+is **not** bundled into VibeKB. The model was derived read-only from the
+[SousMeow source](https://github.com/cubixmeow-commits/dev-portfolio-v2)
+(`projects/sousmeow`) and can go stale — future agents must re-verify against
+that source before changing any functionality claim.
 
 ## Run locally
 
@@ -99,8 +104,11 @@ as the software changes — they are not an isolated archive.
 
 ## Current V1 limitations
 
-- The example content models a documented sample app; its source files are
-  described, not shipped in this repo.
+- The example models the real SousMeow app read-only; SousMeow's source is not
+  shipped in this repo, and the model can drift from it over time.
+- A few SousMeow areas are `inferred-from-source` (e.g. account settings, the
+  seed script, the bulk simulation) pending a direct source trace — see the
+  handoff.
 - Extraction is not automatic — records are written and maintained by you and
   your coding agent following the workflow in [MAINTENANCE.md](./MAINTENANCE.md).
 - The Markdown renderer supports a pragmatic subset (headings, lists, tables,

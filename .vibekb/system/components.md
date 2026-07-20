@@ -2,28 +2,31 @@
 id: system-components
 type: system
 title: Major components
-summary: Controllers, domain service, repository, database, and templates — and what each is responsible for.
-updated: 2026-07-10
+summary: A custom PHP MVC — front controller, Router, Core services, Controllers, Models, Services, and server-rendered Views — with one PDO data path.
+updated: 2026-07-16
+verification: verified-from-source
 ---
 
 ## The parts and their jobs
 
 | Component | Responsibility |
 |-----------|----------------|
-| `public/*.php` controllers | One per page/action: list, view, create, update status, export |
-| `src/IdeaService.php` | Validation and application rules (valid idea, allowed statuses) |
-| `src/IdeaRepository.php` | All SQL for the `ideas` table |
-| `src/Database.php` | Opens the SQLite file, configures PDO, returns the shared connection |
-| `migrations/*.sql` + `bin/migrate.php` | Explicit, ordered schema changes |
-| `templates/*.php` | Server-rendered HTML partials |
-| `src/config.php` | Reads `IDEAS_DB_PATH` and other environment configuration |
+| `public/index.php` | Front controller: security headers, CSP, CSRF gate, dispatch |
+| `app/Core/Router.php` | Route table and dispatch (`app/routes.php` defines routes) |
+| `app/Core/` | Framework: `Auth`, `Csrf`, `Database`, `Config`, `Env`, `Session`, `Flash`, `RateLimiter`, `Mailer`, `View` |
+| `app/Controllers/` | One class per area (Marketing, Marketplace, Category, Collection, Auth, Account, Kitchen, Project, Runner, Export, Admin, Legal, Philosophy) |
+| `app/Models/` | Table access: `Cookbook`, `Recipe`, `PantryField`, `Project`, `Artifact`, `Category`, `Collection`, `Export`, `User`, `CookbookStage`, `PasswordReset` |
+| `app/Services/` | Logic: `PromptBuilder`, `ResponseParser`, `OutputContract`, `ProjectKit`, `SafeText`, `CollectionResolver`, `SiteStats`, `Simulation*`, `Accent`, mailers |
+| `app/Views/` | Server-rendered PHP templates under a shared `layout/app.php` |
+| `database/`, `scripts/seed.php` | Two schema dialects, versioned seeds, the CLI seeder |
 
 ## Where behaviour lives
 
-- **Validation** is only in the service — controllers do not duplicate it.
-- **SQL** is only in the repository — controllers never write queries.
-- **Connection details** are only in `Database.php` — nothing else opens the
-  file.
+- **Prompt assembly** is only in `PromptBuilder`.
+- **Review parsing** is only in `ResponseParser` / `OutputContract`.
+- **SQL** lives in Models; **the connection** only in `Core/Database`.
+- **CSRF** is one gate in the front controller; **auth** is `Core/Auth`.
+- **Escaping** of untrusted (pasted) content is `Services/SafeText`.
 
-Keeping these boundaries is what keeps the read and write paths aligned. When
-they blur, the `read-write-path-drift` warning becomes a real bug.
+Keeping these boundaries is what keeps the read and write paths aligned; when
+they blur, the `read-write-path-coupling` warning becomes a real bug.

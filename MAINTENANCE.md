@@ -4,52 +4,62 @@ This is the complete workflow for a meaningful change. It keeps the living
 software model accurate as the software evolves. Follow every step; skipping
 verification or the model update is how VibeKB drifts.
 
-Worked example: **adding a `priority` reorder UI to the sample app.**
+The current example model is **SousMeow** — a real application derived read-only
+from `cubixmeow-commits/dev-portfolio-v2` (`projects/sousmeow`). Because the
+example is a real, separate app, **any change to a functionality claim must be
+re-verified against the SousMeow source first.**
+
+Worked example: **promoting `manage-account` from `inferred-from-source` to
+`verified-from-source`.**
 
 ## 1. Describe current behavior
 
-Read the affected functionality record(s) and be able to state what the
-software does today. For the example: `browse-ideas` currently sorts by
-`priority ASC` but has **no UI to change priority after creation** — that's why
-its status is `partial`.
+Read the affected functionality record(s) and be able to state what the software
+does today. For the example: `manage-account` is currently
+`inferred-from-source` — the routes and views confirm the surface, but
+`app/Controllers/AccountController.php` has not been traced line by line.
 
 ## 2. Record the requested change
 
 Update `.vibekb/work/current.md`:
-- requested outcome ("let me reorder ideas from the list"),
-- current behaviour,
-- proposed behaviour,
-- affected functionality (`browse-ideas`, maybe a new `reorder-ideas`),
-- expected files,
-- data impact (writes `priority`),
-- risks,
-- verification plan.
+- requested outcome ("verify the account settings flows against source"),
+- current behaviour (inferred),
+- proposed behaviour (verified, or corrected if the trace disagrees),
+- affected functionality (`manage-account`),
+- expected files (`AccountController.php`, `AccountDataExport.php`),
+- data impact (none — a verification pass),
+- risks (the trace may reveal the record overstates behaviour),
+- verification plan (read the controller; exercise the flows if runnable).
 
 ## 3. Identify affected functionality
 
-List every functionality record the change touches, and check `depends_on` /
-derived dependents. Reordering writes `priority`, which `browse-ideas` reads —
-so both are in scope. Check active warnings: `read-write-path-drift` applies.
+List every record the change touches and check `depends_on` / derived
+dependents. For a real code change (not just verification), check active
+warnings — e.g. `read-write-path-coupling` for anything touching Pantry or
+Artifact fields.
 
 ## 4. Implement
 
-Make the code changes, respecting constraints (PHP 8.2, no build step,
-single-user) and warnings (change read and write paths together).
+For SousMeow this usually means **reading the source**, not editing it — VibeKB
+never modifies the example app. If you are documenting a real code change the
+SousMeow team made, respect its constraints (PHP 8, `public/` root, two schema
+dialects) and warnings.
 
 ## 5. Verify
 
-Exercise the real behaviour: reorder ideas, reload the list, confirm order
-persists. Record what you tested and how. Set the honest verification state
-(`verified-manually` or `verified-by-test`). If something is untested, say so.
+Trace the actual source (and exercise the behaviour where a local SousMeow
+checkout is runnable). Record what you read/tested. Set the honest verification
+state (`verified-from-source`, `verified-manually`, etc.). If something is still
+untested, say so — do not upgrade a state you did not confirm.
 
 ## 6. Update functionality records
 
-- Update `browse-ideas`: change status from `partial` to `implemented` **only
-  if** reordering now exists and is verified; update the current-behavior,
-  flow, data-used, and safe-to-change sections.
-- If you added `reorder-ideas`, create its record with all sections and add it
-  to `functionality/index.json`.
-- Update `files/important-files.json` for any new or changed file.
+- Update `manage-account`: change `verification` to `verified-from-source`
+  **only if** you actually traced `AccountController`; fix the body if the trace
+  disagreed.
+- If you discovered a new behaviour, create its record and add it to
+  `functionality/index.json`.
+- Update `files/important-files.json` provenance for any file you traced.
 
 ## 7. Update repository memory
 

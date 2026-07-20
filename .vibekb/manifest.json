@@ -3,9 +3,12 @@
   "content_model": "functionality-first",
   "updated": "2026-07-20",
   "example_project": {
-    "name": "SaaS Idea Manager",
+    "name": "SousMeow",
     "is_sample": true,
-    "note": "This .vibekb content models a small, realistic example application so every VibeKB V1 view can be demonstrated. The example app's source files (public/, src/, migrations/) are described, not shipped in this repository. Provenance fields reflect how each fact would be established for a real project."
+    "source_repository": "https://github.com/cubixmeow-commits/dev-portfolio-v2",
+    "source_subpath": "projects/sousmeow",
+    "source_commit": "c1617ab (2026-07-16)",
+    "note": "SousMeow is a real application. This VibeKB model was derived by reading the SousMeow source read-only; SousMeow is NOT bundled into VibeKB. File paths in these records are relative to projects/sousmeow/ in the source repository. This model can go stale if SousMeow changes — future agents must re-verify against the source before changing functionality claims."
   },
   "structure": {
     "project": "project/ — identity, intent, current state, constraints",
