@@ -114,9 +114,19 @@ Reference view; a dev-only banner links to them.
 - Extraction is manual (agent-maintained), by design for V1.
 - The Markdown renderer is a pragmatic subset, not full CommonMark.
 
+## Homepage redesign (follow-on pass — done)
+
+With V1 proven, the homepage was redesigned in the same clean visual language to
+represent the actual product. It now leads with the locked product line, frames
+the problem honestly and briefly, explains the functionality-first living
+software model, lists the eleven real views, and — importantly — renders **real
+functionality records loaded from `.vibekb/`** (status + verification badges,
+live status counts, the active AI task) so the page demonstrates the product
+with its own content. It degrades gracefully if content is missing and links
+deep into the guide.
+
 ## Recommended next task
 
-**Redesign the VibeKB homepage and final example experience around the working
-V1 product** — now that the product model is proven, build the marketing
-homepage, the polished showcase example, and the onboarding experience on top of
-this foundation.
+**Build the polished showcase example and onboarding experience** — a richer,
+fully-worked sample project and a first-run/onboarding flow, on top of this
+working V1 product and its redesigned homepage.
