@@ -1,8 +1,15 @@
 ---
+# cPanel Git Version Control deployment configuration for VibeKB
+# Destination: /home/iainmcok/public_html/vibekb/
+#
+# Review and update this file whenever the repository structure, build output,
+# runtime folders, or deployment requirements change. See AGENTS.md.
+#
+# Note: rsync of ./ includes the hidden .vibekb/ knowledge directory required
+# by the PHP publication engine. Do not add --exclude='.vibekb/'.
+
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/iainmcok/public_html/vibekb
-    - /bin/mkdir -p $DEPLOYPATH
-    - /bin/cp -R * $DEPLOYPATH/
-    - /bin/cp -R .vibekb $DEPLOYPATH/
-    - /bin/cp -f .htaccess $DEPLOYPATH/ 2>/dev/null || true
+    - export DEPLOYPATH=/home/iainmcok/public_html/vibekb/
+    - /bin/mkdir -p "$DEPLOYPATH"
+    - /bin/rsync -av --delete --exclude='.git/' --exclude='.github/' --exclude='.cursor/' --exclude='.vscode/' --exclude='.idea/' --exclude='.cpanel.yml' --exclude='.env' --exclude='.env.*' --exclude='node_modules/' --exclude='vendor/' --exclude='tests/' --exclude='test/' --exclude='__tests__/' --exclude='docs/' --exclude='coverage/' --exclude='logs/' --exclude='tmp/' --exclude='temp/' --exclude='*.log' --exclude='.DS_Store' --exclude='Thumbs.db' --exclude='.gitignore' --exclude='.gitattributes' --exclude='.editorconfig' --exclude='.eslint*' --exclude='.prettier*' --exclude='.npmrc' --exclude='.nvmrc' --exclude='.phpunit*' --exclude='phpunit.xml*' --exclude='composer.json' --exclude='composer.lock' --exclude='package.json' --exclude='package-lock.json' --exclude='yarn.lock' --exclude='pnpm-lock.yaml' --exclude='tsconfig*.json' --exclude='vite.config.*' --exclude='webpack.config.*' --exclude='rollup.config.*' --exclude='jest.config.*' --exclude='Dockerfile*' --exclude='docker-compose*.yml' --exclude='docker-compose*.yaml' --exclude='Makefile' --exclude='AGENTS.md' --exclude='DEPLOYMENT.md' --exclude='CONTRIBUTING.md' --exclude='.well-known/' --exclude='uploads/' --exclude='upload/' --exclude='media/' --exclude='files/' --exclude='storage/' --exclude='sessions/' --exclude='session/' --exclude='cache/' --exclude='data/' --exclude='database/' --exclude='databases/' --exclude='sqlite/' --exclude='*.sqlite' --exclude='*.sqlite3' --exclude='*.db' --exclude='config.local.php' --exclude='config.production.php' --exclude='local.config.php' --exclude='wp-config.php' --exclude='*.bak' --exclude='*.swp' --exclude='*~' ./ "$DEPLOYPATH"

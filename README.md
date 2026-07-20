@@ -47,4 +47,4 @@ PHP templates under `edition/` read these files and render the publication. Do n
 
 Production target: `/home/iainmcok/public_html/vibekb/`
 
-See `.cpanel.yml`. The hidden `.vibekb` directory is copied explicitly because shell globs skip dotfiles.
+See `.cpanel.yml` and [DEPLOYMENT.md](./DEPLOYMENT.md). The rsync deploy includes the hidden `.vibekb/` knowledge directory required by the edition engine.
