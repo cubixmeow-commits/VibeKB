@@ -1,0 +1,114 @@
+{
+  "files": [
+    {
+      "path": "public/index.php",
+      "purpose": "App entry point and the ideas list page.",
+      "functionality": ["browse-ideas"],
+      "runs_when": "Every time the app home page is opened.",
+      "depended_on_by": ["Every visitor — this is the front door."],
+      "depends_on": ["src/IdeaRepository.php", "src/Database.php", "templates/ideas-list.php"],
+      "safety": "moderate-impact",
+      "test_after_change": "Load the list with zero, one, and many ideas; confirm ordering and the empty state.",
+      "provenance": "verified-from-source"
+    },
+    {
+      "path": "public/create-idea.php",
+      "purpose": "Renders the New idea form and handles the submit.",
+      "functionality": ["create-idea"],
+      "runs_when": "Opening the New idea form and submitting it.",
+      "depended_on_by": ["Browse ideas (shows what this writes)"],
+      "depends_on": ["src/IdeaService.php", "src/IdeaRepository.php"],
+      "safety": "understand-dependencies-first",
+      "test_after_change": "Create an idea with and without a title; confirm validation and that it appears in the list.",
+      "provenance": "verified-from-source"
+    },
+    {
+      "path": "public/update-status.php",
+      "purpose": "Handles a status-change POST for one idea.",
+      "functionality": ["change-idea-status"],
+      "runs_when": "The operator changes an idea's status.",
+      "depended_on_by": ["View an idea", "Browse ideas"],
+      "depends_on": ["src/IdeaService.php", "src/IdeaRepository.php"],
+      "safety": "understand-dependencies-first",
+      "test_after_change": "Transition an idea through each allowed status; confirm invalid values are rejected.",
+      "provenance": "verified-manually"
+    },
+    {
+      "path": "public/export.php",
+      "purpose": "Streams every idea as a downloadable CSV.",
+      "functionality": ["export-ideas"],
+      "runs_when": "The operator clicks Export CSV.",
+      "depended_on_by": [],
+      "depends_on": ["src/IdeaRepository.php"],
+      "safety": "moderate-impact",
+      "test_after_change": "Export ideas whose notes contain commas, quotes, and newlines; open the file in a spreadsheet.",
+      "provenance": "not-verified"
+    },
+    {
+      "path": "src/IdeaService.php",
+      "purpose": "Validation and application rules for ideas (valid idea, allowed status set).",
+      "functionality": ["create-idea", "change-idea-status"],
+      "runs_when": "On every create and status change.",
+      "depended_on_by": ["public/create-idea.php", "public/update-status.php"],
+      "depends_on": [],
+      "safety": "high-impact",
+      "test_after_change": "Re-run create and status-change flows; confirm both valid and invalid inputs behave.",
+      "provenance": "verified-from-source"
+    },
+    {
+      "path": "src/IdeaRepository.php",
+      "purpose": "All SQL for the ideas table: insert, find, all, updateStatus.",
+      "functionality": ["create-idea", "browse-ideas", "view-idea", "change-idea-status", "export-ideas"],
+      "runs_when": "On every read or write of an idea.",
+      "depended_on_by": ["All idea controllers"],
+      "depends_on": ["src/Database.php"],
+      "safety": "high-impact",
+      "test_after_change": "Exercise list, detail, create, status change, and export; watch for read/write field drift.",
+      "provenance": "verified-from-source"
+    },
+    {
+      "path": "src/Database.php",
+      "purpose": "Opens the SQLite file and returns the shared PDO connection.",
+      "functionality": ["initialize-database"],
+      "runs_when": "The first database access in a request.",
+      "depended_on_by": ["src/IdeaRepository.php"],
+      "depends_on": ["src/config.php"],
+      "safety": "high-impact",
+      "test_after_change": "Confirm the app connects with IDEAS_DB_PATH set and unset; check file creation on a fresh path.",
+      "provenance": "verified-from-source"
+    },
+    {
+      "path": "bin/migrate.php",
+      "purpose": "Applies unapplied numbered SQL migrations in order and records them.",
+      "functionality": ["initialize-database"],
+      "runs_when": "Run by the operator on purpose; never on a page load.",
+      "depended_on_by": ["The schema every feature reads/writes"],
+      "depends_on": ["migrations/*.sql", "src/Database.php"],
+      "safety": "high-impact",
+      "test_after_change": "Run against a fresh and an up-to-date database; confirm idempotence.",
+      "provenance": "verified-from-source"
+    },
+    {
+      "path": "templates/ideas-list.php",
+      "purpose": "Renders the list rows and the empty state.",
+      "functionality": ["browse-ideas"],
+      "runs_when": "On the list page.",
+      "depended_on_by": ["public/index.php"],
+      "depends_on": [],
+      "safety": "presentation-only",
+      "test_after_change": "Visually check rows and empty state at a narrow width.",
+      "provenance": "verified-from-source"
+    },
+    {
+      "path": "src/config.php",
+      "purpose": "Reads environment configuration, including IDEAS_DB_PATH and the dev/prod error mode.",
+      "functionality": ["initialize-database", "create-idea", "browse-ideas"],
+      "runs_when": "Early in every request.",
+      "depended_on_by": ["src/Database.php", "all controllers"],
+      "depends_on": [],
+      "safety": "understand-dependencies-first",
+      "test_after_change": "Confirm the app still finds the database and that production hides error detail.",
+      "provenance": "verified-from-source"
+    }
+  ]
+}
