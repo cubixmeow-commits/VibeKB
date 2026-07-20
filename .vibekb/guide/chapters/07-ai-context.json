@@ -1,0 +1,148 @@
+{
+  "id": "ai-context",
+  "number": 7,
+  "question": "What would another AI session need to know?",
+  "title": "AI context",
+  "summary": "Handoff notes written for the next Cursor session—not for humans reading documentation for fun.",
+  "scenes": [
+    {
+      "type": "statement",
+      "headline": "Future AI reads this before it edits your repo.",
+      "body": "Every coding agent starts cold. Without repository context it invents auth, swaps databases, and adds fields without migrations. These notes are the antidote—written once, reused every session."
+    },
+    {
+      "type": "ai-loop",
+      "label": "Status field session — how capture worked",
+      "description": "A real pattern from month 1. The implementation is code; the memory is in .vibekb/sessions/.",
+      "insight": "The session summary took five minutes. Re-explaining the same rejection every month would take hours.",
+      "steps": [
+        {
+          "actor": "Human",
+          "title": "Requests status field",
+          "text": "“Add draft, active, archived—keep it simple.”",
+          "example": ""
+        },
+        {
+          "actor": "AI",
+          "title": "Implements migration + UI",
+          "text": "Adds column, form select, list filter in one pass.",
+          "example": ""
+        },
+        {
+          "actor": "Human",
+          "title": "Captures session summary",
+          "text": "Records rejected Kanban and auto-archive in sessions/status-field-session.md.",
+          "example": "Rejected: automatic status transitions from date fields."
+        },
+        {
+          "actor": "VibeKB",
+          "title": "Updates guide + feature timeline",
+          "text": "Chapter 4 and feature-timeline/status-field.md linked.",
+          "example": ""
+        },
+        {
+          "actor": "AI",
+          "title": "Next session reads guide first",
+          "text": "Agent does not add a fourth status or workflow engine without a new decision.",
+          "example": "handoff/ai-session-start.md is the entry point."
+        }
+      ]
+    },
+    {
+      "type": "developer-detail",
+      "label": "AI session start checklist",
+      "summary": "Paste or point your agent here at the start of every session.",
+      "points": [
+        {
+          "title": "Read boundaries",
+          "text": "decisions/ and warnings/ before suggesting architecture changes."
+        },
+        {
+          "title": "Read alignment",
+          "text": "Five-part save path if touching forms or schema."
+        },
+        {
+          "title": "Update after",
+          "text": "Guide chapter, decision, or debugging file if intent changed."
+        },
+        {
+          "title": "Do not",
+          "text": "Add auth, uploads, or DB engine switches without a recorded decision."
+        }
+      ],
+      "sources": [
+        {
+          "collection": "handoff",
+          "slug": "ai-session-start"
+        }
+      ]
+    },
+    {
+      "type": "interactive-cards",
+      "label": "Session summaries on disk",
+      "cards": [
+        {
+          "id": "status-session",
+          "title": "Status field session",
+          "teaser": "What was built and what was rejected in one Cursor afternoon.",
+          "points": [
+            "Three states only",
+            "Migration + forms same change set",
+            "Link to feature timeline"
+          ],
+          "sources": [
+            {
+              "collection": "sessions",
+              "slug": "status-field-session"
+            }
+          ]
+        },
+        {
+          "id": "sqlite-session",
+          "title": "SQLite reconsideration",
+          "teaser": "PostgreSQL suggestion deflected with existing decision.",
+          "points": [
+            "Export does not require engine change",
+            "Preconditions for future switch documented"
+          ],
+          "sources": [
+            {
+              "collection": "sessions",
+              "slug": "sqlite-reconsideration"
+            }
+          ]
+        },
+        {
+          "id": "blank-session",
+          "title": "Blank list debug",
+          "teaser": "Deploy exclusion became permanent knowledge.",
+          "points": [
+            "Ordered checks now in debugging guide",
+            "rsync exclude is intentional"
+          ],
+          "sources": [
+            {
+              "collection": "sessions",
+              "slug": "blank-list-debug"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "headline": "This is what day-one VibeKB buys you.",
+      "body": "Not prettier docs—a shorter distance between “AI generated it” and “I know why it is that way.” Initialize on the empty repo so month six feels like this instead of archaeology.",
+      "facts": [
+        {
+          "label": "Human handoff",
+          "text": "new-operator-onboarding.md for people joining mid-stream."
+        },
+        {
+          "label": "AI handoff",
+          "text": "ai-session-start.md for every new agent session."
+        }
+      ]
+    }
+  ]
+}

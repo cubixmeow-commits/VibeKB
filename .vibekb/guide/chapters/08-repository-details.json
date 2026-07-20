@@ -1,0 +1,147 @@
+{
+  "id": "repository-details",
+  "number": 8,
+  "question": "Where does everything live?",
+  "title": "Repository details",
+  "summary": "The map—only after you understand why. Technical depth lives in the edition; collective memory lives in .vibekb/.",
+  "scenes": [
+    {
+      "type": "statement",
+      "headline": "You understand the why. Here is the where.",
+      "body": "This chapter is intentionally last. Files matter after intent. The edition engine holds module-level depth; this guide holds the reasoning you need before opening either."
+    },
+    {
+      "type": "concept-map",
+      "label": "Repository layout",
+      "description": "Two presentation engines, one knowledge root.",
+      "layers": [
+        {
+          "id": "vibekb",
+          "title": ".vibekb/",
+          "text": "Knowledge root",
+          "detail": "project.json, decisions/, sessions/, timeline/, handoff/, guide/ chapters. Source of truth—not the website."
+        },
+        {
+          "id": "guide-engine",
+          "title": "guide/",
+          "text": "Project Guide engine",
+          "detail": "PHP + jQuery presentation of guide JSON. What you are reading now."
+        },
+        {
+          "id": "edition-engine",
+          "title": "edition/",
+          "text": "Technical reference",
+          "detail": "Deeper module articles for when you need implementation detail."
+        },
+        {
+          "id": "app",
+          "title": "Application code",
+          "text": "ideas/, includes/, templates/",
+          "detail": "SaaS Idea Manager itself—the artifact the knowledge describes."
+        }
+      ]
+    },
+    {
+      "type": "developer-detail",
+      "label": "Where to begin editing",
+      "variant": "entry-points",
+      "entries": [
+        {
+          "id": "new-field",
+          "question": "I need to add a field to ideas",
+          "points": [
+            {
+              "title": "Start",
+              "text": "lessons-learned/schema-before-code.md"
+            },
+            {
+              "title": "Then",
+              "text": "Migration, write path, read path, forms—in one change set"
+            },
+            {
+              "title": "Update",
+              "text": "Guide chapter 6 and relevant module in edition"
+            }
+          ],
+          "sources": [
+            {
+              "collection": "modules",
+              "slug": "ideas-crud"
+            }
+          ]
+        },
+        {
+          "id": "new-feature",
+          "question": "I need a new feature",
+          "points": [
+            {
+              "title": "Start",
+              "text": "Chapter 4 feature reasoning—does it pass the one-operator test?"
+            },
+            {
+              "title": "Capture",
+              "text": "feature-timeline/ entry and session summary when shipped"
+            }
+          ]
+        },
+        {
+          "id": "deploy",
+          "question": "I need to deploy",
+          "points": [
+            {
+              "title": "Remember",
+              "text": "SQLite file is persistent on host; not rsynced from repo"
+            },
+            {
+              "title": "Check",
+              "text": "debugging/blank-ideas-list.md if list empty after deploy"
+            }
+          ],
+          "sources": [
+            {
+              "collection": "debugging",
+              "slug": "blank-ideas-list"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "reference-links",
+      "label": "Knowledge collections",
+      "links": [
+        {
+          "collection": "overview",
+          "slug": "read-this-first"
+        },
+        {
+          "collection": "mental-models",
+          "slug": "ideas-as-records"
+        },
+        {
+          "collection": "modules",
+          "slug": "database-layer"
+        },
+        {
+          "collection": "handoff",
+          "slug": "new-operator-onboarding"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "headline": "Initialize VibeKB on day one of your next project.",
+      "body": "This sample is what six months of AI-assisted building looks like when understanding keeps pace with generation. The code is ordinary. The habit is not.",
+      "facts": [
+        {
+          "label": "You just walked through",
+          "text": "Overview → timeline → architecture → features → decisions → developer notes → AI context → repository."
+        },
+        {
+          "label": "Imagine",
+          "text": "Every repository you build with Cursor starting like this."
+        }
+      ]
+    }
+  ]
+}

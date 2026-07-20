@@ -1,0 +1,147 @@
+{
+  "id": "architecture-evolution",
+  "number": 3,
+  "question": "Why is the architecture structured this way?",
+  "title": "Architecture evolution",
+  "summary": "A deliberately boring stack—documented at each stage so “simplify” and “add auth” prompts do not erase intent.",
+  "scenes": [
+    {
+      "type": "evolution",
+      "label": "Architecture snapshots",
+      "description": "The system did not jump to its current shape. Each snapshot reflects what existed—and what was recorded—at that time.",
+      "snapshots": [
+        {
+          "id": "v0",
+          "version": "Day 1",
+          "title": "Intent only",
+          "body": "PHP on cPanel, SQLite file, server-rendered templates. No framework. Documented before implementation so AI sessions did not import Laravel by default.",
+          "changes": [
+            "Single process, single operator",
+            "Database as a file beside the app",
+            "No build step on shared hosting"
+          ],
+          "note": "This snapshot exists in project.json before the ideas table was created."
+        },
+        {
+          "id": "v1",
+          "version": "Week 1",
+          "title": "Thin vertical slice",
+          "body": "One ideas module: list, create, edit, delete. Includes layer for DB, simple validation, PHP templates. No service container, no ORM.",
+          "changes": [
+            "includes/db.php owns connection path",
+            "ideas/ directory as CRUD entry",
+            "Manual SQL migrations in repo"
+          ]
+        },
+        {
+          "id": "v2",
+          "version": "Month 2",
+          "title": "Fields grow, boundaries hold",
+          "body": "Status and sort_order added. Architecture unchanged: still one operator, still SQLite, still no auth layer. Boundaries reinforced in warnings/ not in code comments alone.",
+          "changes": [
+            "Schema migrations documented per feature",
+            "List query owns sort order",
+            "Export discussed—not built—without DB switch"
+          ],
+          "note": "Originally we planned MySQL for “serious” hosting. We stayed on SQLite because the operator count did not change."
+        },
+        {
+          "id": "v3",
+          "version": "Month 6",
+          "title": "Stable mental model",
+          "body": "Three layers: templates (views), ideas handlers (CRUD), database file (truth). Edition documents modules; guide explains why the layers must not collapse.",
+          "changes": [
+            "Debugging guides for deploy vs local drift",
+            "Handoff notes for AI sessions",
+            "Risks tracked as first-class knowledge"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "concept-map",
+      "label": "Current system picture",
+      "description": "Select a layer. Each explanation includes what breaks if you treat this as optional.",
+      "layers": [
+        {
+          "id": "operator",
+          "title": "One operator",
+          "text": "No accounts, no roles",
+          "detail": "Authentication was rejected for v1—not deferred. Adding auth halfway is a documented trap. See decisions/no-authentication.md."
+        },
+        {
+          "id": "templates",
+          "title": "PHP templates",
+          "text": "Server-rendered HTML",
+          "detail": "No SPA. Keeps deploy simple on cPanel. AI must not introduce a build pipeline without a recorded decision."
+        },
+        {
+          "id": "handlers",
+          "title": "Ideas handlers",
+          "text": "CRUD + validation",
+          "detail": "Form names, validation, write, and read must stay aligned. This invariant saved the project twice."
+        },
+        {
+          "id": "sqlite",
+          "title": "SQLite file",
+          "text": "data/ideas.sqlite",
+          "detail": "Not deployed via rsync—by design. Production DB is persistent on the host. Blank list debugging starts here."
+        }
+      ]
+    },
+    {
+      "type": "interactive-cards",
+      "label": "Assumptions still in force",
+      "cards": [
+        {
+          "id": "cpanel",
+          "title": "cPanel shared hosting",
+          "teaser": "No Node build, no background workers.",
+          "points": [
+            "PHP 8.2 and SQLite extension available",
+            "Deploy is rsync + Git pull",
+            "File permissions on SQLite matter"
+          ],
+          "sources": [
+            {
+              "collection": "assumptions",
+              "slug": "cpanel-php-sqlite"
+            }
+          ]
+        },
+        {
+          "id": "one-op",
+          "title": "Single operator",
+          "teaser": "Collaboration is out of scope until explicitly chosen.",
+          "points": [
+            "No user table, no sessions",
+            "Concurrency not a design goal",
+            "Multi-user requires a new decision set"
+          ],
+          "sources": [
+            {
+              "collection": "assumptions",
+              "slug": "one-operator"
+            }
+          ]
+        },
+        {
+          "id": "plain-text",
+          "title": "Plain text ideas",
+          "teaser": "No uploads, no rich media.",
+          "points": [
+            "Notes are text fields only",
+            "Attachments would change hosting and security model",
+            "Rejected in week 1 and recorded"
+          ],
+          "sources": [
+            {
+              "collection": "assumptions",
+              "slug": "plain-text-ideas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
