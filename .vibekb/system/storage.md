@@ -2,42 +2,45 @@
 id: system-storage
 type: system
 title: Storage
-summary: One SQLite file holds every idea; a migrations table tracks schema versions. No other persistence.
+summary: One relational database (SQLite dev / MySQL prod) holds the catalog and user work; export zips live on disk outside the web root. No other persistence.
 updated: 2026-07-16
+verification: verified-from-source
 ---
 
 ## What is stored, and where
 
-Everything lives in a single SQLite file selected by `IDEAS_DB_PATH`
-(default `data/ideas.sqlite`). There is no session store, no cache, and no
-external storage.
+All structured data is in one database — SQLite (`storage/sousmeow.sqlite`) in
+dev or MySQL in production, same schema. Export zips are files in
+`storage/exports/` (outside the web root). Sessions use PHP's session store.
+There is no external storage.
 
-## The `ideas` table
+## The catalog (seeded, read-mostly)
 
-| Column | Meaning | Written by | Read by |
-|--------|---------|------------|---------|
-| `id` | Primary key | database | View, Change status |
-| `title` | Short idea name | Create | Browse, View, Export |
-| `notes` | Free-text detail | Create | View, Export |
-| `status` | Lifecycle value (`inbox` … `parked`) | Create, Change status | Browse, View, Export |
-| `priority` | Integer sort key (lower = higher priority) | Create | Browse |
-| `created_at` | Creation timestamp | Create | Browse, View, Export |
-| `updated_at` | Last change timestamp | Create, Change status | View |
+| Table | Meaning |
+|-------|---------|
+| `cookbooks` | Workflows: slug, status, `is_executable`, difficulty, category |
+| `cookbook_stages`, `recipes` | Ordered steps, prompts, output contracts |
+| `recipe_checks` | Per-recipe Quality Checks (+ evidence keys) |
+| `pantry_fields` | Typed input definitions per Cookbook |
+| `sousmeow_categories`, `sousmeow_collections`, `sousmeow_cookbook_collections` | Discovery taxonomy (prefixed to avoid collisions on shared hosting) |
 
-## The `schema_migrations` table
+## User work (written during a run)
 
-Records which numbered migration files have been applied so `bin/migrate.php`
-never re-runs one. This is the source of truth for "what schema version is this
-database".
+| Table | Meaning | Written by |
+|-------|---------|------------|
+| `users` | Accounts, roles, verification, `simulation` flag | Auth/Account |
+| `projects` | A user's run of a Cookbook | Start / Pantry / Runner |
+| `pantry_values` | The facts entered (unique per project+field) | Fill the Pantry |
+| `artifacts` | One per project+recipe; status + approved version | Runner |
+| `artifact_versions` | Immutable, append-only (pasted/example/edited/restored) | Paste / Approve |
+| `artifact_checks` | A confirmed check against a specific version | Review |
+| `exports` | A built kit's filename, size, count | Export |
+| `simulation_runs` | Daily demo-activity log | Simulation |
 
-## Durability and backup
+## Durability, backup, sensitivity
 
-Because storage is one file, backup is copying that file. It is **not** part of
-the git deploy (it is excluded so a deploy can never overwrite live data). The
-operator is responsible for backups.
-
-## Sensitive data
-
-None by design — ideas are the operator's own notes, and there are no
-credentials stored. Adding anything sensitive would reopen the
-`half-auth-not-multiuser` concern.
+- Backup = the SQLite file or a MySQL dump; export zips are copied separately.
+- Table names for the taxonomy carry a `sousmeow_` prefix because the
+  production database is shared with other apps on the account.
+- Passwords are hashed (`password_hash`); pasted content is the only untrusted
+  bulk data and is sanitised/escaped.

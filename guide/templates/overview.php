@@ -16,6 +16,8 @@ $handoff = $content->handoff();
 $mentalModel = $content->systemDoc('mental-model');
 $oneLiner = (string) ($identity['meta']['one_liner'] ?? $identity['meta']['summary'] ?? '');
 $total = array_sum($statusCounts);
+$example = is_array($content->manifest()['example_project'] ?? null) ? $content->manifest()['example_project'] : [];
+$exampleRepo = (string) ($example['source_repository'] ?? '');
 ?>
 <article class="view view-overview">
 
@@ -29,7 +31,10 @@ $total = array_sum($statusCounts);
             <p class="sub"><strong>What it gives you:</strong> <?= h((string) $identity['meta']['primary_outcome']) ?></p>
         <?php endif; ?>
         <p class="provenance-note">
-            This is a VibeKB sample. It models a small example application so every view can be shown with realistic, connected content.
+            <?= h($projectName) ?> is the real application VibeKB is explaining here — it is not bundled into
+            VibeKB. This model was derived read-only from the source
+            <?php if ($exampleRepo !== ''): ?>(<a href="<?= h($exampleRepo) ?>" rel="noopener noreferrer"><?= h($exampleRepo) ?></a>)<?php endif; ?>
+            and can go stale; re-verify against the source before changing any functionality claim.
         </p>
     </header>
 

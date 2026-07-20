@@ -69,9 +69,28 @@ try {
     $loaded = false;
 }
 
+$manifest = $loaded ? $content->manifest() : [];
+$example = is_array($manifest['example_project'] ?? null) ? $manifest['example_project'] : [];
 $identity = $loaded ? $content->projectDoc('identity') : null;
-$sampleName = (string) ($identity['meta']['title'] ?? 'the sample project');
+$sampleName = (string) ($identity['meta']['title'] ?? ($example['name'] ?? 'the example project'));
+$sampleTagline = (string) ($identity['meta']['one_liner'] ?? '');
+$sampleRepo = (string) ($example['source_repository'] ?? '');
 $statusCounts = $loaded ? $content->statusCounts() : [];
+
+// Live metrics computed from the actual loaded content (never invented).
+$groups = $loaded ? $content->functionalityGroups() : [];
+$allFunc = $loaded ? $content->allFunctionality() : [];
+$funcCount = count($allFunc);
+$groupCount = count($groups);
+$warnCount = $loaded ? count($content->memoryByType('warnings')) : 0;
+$currentWork = $loaded ? $content->currentWork() : null;
+$verifiedFromSource = 0;
+foreach ($allFunc as $rec) {
+    if (($rec['meta']['verification'] ?? '') === 'verified-from-source') {
+        $verifiedFromSource++;
+    }
+}
+$verifiedPct = $funcCount > 0 ? (int) round($verifiedFromSource / $funcCount * 100) : 0;
 
 // Build the preview carousel from real functionality records (index order).
 $previewItems = [];
@@ -134,18 +153,29 @@ if ($loaded) {
                         <a class="hp-btn hp-btn-ghost" href="#what">See what it shows</a>
                     </div>
                 </div>
-                <figure class="hp-hero-visual" aria-labelledby="hero-flow-label">
-                    <figcaption id="hero-flow-label" class="visually-hidden">
-                        AI builds and changes the software; VibeKB explains it; you understand it.
-                    </figcaption>
-                    <ol class="hp-mini-flow" data-hero-flow>
-                        <li class="is-active"><span>AI builds &amp; changes</span></li>
-                        <li aria-hidden="true" class="hp-mini-flow-arrow">↓</li>
-                        <li><span>VibeKB explains it</span></li>
-                        <li aria-hidden="true" class="hp-mini-flow-arrow">↓</li>
-                        <li><span>You understand it</span></li>
-                    </ol>
-                </figure>
+                <?php if ($loaded): ?>
+                <aside class="hp-example-card" aria-label="Live software example">
+                    <p class="hp-example-label">Live software example</p>
+                    <h2 class="hp-example-name"><?= hp_e($sampleName) ?></h2>
+                    <p class="hp-example-desc"><?= hp_e($sampleTagline !== '' ? $sampleTagline : 'A platform for running step-by-step AI workflows using the AI subscriptions people already have.') ?></p>
+                    <dl class="hp-example-metrics">
+                        <div><dt><?= (int) $funcCount ?></dt><dd>functions modelled</dd></div>
+                        <div><dt><?= (int) $groupCount ?></dt><dd>capability groups</dd></div>
+                        <div><dt><?= (int) $verifiedPct ?>%</dt><dd>verified from source</dd></div>
+                        <div><dt><?= (int) $warnCount ?></dt><dd>active warnings</dd></div>
+                    </dl>
+                    <?php if ($currentWork !== null): ?>
+                        <p class="hp-example-work"><span class="hp-status hp-status--info">AI now</span> <?= hp_e((string) ($currentWork['meta']['title'] ?? '')) ?></p>
+                    <?php endif; ?>
+                    <div class="hp-example-actions">
+                        <a class="hp-btn hp-btn-primary" href="<?= hp_e($guideUrl) ?>">Explore the <?= hp_e($sampleName) ?> guide</a>
+                        <?php if ($sampleRepo !== ''): ?>
+                            <a class="hp-btn hp-btn-ghost" href="<?= hp_e($sampleRepo) ?>" rel="noopener noreferrer">View the repository</a>
+                        <?php endif; ?>
+                    </div>
+                    <p class="hp-example-note">VibeKB is the product. <?= hp_e($sampleName) ?> is the real application it is explaining.</p>
+                </aside>
+                <?php endif; ?>
             </div>
         </section>
 
@@ -250,12 +280,13 @@ if ($loaded) {
         <?php if ($previewItems !== []): ?>
         <section class="hp-section" id="sample" aria-labelledby="sample-title">
             <div class="hp-wrap">
-                <p class="hp-kicker">The product, shown with its own content</p>
-                <h2 id="sample-title">Real functionality, explained.</h2>
+                <p class="hp-kicker">A real application, explained by VibeKB</p>
+                <h2 id="sample-title">Real functionality from <?= hp_e($sampleName) ?>.</h2>
                 <p class="hp-lead">
-                    These are actual records from the guide&#39;s example project, <?= hp_e($sampleName) ?>.
-                    Each links to a full explanation — flow, files, data, dependencies, failure cases, and
-                    what&#39;s safe to change.
+                    <?= hp_e($sampleName) ?> is a real PHP application; VibeKB is the product explaining it.
+                    Every slide below is an actual record derived from the <?= hp_e($sampleName) ?> source —
+                    with its honest status and how it was verified — linking to a full explanation of the
+                    flow, files, data, failure cases, and what&#39;s safe to change.
                 </p>
 
                 <div class="hp-guide-preview" data-guide-preview>
@@ -470,7 +501,7 @@ if ($loaded) {
                             <p><strong>In one sentence, then in full:</strong> what the user experiences and what the software actually does now — with its status and how it was verified.</p>
                         </div>
                         <div class="hp-filter-panel" role="tabpanel" id="rel-panel-1" aria-labelledby="rel-tab-1" data-rel-panel="1" hidden>
-                            <p><strong>A readable flow</strong> from trigger to result — e.g. submit the form → reach <code>create-idea.php</code> → validate → service applies rules → repository writes to SQLite → redirect.</p>
+                            <p><strong>A readable flow</strong> from trigger to result — e.g. paste a response → <code>RunnerController::paste</code> → sanitise untrusted input → store an immutable artifact version → back to the review step.</p>
                         </div>
                         <div class="hp-filter-panel" role="tabpanel" id="rel-panel-2" aria-labelledby="rel-tab-2" data-rel-panel="2" hidden>
                             <p><strong>An implementation map:</strong> the controllers, services, and templates that participate — each linked to the Files that matter view with a safety level.</p>
@@ -656,18 +687,20 @@ if ($loaded) {
         <!-- 11. Final CTA -->
         <section class="hp-section hp-final" id="cta" aria-labelledby="cta-title">
             <div class="hp-wrap hp-narrow">
-                <h2 id="cta-title">See what your software is doing.</h2>
+                <h2 id="cta-title">See what <?= hp_e($sampleName) ?> is doing.</h2>
                 <p>
-                    Open the guide and read the example model — then put VibeKB in your own repo and keep it
-                    current as you build.
+                    Open the guide and read the live model of <?= hp_e($sampleName) ?>, a real application —
+                    then put VibeKB in your own repo and keep its model current as you build.
                 </p>
                 <p class="hp-thesis">
                     Understand what your software is doing — the current functionality, how it works,
                     what AI is changing, and why.
                 </p>
                 <div class="hp-actions">
-                    <a class="hp-btn hp-btn-primary" href="<?= hp_e($guideUrl) ?>">Explore the guide</a>
-                    <a class="hp-btn hp-btn-ghost" href="<?= hp_e($repoUrl) ?>" rel="noopener noreferrer">View the repository</a>
+                    <a class="hp-btn hp-btn-primary" href="<?= hp_e($guideUrl) ?>">Explore the <?= hp_e($sampleName) ?> guide</a>
+                    <?php if ($sampleRepo !== ''): ?>
+                        <a class="hp-btn hp-btn-ghost" href="<?= hp_e($sampleRepo) ?>" rel="noopener noreferrer">View the <?= hp_e($sampleName) ?> repository</a>
+                    <?php endif; ?>
                 </div>
             </div>
         </section>

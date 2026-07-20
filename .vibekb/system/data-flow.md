@@ -2,32 +2,40 @@
 id: system-data-flow
 type: system
 title: How data flows
-summary: Where an idea's data comes from, how it moves through the app, and where it ends up.
+summary: Pantry facts flow into prompts; pasted answers become immutable artifact versions; confirmed checks gate approval; approved artifacts chain into later prompts and the export.
 updated: 2026-07-16
+verification: verified-from-source
 ---
 
-## From keystroke to stored row
+## From facts to finished kit
 
 ```
-Form input  →  IdeaService (validate + normalise)  →  IdeaRepository (INSERT)  →  ideas table
-```
-
-## From stored row to screen
-
-```
-ideas table  →  IdeaRepository (SELECT)  →  controller  →  template  →  HTML
+Pantry values ─► PromptBuilder ─► prompt (copied) ─► [your AI] ─► pasted text
+                                                                      │
+                                          cleanContent (sanitise) ────┘
+                                                       │
+                                       artifact_versions (immutable, append-only)
+                                                       │
+                            ResponseParser ─► Quality Check evidence ─► artifact_checks
+                                                       │  (all confirmed)
+                                                    approve ─► approved version
+                                                       │
+                     chains into later prompts  ◄──────┤
+                                                       ▼
+                                              ProjectKit ─► export zip
 ```
 
 ## What is trusted where
 
-- Input from the browser is **never trusted** until `IdeaService` has
-  validated and normalised it.
-- Output to the browser is **always escaped** in templates.
-- SQL parameters are **always bound**, never interpolated.
+- **Pantry input** is validated per type before storage (`savePantry`).
+- **Pasted AI output** is untrusted: sanitised on store (`cleanContent`) and
+  escaped on render (`SafeText`) end to end.
+- **SQL parameters** are always bound (one PDO path); never interpolated.
+- **Ownership** is enforced at the data layer; ids are never leaked.
 
 ## The alignment rule
 
-The set of fields written on create must match the set of fields read on list
-and detail. When they drift, ideas appear to "lose" fields — the exact failure
-described in the `read-write-path-drift` warning and the `blank-list-ordering`
-discovery.
+The fields written for the Pantry and Artifacts must match the fields read by
+`PromptBuilder`, the Runner, and `ProjectKit`. When they drift, prompts get
+`[missing:]` values or the export omits content — the failure the
+`read-write-path-coupling` warning describes.

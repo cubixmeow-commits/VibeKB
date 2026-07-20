@@ -1,75 +1,72 @@
 ---
 id: current-work
 type: work
-title: Verify CSV export escaping
-summary: Confirm that exported CSV correctly escapes idea notes containing commas, quotes, and newlines, then promote export from experimental to implemented.
-objective: Make the CSV export trustworthy for real notes and update its status honestly.
+title: Model SousMeow as the canonical VibeKB example
+summary: Replace the fictional SaaS Idea Manager sample with a truthful, source-derived VibeKB model of the real SousMeow application.
+objective: Turn SousMeow into the example shown throughout VibeKB, grounded entirely in its source.
 requested_by: Project owner
-status: in-progress
-verification_state: not-verified
+status: completed
+verification_state: verified-from-source
 updated: 2026-07-20
-affected_functionality: [export-ideas]
-expected_files: [public/export.php, tests/ExportTest.php]
-data_impact: None — export is read-only.
-risks: [Low. Export does not write data; worst case is a malformed download.]
+affected_functionality: [run-recipe, export-project-kit, browse-marketplace, review-quality-checks]
+expected_files: [.vibekb/project, .vibekb/functionality, .vibekb/system, .vibekb/files, .vibekb/memory, .vibekb/work, index.php]
+data_impact: None to SousMeow (read-only). VibeKB content only.
+risks: [Stale or invented documentation if SousMeow changes and the model is not re-verified.]
 ---
 
 ## What the user asked for
 
-"Make sure the export doesn't break when my notes have commas or line breaks —
-right now I don't trust it."
+Replace the fictional "SaaS Idea Manager" sample with a real VibeKB example
+based on **SousMeow** (`cubixmeow-commits/dev-portfolio-v2`, under
+`projects/sousmeow`), keeping VibeKB the product and SousMeow the real
+application it explains. SousMeow must not be redesigned, modified, or bundled.
 
-## What the software currently does
+## What the old sample contained
 
-`public/export.php` streams all ideas as CSV using `fputcsv()`. `fputcsv()`
-should quote fields containing separators, but this has never been verified
-against real multi-line notes, so `export-ideas` is marked **experimental /
-needs-verification**.
+A fictional single-user PHP + SQLite "SaaS Idea Manager" with six invented
+functionality records (create-idea, browse-ideas, etc.) whose source files did
+not exist in any repository.
 
-## What it should do after this work
+## What the guide contains afterward
 
-Export a valid CSV for any note content, confirmed by a test that includes
-commas, double quotes, and newlines. On success, `export-ideas` moves to
-**implemented / verified-by-test**.
+A source-grounded model of SousMeow: 25 functionality records across 9 capability
+groups, six system documents, ~31 curated important files, source-grounded
+decisions/constraints/assumptions/warnings/discoveries/changes, and this
+handoff. Every claim traces to SousMeow source; verification states are honest.
 
-## Affected functionality
+## How SousMeow source was used
 
-- `export-ideas` (the target).
-- `browse-ideas` (shares the `all()` query — must not regress).
-
-## Files expected to change
-
-- `public/export.php` — only if a defect is found.
-- `tests/ExportTest.php` — new test covering awkward note content.
-
-## Data that could change
-
-None. Export is read-only.
-
-## Dependencies that matter
-
-Relies on `initialize-database` and the `all()` query in `IdeaRepository`.
+Read-only. The repository was cloned to a scratch directory and inspected; no
+change was made to SousMeow. File paths in records are relative to
+`projects/sousmeow/`.
 
 ## Risks
 
-Low. No writes are involved.
+The largest risk is drift: if SousMeow changes, these records can go stale. The
+handoff and manifest instruct future agents to re-verify against source before
+changing functionality claims.
 
-## Completed so far
+## Completed work
 
-- Reproduced the concern: identified that no test covers special characters.
+- Audited SousMeow: routes, schema (both dialects), front controller, database,
+  the full Runner chain, discovery, auth, admin, export, and stats/simulation.
+- Removed all SaaS Idea Manager content and rebuilt `.vibekb/` around SousMeow.
+- Updated the homepage live-example section and guide labels to SousMeow.
 
-## Remaining
+## Remaining / recommended next task
 
-- Add the test with commas/quotes/newlines.
-- Fix escaping if the test fails.
-- Update the `export-ideas` record's status and verification.
+Trace the areas currently marked `inferred-from-source` directly — especially
+`AccountController` (manage-account), `scripts/seed.php` (seed-and-sync-content),
+and the `Simulation*` services (demo-simulation) — and promote their verification
+states once confirmed.
 
-## How the result will be verified
+## How the result was verified
 
-Open the exported file in a spreadsheet and confirm rows and columns line up
-for a note containing `a, b`, `"quoted"`, and a line break.
+VibeKB validation (Reference view) shows no unresolved errors; `php -l` passes;
+all guide views and every functionality detail load; flagship "Run a Cookbook"
+was source-traced through the exact files listed in the handoff.
 
-## Repository memory to add
+## Repository memory added
 
-If a defect is found, add a `discovery` record; update the `export-ideas`
-record either way.
+Decisions, constraints, assumptions, warnings, discoveries, and one change
+record — all linked to SousMeow functionality.

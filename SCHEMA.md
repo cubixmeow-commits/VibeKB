@@ -78,7 +78,7 @@ AI work · Related functionality.
   fall into an "Other" group).
 - `depends_on` lists other functionality ids; **dependents are derived**
   (reverse links) automatically.
-- `related_memory` uses `type:id` references, e.g. `decision:sqlite-over-mysql`.
+- `related_memory` uses `type:id` references, e.g. `decision:never-calls-ai`.
 
 ### project (`project/*.md`)
 Identity, intent, current-state, constraints documents. Free-form body with a
