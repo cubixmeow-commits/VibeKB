@@ -1,0 +1,61 @@
+{
+  "intro": "This publication explains SaaS Idea Manager the way a careful human editor would: what matters now, what is fragile, and how the pieces fit together.",
+  "sections": [
+    {
+      "id": "read-this-first",
+      "title": "Read This First",
+      "summary": "Start here. What this project is, what it deliberately is not, and how to use this edition without getting lost in the source tree.",
+      "collection": "overview",
+      "slug": "read-this-first"
+    },
+    {
+      "id": "current-risks",
+      "title": "Current Risks",
+      "summary": "The failure modes that matter today: architectural drift, schema mismatch, and the hidden cost of adding multi-user features later.",
+      "collection": "risks",
+      "slug": null
+    },
+    {
+      "id": "what-changed",
+      "title": "What Changed",
+      "summary": "Recent editorial updates: clarified migration practice, documented the no-auth boundary, and expanded the project map.",
+      "collection": "editorial",
+      "slug": null
+    },
+    {
+      "id": "how-it-works",
+      "title": "How the Project Works",
+      "summary": "A concise mental walkthrough of request flow, SQLite storage, and how ideas move from form input to persisted records.",
+      "collection": "overview",
+      "slug": "how-the-project-works"
+    },
+    {
+      "id": "important-decisions",
+      "title": "Important Decisions",
+      "summary": "Why SQLite, why no authentication, why manual migrations, and which of those choices should not be reversed casually.",
+      "collection": "decisions",
+      "slug": null
+    },
+    {
+      "id": "where-bugs-start",
+      "title": "Where Bugs Usually Start",
+      "summary": "The places defects tend to appear first: migration drift, template assumptions, and empty-state handling in the ideas list.",
+      "collection": "debugging",
+      "slug": null
+    },
+    {
+      "id": "project-map",
+      "title": "Project Map",
+      "summary": "A practical map of directories and responsibilities so you can find the right file before you ask an agent to change anything.",
+      "collection": "overview",
+      "slug": "project-map"
+    },
+    {
+      "id": "editorial-status",
+      "title": "Editorial Status",
+      "summary": "What this edition covers well, what remains thin, and what should be updated the next time the application changes.",
+      "collection": "editorial",
+      "slug": "status"
+    }
+  ]
+}

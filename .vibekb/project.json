@@ -1,0 +1,20 @@
+{
+  "name": "SaaS Idea Manager",
+  "slug": "saas-idea-manager",
+  "tagline": "A single-user PHP app for capturing and organizing SaaS product ideas.",
+  "purpose": "Store, review, and prioritize multiple SaaS ideas in one place without requiring accounts or cloud services.",
+  "stack": {
+    "language": "PHP 8.2",
+    "database": "SQLite",
+    "hosting": "cPanel shared hosting",
+    "frontend": "Server-rendered PHP templates"
+  },
+  "constraints": [
+    "Single-user only",
+    "Authentication is not implemented",
+    "File uploads are not supported",
+    "Database migrations are applied manually",
+    "Designed for cPanel deployment"
+  ],
+  "audience": "Individual builders exploring SaaS concepts before committing to implementation"
+}

@@ -1,0 +1,8 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/iainmcok/public_html/vibekb
+    - /bin/mkdir -p $DEPLOYPATH
+    - /bin/cp -R * $DEPLOYPATH/
+    - /bin/cp -R .vibekb $DEPLOYPATH/
+    - /bin/cp -f .htaccess $DEPLOYPATH/ 2>/dev/null || true

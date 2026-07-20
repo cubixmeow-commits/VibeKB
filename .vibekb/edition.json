@@ -1,0 +1,20 @@
+{
+  "title": "Current Edition",
+  "subtitle": "SaaS Idea Manager",
+  "version": "2026.07",
+  "published": "2026-07-18",
+  "status": "maintained",
+  "editor_note": "This edition explains the project as it exists today: a single-user PHP and SQLite application with no authentication, no uploads, and manual migrations. Read it before adding features.",
+  "coverage": {
+    "overview": "complete",
+    "decisions": "complete",
+    "risks": "complete",
+    "mental_models": "complete",
+    "warnings": "complete",
+    "assumptions": "complete",
+    "debugging": "complete",
+    "modules": "complete",
+    "glossary": "complete",
+    "editorial": "complete"
+  }
+}
