@@ -1,0 +1,13 @@
+---
+# VibeKB — cPanel Git Version Control deployment
+# Destination: /home/iainmcok/public_html/vibekb/
+#
+# Keep this file accurate as the repository evolves (see AGENTS.md).
+# Paths listed with --exclude are also protected from rsync --delete
+# (rsync does not delete excluded destination paths unless --delete-excluded).
+
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/iainmcok/public_html/vibekb/
+    - /bin/mkdir -p "$DEPLOYPATH"
+    - /bin/rsync -av --delete --exclude='.git/' --exclude='.github/' --exclude='.cursor/' --exclude='.vscode/' --exclude='.idea/' --exclude='.cpanel.yml' --exclude='.gitignore' --exclude='.gitattributes' --exclude='.editorconfig' --exclude='.env' --exclude='.env.*' --exclude='*.env' --exclude='node_modules/' --exclude='tests/' --exclude='test/' --exclude='__tests__/' --exclude='docs/' --exclude='coverage/' --exclude='logs/' --exclude='tmp/' --exclude='temp/' --exclude='cache/' --exclude='*.log' --exclude='.DS_Store' --exclude='Thumbs.db' --exclude='README.md' --exclude='DEPLOYMENT.md' --exclude='AGENTS.md' --exclude='LICENSE' --exclude='LICENSE.*' --exclude='package.json' --exclude='package-lock.json' --exclude='yarn.lock' --exclude='pnpm-lock.yaml' --exclude='composer.json' --exclude='composer.lock' --exclude='tsconfig.json' --exclude='jsconfig.json' --exclude='vite.config.*' --exclude='webpack.config.*' --exclude='next.config.*' --exclude='tailwind.config.*' --exclude='postcss.config.*' --exclude='eslint.config.*' --exclude='.eslintrc*' --exclude='.prettierrc*' --exclude='.prettierignore' --exclude='phpunit.xml*' --exclude='phpstan*' --exclude='.phpunit*' --exclude='Makefile' --exclude='Dockerfile*' --exclude='docker-compose*' --exclude='.dockerignore' --exclude='.nvmrc' --exclude='.node-version' --exclude='.npmrc' --exclude='.well-known/' --exclude='uploads/' --exclude='storage/' --exclude='data/' --exclude='media/' --exclude='sessions/' --exclude='var/' --exclude='runtime/' --exclude='private/' --exclude='*.sqlite' --exclude='*.sqlite3' --exclude='*.db' --exclude='config.local.php' --exclude='local.config.php' ./ "$DEPLOYPATH"
