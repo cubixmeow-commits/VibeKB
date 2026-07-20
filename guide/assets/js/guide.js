@@ -1,27 +1,32 @@
-/* VibeKB guide — light progressive enhancement only.
-   The guide is fully functional without JavaScript; this just adds a mobile
+/* VibeKB guide — light progressive enhancement (jQuery), matching the homepage.
+   The guide is fully functional without JavaScript; this only adds the mobile
    nav toggle and auto-submits the functionality filters on change. */
-(function () {
+(function (window, document, $) {
     'use strict';
 
-    // Mobile navigation toggle.
-    var toggle = document.querySelector('.nav-toggle');
-    var nav = document.getElementById('primary-nav');
-    if (toggle && nav) {
-        toggle.hidden = false;
-        toggle.addEventListener('click', function () {
-            var open = nav.classList.toggle('is-open');
-            toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-        });
+    if (!$ || !$.fn) {
+        return;
     }
 
-    // Auto-submit filters when a select changes (form still works without JS).
-    var filterForm = document.querySelector('.filters');
-    if (filterForm) {
-        filterForm.querySelectorAll('select').forEach(function (sel) {
-            sel.addEventListener('change', function () {
-                filterForm.submit();
+    $(function () {
+        // Mobile navigation toggle.
+        var $toggle = $('.nav-toggle');
+        var $nav = $('#primary-nav');
+        if ($toggle.length && $nav.length) {
+            $toggle.prop('hidden', false);
+            $toggle.on('click', function () {
+                var open = $nav.toggleClass('is-open').hasClass('is-open');
+                $toggle.attr('aria-expanded', open ? 'true' : 'false');
             });
-        });
-    }
-})();
+        }
+
+        // Auto-submit the functionality filters when a select changes.
+        // The form still works without JavaScript (it has a Filter button).
+        var $filters = $('.filters');
+        if ($filters.length) {
+            $filters.find('select').on('change', function () {
+                $filters.trigger('submit');
+            });
+        }
+    });
+})(window, document, window.jQuery);
