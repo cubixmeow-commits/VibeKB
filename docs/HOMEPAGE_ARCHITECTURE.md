@@ -5,6 +5,8 @@
 The root homepage explains **VibeKB the product** and demonstrates the **Project Guide**.
 It is not a second Project Guide and not a documentation portal.
 
+**Primary audience:** people building with Cursor, Claude Code, Windsurf, Copilot, and similar tools who shipped software faster than they understood it. Layer 1 speaks to that emotional problem; deeper layers explain architecture. Homepage sample display name may differ from the in-guide project name (e.g. “Weekend SaaS Demo” → SaaS Idea Manager).
+
 ## Information layers
 
 | Layer | When shown | Job |

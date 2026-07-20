@@ -9,6 +9,8 @@ function homepage_e(?string $value): string
 
 $guideUrl = 'guide/';
 $repoUrl = 'https://github.com/cubixmeow-commits/VibeKB';
+$sampleDisplayName = 'Weekend SaaS Demo';
+$sampleRealName = 'SaaS Idea Manager';
 
 $previewStems = [
     '01-what-is-this',
@@ -110,8 +112,8 @@ foreach ($previewStems as $stem) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>VibeKB — Understand the project before you touch the code</title>
-    <meta name="description" content="VibeKB turns repository knowledge into a guided Project Guide that explains what the software does, how it works, what can break, and what to know before changing it.">
+    <title>VibeKB — Your AI built the app. Now understand what you shipped.</title>
+    <meta name="description" content="Built something with Cursor, Claude Code, or Copilot that you&#39;re afraid to touch? VibeKB turns the repo into a Project Guide so you can understand what you actually shipped.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -136,27 +138,29 @@ foreach ($previewStems as $stem) {
         <section class="hp-section hp-hero" id="top" aria-labelledby="hero-title">
             <div class="hp-wrap hp-hero-grid">
                 <div class="hp-hero-copy">
-                    <p class="hp-eyebrow">VibeKB Project Guides</p>
-                    <h1 id="hero-title">Understand the project before you touch the code.</h1>
+                    <p class="hp-eyebrow">For people building with AI coding tools</p>
+                    <h1 id="hero-title">Your AI built the app. Now understand what you actually shipped.</h1>
                     <p class="hp-hero-support">
-                        VibeKB turns knowledge stored inside a repository into a guided, visual explanation
-                        for developers, collaborators, and future AI agents.
+                        Cursor, Claude Code, Windsurf, Copilot—they&#39;re great at generating software.
+                        They&#39;re less great at leaving you with a mental model.
+                        VibeKB turns the repo into a guided Project Guide: what it does, how it works,
+                        what depends on what, where it usually breaks, and what to know before you change anything.
                     </p>
                     <div class="hp-actions">
-                        <a class="hp-btn hp-btn-primary" href="<?= homepage_e($guideUrl) ?>">Explore the sample Project Guide</a>
-                        <a class="hp-btn hp-btn-ghost" href="#how-it-works">See how VibeKB works</a>
+                        <a class="hp-btn hp-btn-primary" href="<?= homepage_e($guideUrl) ?>">Open a sample Project Guide</a>
+                        <a class="hp-btn hp-btn-ghost" href="#problem">That&#39;s… me</a>
                     </div>
                 </div>
                 <figure class="hp-hero-visual" aria-labelledby="hero-flow-label">
                     <figcaption id="hero-flow-label" class="visually-hidden">
-                        Repository knowledge becomes a Project Guide, which creates shared understanding.
+                        An AI-built repository becomes a Project Guide, which becomes confidence to change the software.
                     </figcaption>
                     <ol class="hp-mini-flow" data-hero-flow>
-                        <li class="is-active"><span>Repository knowledge</span></li>
+                        <li class="is-active"><span>AI-built repo</span></li>
                         <li aria-hidden="true" class="hp-mini-flow-arrow">↓</li>
                         <li><span>Project Guide</span></li>
                         <li aria-hidden="true" class="hp-mini-flow-arrow">↓</li>
-                        <li><span>Shared understanding</span></li>
+                        <li><span>You get it</span></li>
                     </ol>
                 </figure>
             </div>
@@ -166,42 +170,42 @@ foreach ($previewStems as $stem) {
         <section class="hp-section" id="problem" aria-labelledby="problem-title">
             <div class="hp-wrap hp-narrow">
                 <p class="hp-kicker">The problem</p>
-                <h2 id="problem-title">Software is being built faster than it is being understood.</h2>
+                <h2 id="problem-title">You successfully built software faster than you could understand it.</h2>
 
                 <div class="hp-stepper" data-stepper="problem">
-                    <div class="hp-stepper-tabs" role="tablist" aria-label="How understanding breaks down">
-                        <button type="button" class="hp-step-tab is-active" role="tab" id="prob-tab-0" aria-selected="true" aria-controls="prob-panel-0" data-step="0">1. The project grows</button>
-                        <button type="button" class="hp-step-tab" role="tab" id="prob-tab-1" aria-selected="false" aria-controls="prob-panel-1" data-step="1" tabindex="-1">2. Decisions disappear</button>
-                        <button type="button" class="hp-step-tab" role="tab" id="prob-tab-2" aria-selected="false" aria-controls="prob-panel-2" data-step="2" tabindex="-1">3. The next person rebuilds the model</button>
+                    <div class="hp-stepper-tabs" role="tablist" aria-label="How understanding falls behind">
+                        <button type="button" class="hp-step-tab is-active" role="tab" id="prob-tab-0" aria-selected="true" aria-controls="prob-panel-0" data-step="0">1. It ships fast</button>
+                        <button type="button" class="hp-step-tab" role="tab" id="prob-tab-1" aria-selected="false" aria-controls="prob-panel-1" data-step="1" tabindex="-1">2. The chat evaporates</button>
+                        <button type="button" class="hp-step-tab" role="tab" id="prob-tab-2" aria-selected="false" aria-controls="prob-panel-2" data-step="2" tabindex="-1">3. You&#39;re scared to touch it</button>
                     </div>
                     <div class="hp-stepper-panels">
                         <div class="hp-step-panel is-active" role="tabpanel" id="prob-panel-0" aria-labelledby="prob-tab-0" data-step-panel="0">
-                            <p>Features land quickly. Files multiply. The repo becomes real software before anyone has a durable explanation of how the pieces fit.</p>
+                            <p>One late night. A few prompts. Suddenly you have screens, a database, and something that looks suspiciously like a product. It works. You&#39;re proud. Also slightly panicked.</p>
                         </div>
                         <div class="hp-step-panel" role="tabpanel" id="prob-panel-1" aria-labelledby="prob-tab-1" data-step-panel="1" hidden>
-                            <p>Important decisions disappear into code, chat transcripts, and expired agent sessions. Intent is scattered; assumptions go unrecorded.</p>
+                            <p>The tool that built it explained itself in a conversation you&#39;ll never fully recover. Decisions live in expired sessions. Six weeks later, the repo is real—and the story is gone.</p>
                         </div>
                         <div class="hp-step-panel" role="tabpanel" id="prob-panel-2" aria-labelledby="prob-tab-2" data-step-panel="2" hidden>
-                            <p>The next developer—or the next AI agent—has to reconstruct the mental model from scratch, often guessing what is safe to change.</p>
+                            <p>Now every change feels like defusing a bomb you assembled yourself. You&#39;re not stuck because you can&#39;t code. You&#39;re stuck because you don&#39;t trust what you shipped.</p>
                         </div>
                     </div>
                     <div class="hp-stepper-fallback">
                         <ol>
-                            <li><strong>The project grows.</strong> Features land quickly before a durable explanation exists.</li>
-                            <li><strong>Decisions disappear.</strong> Intent scatters across code, chats, and expired sessions.</li>
-                            <li><strong>The next person rebuilds the model.</strong> Humans and agents guess what is safe to change.</li>
+                            <li><strong>It ships fast.</strong> Prompts turn into a real app before you have a durable mental model.</li>
+                            <li><strong>The chat evaporates.</strong> Decisions disappear into sessions you can&#39;t reopen.</li>
+                            <li><strong>You&#39;re scared to touch it.</strong> The software works—and every change feels risky.</li>
                         </ol>
                     </div>
                 </div>
 
                 <details class="hp-details">
-                    <summary>Why READMEs are not enough</summary>
+                    <summary>Why the README (and the chat) aren&#39;t enough</summary>
                     <ul class="hp-plain-list">
-                        <li>README files are usually setup-oriented.</li>
-                        <li>Source code shows implementation but not always intent.</li>
-                        <li>Commit history contains fragments, not a coherent mental model.</li>
-                        <li>AI conversations are temporary and disconnected.</li>
-                        <li>Architectural assumptions are rarely obvious from filenames.</li>
+                        <li>READMEs are usually about setup, not how the system thinks.</li>
+                        <li>The code shows what runs—not why it was shaped that way.</li>
+                        <li>Commits are fragments. They rarely narrate the mental model.</li>
+                        <li>Agent chats are temporary. They don&#39;t ship with the repo.</li>
+                        <li>Filenames rarely admit the assumptions you&#39;re relying on.</li>
                     </ul>
                 </details>
             </div>
@@ -210,59 +214,59 @@ foreach ($previewStems as $stem) {
         <!-- 3. Product outcomes -->
         <section class="hp-section hp-surface" id="product" aria-labelledby="product-title">
             <div class="hp-wrap">
-                <p class="hp-kicker">The product</p>
-                <h2 id="product-title">VibeKB creates a guided Project Guide inside the repository.</h2>
-                <p class="hp-lead">Four outcomes—open one at a time.</p>
+                <p class="hp-kicker">What you get</p>
+                <h2 id="product-title">Answers you wish you had before the next prompt.</h2>
+                <p class="hp-lead">VibeKB helps you answer the questions that keep you from opening the editor. The Project Guide is where those answers live—pulled from knowledge kept inside the repository.</p>
 
                 <div class="hp-outcome" data-tabs="outcomes">
-                    <div class="hp-tablist" role="tablist" aria-label="Project Guide outcomes">
-                        <button type="button" class="hp-tab is-active" role="tab" id="out-tab-0" aria-selected="true" aria-controls="out-panel-0" data-tab="0">Understand the product</button>
-                        <button type="button" class="hp-tab" role="tab" id="out-tab-1" aria-selected="false" aria-controls="out-panel-1" data-tab="1" tabindex="-1">Follow the system</button>
-                        <button type="button" class="hp-tab" role="tab" id="out-tab-2" aria-selected="false" aria-controls="out-panel-2" data-tab="2" tabindex="-1">Change it safely</button>
-                        <button type="button" class="hp-tab" role="tab" id="out-tab-3" aria-selected="false" aria-controls="out-panel-3" data-tab="3" tabindex="-1">Debug it faster</button>
+                    <div class="hp-tablist" role="tablist" aria-label="Questions VibeKB helps answer">
+                        <button type="button" class="hp-tab is-active" role="tab" id="out-tab-0" aria-selected="true" aria-controls="out-panel-0" data-tab="0">What does this app do?</button>
+                        <button type="button" class="hp-tab" role="tab" id="out-tab-1" aria-selected="false" aria-controls="out-panel-1" data-tab="1" tabindex="-1">What happens on Save?</button>
+                        <button type="button" class="hp-tab" role="tab" id="out-tab-2" aria-selected="false" aria-controls="out-panel-2" data-tab="2" tabindex="-1">What breaks if I change this?</button>
+                        <button type="button" class="hp-tab" role="tab" id="out-tab-3" aria-selected="false" aria-controls="out-panel-3" data-tab="3" tabindex="-1">Where do I start debugging?</button>
                     </div>
                     <div class="hp-tabpanels">
                         <div class="hp-tabpanel is-active" role="tabpanel" id="out-panel-0" aria-labelledby="out-tab-0" data-tab-panel="0">
-                            <p class="hp-tabpanel-lead">What it does, who it is for, and how someone uses it—before any file paths.</p>
-                            <p class="hp-example"><strong>Example:</strong> SaaS Idea Manager is a single-operator place to collect and develop software ideas.</p>
-                            <a class="hp-text-link" href="<?= homepage_e($guideUrl) ?>#what-is-this">See this in the sample guide</a>
+                            <p class="hp-tabpanel-lead">Plain language first: what it is, who it&#39;s for, how someone uses it—before you drown in files.</p>
+                            <p class="hp-example"><strong>In the sample:</strong> one person collecting software ideas, not a multi-tenant mystery box.</p>
+                            <a class="hp-text-link" href="<?= homepage_e($guideUrl) ?>#what-is-this">See “What is this project?”</a>
                         </div>
                         <div class="hp-tabpanel" role="tabpanel" id="out-panel-1" aria-labelledby="out-tab-1" data-tab-panel="1" hidden>
-                            <p class="hp-tabpanel-lead">How actions, data, and major components connect end to end.</p>
-                            <p class="hp-example"><strong>Example:</strong> Form submit → PHP validation → SQLite write → reload → updated list.</p>
+                            <p class="hp-tabpanel-lead">Follow the click: form → validation → database → reload → screen. The path you need before you “just add a field.”</p>
+                            <p class="hp-example"><strong>In the sample:</strong> PHP checks input, writes SQLite, then shows the saved idea again.</p>
                             <a class="hp-text-link" href="<?= homepage_e($guideUrl) ?>#save-flow">See the save path</a>
                         </div>
                         <div class="hp-tabpanel" role="tabpanel" id="out-panel-2" aria-labelledby="out-tab-2" data-tab-panel="2" hidden>
-                            <p class="hp-tabpanel-lead">Dependencies, assumptions, invariants, risks, and side effects before you edit.</p>
-                            <p class="hp-example"><strong>Example:</strong> Adding a field means migration, forms, write path, read path, and production apply—together.</p>
+                            <p class="hp-tabpanel-lead">Dependencies, assumptions, and side effects—so a refactor doesn&#39;t become an archaeology dig.</p>
+                            <p class="hp-example"><strong>In the sample:</strong> a new field means migration, forms, write path, read path, and production apply—together.</p>
                             <a class="hp-text-link" href="<?= homepage_e($guideUrl) ?>#change-safely">See change-safety guides</a>
                         </div>
                         <div class="hp-tabpanel" role="tabpanel" id="out-panel-3" aria-labelledby="out-tab-3" data-tab-panel="3" hidden>
-                            <p class="hp-tabpanel-lead">Known failure paths and where investigation should begin.</p>
-                            <p class="hp-example"><strong>Example:</strong> Blank ideas list → file exists? PHP can read it? Query returns rows? Template displays them?</p>
+                            <p class="hp-tabpanel-lead">Known failure paths and a starting order—so you&#39;re not guessing which file to open at 1am.</p>
+                            <p class="hp-example"><strong>In the sample:</strong> blank list → does the DB file exist? Can PHP read it? Does the query return rows?</p>
                             <a class="hp-text-link" href="<?= homepage_e($guideUrl) ?>#problems">See troubleshooting sequences</a>
                         </div>
                     </div>
                     <div class="hp-tabs-fallback">
                         <article>
-                            <h3>Understand the product</h3>
-                            <p>What it does, who it is for, and how someone uses it.</p>
-                            <a href="<?= homepage_e($guideUrl) ?>#what-is-this">Sample: What is this project?</a>
+                            <h3>What does this app do?</h3>
+                            <p>Plain-language product understanding before file diving.</p>
+                            <a href="<?= homepage_e($guideUrl) ?>#what-is-this">Open “What is this project?”</a>
                         </article>
                         <article>
-                            <h3>Follow the system</h3>
-                            <p>How actions, data, and major components connect.</p>
-                            <a href="<?= homepage_e($guideUrl) ?>#save-flow">Sample: What happens when an idea is saved?</a>
+                            <h3>What happens on Save?</h3>
+                            <p>Follow the request path end to end.</p>
+                            <a href="<?= homepage_e($guideUrl) ?>#save-flow">Open the save path</a>
                         </article>
                         <article>
-                            <h3>Change it safely</h3>
-                            <p>Dependencies, assumptions, invariants, risks, and side effects.</p>
-                            <a href="<?= homepage_e($guideUrl) ?>#change-safely">Sample: What should I know before changing it?</a>
+                            <h3>What breaks if I change this?</h3>
+                            <p>Dependencies, assumptions, and change impact.</p>
+                            <a href="<?= homepage_e($guideUrl) ?>#change-safely">Open change-safety guides</a>
                         </article>
                         <article>
-                            <h3>Debug it faster</h3>
-                            <p>Known failure paths and where investigation should begin.</p>
-                            <a href="<?= homepage_e($guideUrl) ?>#problems">Sample: Where do problems usually happen?</a>
+                            <h3>Where do I start debugging?</h3>
+                            <p>Known failure paths and investigation order.</p>
+                            <a href="<?= homepage_e($guideUrl) ?>#problems">Open troubleshooting</a>
                         </article>
                     </div>
                 </div>
@@ -273,10 +277,11 @@ foreach ($previewStems as $stem) {
         <section class="hp-section" id="sample" aria-labelledby="sample-title">
             <div class="hp-wrap">
                 <p class="hp-kicker">Sample Project Guide</p>
-                <h2 id="sample-title">SaaS Idea Manager</h2>
+                <h2 id="sample-title"><?= homepage_e($sampleDisplayName) ?></h2>
                 <p class="hp-lead">
-                    Explore how VibeKB explains a PHP and SQLite application—from the user journey through developer risks and deployment mistakes.
-                    This is a preview; the complete guide remains separate.
+                    Here&#39;s what your project could look like once you actually understand it.
+                    Flip through chapters the way you&#39;d open a mysterious weekend build and finally ask: wait—what did we ship?
+                    <span class="hp-note" style="display:block;margin-top:0.5rem;">Inside the guide, the real project name is <?= homepage_e($sampleRealName) ?>—a small PHP and SQLite app.</span>
                 </p>
 
                 <div class="hp-guide-preview" data-guide-preview>
@@ -325,7 +330,7 @@ foreach ($previewStems as $stem) {
 
                                 <?php if ($chapter['dev_points'] !== []): ?>
                                     <details class="hp-details hp-guide-dev">
-                                        <summary>What should a developer know?</summary>
+                                        <summary>What should I know before I mess with this?</summary>
                                         <ul class="hp-plain-list">
                                             <?php foreach (array_slice($chapter['dev_points'], 0, 4) as $point): ?>
                                                 <li>
@@ -357,7 +362,7 @@ foreach ($previewStems as $stem) {
                     </div>
 
                     <p class="hp-guide-complete">
-                        <a class="hp-btn hp-btn-primary" href="<?= homepage_e($guideUrl) ?>">Open the complete Project Guide</a>
+                        <a class="hp-btn hp-btn-primary" href="<?= homepage_e($guideUrl) ?>">Explore the complete Project Guide</a>
                     </p>
                 </div>
             </div>
@@ -367,8 +372,8 @@ foreach ($previewStems as $stem) {
         <section class="hp-section hp-surface" id="depths" aria-labelledby="depths-title">
             <div class="hp-wrap">
                 <p class="hp-kicker">One source, multiple depths</p>
-                <h2 id="depths-title">Simple first. Technical when needed.</h2>
-                <p class="hp-lead">Extract once. Explain at the right depth. The same feature—“Saving an idea”—across three levels.</p>
+                <h2 id="depths-title">Simple first. Technical when you&#39;re ready.</h2>
+                <p class="hp-lead">Same fact, three depths—so you&#39;re not force-fed a schema dump when you only wanted “what happens when I click Save?”</p>
 
                 <div class="hp-depth" data-depth-selector>
                     <div class="hp-depth-tabs" role="tablist" aria-label="Information depth">
@@ -381,37 +386,37 @@ foreach ($previewStems as $stem) {
                             <h3>Understand</h3>
                             <ul>
                                 <li><strong>Purpose:</strong> Capture an idea so it survives beyond a chat.</li>
-                                <li><strong>User journey:</strong> Submit a form and see the idea on the list.</li>
+                                <li><strong>User journey:</strong> Submit a form and see it on the list.</li>
                                 <li><strong>Mental model:</strong> Browser → PHP → SQLite → screen.</li>
-                                <li><strong>Relationships:</strong> The list shows what the database stored.</li>
+                                <li><strong>Relationships:</strong> The list shows what actually got stored.</li>
                             </ul>
                         </div>
                         <div class="hp-depth-panel" role="tabpanel" id="depth-panel-1" aria-labelledby="depth-tab-1" data-depth-panel="1" hidden>
                             <h3>Work on it</h3>
                             <ul>
-                                <li><strong>Responsibilities:</strong> Validate input, write with prepared statements, redirect, reload.</li>
-                                <li><strong>Data touched:</strong> Idea title, notes, status, timestamps in SQLite.</li>
-                                <li><strong>Invariants:</strong> Read and write paths must stay aligned.</li>
-                                <li><strong>Risks / change impact:</strong> New fields need migration, forms, write, read, and production apply.</li>
+                                <li><strong>Responsibilities:</strong> Validate, write, redirect, reload.</li>
+                                <li><strong>Data touched:</strong> Title, notes, status, timestamps in SQLite.</li>
+                                <li><strong>Invariant:</strong> Read and write paths must stay aligned.</li>
+                                <li><strong>Change impact:</strong> New fields need migration, forms, write, read, and a production apply.</li>
                             </ul>
                         </div>
                         <div class="hp-depth-panel" role="tabpanel" id="depth-panel-2" aria-labelledby="depth-tab-2" data-depth-panel="2" hidden>
                             <h3>Reference</h3>
                             <ul>
                                 <li><strong>Important areas:</strong> Ideas CRUD, database layer, templates.</li>
-                                <li><strong>Accepted decisions:</strong> Manual migrations; SQLite; no auth; no uploads.</li>
-                                <li><strong>Debugging:</strong> Fields disappear when write/read diverge.</li>
-                                <li><strong>Assumptions / history:</strong> One operator; editorial notes in <code>.vibekb/</code>.</li>
+                                <li><strong>Decisions:</strong> Manual migrations; SQLite; no auth; no uploads.</li>
+                                <li><strong>Debugging:</strong> Fields vanish when write/read diverge.</li>
+                                <li><strong>History:</strong> Assumptions and notes living in <code>.vibekb/</code>.</li>
                             </ul>
                         </div>
                     </div>
                     <div class="hp-depth-fallback">
                         <h3>Understand</h3>
-                        <p>Purpose, user journey, mental model, major relationships.</p>
+                        <p>Purpose, journey, mental model—enough to stop panicking.</p>
                         <h3>Work on it</h3>
-                        <p>Responsibilities, dependencies, data touched, invariants, risks, change impact.</p>
+                        <p>Responsibilities, data, invariants, risks—enough to edit safely.</p>
                         <h3>Reference</h3>
-                        <p>Important files, accepted decisions, debugging notes, assumptions, history.</p>
+                        <p>Decisions, debugging notes, assumptions, history—when you need the receipts.</p>
                     </div>
                 </div>
             </div>
@@ -421,54 +426,55 @@ foreach ($previewStems as $stem) {
         <section class="hp-section" id="how-it-works" aria-labelledby="how-title">
             <div class="hp-wrap">
                 <p class="hp-kicker">How VibeKB works</p>
-                <h2 id="how-title">From repository knowledge to shared context.</h2>
+                <h2 id="how-title">Understanding that ships with the repo—not another chat you&#39;ll lose.</h2>
 
                 <div class="hp-pipeline" data-pipeline>
                     <div class="hp-pipeline-stages" role="tablist" aria-label="VibeKB pipeline">
-                        <button type="button" class="hp-pipe-stage is-active" role="tab" id="pipe-tab-0" aria-selected="true" aria-controls="pipe-panel-0" data-pipe="0">Repository</button>
-                        <button type="button" class="hp-pipe-stage" role="tab" id="pipe-tab-1" aria-selected="false" aria-controls="pipe-panel-1" data-pipe="1" tabindex="-1">Knowledge extraction</button>
-                        <button type="button" class="hp-pipe-stage" role="tab" id="pipe-tab-2" aria-selected="false" aria-controls="pipe-panel-2" data-pipe="2" tabindex="-1">Structured model</button>
+                        <button type="button" class="hp-pipe-stage is-active" role="tab" id="pipe-tab-0" aria-selected="true" aria-controls="pipe-panel-0" data-pipe="0">Your repo</button>
+                        <button type="button" class="hp-pipe-stage" role="tab" id="pipe-tab-1" aria-selected="false" aria-controls="pipe-panel-1" data-pipe="1" tabindex="-1">What matters</button>
+                        <button type="button" class="hp-pipe-stage" role="tab" id="pipe-tab-2" aria-selected="false" aria-controls="pipe-panel-2" data-pipe="2" tabindex="-1">Structured knowledge</button>
                         <button type="button" class="hp-pipe-stage" role="tab" id="pipe-tab-3" aria-selected="false" aria-controls="pipe-panel-3" data-pipe="3" tabindex="-1">Project Guide</button>
-                        <button type="button" class="hp-pipe-stage" role="tab" id="pipe-tab-4" aria-selected="false" aria-controls="pipe-panel-4" data-pipe="4" tabindex="-1">Human &amp; AI context</button>
+                        <button type="button" class="hp-pipe-stage" role="tab" id="pipe-tab-4" aria-selected="false" aria-controls="pipe-panel-4" data-pipe="4" tabindex="-1">You + the next session</button>
                     </div>
                     <div class="hp-pipeline-panels">
                         <div class="hp-pipe-panel is-active" role="tabpanel" id="pipe-panel-0" aria-labelledby="pipe-tab-0" data-pipe-panel="0">
                             <p><span class="hp-badge hp-badge-now">Available in Version 1</span></p>
-                            <p>Source code, decisions, documentation, and project-owned context live in the repository—especially under <code>.vibekb/</code>.</p>
+                            <p>The software you already built—and the project knowledge beside it under <code>.vibekb/</code>. Same repo. Same Git history.</p>
                         </div>
                         <div class="hp-pipe-panel" role="tabpanel" id="pipe-panel-1" aria-labelledby="pipe-tab-1" data-pipe-panel="1" hidden>
                             <p><span class="hp-badge hp-badge-later">Architecture direction</span></p>
-                            <p>Relevant understanding is identified and organized. Version 1 relies on curated knowledge files maintained with the project; deeper automated extraction is a direction, not a current black-box product.</p>
+                            <p>Figure out what&#39;s worth remembering. Version 1 is curated knowledge files you maintain with the project. Deeper automatic extraction is a direction—not a magic black box we pretend exists today.</p>
                         </div>
                         <div class="hp-pipe-panel" role="tabpanel" id="pipe-panel-2" aria-labelledby="pipe-tab-2" data-pipe-panel="2" hidden>
                             <p><span class="hp-badge hp-badge-now">Available in Version 1</span></p>
-                            <p>Facts, relationships, risks, intent, and change impact are stored in structured files—separate from how they are presented.</p>
+                            <p>Facts, risks, intent, and change impact live in structured files—separate from how they&#39;re shown on screen.</p>
                         </div>
                         <div class="hp-pipe-panel" role="tabpanel" id="pipe-panel-3" aria-labelledby="pipe-tab-3" data-pipe-panel="3" hidden>
                             <p><span class="hp-badge hp-badge-now">Available in Version 1</span></p>
-                            <p>The knowledge becomes a guided, human-readable Project Guide with chapters, scenes, and progressive developer detail.</p>
+                            <p>That knowledge becomes a guided Project Guide: chapters, scenes, and developer detail when you ask for it.</p>
                         </div>
                         <div class="hp-pipe-panel" role="tabpanel" id="pipe-panel-4" aria-labelledby="pipe-tab-4" data-pipe-panel="4" hidden>
                             <p><span class="hp-badge hp-badge-now">Available in Version 1</span></p>
-                            <p>The same knowledge supports onboarding, safer modification, debugging, and future agent sessions—as stable repository-owned context, not a temporary chat.</p>
+                            <p>You get a mental model you can trust. The next coding session—human or agent—starts from the repo, not from amnesia.</p>
                         </div>
                     </div>
                     <div class="hp-pipeline-fallback">
                         <ol>
-                            <li><strong>Repository</strong> — project-owned knowledge beside the code. <em>Version 1</em></li>
-                            <li><strong>Knowledge extraction</strong> — organize what matters. <em>Architecture direction for deeper automation</em></li>
-                            <li><strong>Structured model</strong> — facts separate from presentation. <em>Version 1</em></li>
-                            <li><strong>Project Guide</strong> — guided human experience. <em>Version 1</em></li>
-                            <li><strong>Developer and AI context</strong> — shared mental model for the next session. <em>Version 1</em></li>
+                            <li><strong>Your repo</strong> — code plus project knowledge in Git. <em>Version 1</em></li>
+                            <li><strong>What matters</strong> — curated now; deeper extraction later. <em>Architecture direction</em></li>
+                            <li><strong>Structured knowledge</strong> — facts separate from presentation. <em>Version 1</em></li>
+                            <li><strong>Project Guide</strong> — guided explanation you can actually read. <em>Version 1</em></li>
+                            <li><strong>You + the next session</strong> — continuity instead of re-guessing. <em>Version 1</em></li>
                         </ol>
                     </div>
                 </div>
 
                 <details class="hp-details">
-                    <summary>Version 1 boundaries</summary>
+                    <summary>Version 1, honestly</summary>
                     <p>
-                        Version 1 is a working content system and one fully published sample project.
-                        No accounts. No cloud AI APIs. No search product. Proof that a project can explain itself from repository-owned knowledge.
+                        One working content system. One fully published sample.
+                        No accounts. No cloud AI APIs. No search product.
+                        Just proof that a project can explain itself from knowledge that lives in the repo.
                     </p>
                 </details>
             </div>
@@ -478,121 +484,137 @@ foreach ($previewStems as $stem) {
         <section class="hp-section hp-surface" id="relevance" aria-labelledby="relevance-title">
             <div class="hp-wrap">
                 <p class="hp-kicker">What belongs in VibeKB?</p>
-                <h2 id="relevance-title">Curated understanding, not automated exhaust.</h2>
+                <h2 id="relevance-title">The stuff you&#39;d beg past-you to write down.</h2>
+                <p class="hp-lead">Not every file. Not every function. The facts that stop you from breaking your own app.</p>
 
                 <div class="hp-filter" data-relevance>
                     <div class="hp-filter-list" role="tablist" aria-label="Inclusion tests">
-                        <button type="button" class="hp-filter-btn is-active" role="tab" id="rel-tab-0" aria-selected="true" aria-controls="rel-panel-0" data-rel="0">Does it improve understanding?</button>
-                        <button type="button" class="hp-filter-btn" role="tab" id="rel-tab-1" aria-selected="false" aria-controls="rel-panel-1" data-rel="1" tabindex="-1">Needed before modifying?</button>
-                        <button type="button" class="hp-filter-btn" role="tab" id="rel-tab-2" aria-selected="false" aria-controls="rel-panel-2" data-rel="2" tabindex="-1">Could omitting it cause harm?</button>
-                        <button type="button" class="hp-filter-btn" role="tab" id="rel-tab-3" aria-selected="false" aria-controls="rel-panel-3" data-rel="3" tabindex="-1">Would it shorten debugging?</button>
-                        <button type="button" class="hp-filter-btn" role="tab" id="rel-tab-4" aria-selected="false" aria-controls="rel-panel-4" data-rel="4" tabindex="-1">Could it disappear between sessions?</button>
-                        <button type="button" class="hp-filter-btn" role="tab" id="rel-tab-5" aria-selected="false" aria-controls="rel-panel-5" data-rel="5" tabindex="-1">Does it explain architectural intent?</button>
+                        <button type="button" class="hp-filter-btn is-active" role="tab" id="rel-tab-0" aria-selected="true" aria-controls="rel-panel-0" data-rel="0">Would this help me understand it?</button>
+                        <button type="button" class="hp-filter-btn" role="tab" id="rel-tab-1" aria-selected="false" aria-controls="rel-panel-1" data-rel="1" tabindex="-1">Do I need this before I edit?</button>
+                        <button type="button" class="hp-filter-btn" role="tab" id="rel-tab-2" aria-selected="false" aria-controls="rel-panel-2" data-rel="2" tabindex="-1">Could skipping it wreck data?</button>
+                        <button type="button" class="hp-filter-btn" role="tab" id="rel-tab-3" aria-selected="false" aria-controls="rel-panel-3" data-rel="3" tabindex="-1">Would this shorten a 2am debug?</button>
+                        <button type="button" class="hp-filter-btn" role="tab" id="rel-tab-4" aria-selected="false" aria-controls="rel-panel-4" data-rel="4" tabindex="-1">Will the next chat forget this?</button>
+                        <button type="button" class="hp-filter-btn" role="tab" id="rel-tab-5" aria-selected="false" aria-controls="rel-panel-5" data-rel="5" tabindex="-1">Does this explain why it&#39;s shaped this way?</button>
                     </div>
                     <div class="hp-filter-panels">
                         <div class="hp-filter-panel is-active" role="tabpanel" id="rel-panel-0" aria-labelledby="rel-tab-0" data-rel-panel="0">
-                            <p><strong>Include:</strong> “Ideas are first-class records with status and timestamps.”</p>
-                            <p>That changes how someone thinks about the product—not just a folder name.</p>
+                            <p><strong>Keep:</strong> “Ideas are first-class records with status and timestamps.”</p>
+                            <p>That&#39;s a product truth—not a folder tour.</p>
                         </div>
                         <div class="hp-filter-panel" role="tabpanel" id="rel-panel-1" aria-labelledby="rel-tab-1" data-rel-panel="1" hidden>
-                            <p><strong>Include:</strong> “Read and write paths must stay aligned when fields change.”</p>
-                            <p>Without it, a developer may update a form and forget the SELECT.</p>
+                            <p><strong>Keep:</strong> “Read and write paths must stay aligned when fields change.”</p>
+                            <p>Otherwise you update the form, hit Save, and watch the field ghost itself on reload.</p>
                         </div>
                         <div class="hp-filter-panel" role="tabpanel" id="rel-panel-2" aria-labelledby="rel-tab-2" data-rel-panel="2" hidden>
-                            <p><strong>Include:</strong> “A login page alone does not make the app safely multi-user.”</p>
-                            <p>Omitting ownership validation risks exposing every idea to every user.</p>
+                            <p><strong>Keep:</strong> “A login page alone does not make this safely multi-user.”</p>
+                            <p>Half-shipping auth is how you invent a data leak and call it a feature.</p>
                         </div>
                         <div class="hp-filter-panel" role="tabpanel" id="rel-panel-3" aria-labelledby="rel-tab-3" data-rel-panel="3" hidden>
-                            <p><strong>Include:</strong> The blank-list diagnostic order (file → permissions → query → template).</p>
-                            <p>It shortens the path from “empty page” to a real cause.</p>
+                            <p><strong>Keep:</strong> Blank-list order: file → permissions → query → template.</p>
+                            <p>Beats randomly rewriting the homepage at midnight.</p>
                         </div>
                         <div class="hp-filter-panel" role="tabpanel" id="rel-panel-4" aria-labelledby="rel-tab-4" data-rel-panel="4" hidden>
-                            <p><strong>Include:</strong> Why SQLite and manual migrations were chosen.</p>
-                            <p>Chat sessions expire; repository knowledge does not.</p>
+                            <p><strong>Keep:</strong> Why SQLite and manual migrations were chosen.</p>
+                            <p>Chats forget. The repo can remember—if you put it there.</p>
                         </div>
                         <div class="hp-filter-panel" role="tabpanel" id="rel-panel-5" aria-labelledby="rel-tab-5" data-rel-panel="5" hidden>
-                            <p><strong>Include:</strong> “No uploads is intentional—not an unfinished placeholder.”</p>
-                            <p>Intent prevents agents from “helpfully” adding unsafe features.</p>
+                            <p><strong>Keep:</strong> “No uploads is intentional—not unfinished.”</p>
+                            <p>So the next agent doesn&#39;t “helpfully” invent a storage subsystem for you.</p>
                         </div>
                     </div>
                     <div class="hp-filter-fallback">
                         <ol>
-                            <li>Does it improve understanding?</li>
-                            <li>Is it needed before modifying the project?</li>
-                            <li>Could omitting it cause bugs or data loss?</li>
-                            <li>Would it shorten debugging?</li>
-                            <li>Could this knowledge disappear between developers or agent sessions?</li>
-                            <li>Does it explain architectural intent?</li>
+                            <li>Would this help me understand the project?</li>
+                            <li>Do I need this before I edit?</li>
+                            <li>Could skipping it cause bugs or data loss?</li>
+                            <li>Would this shorten debugging?</li>
+                            <li>Will the next chat forget this?</li>
+                            <li>Does this explain architectural intent?</li>
                         </ol>
                     </div>
                 </div>
 
                 <details class="hp-details">
-                    <summary>What VibeKB intentionally leaves out</summary>
+                    <summary>What we intentionally leave out</summary>
                     <ul class="hp-plain-list">
                         <li>Every file</li>
                         <li>Every function</li>
                         <li>Full line-by-line schemas</li>
-                        <li>Obvious implementation details</li>
-                        <li>Generic framework behavior</li>
-                        <li>Temporary trivia</li>
+                        <li>Obvious implementation noise</li>
+                        <li>Generic framework tutorials</li>
+                        <li>Temporary trivia from last Tuesday&#39;s prompt</li>
                         <li>Exhaustive dependency dumps</li>
                     </ul>
                 </details>
             </div>
         </section>
 
-        <!-- 8. Developers and AI -->
+        <!-- 8. Scenarios -->
         <section class="hp-section" id="audience" aria-labelledby="audience-title">
             <div class="hp-wrap">
-                <p class="hp-kicker">Who it helps</p>
-                <h2 id="audience-title">One shared mental model for humans and agents.</h2>
+                <p class="hp-kicker">Familiar situations</p>
+                <h2 id="audience-title">You built it. Now you have to live with it.</h2>
 
                 <div class="hp-compare" data-compare>
-                    <div class="hp-compare-tabs" role="tablist" aria-label="Audience">
-                        <button type="button" class="hp-compare-tab is-active" role="tab" id="cmp-tab-0" aria-selected="true" aria-controls="cmp-panel-0" data-cmp="0">For developers</button>
-                        <button type="button" class="hp-compare-tab" role="tab" id="cmp-tab-1" aria-selected="false" aria-controls="cmp-panel-1" data-cmp="1" tabindex="-1">For AI agents</button>
+                    <div class="hp-compare-tabs" role="tablist" aria-label="Familiar situations">
+                        <button type="button" class="hp-compare-tab is-active" role="tab" id="cmp-tab-0" aria-selected="true" aria-controls="cmp-panel-0" data-cmp="0">I inherited my own code</button>
+                        <button type="button" class="hp-compare-tab" role="tab" id="cmp-tab-1" aria-selected="false" aria-controls="cmp-panel-1" data-cmp="1" tabindex="-1">I&#39;m scared to refactor</button>
+                        <button type="button" class="hp-compare-tab" role="tab" id="cmp-tab-2" aria-selected="false" aria-controls="cmp-panel-2" data-cmp="2" tabindex="-1">I&#39;m handing this to another AI</button>
+                        <button type="button" class="hp-compare-tab" role="tab" id="cmp-tab-3" aria-selected="false" aria-controls="cmp-panel-3" data-cmp="3" tabindex="-1">I&#39;m handing this to a human</button>
                     </div>
                     <div class="hp-compare-panels">
                         <div class="hp-compare-panel is-active" role="tabpanel" id="cmp-panel-0" aria-labelledby="cmp-tab-0" data-cmp-panel="0">
+                            <p class="hp-tabpanel-lead">Understand what already exists—without replaying every chat that created it.</p>
                             <ul class="hp-plain-list">
-                                <li>Faster onboarding</li>
-                                <li>Safer changes</li>
-                                <li>Better debugging starting points</li>
-                                <li>Clearer architectural boundaries</li>
-                                <li>Less time reconstructing intent</li>
+                                <li>See the product story before the file tree</li>
+                                <li>Recover decisions that only lived in prompts</li>
+                                <li>Stop reverse-engineering your own weekend</li>
                             </ul>
                         </div>
                         <div class="hp-compare-panel" role="tabpanel" id="cmp-panel-1" aria-labelledby="cmp-tab-1" data-cmp-panel="1" hidden>
+                            <p class="hp-tabpanel-lead">See dependencies before you change anything.</p>
                             <ul class="hp-plain-list">
-                                <li>Stable repository-owned context</li>
-                                <li>Less repeated repository analysis</li>
+                                <li>Change-safety checklists for fields, auth, uploads, engines</li>
+                                <li>Invariants called out in plain language</li>
+                                <li>Risks that show up before the breakage does</li>
+                            </ul>
+                        </div>
+                        <div class="hp-compare-panel" role="tabpanel" id="cmp-panel-2" aria-labelledby="cmp-tab-2" data-cmp-panel="2" hidden>
+                            <p class="hp-tabpanel-lead">Give the next session real project context—not vibes and a prayer.</p>
+                            <ul class="hp-plain-list">
+                                <li>Stable, repository-owned context</li>
                                 <li>Fewer guessed assumptions</li>
-                                <li>Better continuity between sessions</li>
                                 <li>More focused change instructions</li>
                             </ul>
-                            <p class="hp-note">VibeKB improves context and reduces ambiguity. It does not claim AI output is automatically correct.</p>
+                            <p class="hp-note">Better context reduces ambiguity. It doesn&#39;t magically make every generated change correct.</p>
+                        </div>
+                        <div class="hp-compare-panel" role="tabpanel" id="cmp-panel-3" aria-labelledby="cmp-tab-3" data-cmp-panel="3" hidden>
+                            <p class="hp-tabpanel-lead">Preserve the mental model instead of forcing someone to archaeology your repo.</p>
+                            <ul class="hp-plain-list">
+                                <li>Faster onboarding</li>
+                                <li>Clearer boundaries</li>
+                                <li>Less “wait, why is it like this?”</li>
+                            </ul>
                         </div>
                     </div>
                     <div class="hp-compare-fallback">
-                        <h3>For developers</h3>
-                        <ul>
-                            <li>Faster onboarding, safer changes, clearer boundaries, better debugging starts.</li>
-                        </ul>
-                        <h3>For AI agents</h3>
-                        <ul>
-                            <li>Stable context, fewer guessed assumptions, better continuity between sessions.</li>
-                        </ul>
-                        <p>VibeKB improves context; it does not guarantee correct AI output.</p>
+                        <h3>I inherited my own code</h3>
+                        <p>Understand what already exists without replaying every chat.</p>
+                        <h3>I&#39;m scared to refactor</h3>
+                        <p>See dependencies and change impact first.</p>
+                        <h3>I&#39;m handing this to another AI</h3>
+                        <p>Give it repository-owned context instead of amnesia.</p>
+                        <h3>I&#39;m handing this to a human</h3>
+                        <p>Preserve the mental model so they don&#39;t reverse-engineer everything.</p>
                     </div>
                 </div>
 
                 <details class="hp-details">
-                    <summary>Token efficiency</summary>
+                    <summary>Why this is cheaper than re-explaining the project every time</summary>
                     <p>
-                        The expensive work is creating the structured understanding.
-                        Once it exists, different views—Understand, Work on it, Reference—can reuse the same source
-                        rather than regenerate the entire explanation for every session.
+                        The expensive work is creating the structured understanding once.
+                        After that, Understand / Work on it / Reference views reuse the same source—
+                        instead of regenerating the whole story in every new session.
                     </p>
                 </details>
             </div>
@@ -601,9 +623,9 @@ foreach ($previewStems as $stem) {
         <!-- 9. Repository architecture -->
         <section class="hp-section hp-surface" id="architecture" aria-labelledby="arch-title">
             <div class="hp-wrap">
-                <p class="hp-kicker">Repository-native</p>
-                <h2 id="arch-title">The knowledge stays with the project.</h2>
-                <p class="hp-lead">Content belongs in repository-owned files. Presentation is separate. The guide versions with the software.</p>
+                <p class="hp-kicker">Memory</p>
+                <h2 id="arch-title">Tools remember conversations. Repositories should remember projects.</h2>
+                <p class="hp-lead">VibeKB keeps understanding next to the code—so the story survives the chat that wrote it.</p>
 
                 <div class="hp-repo" data-repo-map>
                     <div class="hp-repo-tree" role="tablist" aria-label=".vibekb structure">
@@ -617,44 +639,44 @@ foreach ($previewStems as $stem) {
                     </div>
                     <div class="hp-repo-panels">
                         <div class="hp-repo-panel is-active" role="tabpanel" id="repo-panel-0" aria-labelledby="repo-tab-0" data-repo-panel="0">
-                            <p>Root of repository-owned project knowledge. Deploys with the site. Do not exclude it from rsync.</p>
+                            <p>Where project memory lives. Deploys with the site. Do not exclude it from rsync—or from your brain&#39;s backup plan.</p>
                         </div>
                         <div class="hp-repo-panel" role="tabpanel" id="repo-panel-1" aria-labelledby="repo-tab-1" data-repo-panel="1" hidden>
-                            <p>Project identity: name, stack, constraints, audience—shared by the Project Guide and technical reference.</p>
+                            <p>Identity card: name, stack, constraints, audience. Shared by the Guide and the deeper reference.</p>
                         </div>
                         <div class="hp-repo-panel" role="tabpanel" id="repo-panel-2" aria-labelledby="repo-tab-2" data-repo-panel="2" hidden>
-                            <p>Chapter JSON for the guided presentation. The engine under <code>guide/</code> renders it; content stays here.</p>
+                            <p>Chapter JSON for the guided tour. Presentation code lives under <code>guide/</code>; the story stays here.</p>
                         </div>
                         <div class="hp-repo-panel" role="tabpanel" id="repo-panel-3" aria-labelledby="repo-tab-3" data-repo-panel="3" hidden>
-                            <p>Accepted decisions—SQLite, no authentication, no uploads, manual migrations—and why they stand.</p>
+                            <p>Choices you made on purpose—SQLite, no auth, no uploads, manual migrations—and why you shouldn&#39;t casually undo them.</p>
                         </div>
                         <div class="hp-repo-panel" role="tabpanel" id="repo-panel-4" aria-labelledby="repo-tab-4" data-repo-panel="4" hidden>
-                            <p>Active failure modes: schema drift, multi-user without ownership, losing architectural understanding.</p>
+                            <p>The failure modes that bite vibe-built apps: schema drift, half-shipped auth, losing the plot as features pile up.</p>
                         </div>
                         <div class="hp-repo-panel" role="tabpanel" id="repo-panel-5" aria-labelledby="repo-tab-5" data-repo-panel="5" hidden>
-                            <p>Ordered debugging guides for blank lists, disappearing fields, and migration mismatch after deploy.</p>
+                            <p>Ordered “start here” guides for blank lists, vanishing fields, and “worked locally, died after deploy.”</p>
                         </div>
                         <div class="hp-repo-panel" role="tabpanel" id="repo-panel-6" aria-labelledby="repo-tab-6" data-repo-panel="6" hidden>
-                            <p>Shared vocabulary—idea, manual migration, ownership validation—so humans and agents use the same words.</p>
+                            <p>Shared words—idea, manual migration, ownership validation—so you and the next session mean the same thing.</p>
                         </div>
                     </div>
                     <div class="hp-repo-fallback">
                         <ul>
-                            <li><code>.vibekb/</code> — repository-owned knowledge root</li>
+                            <li><code>.vibekb/</code> — project memory root</li>
                             <li><code>project.json</code> — identity and constraints</li>
                             <li><code>guide/</code> — Project Guide chapters</li>
-                            <li><code>decisions/</code> — accepted architectural choices</li>
-                            <li><code>risks/</code> — active failure modes</li>
-                            <li><code>debugging/</code> — ordered investigation guides</li>
+                            <li><code>decisions/</code> — choices and reasons</li>
+                            <li><code>risks/</code> — what usually bites</li>
+                            <li><code>debugging/</code> — where to look first</li>
                             <li><code>glossary/</code> — shared vocabulary</li>
                         </ul>
                     </div>
                 </div>
 
                 <ul class="hp-plain-list hp-arch-points">
-                    <li>The website is one view of the underlying knowledge.</li>
-                    <li>Meaningful architecture changes should update the guide in the same change set.</li>
-                    <li>Knowledge can be versioned with the software in Git.</li>
+                    <li>The website is one view of that memory—not the memory itself.</li>
+                    <li>When the architecture changes, update the guide in the same change set.</li>
+                    <li>If it&#39;s in Git with the software, the next you can find it.</li>
                 </ul>
             </div>
         </section>
@@ -662,18 +684,18 @@ foreach ($previewStems as $stem) {
         <!-- 10. Principles -->
         <section class="hp-section" id="principles" aria-labelledby="principles-title">
             <div class="hp-wrap hp-narrow">
-                <p class="hp-kicker">Design principles</p>
-                <h2 id="principles-title">How VibeKB decides what to say.</h2>
+                <p class="hp-kicker">Principles</p>
+                <h2 id="principles-title">Rules for not gaslighting your future self.</h2>
 
                 <div class="hp-manifesto" data-manifesto>
                     <div class="hp-manifesto-stage" aria-live="polite">
                         <p class="hp-manifesto-index">Principle <span data-manifesto-current>1</span> of 7</p>
                         <p class="hp-manifesto-text is-active" data-manifesto-item="0">Curated understanding, not automated exhaust.</p>
-                        <p class="hp-manifesto-text" data-manifesto-item="1" hidden>Extract once, explain at the right depth.</p>
+                        <p class="hp-manifesto-text" data-manifesto-item="1" hidden>Extract once. Explain at the right depth.</p>
                         <p class="hp-manifesto-text" data-manifesto-item="2" hidden>The repository is the source of truth.</p>
                         <p class="hp-manifesto-text" data-manifesto-item="3" hidden>Explain intent, not only implementation.</p>
-                        <p class="hp-manifesto-text" data-manifesto-item="4" hidden>Simple first, technical when needed.</p>
-                        <p class="hp-manifesto-text" data-manifesto-item="5" hidden>Never make the next developer guess.</p>
+                        <p class="hp-manifesto-text" data-manifesto-item="4" hidden>Simple first. Technical when you&#39;re ready.</p>
+                        <p class="hp-manifesto-text" data-manifesto-item="5" hidden>Never make the next you guess.</p>
                         <p class="hp-manifesto-text" data-manifesto-item="6" hidden>The guide should evolve with the project.</p>
                     </div>
                     <div class="hp-manifesto-controls">
@@ -683,11 +705,11 @@ foreach ($previewStems as $stem) {
                     <div class="hp-manifesto-fallback">
                         <ol>
                             <li>Curated understanding, not automated exhaust.</li>
-                            <li>Extract once, explain at the right depth.</li>
+                            <li>Extract once. Explain at the right depth.</li>
                             <li>The repository is the source of truth.</li>
                             <li>Explain intent, not only implementation.</li>
-                            <li>Simple first, technical when needed.</li>
-                            <li>Never make the next developer guess.</li>
+                            <li>Simple first. Technical when you&#39;re ready.</li>
+                            <li>Never make the next you guess.</li>
                             <li>The guide should evolve with the project.</li>
                         </ol>
                     </div>
@@ -698,9 +720,11 @@ foreach ($previewStems as $stem) {
         <!-- 11. Final CTA -->
         <section class="hp-section hp-final" id="cta" aria-labelledby="cta-title">
             <div class="hp-wrap hp-narrow">
-                <h2 id="cta-title">See the idea working on a real sample project.</h2>
+                <h2 id="cta-title">See what understanding looks like on a real weekend build.</h2>
                 <p>
-                    Open the SaaS Idea Manager Project Guide and move from product understanding to developer detail at your own pace.
+                    Open the <?= homepage_e($sampleDisplayName) ?> Project Guide.
+                    Start with what the app does. Dig into risks when you&#39;re ready.
+                    Imagine this existed for the project you&#39;re afraid to open.
                 </p>
                 <div class="hp-actions">
                     <a class="hp-btn hp-btn-primary" href="<?= homepage_e($guideUrl) ?>">Explore the complete Project Guide</a>
@@ -712,7 +736,7 @@ foreach ($previewStems as $stem) {
 
     <footer class="hp-footer">
         <div class="hp-wrap hp-footer-inner">
-            <p><strong>VibeKB.</strong> A guided explanation of a software project, from knowledge inside its repository.</p>
+            <p><strong>VibeKB.</strong> Understand the software you shipped before you break it.</p>
             <p class="hp-footer-note">Version 1 · Lives in your repo · <a href="<?= homepage_e($guideUrl) ?>">Project Guide</a></p>
         </div>
     </footer>
