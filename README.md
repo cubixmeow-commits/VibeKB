@@ -6,7 +6,7 @@ VibeKB keeps an explanation of your project inside the repository (`.vibekb/`) a
 
 ## Version 1
 
-- Landing page: `/index.php`
+- Landing page: `/index.php` — layered product homepage (`assets/css/homepage.css`, `assets/js/homepage.js`)
 - Primary sample: `/guide/` — **SaaS Idea Manager Project Guide** (guided presentation)
 - Technical reference: `/edition/` — full structured articles from `.vibekb/` knowledge files
 - Content system: `.vibekb/` (JSON metadata + Markdown + guide chapters)
