@@ -1,50 +1,31 @@
-/* VibeKB V1 Software Guide — clean, restrained, mobile-first, theme-aware.
-   This is a product-foundation stylesheet, not the final visual design. */
+/* VibeKB V1 Software Guide — warm cream + teal, light-only, to match the
+   homepage (assets/css/homepage.css). Same palette, fonts, and design language. */
 
 :root {
-    --bg: #ffffff;
-    --surface: #f6f7f9;
-    --surface-2: #eef0f3;
-    --border: #dfe3e8;
-    --text: #1a1d21;
-    --text-soft: #5a626c;
-    --muted: #8b939d;
-    --accent: #2f5bd7;
-    --accent-soft: #e7edfb;
-    --radius: 10px;
+    color-scheme: light;
+
+    --bg: #fffcf7;          /* cream — header, cards, buttons */
+    --surface: #fffcf7;     /* cream — cards (separated by border + page wash) */
+    --surface-2: #f0ece1;   /* warm inset — code, table headers */
+    --border: rgba(26, 36, 33, 0.14);
+    --text: #1a2421;        /* deep green-ink */
+    --text-soft: #3d4a45;
+    --muted: #66736d;
+    --accent: #0c7c6c;      /* teal */
+    --accent-deep: #085a4e;
+    --accent-soft: #d5ebe5;
+    --radius: 12px;
     --maxw: 1080px;
+    --shadow: 0 1px 0 rgba(26,36,33,0.04), 0 16px 36px rgba(26,36,33,0.06);
+    --display: "Outfit", "Avenir Next", "Segoe UI", sans-serif;
 
-    --ok-bg: #e4f5ea; --ok-fg: #1c7a41;
-    --info-bg: #e7edfb; --info-fg: #2f5bd7;
-    --warn-bg: #fdf0da; --warn-fg: #9a6410;
-    --danger-bg: #fbe4e4; --danger-fg: #b02a2a;
-    --muted-bg: #eceef1; --muted-fg: #5a626c;
-    --unknown-bg: #eceef1; --unknown-fg: #7a828c;
+    --ok-bg: #d9efe0; --ok-fg: #1c7a41;
+    --info-bg: #d5ebe5; --info-fg: #085a4e;   /* teal, matches accent */
+    --warn-bg: #f6ead4; --warn-fg: #8a4b12;   /* warm amber */
+    --danger-bg: #f6dede; --danger-fg: #b02a2a;
+    --muted-bg: #e6ede6; --muted-fg: #66736d;
+    --unknown-bg: #e6ede6; --unknown-fg: #7a828c;
 }
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --bg: #14171b;
-        --surface: #1b1f24;
-        --surface-2: #22272e;
-        --border: #2d333b;
-        --text: #e8eaed;
-        --text-soft: #aab2bd;
-        --muted: #7c848f;
-        --accent: #7aa2ff;
-        --accent-soft: #1f2a44;
-
-        --ok-bg: #16321f; --ok-fg: #6fd694;
-        --info-bg: #1f2a44; --info-fg: #9bb8ff;
-        --warn-bg: #3a2c12; --warn-fg: #e6b45c;
-        --danger-bg: #3a1c1c; --danger-fg: #f08a8a;
-        --muted-bg: #262b31; --muted-fg: #aab2bd;
-        --unknown-bg: #262b31; --unknown-fg: #8b939d;
-    }
-}
-
-:root[data-theme="dark"] { color-scheme: dark; }
-:root[data-theme="light"] { color-scheme: light; }
 
 * { box-sizing: border-box; }
 
@@ -52,16 +33,22 @@ html { -webkit-text-size-adjust: 100%; }
 
 body {
     margin: 0;
-    background: var(--bg);
     color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: "Figtree", "Avenir Next", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     line-height: 1.6;
     font-size: 17px;
+    background:
+        radial-gradient(900px 420px at 8% -10%, rgba(12, 124, 108, 0.12), transparent 55%),
+        radial-gradient(700px 400px at 100% 0%, rgba(138, 75, 18, 0.07), transparent 45%),
+        linear-gradient(165deg, #e8f0ec 0%, #f6f1e8 55%, #fbf8f2 100%);
+    background-attachment: fixed;
 }
+
+h1, h2, h3 { font-family: var(--display); }
 
 .wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 clamp(16px, 4vw, 32px); }
 
-a { color: var(--accent); }
+a { color: var(--accent-deep); }
 a:hover { text-decoration: underline; }
 
 code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.9em; }
@@ -73,7 +60,7 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fo
 .skip-link:focus { left: 0; }
 
 /* ---- header / nav ---- */
-.site-header { border-bottom: 1px solid var(--border); background: var(--bg); position: sticky; top: 0; z-index: 20; }
+.site-header { border-bottom: 1px solid var(--border); background: rgba(255, 252, 247, 0.88); backdrop-filter: saturate(1.2) blur(8px); position: sticky; top: 0; z-index: 20; }
 .site-header__inner { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding-top: 12px; padding-bottom: 12px; }
 .brand { display: flex; align-items: baseline; gap: 10px; text-decoration: none; color: var(--text); }
 .brand__mark { font-weight: 800; letter-spacing: -0.02em; font-size: 1.15rem; }
@@ -163,7 +150,7 @@ a.chip:hover { background: var(--accent-soft); border-color: var(--accent); text
 }
 .btn:hover { border-color: var(--accent); text-decoration: none; }
 .btn--primary { background: var(--accent); color: #fff; border-color: var(--accent); }
-.btn--primary:hover { filter: brightness(1.06); }
+.btn--primary:hover { background: var(--accent-deep); border-color: var(--accent-deep); }
 .button-row, .cross-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
 .text-link { font-weight: 600; }
 

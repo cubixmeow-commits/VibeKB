@@ -19,6 +19,9 @@ $errorCount = count(array_filter($issues, fn ($i) => $i['level'] === 'error'));
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= h($pageTitle) ?> · <?= h($projectName) ?> — VibeKB</title>
     <meta name="description" content="A living explanation of what <?= h($projectName) ?> currently does, how it works, what AI is changing, and why.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= h(guide_base()) ?>assets/css/guide.css">
 </head>
 <body>
@@ -76,6 +79,7 @@ $errorCount = count(array_filter($issues, fn ($i) => $i['level'] === 'error'));
     </div>
 </footer>
 
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="<?= h(guide_base()) ?>assets/js/guide.js" defer></script>
 </body>
 </html>
