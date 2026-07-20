@@ -1,0 +1,27 @@
+{
+  "groups": [
+    {
+      "id": "primary-workflow",
+      "title": "Primary workflow",
+      "description": "Capturing, browsing, and reading ideas — the core loop the app exists for."
+    },
+    {
+      "id": "data-management",
+      "title": "Data management",
+      "description": "Changing and exporting the ideas that have been captured."
+    },
+    {
+      "id": "deployment-operations",
+      "title": "Deployment & operations",
+      "description": "System behaviour that makes the app run and persist data."
+    }
+  ],
+  "order": [
+    "create-idea",
+    "browse-ideas",
+    "view-idea",
+    "change-idea-status",
+    "export-ideas",
+    "initialize-database"
+  ]
+}

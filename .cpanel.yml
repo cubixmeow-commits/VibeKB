@@ -5,15 +5,17 @@
 # Review and update this file whenever the repository structure, build output,
 # runtime folders, or deployment requirements change. See AGENTS.md.
 #
-# Note: rsync of ./ includes the hidden .vibekb/ knowledge directory required
-# by the Project Guide and technical reference engines (including .vibekb/guide/).
-# Do not add --exclude='.vibekb/'.
-# Runtime paths that must deploy: index.php, assets/ (incl. homepage.css/js),
-# guide/, edition/, .vibekb/
-# docs/ remains excluded (authoring docs only; not required at runtime).
+# Note: rsync of ./ includes the hidden .vibekb/ content directory required by
+# the guide app to render the living software model. Do not add
+# --exclude='.vibekb/'.
+# Runtime paths that must deploy: index.php, assets/ (home.css), guide/ (the V1
+# app, incl. guide/assets/), .vibekb/, README.md.
+# Authoring docs (PRODUCT.md, CLAUDE.md, AGENTS.md, SCHEMA.md, MAINTENANCE.md,
+# INITIALIZE.md, BUILD_REPORT.md, DEPLOYMENT.md) are excluded — not needed at
+# runtime.
 
 deployment:
   tasks:
     - export DEPLOYPATH=/home/iainmcok/public_html/vibekb/
     - /bin/mkdir -p "$DEPLOYPATH"
-    - /bin/rsync -av --delete --exclude='.git/' --exclude='.github/' --exclude='.cursor/' --exclude='.vscode/' --exclude='.idea/' --exclude='.cpanel.yml' --exclude='.env' --exclude='.env.*' --exclude='node_modules/' --exclude='vendor/' --exclude='tests/' --exclude='test/' --exclude='__tests__/' --exclude='docs/' --exclude='coverage/' --exclude='logs/' --exclude='tmp/' --exclude='temp/' --exclude='*.log' --exclude='.DS_Store' --exclude='Thumbs.db' --exclude='.gitignore' --exclude='.gitattributes' --exclude='.editorconfig' --exclude='.eslint*' --exclude='.prettier*' --exclude='.npmrc' --exclude='.nvmrc' --exclude='.phpunit*' --exclude='phpunit.xml*' --exclude='composer.json' --exclude='composer.lock' --exclude='package.json' --exclude='package-lock.json' --exclude='yarn.lock' --exclude='pnpm-lock.yaml' --exclude='tsconfig*.json' --exclude='vite.config.*' --exclude='webpack.config.*' --exclude='rollup.config.*' --exclude='jest.config.*' --exclude='Dockerfile*' --exclude='docker-compose*.yml' --exclude='docker-compose*.yaml' --exclude='Makefile' --exclude='AGENTS.md' --exclude='DEPLOYMENT.md' --exclude='CONTRIBUTING.md' --exclude='.well-known/' --exclude='uploads/' --exclude='upload/' --exclude='media/' --exclude='files/' --exclude='storage/' --exclude='sessions/' --exclude='session/' --exclude='cache/' --exclude='data/' --exclude='database/' --exclude='databases/' --exclude='sqlite/' --exclude='*.sqlite' --exclude='*.sqlite3' --exclude='*.db' --exclude='config.local.php' --exclude='config.production.php' --exclude='local.config.php' --exclude='wp-config.php' --exclude='*.bak' --exclude='*.swp' --exclude='*~' ./ "$DEPLOYPATH"
+    - /bin/rsync -av --delete --exclude='.git/' --exclude='.github/' --exclude='.cursor/' --exclude='.vscode/' --exclude='.idea/' --exclude='.cpanel.yml' --exclude='.env' --exclude='.env.*' --exclude='node_modules/' --exclude='vendor/' --exclude='tests/' --exclude='test/' --exclude='__tests__/' --exclude='docs/' --exclude='coverage/' --exclude='logs/' --exclude='tmp/' --exclude='temp/' --exclude='*.log' --exclude='.DS_Store' --exclude='Thumbs.db' --exclude='.gitignore' --exclude='.gitattributes' --exclude='.editorconfig' --exclude='.eslint*' --exclude='.prettier*' --exclude='.npmrc' --exclude='.nvmrc' --exclude='.phpunit*' --exclude='phpunit.xml*' --exclude='composer.json' --exclude='composer.lock' --exclude='package.json' --exclude='package-lock.json' --exclude='yarn.lock' --exclude='pnpm-lock.yaml' --exclude='tsconfig*.json' --exclude='vite.config.*' --exclude='webpack.config.*' --exclude='rollup.config.*' --exclude='jest.config.*' --exclude='Dockerfile*' --exclude='docker-compose*.yml' --exclude='docker-compose*.yaml' --exclude='Makefile' --exclude='AGENTS.md' --exclude='DEPLOYMENT.md' --exclude='CONTRIBUTING.md' --exclude='CLAUDE.md' --exclude='PRODUCT.md' --exclude='SCHEMA.md' --exclude='MAINTENANCE.md' --exclude='INITIALIZE.md' --exclude='BUILD_REPORT.md' --exclude='.well-known/' --exclude='uploads/' --exclude='upload/' --exclude='media/' --exclude='files/' --exclude='storage/' --exclude='sessions/' --exclude='session/' --exclude='cache/' --exclude='data/' --exclude='database/' --exclude='databases/' --exclude='sqlite/' --exclude='*.sqlite' --exclude='*.sqlite3' --exclude='*.db' --exclude='config.local.php' --exclude='config.production.php' --exclude='local.config.php' --exclude='wp-config.php' --exclude='*.bak' --exclude='*.swp' --exclude='*~' ./ "$DEPLOYPATH"
