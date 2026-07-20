@@ -7,7 +7,7 @@ It is not a second Project Guide and not a documentation portal.
 
 **Primary audience:** people building with Cursor, Claude Code, Windsurf, Copilot, and similar tools.
 
-**Strategic position:** VibeKB is day-one infrastructure for AI-assisted development—a living Project Guide that grows with the repository—not a cleanup tool after understanding is already lost. The `#workflow` section is the central timeline (new project → initialize → build → guide grows → months later). Homepage sample display name may differ from the in-guide project name (e.g. “Weekend SaaS Demo” → SaaS Idea Manager).
+**Strategic narrative:** The homepage educates visitors about a new reality first—code is generated faster than humans can absorb it—then introduces VibeKB as the way to close that gap. Layer 1 is the problem story; VibeKB appears after the shift is clear. The Project Guide is framed as preserved understanding (not documentation). Homepage sample display name may differ from the in-guide project name (e.g. “Weekend SaaS Demo” → SaaS Idea Manager).
 
 ## Information layers
 
@@ -23,17 +23,17 @@ Relevant information does not need to be removed—but it must not all compete f
 
 ## Section map
 
-1. Hero — promise + mini pipeline visual  
-2. Problem — stepped narrative + README expandable  
-3. Product outcomes — four tabs into guide chapters  
-4. Sample Project Guide preview — shared chapter JSON excerpts  
-5. Depths — Understand / Work on it / Reference on one feature  
-6. How it works — pipeline with Version 1 vs architecture-direction badges  
-7. Relevance filter — inclusion tests + leave-outs  
-8. Developers & AI agents — comparison + token-efficiency expandable  
-9. Repository architecture — `.vibekb` map  
-10. Principles — one-at-a-time manifesto  
-11. Final CTA — complete guide + repository  
+1. Hero — the new bottleneck (generation vs understanding), before the product  
+2. The shift — story of how the gap opens (stepper)  
+3. Closing the gap — introduce VibeKB as preserved understanding  
+4. Sample Project Guide preview — what closing the gap looks like  
+5. Depths — human absorption speed across Understand / Work on it / Reference  
+6. Workflow — day-one timeline so the gap never opens  
+7. Relevance — what to preserve while building  
+8. Audience — “never want to lose the next project”  
+9. Repository architecture — where the mental model lives  
+10. Principles — rules for keeping understanding ahead of generation  
+11. Final CTA — thesis + living guide  
 
 ## Interaction patterns
 

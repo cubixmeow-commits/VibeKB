@@ -388,6 +388,27 @@ a:hover {
   font-size: 0.95rem;
 }
 
+.hp-thesis {
+  margin: 1.5rem 0 0;
+  padding: 1.15rem 1.2rem;
+  border-radius: var(--hp-radius);
+  border: 1px solid rgba(12, 124, 108, 0.28);
+  background: linear-gradient(145deg, #fff, var(--hp-accent-soft));
+  font-family: var(--hp-display);
+  font-weight: 700;
+  font-size: clamp(1.05rem, 0.95rem + 0.55vw, 1.3rem);
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  color: var(--hp-ink);
+}
+
+.hp-thesis-soft {
+  background: rgba(255, 252, 247, 0.92);
+  border-color: var(--hp-line);
+  font-size: clamp(1rem, 0.95rem + 0.35vw, 1.15rem);
+  font-weight: 650;
+}
+
 /* Day-one workflow timeline */
 
 .hp-timeline-track {
