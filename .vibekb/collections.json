@@ -48,5 +48,30 @@
     "title": "Editorial History",
     "description": "How this explanation has evolved and what still needs attention.",
     "template": "editorial"
+  },
+  "timeline": {
+    "title": "Project Timeline",
+    "description": "How the repository and its understanding evolved over time.",
+    "template": "timeline"
+  },
+  "sessions": {
+    "title": "AI Session Summaries",
+    "description": "What was decided in coding conversations before it disappeared.",
+    "template": "sessions"
+  },
+  "lessons-learned": {
+    "title": "Lessons Learned",
+    "description": "Mistakes and discoveries worth remembering.",
+    "template": "lessons-learned"
+  },
+  "feature-timeline": {
+    "title": "Feature Timeline",
+    "description": "Why each feature exists and when it landed.",
+    "template": "feature-timeline"
+  },
+  "handoff": {
+    "title": "Handoff Notes",
+    "description": "What the next human or AI session needs before touching code.",
+    "template": "handoff"
   }
 }

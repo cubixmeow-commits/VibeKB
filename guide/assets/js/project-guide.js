@@ -48,7 +48,7 @@
 
   function closeOpenPanels($scope) {
     var $root = $scope && $scope.length ? $scope : $(document);
-    $root.find('[data-card-toggle][aria-expanded="true"], [data-problem-toggle][aria-expanded="true"], [data-checklist-toggle][aria-expanded="true"], [data-dev-toggle][aria-expanded="true"]').each(function () {
+    $root.find('[data-card-toggle][aria-expanded="true"], [data-problem-toggle][aria-expanded="true"], [data-checklist-toggle][aria-expanded="true"], [data-dev-toggle][aria-expanded="true"], [data-decision-toggle][aria-expanded="true"]').each(function () {
       var $btn = $(this);
       var panelId = $btn.attr('aria-controls');
       $btn.attr('aria-expanded', 'false');
@@ -168,6 +168,9 @@
     // Soft-init progressive scenes in the active chapter
     initProgression($active);
     initAlignment($active);
+    $active.find('[data-timeline]').each(function () {
+      $(this).find('[data-timeline-phase]').first().trigger('click');
+    });
   }
 
   function go(delta) {
@@ -250,6 +253,179 @@
           $item.addClass('is-lit');
         }, 90 * idx);
       });
+    });
+  }
+
+  function bindTimeline() {
+    $('[data-timeline]').each(function () {
+      var $timeline = $(this);
+      var $phases = $timeline.find('[data-timeline-phase]');
+      var $panel = $timeline.find('[data-timeline-panel]');
+      var $prev = $timeline.find('[data-timeline-prev]');
+      var $next = $timeline.find('[data-timeline-next]');
+      var data = [];
+      try {
+        data = JSON.parse($timeline.find('[data-timeline-data]').text() || '[]');
+      } catch (err) {
+        data = [];
+      }
+      var index = 0;
+
+      function render(i) {
+        if (!data[i]) {
+          return;
+        }
+        var phase = data[i];
+        index = i;
+        $phases.removeClass('is-active').attr('aria-selected', 'false').attr('tabindex', '-1');
+        $phases.eq(i).addClass('is-active').attr('aria-selected', 'true').attr('tabindex', '0');
+        $panel.find('[data-timeline-panel-when]').text(phase.when || '');
+        $panel.find('[data-timeline-panel-title]').text(phase.title || '');
+        $panel.find('[data-timeline-panel-narrative]').text(phase.narrative || '');
+        var $snaps = $panel.find('[data-timeline-snapshots]');
+        $snaps.empty();
+        if (phase.snapshots && phase.snapshots.length) {
+          $snaps.prop('hidden', false);
+          phase.snapshots.forEach(function (snap) {
+            $snaps.append(
+              $('<li/>').append($('<strong/>').text(snap.label || '')).append(document.createTextNode(' ' + (snap.text || '')))
+            );
+          });
+        } else {
+          $snaps.prop('hidden', true);
+        }
+        var $captured = $panel.find('[data-timeline-captured]');
+        var $wrap = $panel.find('[data-timeline-captured-wrap]');
+        $captured.empty();
+        if (phase.captured && phase.captured.length) {
+          $wrap.prop('hidden', false);
+          phase.captured.forEach(function (item) {
+            $captured.append($('<li/>').text(item));
+          });
+        } else {
+          $wrap.prop('hidden', true);
+        }
+        $prev.prop('disabled', i <= 0);
+        $next.prop('disabled', i >= data.length - 1);
+      }
+
+      $timeline.on('click', '[data-timeline-phase]', function () {
+        render(parseInt($(this).attr('data-phase-index'), 10));
+      });
+      $prev.on('click', function () {
+        render(index - 1);
+      });
+      $next.on('click', function () {
+        render(index + 1);
+      });
+      if (data.length) {
+        render(0);
+      }
+    });
+  }
+
+  function bindEvolution() {
+    $('[data-evolution]').each(function () {
+      var $evo = $(this);
+      var $tabs = $evo.find('[data-evolution-tab]');
+      var $panel = $evo.find('[data-evolution-panel]');
+      var data = [];
+      try {
+        data = JSON.parse($evo.find('[data-evolution-data]').text() || '[]');
+      } catch (err) {
+        data = [];
+      }
+
+      function render(i) {
+        if (!data[i]) {
+          return;
+        }
+        var snap = data[i];
+        $tabs.removeClass('is-active').attr('aria-selected', 'false').attr('tabindex', '-1');
+        $tabs.eq(i).addClass('is-active').attr('aria-selected', 'true').attr('tabindex', '0');
+        $panel.find('[data-evolution-panel-version]').text(snap.version || '');
+        $panel.find('[data-evolution-panel-title]').text(snap.title || '');
+        $panel.find('[data-evolution-panel-body]').text(snap.body || '');
+        var $changes = $panel.find('[data-evolution-changes]');
+        $changes.empty();
+        if (snap.changes && snap.changes.length) {
+          $changes.prop('hidden', false);
+          snap.changes.forEach(function (change) {
+            $changes.append($('<li/>').text(change));
+          });
+        } else {
+          $changes.prop('hidden', true);
+        }
+        var $note = $panel.find('[data-evolution-note]');
+        if (snap.note) {
+          $note.text(snap.note).prop('hidden', false);
+        } else {
+          $note.prop('hidden', true);
+        }
+      }
+
+      $evo.on('click', '[data-evolution-tab]', function () {
+        render(parseInt($(this).attr('data-snap-index'), 10));
+      });
+      if (data.length) {
+        render(0);
+      }
+    });
+  }
+
+  function bindAiLoop() {
+    $('[data-ai-loop]').each(function () {
+      var $loop = $(this);
+      var $steps = $loop.find('[data-ailoop-step]');
+      var $prev = $loop.find('[data-ailoop-prev]');
+      var $next = $loop.find('[data-ailoop-next]');
+      var index = 0;
+
+      function activate(i, focusBtn) {
+        if (i < 0 || i >= $steps.length) {
+          return;
+        }
+        index = i;
+        $steps.removeClass('is-active');
+        $steps.find('[data-ailoop-activate]').attr('aria-pressed', 'false');
+        var $step = $steps.eq(i).addClass('is-active');
+        var $btn = $step.find('[data-ailoop-activate]').attr('aria-pressed', 'true');
+        var actor = $.trim($step.find('.pg-ailoop-actor').first().text());
+        var title = $.trim($step.find('.pg-ailoop-step-title').first().text());
+        var text = $.trim($loop.find('[data-ailoop-step-text="' + i + '"]').text());
+        var exampleMatch = text.match(/Example:\s*(.+)$/);
+        var bodyText = text;
+        var example = '';
+        if (exampleMatch) {
+          bodyText = $.trim(text.replace(/Example:\s*.+$/, ''));
+          example = exampleMatch[1];
+        }
+        $loop.find('[data-ailoop-panel-actor]').text(actor);
+        $loop.find('[data-ailoop-panel-title]').text(title);
+        $loop.find('[data-ailoop-panel-text]').text(bodyText);
+        var $ex = $loop.find('[data-ailoop-example]');
+        if (example) {
+          $ex.text(example).prop('hidden', false);
+        } else {
+          $ex.prop('hidden', true);
+        }
+        $prev.prop('disabled', i <= 0);
+        $next.prop('disabled', i >= $steps.length - 1);
+        if (focusBtn) {
+          $btn.trigger('focus');
+        }
+      }
+
+      $loop.on('click', '[data-ailoop-activate]', function () {
+        activate(parseInt($(this).closest('[data-ailoop-step]').attr('data-step-index'), 10), false);
+      });
+      $prev.on('click', function () {
+        activate(index - 1, true);
+      });
+      $next.on('click', function () {
+        activate(index + 1, true);
+      });
+      activate(0, false);
     });
   }
 
@@ -464,7 +640,11 @@
     bindDisclosure('[data-problem-toggle]', 'data-problem-panel');
     bindDisclosure('[data-checklist-toggle]', 'data-checklist-panel');
     bindDisclosure('[data-dev-toggle]', 'data-dev-panel');
+    bindDisclosure('[data-decision-toggle]', 'data-decision-panel');
     bindFlow($('[data-flow]'));
+    bindTimeline();
+    bindEvolution();
+    bindAiLoop();
     bindTrouble();
     bindConceptMap();
     bindIdeaDemo();

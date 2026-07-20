@@ -65,6 +65,10 @@ final class GuideRenderer
             'checklist',
             'developer-detail',
             'reference-links',
+            'timeline',
+            'evolution',
+            'ai-loop',
+            'decision-history',
         ];
         if (!in_array($type, $allowed, true)) {
             $type = 'statement';

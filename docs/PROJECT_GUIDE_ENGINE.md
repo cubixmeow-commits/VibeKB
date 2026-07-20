@@ -17,7 +17,7 @@ This is not a generic page builder, documentation portal, or slide deck framewor
   guide/
     guide.json                 # Guide metadata + chapter file list
     chapters/
-      01-what-is-this.json
+      01-collective-memory.json
       …
   overview/ decisions/ …       # Reference knowledge (Markdown)
 ```
@@ -58,7 +58,11 @@ Each chapter JSON includes:
 | `problem-path` | Troubleshooting walkthroughs / alignment |
 | `checklist` | Change-safety checklists or “affects” lists |
 | `developer-detail` | Work-on-it disclosure or question entry points |
-| `reference-links` | Links into the technical reference |
+| `reference-links` | Links into the technical reference (collection groups or item refs) |
+| `timeline` | Project evolution phases (day 1 → month 6) with snapshots |
+| `evolution` | Architecture or feature version snapshots |
+| `ai-loop` | Human → AI → VibeKB → future session collaboration loop |
+| `decision-history` | Expandable decisions with rejected alternatives |
 
 Each scene type has:
 

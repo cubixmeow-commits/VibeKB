@@ -9,15 +9,15 @@ function homepage_e(?string $value): string
 
 $guideUrl = 'guide/';
 $repoUrl = 'https://github.com/cubixmeow-commits/VibeKB';
-$sampleDisplayName = 'Weekend SaaS Demo';
+$sampleDisplayName = 'Six-Month AI Build';
 $sampleRealName = 'SaaS Idea Manager';
 
 $previewStems = [
-    '01-what-is-this',
-    '03-save-flow',
-    '04-simplicity',
-    '06-problems',
-    '07-change-safely',
+    '01-collective-memory',
+    '02-how-it-grew',
+    '05-decision-history',
+    '07-ai-context',
+    '06-developer-notes',
 ];
 
 $previewChapters = [];
@@ -41,6 +41,41 @@ foreach ($previewStems as $stem) {
         $type = (string) ($scene['type'] ?? '');
         if ($type === 'statement' && $statement === '') {
             $statement = (string) ($scene['headline'] ?? $scene['body'] ?? '');
+        }
+        if ($type === 'timeline' && $flowSteps === []) {
+            foreach (($scene['phases'] ?? []) as $phase) {
+                if (is_array($phase)) {
+                    $flowSteps[] = [
+                        'title' => (string) ($phase['when'] ?? '') . ': ' . (string) ($phase['title'] ?? ''),
+                        'text' => (string) ($phase['narrative'] ?? ''),
+                    ];
+                }
+            }
+        }
+        if ($type === 'ai-loop' && $flowSteps === []) {
+            foreach (($scene['steps'] ?? []) as $step) {
+                if (is_array($step)) {
+                    $flowSteps[] = [
+                        'title' => (string) ($step['actor'] ?? '') . ' — ' . (string) ($step['title'] ?? ''),
+                        'text' => (string) ($step['text'] ?? ''),
+                    ];
+                }
+            }
+        }
+        if ($type === 'decision-history' && $devPoints === []) {
+            $decisions = $scene['decisions'] ?? [];
+            if (isset($decisions[0]) && is_array($decisions[0])) {
+                $statement = (string) ($decisions[0]['outcome'] ?? $decisions[0]['title'] ?? '');
+                foreach ($decisions as $decision) {
+                    if (!is_array($decision)) {
+                        continue;
+                    }
+                    $devPoints[] = [
+                        'title' => (string) ($decision['when'] ?? ''),
+                        'text' => (string) ($decision['title'] ?? ''),
+                    ];
+                }
+            }
         }
         if ($type === 'developer-detail' && $devPoints === []) {
             foreach (($scene['points'] ?? []) as $point) {
@@ -244,46 +279,46 @@ foreach ($previewStems as $stem) {
                     </div>
                     <div class="hp-tabpanels">
                         <div class="hp-tabpanel is-active" role="tabpanel" id="out-panel-0" aria-labelledby="out-tab-0" data-tab-panel="0">
-                            <p class="hp-tabpanel-lead">The Project Guide keeps pace with the product: what it does, who it&#39;s for, how someone uses it—updated as features land.</p>
-                            <p class="hp-example"><strong>In the sample:</strong> plain-language product truth before any file dive.</p>
-                            <a class="hp-text-link" href="<?= homepage_e($guideUrl) ?>#what-is-this">See “What is this project?”</a>
+                            <p class="hp-tabpanel-lead">The Project Guide grows with the product—capturing intent, not just describing features after the fact.</p>
+                            <p class="hp-example"><strong>In the sample:</strong> collective memory overview and the AI collaboration loop.</p>
+                            <a class="hp-text-link" href="<?= homepage_e($guideUrl) ?>#collective-memory">See collective memory</a>
                         </div>
                         <div class="hp-tabpanel" role="tabpanel" id="out-panel-1" aria-labelledby="out-tab-1" data-tab-panel="1" hidden>
                             <p class="hp-tabpanel-lead">Trade-offs, rejected approaches, and “why it&#39;s shaped this way” stop living only in chats. They become repository knowledge.</p>
-                            <p class="hp-example"><strong>In the sample:</strong> save path, SQLite choice, no-auth boundaries—recorded where the code lives.</p>
-                            <a class="hp-text-link" href="<?= homepage_e($guideUrl) ?>#save-flow">See the save path</a>
+                            <p class="hp-example"><strong>In the sample:</strong> decision history with rejected PostgreSQL and half-auth paths.</p>
+                            <a class="hp-text-link" href="<?= homepage_e($guideUrl) ?>#decision-history">See decision history</a>
                         </div>
                         <div class="hp-tabpanel" role="tabpanel" id="out-panel-2" aria-labelledby="out-tab-2" data-tab-panel="2" hidden>
-                            <p class="hp-tabpanel-lead">Dependencies, invariants, and side effects are available before the next refactor prompt—not after something breaks.</p>
-                            <p class="hp-example"><strong>In the sample:</strong> adding a field means migration, forms, write, read, and production apply—together.</p>
-                            <a class="hp-text-link" href="<?= homepage_e($guideUrl) ?>#change-safely">See change-safety guides</a>
+                            <p class="hp-tabpanel-lead">Day 1 to month 6—timeline, architecture evolution, and feature reasoning captured alongside code.</p>
+                            <p class="hp-example"><strong>In the sample:</strong> interactive timeline from VibeKB init to full knowledge base.</p>
+                            <a class="hp-text-link" href="<?= homepage_e($guideUrl) ?>#how-it-grew">See how it grew</a>
                         </div>
                         <div class="hp-tabpanel" role="tabpanel" id="out-panel-3" aria-labelledby="out-tab-3" data-tab-panel="3" hidden>
-                            <p class="hp-tabpanel-lead">When you solve a failure once, the path stays with the project—so the gap doesn&#39;t reopen every late night.</p>
-                            <p class="hp-example"><strong>In the sample:</strong> blank list → file exists? PHP can read it? Query returns rows?</p>
-                            <a class="hp-text-link" href="<?= homepage_e($guideUrl) ?>#problems">See troubleshooting sequences</a>
+                            <p class="hp-tabpanel-lead">AI handoff notes and session summaries so the next agent session starts from repository truth.</p>
+                            <p class="hp-example"><strong>In the sample:</strong> what Cursor should read before editing this repo.</p>
+                            <a class="hp-text-link" href="<?= homepage_e($guideUrl) ?>#ai-context">See AI context</a>
                         </div>
                     </div>
                     <div class="hp-tabs-fallback">
                         <article>
                             <h3>Understanding grows with the code</h3>
-                            <p>Product truth stays current as features land.</p>
-                            <a href="<?= homepage_e($guideUrl) ?>#what-is-this">Open “What is this project?”</a>
+                            <p>Collective memory from day one—not a retrofit.</p>
+                            <a href="<?= homepage_e($guideUrl) ?>#collective-memory">Open collective memory</a>
                         </article>
                         <article>
                             <h3>Decisions stay in the repo</h3>
-                            <p>Trade-offs and intent leave the chat and enter Git.</p>
-                            <a href="<?= homepage_e($guideUrl) ?>#save-flow">Open the save path</a>
+                            <p>Rejected paths recorded so debates do not restart.</p>
+                            <a href="<?= homepage_e($guideUrl) ?>#decision-history">Open decision history</a>
                         </article>
                         <article>
-                            <h3>Change without archaeology</h3>
-                            <p>Invariants and impact before you edit.</p>
-                            <a href="<?= homepage_e($guideUrl) ?>#change-safely">Open change-safety guides</a>
+                            <h3>Evolution you can walk through</h3>
+                            <p>Timeline from init to month six.</p>
+                            <a href="<?= homepage_e($guideUrl) ?>#how-it-grew">Open project timeline</a>
                         </article>
                         <article>
-                            <h3>Debug from memory, not guesswork</h3>
-                            <p>Failure paths accumulate instead of disappearing.</p>
-                            <a href="<?= homepage_e($guideUrl) ?>#problems">Open troubleshooting</a>
+                            <h3>AI sessions start informed</h3>
+                            <p>Handoff notes before the next edit prompt.</p>
+                            <a href="<?= homepage_e($guideUrl) ?>#ai-context">Open AI context</a>
                         </article>
                     </div>
                 </div>
@@ -300,9 +335,9 @@ foreach ($previewStems as $stem) {
                 <p class="hp-kicker">What closing the gap looks like</p>
                 <h2 id="sample-title"><?= homepage_e($sampleDisplayName) ?></h2>
                 <p class="hp-lead">
-                    A living Project Guide for a real build—simple first, technical when you dig in.
-                    This is what it looks like when understanding is not left behind in expired chats.
-                    <span class="hp-sample-aside">Inside the guide, the project is <?= homepage_e($sampleRealName) ?>: a small PHP and SQLite app explained end to end.</span>
+                    Walk through six months of AI-assisted building—decisions, rejected approaches, session summaries, and handoff notes preserved in the repository.
+                    This is what it looks like when understanding keeps pace with generation.
+                    <span class="hp-sample-aside">The app inside is <?= homepage_e($sampleRealName) ?>—a small PHP and SQLite project. The sample is the workflow around it.</span>
                 </p>
 
                 <div class="hp-guide-preview" data-guide-preview>
