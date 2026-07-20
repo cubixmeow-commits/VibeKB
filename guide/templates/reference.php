@@ -12,7 +12,7 @@ $warnings = array_values(array_filter($issues, fn ($i) => $i['level'] === 'warn'
 $manifest = $content->manifest();
 ?>
 <article class="view view-doc">
-    <header class="page-head">
+    <header class="page-head reading-column">
         <p class="eyebrow">Reference</p>
         <h1>Content model &amp; diagnostics</h1>
         <p class="lede">How this guide's content is structured, the vocabularies it validates against, and any problems detected in the current content set.</p>

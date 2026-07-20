@@ -23,15 +23,15 @@ if ($reqType !== '' && $reqId !== '') {
     $rec = $content->memoryRecord($reqType, $reqId);
     if ($rec === null) {
         http_response_code(404);
-        echo '<article class="view"><p class="breadcrumb"><a href="' . h(guide_url('why')) . '">← Why it works this way</a></p>';
+        echo '<article class="view"><p class="breadcrumb"><a href="' . h(guide_url('why')) . '">← Decisions &amp; rationale</a></p>';
         echo '<h1>Record not found</h1><p class="muted">No ' . h(rtrim($reqType, 's')) . ' with id <code>' . h($reqId) . '</code>.</p></article>';
         return;
     }
     $m = $rec['meta'];
     ?>
     <article class="view view-doc">
-        <p class="breadcrumb"><a href="<?= h(guide_url('why')) ?>">← Why it works this way</a></p>
-        <header class="page-head">
+        <p class="breadcrumb"><a href="<?= h(guide_url('why')) ?>">← Decisions &amp; rationale</a></p>
+        <header class="page-head reading-column">
             <p class="eyebrow"><?= h($typeLabels[$reqType] ?? ucfirst($reqType)) ?></p>
             <h1><?= h((string) ($m['title'] ?? $reqId)) ?></h1>
             <p class="lede"><?= h((string) ($m['summary'] ?? '')) ?></p>
@@ -43,7 +43,7 @@ if ($reqType !== '' && $reqId !== '') {
             </div>
         </header>
         <div class="detail-grid">
-            <div class="detail-main"><div class="prose"><?= $rec['html'] ?></div></div>
+            <div class="detail-main"><div class="prose reading-column"><?= $rec['html'] ?></div></div>
             <aside class="detail-rail" aria-label="Connections">
                 <div class="rail-card">
                     <h2>Affects functionality</h2>
@@ -63,8 +63,8 @@ if ($reqType !== '' && $reqId !== '') {
 $memory = $content->memory();
 ?>
 <article class="view view-why">
-    <header class="page-head">
-        <p class="eyebrow">Why it works this way</p>
+    <header class="page-head reading-column">
+        <p class="eyebrow">Decisions &amp; rationale</p>
         <h1>The reasoning behind the software</h1>
         <p class="lede">Decisions, constraints, assumptions, warnings, and discoveries — each connected to the functionality it explains. Repository memory supports the software model; it does not replace it.</p>
     </header>

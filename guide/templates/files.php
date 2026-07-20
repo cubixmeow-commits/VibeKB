@@ -8,7 +8,7 @@
 $files = $content->files();
 ?>
 <article class="view view-files">
-    <header class="page-head">
+    <header class="page-head reading-column">
         <p class="eyebrow">Files that matter</p>
         <h1>The files worth understanding</h1>
         <p class="lede">A curated list — not the whole repository. Each file says what it does, when it runs, and how safe it is to change.</p>

@@ -40,6 +40,9 @@ try {
 }
 
 $view = (string) ($_GET['view'] ?? 'overview');
+if ($view === '') {
+    $view = 'overview';
+}
 
 // Whitelist of views -> template files. `functionality` is special-cased
 // because it renders either the index or a detail page depending on `?id`.
@@ -56,17 +59,37 @@ $routes = [
     'reference' => 'reference',
 ];
 
-$navItems = [
+// Primary answers the product questions in order; secondary holds deeper
+// exploration. Labels may differ from historical wording; routes stay intact.
+$navPrimary = [
     ['view' => 'overview', 'label' => 'Overview'],
     ['view' => 'functionality', 'label' => 'Functionality'],
-    ['view' => 'how-it-works', 'label' => 'How it works'],
+    ['view' => 'how-it-works', 'label' => 'Architecture'],
+    ['view' => 'current-work', 'label' => 'Current work'],
+];
+
+$navSecondary = [
     ['view' => 'data', 'label' => 'Data &amp; storage'],
     ['view' => 'files', 'label' => 'Files that matter'],
-    ['view' => 'current-work', 'label' => 'Current AI work'],
     ['view' => 'changes', 'label' => 'Changes'],
-    ['view' => 'why', 'label' => 'Why it works this way'],
+    ['view' => 'why', 'label' => 'Decisions &amp; rationale'],
     ['view' => 'handoff', 'label' => 'AI handoff'],
     ['view' => 'reference', 'label' => 'Reference'],
+];
+
+$navItems = array_merge($navPrimary, $navSecondary);
+
+$pageTitles = [
+    'overview' => 'Overview',
+    'functionality' => 'Functionality',
+    'how-it-works' => 'Architecture',
+    'data' => 'Data & storage',
+    'files' => 'Files that matter',
+    'current-work' => 'Current work',
+    'changes' => 'Changes',
+    'why' => 'Decisions & rationale',
+    'handoff' => 'AI handoff',
+    'reference' => 'Reference',
 ];
 
 $identity = $content->projectDoc('identity');
@@ -97,7 +120,7 @@ if ($view === 'functionality') {
     }
 } elseif (array_key_exists($view, $routes) && $routes[$view] !== null) {
     $template = $routes[$view];
-    $pageTitle = ucfirst(str_replace('-', ' ', $view));
+    $pageTitle = $pageTitles[$view] ?? ucfirst(str_replace('-', ' ', $view));
 } else {
     http_response_code(404);
     $template = 'not-found';
@@ -108,6 +131,8 @@ if ($view === 'functionality') {
 $vars['view'] = $view;
 $vars['pageTitle'] = $pageTitle;
 $vars['navItems'] = $navItems;
+$vars['navPrimary'] = $navPrimary;
+$vars['navSecondary'] = $navSecondary;
 $vars['bodyTemplate'] = $template;
 
 render_view('layout', $vars);

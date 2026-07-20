@@ -9,7 +9,7 @@ $changes = $content->changes();
 uasort($changes, fn ($a, $b) => strcmp((string) ($b['meta']['updated'] ?? ''), (string) ($a['meta']['updated'] ?? '')));
 ?>
 <article class="view view-changes">
-    <header class="page-head">
+    <header class="page-head reading-column">
         <p class="eyebrow">Changes</p>
         <h1>What changed, and why it matters</h1>
         <p class="lede">Meaningful shifts in what the software does — not a log of every edit.</p>
@@ -30,7 +30,7 @@ uasort($changes, fn ($a, $b) => strcmp((string) ($b['meta']['updated'] ?? ''), (
                         </div>
                     </div>
                     <p><?= h((string) ($m['summary'] ?? '')) ?></p>
-                    <div class="prose change-card__body"><?= $c['html'] ?></div>
+                    <div class="prose reading-column change-card__body"><?= $c['html'] ?></div>
                     <?php if (!empty($m['functionality'])): ?>
                         <p class="change-card__links"><strong>Affected:</strong>
                             <?= functionality_chips($content->resolveFunctionality($m['functionality'])) ?>

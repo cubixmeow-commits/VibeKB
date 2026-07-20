@@ -1,6 +1,6 @@
 <?php
 /**
- * Shared page shell: header, primary navigation, body template, footer.
+ * Shared page shell: brand bar, sidebar navigation, body template, footer.
  *
  * @var Content $content
  * @var string $projectName
@@ -8,10 +8,19 @@
  * @var string $pageTitle
  * @var string $bodyTemplate
  * @var array<int, array{view: string, label: string}> $navItems
+ * @var array<int, array{view: string, label: string}> $navPrimary
+ * @var array<int, array{view: string, label: string}> $navSecondary
  * @var bool $devMode
  */
 $issues = $content->issues();
 $errorCount = count(array_filter($issues, fn ($i) => $i['level'] === 'error'));
+$navPrimary = $navPrimary ?? $navItems;
+$navSecondary = $navSecondary ?? [];
+
+$isActive = static function (string $itemView, string $currentView): bool {
+    return ($itemView === $currentView)
+        || ($currentView === 'functionality' && $itemView === 'functionality');
+};
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,17 +36,31 @@ $errorCount = count(array_filter($issues, fn ($i) => $i['level'] === 'error'));
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
 
-<header class="site-header">
-    <div class="wrap site-header__inner">
-        <a class="brand" href="<?= h(guide_url('overview')) ?>">
-            <span class="brand__mark">VibeKB</span>
-            <span class="brand__project"><?= h($projectName) ?></span>
-        </a>
-        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" hidden>Menu</button>
-        <nav class="primary-nav" id="primary-nav" aria-label="Guide sections">
-            <ul>
-                <?php foreach ($navItems as $item): ?>
-                    <?php $active = ($item['view'] === $view) || ($view === 'functionality' && $item['view'] === 'functionality'); ?>
+<div class="app-shell">
+    <header class="site-header">
+        <div class="site-header__inner">
+            <a class="brand" href="<?= h(guide_url('overview')) ?>">
+                <span class="brand__mark">VibeKB</span>
+                <span class="brand__project"><?= h($projectName) ?></span>
+            </a>
+            <button
+                class="nav-toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="guide-sidebar"
+                hidden
+            >Menu</button>
+        </div>
+    </header>
+
+    <div class="nav-backdrop" id="nav-backdrop" hidden></div>
+
+    <aside class="sidebar" id="guide-sidebar" aria-label="Guide navigation">
+        <nav class="sidebar-nav" aria-label="Guide sections">
+            <p class="sidebar-nav__label" id="nav-primary-label">Primary</p>
+            <ul class="sidebar-nav__list" aria-labelledby="nav-primary-label">
+                <?php foreach ($navPrimary as $item): ?>
+                    <?php $active = $isActive($item['view'], $view); ?>
                     <li>
                         <a href="<?= h(guide_url($item['view'])) ?>"<?= $active ? ' aria-current="page"' : '' ?>>
                             <?= $item['label'] ?>
@@ -45,39 +68,55 @@ $errorCount = count(array_filter($issues, fn ($i) => $i['level'] === 'error'));
                     </li>
                 <?php endforeach; ?>
             </ul>
+
+            <?php if ($navSecondary !== []): ?>
+                <p class="sidebar-nav__label" id="nav-explore-label">Explore</p>
+                <ul class="sidebar-nav__list sidebar-nav__list--secondary" aria-labelledby="nav-explore-label">
+                    <?php foreach ($navSecondary as $item): ?>
+                        <?php $active = $isActive($item['view'], $view); ?>
+                        <li>
+                            <a href="<?= h(guide_url($item['view'])) ?>"<?= $active ? ' aria-current="page"' : '' ?>>
+                                <?= $item['label'] ?>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
         </nav>
-    </div>
-</header>
+    </aside>
 
-<?php if ($devMode && $errorCount > 0): ?>
-    <div class="wrap">
-        <p class="content-alert" role="status">
-            <strong><?= (int) $errorCount ?> content validation error<?= $errorCount === 1 ? '' : 's' ?></strong>
-            — see the <a href="<?= h(guide_url('reference')) ?>#validation">Reference</a> view. (Shown in development only.)
-        </p>
-    </div>
-<?php endif; ?>
+    <div class="app-main">
+        <?php if ($devMode && $errorCount > 0): ?>
+            <div class="wrap">
+                <p class="content-alert" role="status">
+                    <strong><?= (int) $errorCount ?> content validation error<?= $errorCount === 1 ? '' : 's' ?></strong>
+                    — see the <a href="<?= h(guide_url('reference')) ?>#validation">Reference</a> view. (Shown in development only.)
+                </p>
+            </div>
+        <?php endif; ?>
 
-<main id="main" class="wrap">
-    <?php
-    $bodyFile = __DIR__ . '/' . $bodyTemplate . '.php';
-    if (is_file($bodyFile)) {
-        require $bodyFile;
-    } else {
-        echo '<p>View unavailable.</p>';
-    }
-    ?>
-</main>
+        <main id="main" class="wrap">
+            <?php
+            $bodyFile = __DIR__ . '/' . $bodyTemplate . '.php';
+            if (is_file($bodyFile)) {
+                require $bodyFile;
+            } else {
+                echo '<p>View unavailable.</p>';
+            }
+            ?>
+        </main>
 
-<footer class="site-footer">
-    <div class="wrap site-footer__inner">
-        <p><strong>VibeKB</strong> — Understand what your software is doing.</p>
-        <p class="muted">
-            A living explanation generated from repository-owned content in <code>.vibekb/</code>.
-            <a href="<?= h(site_root_url()) ?>">About VibeKB</a>
-        </p>
+        <footer class="site-footer">
+            <div class="wrap site-footer__inner">
+                <p><strong>VibeKB</strong> — Understand what your software is doing.</p>
+                <p class="muted">
+                    A living explanation generated from repository-owned content in <code>.vibekb/</code>.
+                    <a href="<?= h(site_root_url()) ?>">About VibeKB</a>
+                </p>
+            </div>
+        </footer>
     </div>
-</footer>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="<?= h(guide_asset('assets/js/guide.js')) ?>" defer></script>

@@ -39,13 +39,13 @@ $anyFilter = ($fStatus !== '' || $fArea !== '' || $fVer !== '' || $fFacing !== '
 $shown = 0;
 ?>
 <article class="view view-func-index">
-    <header class="page-head">
+    <header class="page-head reading-column">
         <p class="eyebrow">Functionality index</p>
         <h1>Everything the software does</h1>
         <p class="lede">Functionality is the primary unit. Each item is something the software does, with its real status and how it was verified.</p>
     </header>
 
-    <form class="filters" method="get" action="<?= h(guide_url('functionality')) ?>">
+    <form class="filters wide-section" method="get" action="<?= h(guide_url('functionality')) ?>">
         <input type="hidden" name="view" value="functionality">
         <div class="filters__row">
             <label>Status
@@ -91,26 +91,48 @@ $shown = 0;
     <?php foreach ($groups as $group): ?>
         <?php $rows = array_filter($group['records'], fn ($r) => $matches($r['meta'])); ?>
         <?php if ($rows === []) { continue; } ?>
-        <section class="group-block" aria-labelledby="grp-<?= h($group['id']) ?>">
-            <h2 id="grp-<?= h($group['id']) ?>"><?= h($group['title']) ?></h2>
-            <?php if ($group['description'] !== ''): ?><p class="muted"><?= h($group['description']) ?></p><?php endif; ?>
-            <ul class="func-cards">
+        <section class="group-block wide-section" aria-labelledby="grp-<?= h($group['id']) ?>">
+            <header class="section-intro">
+                <h2 id="grp-<?= h($group['id']) ?>"><?= h($group['title']) ?></h2>
+                <?php if ($group['description'] !== ''): ?>
+                    <p class="section-intro__support"><?= h($group['description']) ?></p>
+                <?php endif; ?>
+            </header>
+            <ul class="record-list">
                 <?php foreach ($rows as $rec): $m = $rec['meta']; $shown++; ?>
-                    <li class="func-card">
-                        <div class="func-card__head">
-                            <h3><a href="<?= h(functionality_url((string) $m['id'])) ?>"><?= h((string) ($m['title'] ?? $m['id'])) ?></a></h3>
-                            <div class="func-card__badges">
+                    <li class="record-card">
+                        <div class="record-card__row">
+                            <h3 class="record-card__title">
+                                <a class="record-card__link" href="<?= h(functionality_url((string) $m['id'])) ?>">
+                                    <?= h((string) ($m['title'] ?? $m['id'])) ?>
+                                </a>
+                            </h3>
+                            <div class="record-card__status">
                                 <?= status_badge((string) ($m['status'] ?? 'unknown')) ?>
-                                <?php if (($m['verification'] ?? '') !== ''): ?><?= verification_badge((string) $m['verification']) ?><?php endif; ?>
                             </div>
                         </div>
-                        <p class="func-card__summary"><?= h((string) ($m['summary'] ?? '')) ?></p>
-                        <dl class="func-card__meta">
-                            <?php if (($m['trigger'] ?? '') !== ''): ?>
-                                <div><dt>Trigger</dt><dd><?= h((string) $m['trigger']) ?></dd></div>
+                        <p class="record-card__summary"><?= h((string) ($m['summary'] ?? '')) ?></p>
+                        <dl class="record-card__meta">
+                            <?php if (($m['verification'] ?? '') !== ''): ?>
+                                <div>
+                                    <dt>Verification</dt>
+                                    <dd><?= verification_badge((string) $m['verification']) ?></dd>
+                                </div>
                             <?php endif; ?>
-                            <div><dt>Facing</dt><dd><?= !empty($m['user_facing']) ? 'User-facing' : 'System' ?></dd></div>
-                            <div><dt>Updated</dt><dd><?= h((string) ($m['updated'] ?? 'unknown')) ?></dd></div>
+                            <?php if (($m['trigger'] ?? '') !== ''): ?>
+                                <div>
+                                    <dt>Trigger</dt>
+                                    <dd><?= h((string) $m['trigger']) ?></dd>
+                                </div>
+                            <?php endif; ?>
+                            <div>
+                                <dt>Facing</dt>
+                                <dd><?= !empty($m['user_facing']) ? 'User-facing' : 'System' ?></dd>
+                            </div>
+                            <div>
+                                <dt>Updated</dt>
+                                <dd><?= h((string) ($m['updated'] ?? 'unknown')) ?></dd>
+                            </div>
                         </dl>
                     </li>
                 <?php endforeach; ?>
