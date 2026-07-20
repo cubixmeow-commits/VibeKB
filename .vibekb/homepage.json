@@ -1,5 +1,5 @@
 {
-  "intro": "This publication explains SaaS Idea Manager the way a careful human editor would: what matters now, what is fragile, and how the pieces fit together.",
+  "intro": "This technical reference explains SaaS Idea Manager: what matters now, what is fragile, and how the pieces fit together. For a guided walkthrough, start with the Project Guide.",
   "sections": [
     {
       "id": "read-this-first",

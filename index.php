@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-$demoUrl = 'edition/';
+$demoUrl = 'guide/';
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,8 +23,8 @@ $demoUrl = 'edition/';
             <a class="wordmark" href="./">VibeKB</a>
             <nav class="top-nav" aria-label="Primary">
                 <a href="#how-it-works">How it works</a>
-                <a href="#demo">Live demo</a>
-                <a class="nav-cta" href="<?= htmlspecialchars($demoUrl, ENT_QUOTES, 'UTF-8') ?>">Open demo</a>
+                <a href="#demo">Project Guide</a>
+                <a class="nav-cta" href="<?= htmlspecialchars($demoUrl, ENT_QUOTES, 'UTF-8') ?>">Open guide</a>
             </nav>
         </div>
     </header>
@@ -45,7 +45,7 @@ $demoUrl = 'edition/';
                     No cloud service. No account. It lives in your repo and ships with it.
                 </p>
                 <div class="hero-actions">
-                    <a class="btn btn-primary" href="<?= htmlspecialchars($demoUrl, ENT_QUOTES, 'UTF-8') ?>">Read a real project</a>
+                    <a class="btn btn-primary" href="<?= htmlspecialchars($demoUrl, ENT_QUOTES, 'UTF-8') ?>">Open the Project Guide</a>
                     <a class="btn btn-ghost" href="#problem">Why this exists</a>
                 </div>
             </div>
@@ -116,24 +116,24 @@ $demoUrl = 'edition/';
 
         <section class="section demo" id="demo" aria-labelledby="demo-title">
             <div class="wrap">
-                <p class="section-kicker">Live demo</p>
+                <p class="section-kicker">Project Guide</p>
                 <h2 id="demo-title">See a real project explained.</h2>
                 <p class="section-lead">
-                    SaaS Idea Manager is a small PHP and SQLite app, published the way VibeKB intends.
-                    Open it and read the project the way it should be understood: what to read first, what's risky right now, and what changed.
+                    SaaS Idea Manager is a small PHP and SQLite app, explained through a guided Project Guide.
+                    Give it five minutes: what the project is, how someone uses it, and what a developer should know before changing it.
                 </p>
                 <a class="demo-shot" href="<?= htmlspecialchars($demoUrl, ENT_QUOTES, 'UTF-8') ?>">
                     <img
                         src="assets/demo-home.png"
                         width="1200"
                         height="780"
-                        alt="Screenshot of the SaaS Idea Manager demo site, showing top navigation and the project explanation homepage."
+                        alt="Screenshot of the SaaS Idea Manager Project Guide, showing the guided project explanation."
                         loading="lazy"
                         decoding="async"
                     >
                 </a>
                 <div class="demo-actions">
-                    <a class="btn btn-primary" href="<?= htmlspecialchars($demoUrl, ENT_QUOTES, 'UTF-8') ?>">Open the demo</a>
+                    <a class="btn btn-primary" href="<?= htmlspecialchars($demoUrl, ENT_QUOTES, 'UTF-8') ?>">Open the Project Guide</a>
                 </div>
             </div>
         </section>
@@ -192,9 +192,9 @@ $demoUrl = 'edition/';
 
         <section class="section final-cta" aria-labelledby="cta-title">
             <div class="wrap narrow">
-                <h2 id="cta-title">Read the demo like it's your own project.</h2>
-                <p>Open SaaS Idea Manager and imagine this existed for the app you're most afraid to touch.</p>
-                <a class="btn btn-primary" href="<?= htmlspecialchars($demoUrl, ENT_QUOTES, 'UTF-8') ?>">Open the demo</a>
+                <h2 id="cta-title">Read the guide like it's your own project.</h2>
+                <p>Open the SaaS Idea Manager Project Guide and imagine this existed for the app you're most afraid to touch.</p>
+                <a class="btn btn-primary" href="<?= htmlspecialchars($demoUrl, ENT_QUOTES, 'UTF-8') ?>">Open the Project Guide</a>
             </div>
         </section>
     </main>

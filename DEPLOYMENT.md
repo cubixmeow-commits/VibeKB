@@ -15,21 +15,23 @@ This project deploys to a cPanel shared hosting account with Git Version Control
 As of Version 1, this repository contains a PHP website:
 
 - `index.php` — public landing page (entry point)
-- `assets/` — landing page CSS
-- `edition/` — generated publication engine (PHP templates + renderer)
-- `.vibekb/` — repository-native project knowledge (JSON + Markdown) read by the edition engine
+- `assets/` — landing page CSS and demo imagery
+- `guide/` — Project Guide presentation engine (primary sample experience)
+- `edition/` — technical reference publication engine (full structured articles)
+- `.vibekb/` — repository-native project knowledge (JSON + Markdown + guide chapters)
 - Deployment/maintenance docs (`DEPLOYMENT.md`, `AGENTS.md`)
 - `.cpanel.yml` — cPanel deploy tasks
 
 | Detected item | Status |
 |---------------|--------|
-| Application type | PHP 8.2 website (landing page + dynamic edition publication) |
+| Application type | PHP 8.2+ website (landing page + Project Guide + technical reference) |
 | Public entry point | `index.php` at the deploy root (`/public_html/vibekb/index.php`) |
-| Demo publication | `/edition/` rendered from `.vibekb/` content |
+| Primary sample | `/guide/` rendered from `.vibekb/guide/` chapter JSON |
+| Technical reference | `/edition/` rendered from `.vibekb/` Markdown collections |
 | Production build output | None — plain PHP, no Node build step |
 | Persistent server data | None required for Version 1; common production paths remain protected by rsync excludes |
 
-**Critical:** `.vibekb/` must be deployed. The rsync of `./` includes hidden directories; do **not** add `--exclude='.vibekb/'`.
+**Critical:** `.vibekb/` must be deployed (including hidden `.vibekb/guide/`). The rsync of `./` includes hidden directories; do **not** add `--exclude='.vibekb/'`.
 
 ## How deployment works
 
@@ -52,10 +54,10 @@ Everything in the repository checkout **except** excluded paths is synced to:
 
 Today that means:
 
-- `index.php`, `assets/`, `edition/`, and `.vibekb/` (plus `README.md`)
-- Agent/deploy docs (`AGENTS.md`, `DEPLOYMENT.md`) are excluded on purpose
+- `index.php`, `assets/`, `guide/`, `edition/`, and `.vibekb/` (plus `README.md`)
+- Agent/deploy docs (`AGENTS.md`, `DEPLOYMENT.md`) and `docs/` are excluded on purpose
 
-After deploy, `https://<your-domain>/vibekb/` should serve the landing page and `/vibekb/edition/` the demo publication.
+After deploy, `https://<your-domain>/vibekb/` should serve the landing page, `/vibekb/guide/` the Project Guide, and `/vibekb/edition/` the technical reference.
 
 **Important:** The production server is not assumed to have Node.js. Do not rely on `npm install` / `npm run build` inside `.cpanel.yml` on this shared host.
 
@@ -121,9 +123,10 @@ If the application later introduces other persistent paths (for example `public/
 ### After deploy
 
 1. Verify `https://<your-domain>/vibekb/` serves the landing page (`index.php`).
-2. Verify `https://<your-domain>/vibekb/edition/` renders the SaaS Idea Manager edition (confirms `.vibekb/` synced).
-3. Confirm uploads/data directories still exist after deploy if any were created on the server.
-4. Confirm `.env` and other secrets on the server were not overwritten or removed.
+2. Verify `https://<your-domain>/vibekb/guide/` renders the SaaS Idea Manager Project Guide (confirms `.vibekb/guide/` synced).
+3. Verify `https://<your-domain>/vibekb/edition/` still renders the technical reference.
+4. Confirm uploads/data directories still exist after deploy if any were created on the server.
+5. Confirm `.env` and other secrets on the server were not overwritten or removed.
 
 ## Common deployment troubleshooting
 
@@ -131,7 +134,8 @@ If the application later introduces other persistent paths (for example `public/
 |---------|----------------|---------------|
 | Deploy button missing / errors about `.cpanel.yml` | Missing or invalid YAML | File must be at repo root, start with `---`, and contain valid `deployment.tasks` |
 | Site empty or old files remain | Deploy did not run, or wrong branch | Deploy HEAD; confirm cPanel is on the intended branch |
-| Edition pages are empty / missing content | `.vibekb/` missing on server | Confirm rsync includes hidden dirs; do not exclude `.vibekb/` |
+| Edition / guide pages empty or missing content | `.vibekb/` missing on server | Confirm rsync includes hidden dirs; do not exclude `.vibekb/` |
+| Project Guide missing chapters | `.vibekb/guide/` not deployed | Confirm chapter JSON exists under `.vibekb/guide/chapters/` on the server |
 | Files deleted unexpectedly | Missing rsync exclude for persistent data | Add `--exclude` for that path; restore from backup if needed |
 | Secrets appeared in public_html | Env/config committed to git | Remove from git history if needed; keep excludes; store secrets only on the server |
 | Build assets missing | Build not run before deploy / Node unavailable on host | Build externally; deploy compiled output; update excludes if the build directory name changes |

@@ -23,11 +23,12 @@
     <header class="site-header">
         <div class="header-inner">
             <a class="brand-lockup" href="<?= e(edition_url()) ?>">
-                <span class="brand-kicker">VibeKB edition</span>
+                <span class="brand-kicker">Technical reference</span>
                 <span class="brand-title"><?= e($project['name'] ?? 'Project') ?></span>
             </a>
             <nav class="primary-nav" aria-label="Publication">
-                <a href="<?= e(edition_url()) ?>">Current Edition</a>
+                <a href="<?= e(rtrim(landing_url(), '/') . '/guide/') ?>">Project Guide</a>
+                <a href="<?= e(edition_url()) ?>">Reference home</a>
                 <a href="<?= e(landing_url()) ?>">About VibeKB</a>
             </nav>
         </div>

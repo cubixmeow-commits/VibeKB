@@ -1,0 +1,85 @@
+{
+  "id": "problems",
+  "number": 6,
+  "question": "Where do problems usually happen?",
+  "title": "Where do problems usually happen?",
+  "summary": "Blank lists, disappearing fields, and deploy mismatches share a pattern: code and data fell out of sync.",
+  "scenes": [
+    {
+      "type": "statement",
+      "headline": "Most failures are alignment problems, not mysterious routes.",
+      "body": "Start with the database file, the schema, and whether read and write paths agree—before deep debugging."
+    },
+    {
+      "type": "problem-path",
+      "label": "Common trouble spots",
+      "problems": [
+        {
+          "id": "blank-list",
+          "title": "Blank ideas list",
+          "summary": "An empty list is usually a normal empty database, a failed query, or a template that hides rows incorrectly.",
+          "steps": [
+            {
+              "title": "Does the database file exist?",
+              "text": "Confirm the SQLite file is present on the host."
+            },
+            {
+              "title": "Can PHP read it?",
+              "text": "Check that the PHP user can read the file and its directory."
+            },
+            {
+              "title": "Does the query return records?",
+              "text": "Inspect a simple count or select against the ideas table."
+            },
+            {
+              "title": "Does the page correctly display those records?",
+              "text": "Verify the list template’s empty-state branch is not always true, and that selected columns match what the template prints."
+            }
+          ],
+          "sources": [
+            { "collection": "debugging", "slug": "blank-ideas-list" }
+          ]
+        },
+        {
+          "id": "field-disappears",
+          "title": "A field saves, then disappears",
+          "summary": "When a field vanishes after reload, five pieces must agree.",
+          "alignment": [
+            "Form field",
+            "Database column",
+            "Write query",
+            "Read query",
+            "Page output"
+          ],
+          "note": "All five must agree. Agents often update the form and forget either the write statement or the read statement.",
+          "sources": [
+            { "collection": "debugging", "slug": "fields-disappear" }
+          ]
+        },
+        {
+          "id": "deploy-mismatch",
+          "title": "Works locally, fails after deployment",
+          "summary": "Code was deployed, but production still has the old schema.",
+          "steps": [
+            {
+              "title": "Code was deployed",
+              "text": "The new PHP expects columns or behavior that did not exist before."
+            },
+            {
+              "title": "Production database still has the old schema",
+              "text": "The migration SQL was not applied on the server."
+            },
+            {
+              "title": "Application code and database structure no longer agree",
+              "text": "Forms fail, pages error, or fields save without appearing. Treat migration application as part of deploy."
+            }
+          ],
+          "sources": [
+            { "collection": "debugging", "slug": "migration-mismatch" },
+            { "collection": "risks", "slug": "schema-drift" }
+          ]
+        }
+      ]
+    }
+  ]
+}

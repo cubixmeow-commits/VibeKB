@@ -6,7 +6,7 @@ require __DIR__ . '/bootstrap.php';
 
 $homepage = $repo->homepage();
 
-$pageTitle = ($edition['title'] ?? 'Current Edition') . ' · ' . ($project['name'] ?? 'VibeKB');
+$pageTitle = ($edition['title'] ?? 'Technical Reference') . ' · ' . ($project['name'] ?? 'VibeKB');
 $pageDescription = (string) ($edition['editor_note'] ?? $project['tagline'] ?? '');
 $activeCollection = null;
 $contentTemplate = 'home';

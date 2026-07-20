@@ -5,8 +5,12 @@
 ?>
 <article class="edition-home">
     <header class="edition-hero">
-        <p class="eyebrow">Technical publication</p>
-        <h1><?= e($edition['title'] ?? 'Current Edition') ?></h1>
+        <p class="eyebrow">Technical reference</p>
+        <h1>Complete technical reference</h1>
+        <p class="lede">
+            Prefer the <a href="<?= e(rtrim(landing_url(), '/') . '/guide/') ?>">Project Guide</a> for a guided explanation.
+            This reference keeps the full structured articles: decisions, risks, debugging, modules, glossary, and editorial history.
+        </p>
         <p class="lede"><?= e($edition['editor_note'] ?? $homepage['intro'] ?? '') ?></p>
         <dl class="edition-meta">
             <div>
@@ -29,7 +33,7 @@
     </header>
 
     <section class="home-intro" aria-labelledby="intro-heading">
-        <h2 id="intro-heading">About this edition</h2>
+        <h2 id="intro-heading">About this reference</h2>
         <p><?= e($homepage['intro'] ?? '') ?></p>
         <?php if (!empty($project['constraints']) && is_array($project['constraints'])): ?>
             <ul class="constraint-list">

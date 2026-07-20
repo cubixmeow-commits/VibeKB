@@ -7,8 +7,9 @@ VibeKB keeps an explanation of your project inside the repository (`.vibekb/`) a
 ## Version 1
 
 - Landing page: `/index.php`
-- Live demonstration: `/edition/` — a generated publication for the fictional **SaaS Idea Manager** project
-- Content system: `.vibekb/` (JSON metadata + Markdown)
+- Primary sample: `/guide/` — **SaaS Idea Manager Project Guide** (guided presentation)
+- Technical reference: `/edition/` — full structured articles from `.vibekb/` knowledge files
+- Content system: `.vibekb/` (JSON metadata + Markdown + guide chapters)
 
 ## Local preview
 
@@ -19,6 +20,7 @@ php -S localhost:8080 -t .
 Then open:
 
 - http://localhost:8080/
+- http://localhost:8080/guide/
 - http://localhost:8080/edition/
 
 ## Content layout
@@ -26,6 +28,9 @@ Then open:
 ```
 .vibekb/
   project.json
+  guide/
+    guide.json
+    chapters/
   edition.json
   homepage.json
   collections.json
@@ -41,10 +46,18 @@ Then open:
   editorial/
 ```
 
-PHP templates under `edition/` read these files and render the publication. Do not duplicate long-form content inside templates.
+The Project Guide engine under `guide/` renders chapter JSON as an interactive presentation.
+The edition engine under `edition/` remains the complete technical reference.
+Do not bury long-form knowledge only inside templates or JavaScript.
+
+## Documentation
+
+- [Project Guide V1 plan](./docs/PROJECT_GUIDE_V1_PLAN.md)
+- [Project Guide engine](./docs/PROJECT_GUIDE_ENGINE.md)
+- [Content rules](./docs/PROJECT_GUIDE_CONTENT_RULES.md)
 
 ## Deployment
 
 Production target: `/home/iainmcok/public_html/vibekb/`
 
-See `.cpanel.yml` and [DEPLOYMENT.md](./DEPLOYMENT.md). The rsync deploy includes the hidden `.vibekb/` knowledge directory required by the edition engine.
+See `.cpanel.yml` and [DEPLOYMENT.md](./DEPLOYMENT.md). The rsync deploy includes the hidden `.vibekb/` knowledge directory (including `.vibekb/guide/`) required by both engines.
