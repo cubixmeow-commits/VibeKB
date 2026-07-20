@@ -603,7 +603,7 @@
       if (currentIndex < total - 1) {
         go(1);
       } else {
-        announce('You finished the Project Guide. Explore developer details or the technical reference.');
+        announce('You finished the Project Guide.');
         $chapters.eq(currentIndex).find('.pg-chapter-title').trigger('focus');
       }
     });

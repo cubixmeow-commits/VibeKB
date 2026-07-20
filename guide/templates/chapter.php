@@ -57,8 +57,8 @@ $isLast = $index === $total - 1;
                 Next: <?= e((string) ($next['question'] ?? $next['title'] ?? '')) ?>
             </a>
         <?php else: ?>
-            <a class="pg-inline-nav pg-inline-nav-next" href="<?= e(reference_url()) ?>">
-                Open technical reference
+            <a class="pg-inline-nav pg-inline-nav-next" href="<?= e(landing_url()) ?>">
+                Back to VibeKB
             </a>
         <?php endif; ?>
     </nav>

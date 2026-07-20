@@ -34,7 +34,6 @@ $total = count($chapters);
             </a>
             <nav class="pg-top-nav" aria-label="Site">
                 <a href="<?= e(landing_url()) ?>">VibeKB</a>
-                <a href="<?= e(reference_url()) ?>">Technical reference</a>
             </nav>
         </div>
     </header>
@@ -105,7 +104,6 @@ $total = count($chapters);
             </p>
             <p class="pg-footer-meta">
                 Content lives in <code>.vibekb/</code>.
-                <a href="<?= e(reference_url()) ?>">Open technical reference</a>
             </p>
         </div>
     </footer>
