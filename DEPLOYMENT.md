@@ -12,22 +12,24 @@ This project deploys to a cPanel shared hosting account with Git Version Control
 
 ## Application profile (current repository)
 
-As of the latest inspection, this repository contains:
+As of Version 1, this repository contains a PHP website:
 
-- `README.md` — project description
+- `index.php` — public landing page (entry point)
+- `assets/` — landing page CSS
+- `edition/` — generated publication engine (PHP templates + renderer)
+- `.vibekb/` — repository-native project knowledge (JSON + Markdown) read by the edition engine
 - Deployment/maintenance docs (`DEPLOYMENT.md`, `AGENTS.md`)
 - `.cpanel.yml` — cPanel deploy tasks
 
-There is **no application runtime yet** (no `index.html`, PHP app, Node server, or production build output).
-
 | Detected item | Status |
 |---------------|--------|
-| Application type | Placeholder / documentation-only repository (intended website product) |
-| Public entry point | Not present yet; add a web root entry such as `index.html` or `index.php` when the site is implemented |
-| Production build output | None detected |
-| Persistent server data | None in the repo; common production paths are protected by rsync excludes |
+| Application type | PHP 8.2 website (landing page + dynamic edition publication) |
+| Public entry point | `index.php` at the deploy root (`/public_html/vibekb/index.php`) |
+| Demo publication | `/edition/` rendered from `.vibekb/` content |
+| Production build output | None — plain PHP, no Node build step |
+| Persistent server data | None required for Version 1; common production paths remain protected by rsync excludes |
 
-When application files are added, update `.cpanel.yml` in the same change (see [AGENTS.md](./AGENTS.md)).
+**Critical:** `.vibekb/` must be deployed. The rsync of `./` includes hidden directories; do **not** add `--exclude='.vibekb/'`.
 
 ## How deployment works
 
@@ -48,9 +50,14 @@ Everything in the repository checkout **except** excluded paths is synced to:
 
 `/home/iainmcok/public_html/vibekb/`
 
-Today that effectively means deployable project files such as `README.md`. Once the site is built out, HTML/CSS/JS/PHP (or built static assets committed to the repo) will be deployed the same way.
+Today that means:
 
-**Important:** The production server is not assumed to have Node.js. Do not rely on `npm install` / `npm run build` inside `.cpanel.yml` on this shared host. If a frontend build is required later, build in CI or locally and commit/publish the compiled assets (or adjust deployment after confirming available tooling on the host).
+- `index.php`, `assets/`, `edition/`, and `.vibekb/` (plus `README.md`)
+- Agent/deploy docs (`AGENTS.md`, `DEPLOYMENT.md`) are excluded on purpose
+
+After deploy, `https://<your-domain>/vibekb/` should serve the landing page and `/vibekb/edition/` the demo publication.
+
+**Important:** The production server is not assumed to have Node.js. Do not rely on `npm install` / `npm run build` inside `.cpanel.yml` on this shared host.
 
 ## What is excluded
 
@@ -111,11 +118,12 @@ If the application later introduces other persistent paths (for example `public/
 2. Update/pull the latest commits if needed.
 3. Click **Deploy HEAD Commit** (wording may vary by cPanel version).
 
-### After the first real site files land
+### After deploy
 
-1. Verify `https://<your-domain>/vibekb/` (or the mapped domain) serves the expected entry file.
-2. Confirm uploads/data directories still exist after deploy.
-3. Confirm `.env` and other secrets on the server were not overwritten or removed.
+1. Verify `https://<your-domain>/vibekb/` serves the landing page (`index.php`).
+2. Verify `https://<your-domain>/vibekb/edition/` renders the SaaS Idea Manager edition (confirms `.vibekb/` synced).
+3. Confirm uploads/data directories still exist after deploy if any were created on the server.
+4. Confirm `.env` and other secrets on the server were not overwritten or removed.
 
 ## Common deployment troubleshooting
 
@@ -123,6 +131,7 @@ If the application later introduces other persistent paths (for example `public/
 |---------|----------------|---------------|
 | Deploy button missing / errors about `.cpanel.yml` | Missing or invalid YAML | File must be at repo root, start with `---`, and contain valid `deployment.tasks` |
 | Site empty or old files remain | Deploy did not run, or wrong branch | Deploy HEAD; confirm cPanel is on the intended branch |
+| Edition pages are empty / missing content | `.vibekb/` missing on server | Confirm rsync includes hidden dirs; do not exclude `.vibekb/` |
 | Files deleted unexpectedly | Missing rsync exclude for persistent data | Add `--exclude` for that path; restore from backup if needed |
 | Secrets appeared in public_html | Env/config committed to git | Remove from git history if needed; keep excludes; store secrets only on the server |
 | Build assets missing | Build not run before deploy / Node unavailable on host | Build externally; deploy compiled output; update excludes if the build directory name changes |

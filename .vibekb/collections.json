@@ -1,0 +1,52 @@
+{
+  "overview": {
+    "title": "Overview",
+    "description": "Orientation pages for understanding the project as a whole.",
+    "template": "overview"
+  },
+  "decisions": {
+    "title": "Decisions",
+    "description": "Architectural and product choices that shape how the system behaves.",
+    "template": "decisions"
+  },
+  "risks": {
+    "title": "Risks",
+    "description": "Known failure modes and pressures that grow with the codebase.",
+    "template": "risks"
+  },
+  "mental-models": {
+    "title": "Mental Models",
+    "description": "How to think about the system when changing or extending it.",
+    "template": "mental-models"
+  },
+  "warnings": {
+    "title": "Warnings",
+    "description": "Hard boundaries and traps that should not be crossed casually.",
+    "template": "warnings"
+  },
+  "assumptions": {
+    "title": "Assumptions",
+    "description": "Conditions the current design depends on remaining true.",
+    "template": "assumptions"
+  },
+  "debugging": {
+    "title": "Debugging Guides",
+    "description": "Where to look first when something breaks.",
+    "template": "debugging"
+  },
+  "modules": {
+    "title": "Modules",
+    "description": "Major parts of the application and what each is responsible for.",
+    "template": "modules"
+  },
+  "glossary": {
+    "title": "Glossary",
+    "description": "Shared vocabulary used across this publication and the codebase.",
+    "template": "glossary"
+  },
+  "editorial": {
+    "title": "Editorial History",
+    "description": "How this explanation has evolved and what still needs attention.",
+    "template": "editorial"
+  }
+}

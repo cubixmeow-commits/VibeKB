@@ -4,6 +4,9 @@
 #
 # Review and update this file whenever the repository structure, build output,
 # runtime folders, or deployment requirements change. See AGENTS.md.
+#
+# Note: rsync of ./ includes the hidden .vibekb/ knowledge directory required
+# by the PHP publication engine. Do not add --exclude='.vibekb/'.
 
 deployment:
   tasks:
