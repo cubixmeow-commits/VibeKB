@@ -15,9 +15,23 @@ declare(strict_types=1);
 require_once __DIR__ . '/guide/lib/helpers.php';
 require_once __DIR__ . '/guide/lib/Content.php';
 
+// Revalidate the HTML each load so freshly versioned asset URLs are picked up.
+if (!headers_sent()) {
+    header('Cache-Control: no-cache, must-revalidate');
+}
+
 function hp_e(?string $value): string
 {
     return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
+/** Cache-busting URL for a homepage asset (?v=<file-mtime>). */
+function hp_asset(string $rel): string
+{
+    $rel = ltrim($rel, '/');
+    $fsPath = __DIR__ . '/' . $rel;
+    $version = is_file($fsPath) ? (string) filemtime($fsPath) : '1';
+    return $rel . '?v=' . $version;
 }
 
 /** Site-root-relative link into a guide view (homepage is above the guide dir). */
@@ -120,7 +134,7 @@ if ($loaded) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/homepage.css">
+    <link rel="stylesheet" href="<?= hp_e(hp_asset('assets/css/homepage.css')) ?>">
 </head>
 <body class="hp-body" data-homepage>
     <a class="hp-skip" href="#main">Skip to content</a>
@@ -714,6 +728,6 @@ if ($loaded) {
     </footer>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src="assets/js/homepage.js" defer></script>
+    <script src="<?= hp_e(hp_asset('assets/js/homepage.js')) ?>" defer></script>
 </body>
 </html>

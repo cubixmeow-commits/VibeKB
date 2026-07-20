@@ -25,6 +25,20 @@ function guide_base(): string
     return rtrim($dir, '/') . '/';
 }
 
+/**
+ * Cache-busting URL for a guide asset. Appends the file's modification time as
+ * `?v=` so browsers refetch whenever the asset changes (no build step needed).
+ *
+ * @param string $rel path relative to the guide directory, e.g. "assets/css/guide.css"
+ */
+function guide_asset(string $rel): string
+{
+    $rel = ltrim($rel, '/');
+    $fsPath = dirname(__DIR__) . '/' . $rel; // guide/lib -> guide/
+    $version = is_file($fsPath) ? (string) filemtime($fsPath) : '1';
+    return guide_base() . $rel . '?v=' . $version;
+}
+
 /** URL of the site root (parent of the guide directory). */
 function site_root_url(): string
 {

@@ -22,7 +22,7 @@ $errorCount = count(array_filter($issues, fn ($i) => $i['level'] === 'error'));
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<?= h(guide_base()) ?>assets/css/guide.css">
+    <link rel="stylesheet" href="<?= h(guide_asset('assets/css/guide.css')) ?>">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -80,6 +80,6 @@ $errorCount = count(array_filter($issues, fn ($i) => $i['level'] === 'error'));
 </footer>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-<script src="<?= h(guide_base()) ?>assets/js/guide.js" defer></script>
+<script src="<?= h(guide_asset('assets/js/guide.js')) ?>" defer></script>
 </body>
 </html>

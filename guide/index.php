@@ -14,6 +14,11 @@ declare(strict_types=1);
 require_once __DIR__ . '/lib/helpers.php';
 require_once __DIR__ . '/lib/Content.php';
 
+// Revalidate the HTML each load so freshly versioned asset URLs are picked up.
+if (!headers_sent()) {
+    header('Cache-Control: no-cache, must-revalidate');
+}
+
 $contentRoot = dirname(__DIR__) . '/.vibekb';
 
 // Development vs production error posture.
