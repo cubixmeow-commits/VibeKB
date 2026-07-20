@@ -8,7 +8,8 @@
 # Note: rsync of ./ includes the hidden .vibekb/ knowledge directory required
 # by the Project Guide and technical reference engines (including .vibekb/guide/).
 # Do not add --exclude='.vibekb/'.
-# Runtime paths that must deploy: index.php, assets/, guide/, edition/, .vibekb/
+# Runtime paths that must deploy: index.php, assets/ (incl. homepage.css/js),
+# guide/, edition/, .vibekb/
 # docs/ remains excluded (authoring docs only; not required at runtime).
 
 deployment:

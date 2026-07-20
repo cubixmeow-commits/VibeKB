@@ -14,8 +14,8 @@ This project deploys to a cPanel shared hosting account with Git Version Control
 
 As of Version 1, this repository contains a PHP website:
 
-- `index.php` — public landing page (entry point)
-- `assets/` — landing page CSS and demo imagery
+- `index.php` — public landing page (entry point; layered homepage)
+- `assets/` — homepage CSS/JS and demo imagery (`assets/css/homepage.css`, `assets/js/homepage.js`)
 - `guide/` — Project Guide presentation engine (primary sample experience)
 - `edition/` — technical reference publication engine (full structured articles)
 - `.vibekb/` — repository-native project knowledge (JSON + Markdown + guide chapters)
