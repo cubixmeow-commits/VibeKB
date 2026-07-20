@@ -55,8 +55,8 @@
 
     <footer class="site-footer">
         <div class="footer-inner">
-            <p>Generated explanation for <strong><?= e($project['name'] ?? '') ?></strong>. Content lives in <code>.vibekb/</code>.</p>
-            <p class="footer-meta">Edition <?= e((string) ($edition['version'] ?? '')) ?> · <?= e((string) ($edition['published'] ?? '')) ?></p>
+            <p>Technical reference for <strong><?= e($project['name'] ?? '') ?></strong>. Content lives in <code>.vibekb/</code>.</p>
+            <p class="footer-meta">Reference <?= e((string) ($edition['version'] ?? '')) ?> · <?= e((string) ($edition['published'] ?? '')) ?> · <a href="<?= e(rtrim(landing_url(), '/') . '/guide/') ?>">Project Guide</a></p>
         </div>
     </footer>
 </body>
