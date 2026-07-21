@@ -56,6 +56,7 @@ $routes = [
     'overview' => 'overview',
     'functionality' => null,
     'how-it-works' => 'how-it-works',
+    'diagrams' => 'diagrams',
     'data' => 'data',
     'files' => 'files',
     'current-work' => 'current-work',
@@ -71,6 +72,7 @@ $navPrimary = [
     ['view' => 'overview', 'label' => 'Overview'],
     ['view' => 'functionality', 'label' => 'Functionality'],
     ['view' => 'how-it-works', 'label' => 'Architecture'],
+    ['view' => 'diagrams', 'label' => 'Diagrams'],
     ['view' => 'current-work', 'label' => 'Current work'],
 ];
 
@@ -89,6 +91,7 @@ $pageTitles = [
     'overview' => 'Overview',
     'functionality' => 'Functionality',
     'how-it-works' => 'Architecture',
+    'diagrams' => 'Diagrams',
     'data' => 'Data & storage',
     'files' => 'Files that matter',
     'current-work' => 'Current work',

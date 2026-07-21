@@ -110,6 +110,36 @@ function verification_vocabulary(): array
     ];
 }
 
+/**
+ * Supported diagram types. These are the *kinds* of diagram VibeKB knows how to
+ * present — they are not mandatory diagrams for every repository. A repository
+ * ships only the diagrams it can ground in source.
+ */
+function diagram_type_vocabulary(): array
+{
+    return [
+        'application-overview' => 'Application overview',
+        'user-journey' => 'User journey',
+        'startup-flow' => 'Startup flow',
+        'authentication-flow' => 'Authentication flow',
+        'access-flow' => 'Subscription / access flow',
+        'navigation-map' => 'Main navigation',
+        'feature-access' => 'Feature access',
+        'request-flow' => 'Request flow',
+        'data-flow' => 'Data flow',
+        'storage-map' => 'Storage map',
+        'external-services' => 'External services',
+        'code-architecture' => 'Code architecture',
+        'state-management' => 'State management',
+        'risk-and-uncertainty-map' => 'Risk and uncertainty map',
+    ];
+}
+
+function diagram_type_label(string $type): string
+{
+    return diagram_type_vocabulary()[$type] ?? ucfirst(str_replace('-', ' ', $type));
+}
+
 /** Allowed file safety levels. */
 function safety_vocabulary(): array
 {

@@ -1,0 +1,31 @@
+{
+  "groups": [
+    {
+      "id": "whole-app",
+      "title": "Understand the whole app",
+      "description": "The fastest visual entry points before reading records."
+    },
+    {
+      "id": "product-flows",
+      "title": "Understand the main product flow",
+      "description": "How the core user-facing loop and requests move through the system."
+    },
+    {
+      "id": "technical-system",
+      "title": "Understand the technical system",
+      "description": "Where data lives and how it is shaped."
+    },
+    {
+      "id": "uncertainty",
+      "title": "Understand uncertainty",
+      "description": "Where to be careful and what is not yet verified."
+    }
+  ],
+  "order": [
+    "app-overview",
+    "run-recipe-flow",
+    "request-flow",
+    "storage-map",
+    "risk-uncertainty-map"
+  ]
+}
