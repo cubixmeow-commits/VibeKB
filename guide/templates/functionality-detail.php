@@ -15,6 +15,7 @@ $dependents = $content->dependentsOf($id);
 $mem = $content->resolveMemory($m['related_memory'] ?? []);
 $fileRecords = $content->filesForFunctionality($id);
 $relatedDiagrams = $content->diagramsForFunctionality($id);
+$diagramNodes = $content->diagramNodesForFunctionality($id);
 $reads = is_array($m['reads'] ?? null) ? $m['reads'] : [];
 $writes = is_array($m['writes'] ?? null) ? $m['writes'] : [];
 $config = $m['config'] ?? [];
@@ -135,14 +136,24 @@ $longFiles = count($fileRecords) > 8 || (is_array($primaryFiles) && count($prima
                 <?php endif; ?>
             </div>
 
-            <?php if ($relatedDiagrams !== []): ?>
+            <?php if ($relatedDiagrams !== [] || $diagramNodes !== []): ?>
                 <div class="rail-card metadata-group">
                     <h2>Related diagrams</h2>
-                    <p>
-                        <?php foreach ($relatedDiagrams as $d): ?>
-                            <a class="chip" href="<?= h(diagram_url($d['id'])) ?>"><?= h($d['title']) ?></a>
-                        <?php endforeach; ?>
-                    </p>
+                    <?php if ($relatedDiagrams !== []): ?>
+                        <p>
+                            <?php foreach ($relatedDiagrams as $d): ?>
+                                <a class="chip" href="<?= h(diagram_url($d['id'])) ?>"><?= h($d['title']) ?></a>
+                            <?php endforeach; ?>
+                        </p>
+                    <?php endif; ?>
+                    <?php if ($diagramNodes !== []): ?>
+                        <p class="rail-note text-soft">Appears as a node in:</p>
+                        <ul class="rail-list">
+                            <?php foreach ($diagramNodes as $n): ?>
+                                <li><a href="<?= h(diagram_anchor_url('node-' . $n['node'])) ?>"><?= h($n['node_title']) ?></a> <span class="text-soft">· <?= h($n['diagram_title']) ?></span></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
 

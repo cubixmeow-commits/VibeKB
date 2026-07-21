@@ -45,13 +45,27 @@ workflow in `INITIALIZE.md`.
    storage**, and **list external services** and their failure impact.
 4. Capture **active warnings and placeholders** — real landmines — each with
    affected functionality, severity, and a safe next action.
-5. Add a **small, source-grounded diagram set** under `.vibekb/diagrams/`
-   (records + repository-owned SVGs with accessible `<title>`/`<desc>`; label
-   inferred paths). Do not add diagrams you cannot ground in source.
+5. Add a **small, source-grounded, explainable diagram set** under
+   `.vibekb/diagrams/` (records + repository-owned SVGs with accessible
+   `<title>`/`<desc>`; label inferred paths). Do not add diagrams you cannot
+   ground in source. For each diagram, author a topology
+   (`diagrams/topology/<id>.json`): concept **nodes** (title + plain-language
+   purpose), meaningful **edges** each with a controlled mechanism and a
+   one-sentence explanation, files with roles + reasons, and honest
+   verified/inferred states. **Do not draw an edge unless you can state a
+   concrete mechanism** — shared names, shared folders, and overlapping
+   vocabulary are not mechanisms. Mark the SVG's node/edge groups with
+   `data-vibekb-node` / `data-vibekb-edge` linking to the `#node-<id>` /
+   `#edge-<id>` anchors so the explanation works without JavaScript. Read the
+   node and edge labels as a sentence — the diagram should teach before any
+   click.
 6. Write `work/current.md` and `work/handoff.md` with an explicit next action.
 7. Set the `provenance` block in `manifest.json`: source repository, branch,
    **commit analyzed**, verification scope, last verified.
-8. **Validate:** run `php tools/validate.php` and resolve every error.
+8. **Validate:** run `php tools/validate.php` (and `php tools/test-topology.php`)
+   and resolve every error, including topology contract violations,
+   out-of-vocabulary mechanisms, files without reasons, and SVG markers that do
+   not map to the topology.
 9. **Generate output:**
    - Dynamic guide: deploy `guide/` (PHP 8.2, reads `.vibekb/` live), or
    - Static snapshot: `php tools/generate-static.php` → `/docs` for GitHub

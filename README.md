@@ -53,7 +53,11 @@ Why It Works This Way · AI Handoff · Reference · Search.
 
 **Diagrams** are first-class, source-grounded SVG records in `.vibekb/diagrams/`
 (accessible `<title>`/`<desc>`, inferred paths labelled) that cross-link to the
-functionality and warnings they explain.
+functionality and warnings they explain. They can be **explainable**: a
+repository-owned topology (`diagrams/topology/<id>.json`) gives every node a
+purpose, every edge a concrete mechanism, and every file a reason, with external
+source links as the terminal "show me the implementation" — usable without
+JavaScript in both output modes.
 
 The included `.vibekb/` content models a **real** application — **SousMeow**, a
 guided AI-workflow platform — so every view is demonstrated with realistic,
@@ -106,7 +110,7 @@ deployed (it is the content). See [DEPLOYMENT.md](./DEPLOYMENT.md).
   functionality/  index.json + records/ (the primary unit)
   system/         mental-model, components, request-flow, data-flow, storage, deployment
   files/          important-files.json
-  diagrams/       index.json + records/ + assets/ (source-grounded SVGs)
+  diagrams/       index.json + records/ + assets/ (SVGs) + topology/ (explainable)
   memory/         decisions, constraints, assumptions, warnings, discoveries, changes
   work/           current, handoff, sessions/
 ```

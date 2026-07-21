@@ -252,6 +252,97 @@
         "body": "What am I looking at? Every web request enters public/index.php . The router matches it, an auth check runs, and unsafe methods pass a CSRF gate before reaching a controller. Controllers read and write through the single PDO data path and render an escaped HTML view. Admin actions seeding, management are CLI only and bypass the web routes entirely — shown dashed. Why it matters It shows the exact chokepoint where security is enforced. Anything that adds a route or a state changing action must go through this gate. What is uncertain The Router matching step is inferred from source — the gate and escaping are verified, but the Router class was not line traced. Verify before relying on routing edge cases."
     },
     {
+        "title": "Browser",
+        "summary": "The visitor's browser issues GET and POST requests and receives the rendered HTML response. It is the only client; SousMeow ships no separate front-end app.",
+        "type": "diagram node",
+        "url": "../diagrams/index.html#node-browser",
+        "body": ""
+    },
+    {
+        "title": "Front controller",
+        "summary": "Every request that is not a static file enters one PHP entry point, which sets the security headers and Content-Security-Policy, strips the base path, and hands the request to routing.",
+        "type": "diagram node",
+        "url": "../diagrams/index.html#node-front-controller",
+        "body": "public/index.php The single front controller every dynamic request passes through before anything else runs."
+    },
+    {
+        "title": "Auth & CSRF gate",
+        "summary": "Authenticates the session and verifies a CSRF token on every unsafe (state-changing) request. This is the one chokepoint where request security is enforced.",
+        "type": "diagram node",
+        "url": "../diagrams/index.html#node-security-gate",
+        "body": "app/Core/Csrf.php The single CSRF gate the front controller verifies on every POST. · app/Core/Auth.php Provides requireLogin / requireVerified / requireAdmin used to authorise protected actions."
+    },
+    {
+        "title": "Controller",
+        "summary": "The matched controller handles the request — coordinating models and services and choosing what to render. The Runner is the busiest example.",
+        "type": "diagram node",
+        "url": "../diagrams/index.html#node-controller",
+        "body": "app/Controllers/RunnerController.php The core-loop controller; shown here as the representative request handler. · app/routes.php The complete route table mapping method+path to the controller action that handles it."
+    },
+    {
+        "title": "PDO data path",
+        "summary": "The single database-access path used for every read and write. It targets SQLite in development and MySQL in production behind one interface.",
+        "type": "diagram node",
+        "url": "../diagrams/index.html#node-pdo-data-path",
+        "body": "app/Core/Database.php The one PDO wrapper; prepared-statement helpers and transactions live here and nowhere else."
+    },
+    {
+        "title": "Escaped view",
+        "summary": "Renders the HTML response with all dynamic output escaped before it leaves the application, so pasted or stored content can never inject markup.",
+        "type": "diagram node",
+        "url": "../diagrams/index.html#node-escaped-view",
+        "body": "app/Services/SafeText.php Escapes untrusted content first, then applies a small Markdown allowlist to the escaped text."
+    },
+    {
+        "title": "Admin (CLI only)",
+        "summary": "Seeding and content management run from the command line, never over HTTP. This path deliberately bypasses the web routes and the CSRF gate.",
+        "type": "diagram node",
+        "url": "../diagrams/index.html#node-admin-cli",
+        "body": "scripts/seed.php The CLI seeder that applies the schema and upserts the catalog; the only admin write path."
+    },
+    {
+        "title": "Browser → Front controller (sends request)",
+        "summary": "The browser sends every dynamic HTTP request to the single front controller.",
+        "type": "diagram connection",
+        "url": "../diagrams/index.html#edge-browser-to-front-controller",
+        "body": "public/index.php Receives the request and begins security + routing."
+    },
+    {
+        "title": "Front controller → Auth & CSRF gate (validates request)",
+        "summary": "The front controller authenticates the session and validates the CSRF token on every unsafe method before the request may proceed.",
+        "type": "diagram connection",
+        "url": "../diagrams/index.html#edge-front-controller-to-security-gate",
+        "body": "public/index.php Invokes the CSRF verification on every POST. · app/Core/Csrf.php Performs the token check that gates state-changing requests."
+    },
+    {
+        "title": "Auth & CSRF gate → Controller (routes to controller)",
+        "summary": "Once the gate passes, the router matches the path against the route table and dispatches to the matching controller action.",
+        "type": "diagram connection",
+        "url": "../diagrams/index.html#edge-security-gate-to-controller",
+        "body": "The route table (app/routes.php) is verified from source, but the Router class matching itself was not line-traced. app/routes.php The verified table that determines which controller a path reaches. · app/Core/Router.php Performs the actual match and dispatch — the step that is still inferred."
+    },
+    {
+        "title": "Controller → PDO data path (reads & writes via PDO)",
+        "summary": "The controller performs every database read and write through the single PDO data path, never issuing SQL directly.",
+        "type": "diagram connection",
+        "url": "../diagrams/index.html#edge-controller-to-pdo-data-path",
+        "body": "app/Controllers/RunnerController.php Reads and writes artifacts and projects during the core loop. · app/Core/Database.php The only persistence path every model is built on."
+    },
+    {
+        "title": "Controller → Escaped view (renders escaped HTML)",
+        "summary": "The controller renders an HTML view with all dynamic output escaped before the response is returned to the browser.",
+        "type": "diagram connection",
+        "url": "../diagrams/index.html#edge-controller-to-escaped-view",
+        "body": "app/Services/SafeText.php Escapes any stored or pasted content the view includes."
+    },
+    {
+        "title": "Admin (CLI only) → PDO data path (writes directly (CLI))",
+        "summary": "Admin seeding and management run from the CLI and write through the same PDO path directly, bypassing every web route and the CSRF gate.",
+        "type": "diagram connection",
+        "url": "../diagrams/index.html#edge-admin-cli-to-pdo-data-path",
+        "body": "scripts/seed.php is inferred-from-source; the CLI write path is declared but its execution was not fully traced. scripts/seed.php Applies the schema and upserts the catalog straight through the database layer."
+    },
+    {
         "title": "Risk and uncertainty map",
         "summary": "A single view of the active warnings and the still-inferred areas of the SousMeow model, so an agent sees the landmines before changing code.",
         "type": "diagram",
@@ -264,6 +355,83 @@
         "type": "diagram",
         "url": "../diagrams/index.html#run-recipe-flow",
         "body": "What am I looking at? The end to end \"Run a Cookbook\" loop — the reason SousMeow exists. Teal steps happen inside SousMeow; amber steps happen in the user's own AI, outside the app: 1. Build prompt from a recipe plus the project's pantry. 2. Run in AI — the user pastes the prompt into their own tool. 3. Paste response back into SousMeow stored escaped . 4. Quality checks — the human confirms each check. 5. Approve + version — the result becomes an immutable artifact version. 6. Export kit — the approved work is exported as a project kit. Why it matters This is the most verified path in the model. If you change any step, this shows the neighbours you must keep consistent. What is uncertain Nothing in the loop itself is inferred; the two linked warnings mark the places where a careless edit "
+    },
+    {
+        "title": "Build prompt",
+        "summary": "Assembles the copyable prompt for a recipe step by substituting the project's Pantry values and any approved upstream artifacts. This is what the user runs in their own AI.",
+        "type": "diagram node",
+        "url": "../diagrams/index.html#node-build-prompt",
+        "body": "app/Services/PromptBuilder.php Builds the prompt text and the matching highlighted HTML from the recipe, Pantry, and artifacts. · app/Models/PantryField.php Supplies the Pantry field values substituted into the prompt."
+    },
+    {
+        "title": "Run in the user's AI",
+        "summary": "The user pastes the prompt into their own AI tool and runs it. SousMeow performs no AI call itself — this step is deliberately outside the application, which is why no code implements it.",
+        "type": "diagram node",
+        "url": "../diagrams/index.html#node-run-in-ai",
+        "body": ""
+    },
+    {
+        "title": "Paste response",
+        "summary": "The user pastes the AI's output back into SousMeow, where it is escaped and stored as a new artifact version. Pasted content is always treated as untrusted.",
+        "type": "diagram node",
+        "url": "../diagrams/index.html#node-paste-response",
+        "body": "app/Controllers/RunnerController.php Handles the paste write transition and records the response as an artifact version. · app/Services/SafeText.php Escapes the pasted (untrusted) content before it is stored or ever re-displayed."
+    },
+    {
+        "title": "Quality checks",
+        "summary": "The human confirms each of the recipe's quality checks against the pasted response. Structural evidence is offered, but a person makes the call.",
+        "type": "diagram node",
+        "url": "../diagrams/index.html#node-quality-checks",
+        "body": "app/Services/ResponseParser.php Parses the pasted response against the recipe's output contract to produce found/missing evidence. · app/Models/Artifact.php Records which checks the user has confirmed."
+    },
+    {
+        "title": "Approve + version",
+        "summary": "Approving the step writes an immutable artifact version. Versions are append-only, so the approved result is preserved exactly.",
+        "type": "diagram node",
+        "url": "../diagrams/index.html#node-approve-version",
+        "body": "app/Models/Artifact.php addVersion is append-only; approve/reopen and confirmed checks are enforced here."
+    },
+    {
+        "title": "Export kit",
+        "summary": "Once every step is approved, the project can be exported as a self-contained kit: numbered Markdown files plus an offline kit.html reader.",
+        "type": "diagram node",
+        "url": "../diagrams/index.html#node-export-kit",
+        "body": "app/Services/ProjectKit.php Builds the export zip from the approved artifacts and the Pantry. · app/Controllers/ExportController.php The export page and build gate that requires all steps approved before a kit can be produced."
+    },
+    {
+        "title": "Build prompt → Run in the user's AI (emits copyable prompt)",
+        "summary": "Build-prompt emits a fully substituted, copyable prompt; the user runs it in their own AI tool, because SousMeow never calls an AI itself.",
+        "type": "diagram connection",
+        "url": "../diagrams/index.html#edge-build-prompt-to-run-in-ai",
+        "body": "app/Services/PromptBuilder.php Produces the exact prompt text the user copies out."
+    },
+    {
+        "title": "Run in the user's AI → Paste response (receives pasted output)",
+        "summary": "Paste-response receives the AI's output back from the user and stores it, escaped, as a new artifact version.",
+        "type": "diagram connection",
+        "url": "../diagrams/index.html#edge-run-in-ai-to-paste-response",
+        "body": "app/Controllers/RunnerController.php Accepts the pasted text and writes it as an artifact version. · app/Services/SafeText.php Escapes the untrusted paste on the way in."
+    },
+    {
+        "title": "Paste response → Quality checks (advances to review)",
+        "summary": "After a response is stored, the Runner advances the step to its review state where the quality checks are confirmed.",
+        "type": "diagram connection",
+        "url": "../diagrams/index.html#edge-paste-response-to-quality-checks",
+        "body": "app/Controllers/RunnerController.php Enforces strict step ordering: review becomes available only after a paste exists."
+    },
+    {
+        "title": "Quality checks → Approve + version (unlocks approval)",
+        "summary": "When every quality check is confirmed, the Runner allows approval, which writes the immutable artifact version.",
+        "type": "diagram connection",
+        "url": "../diagrams/index.html#edge-quality-checks-to-approve-version",
+        "body": "app/Controllers/RunnerController.php Blocks approval until the checks for the step are confirmed. · app/Models/Artifact.php Writes the append-only approved version."
+    },
+    {
+        "title": "Approve + version → Export kit (enables export)",
+        "summary": "Once all steps are approved, the export gate opens and the kit is built from the approved artifact versions.",
+        "type": "diagram connection",
+        "url": "../diagrams/index.html#edge-approve-version-to-export-kit",
+        "body": "app/Controllers/ExportController.php The build gate that refuses to export until every step is approved. · app/Services/ProjectKit.php Reads the approved artifacts to assemble the export."
     },
     {
         "title": "Storage map — one PDO path, two dialects",
@@ -411,6 +579,13 @@
         "type": "change",
         "url": "../why/changes/add-diagrams-and-provenance.html",
         "body": "Before The SousMeow model had no diagrams and no explicit provenance block. The overview relied on an undefined \"Last meaningful update\" label and counted functionality records as \"areas\". After Added .vibekb/diagrams/ with five diagrams: app overview, the Run a Cookbook loop, request flow, storage map, and a risk & uncertainty map. Each has an accessible SVG and links to related functionality and warnings. Added a provenance block to manifest.json source commit analysed, verification scope, last verified, updates automatically: false . Counts now read \"N functionality records across M functional areas\". Impact Documentation only — SousMeow itself was not touched and no verification state was upgraded for presentation. The diagrams reflect existing verified records; inferred areas request "
+    },
+    {
+        "title": "Made diagrams explainable — nodes, edges, mechanisms, files-with-reasons",
+        "summary": "Two SousMeow diagrams gained a repository-owned topology so every node states what it is, every edge states a concrete mechanism, every file states why it matters, and external source links reach the implementation — without upgrading any verification claim.",
+        "type": "change",
+        "url": "../why/changes/add-explainable-diagrams.html",
+        "body": "Before Diagrams were a picture plus prose. There was no way to select a box or arrow and learn what it is, why it connects to its neighbour, which files implement it, or where to open the code. Relationships had no stated mechanism. After Added an optional per diagram topology .vibekb/diagrams/topology/<id .json with nodes title + plain language purpose , edges a controlled mechanism and a one sentence explanation , per node/edge files with roles and reasons, repository locations, and honest verified/inferred states. Upgraded two representative diagrams: Request flow verified web path with two inferred, dashed edges — the Router match and the CLI write path and Run a Cookbook — the core loop a verified user journey with the pasted response and read/write coupling warnings attached . Marked"
     },
     {
         "title": "Introduced the categories + collections taxonomy",
@@ -672,17 +847,17 @@
         "body": "How it ships SousMeow is plain PHP 8 plus MySQL or SQLite — no Node, no Composer, no workers. The projects/sousmeow folder is uploaded and the domain document root points at sousmeow/public . app/ , config/ , database/ , scripts/ , and storage/ must sit above the document root. public/.htaccess routes clean URLs through index.php mod rewrite . Configure Copy config/config.example.php to config/config.php gitignored and set: app.env = 'production' , app.base url , app.base path if under a subdirectory , session.secure = true , and the DB driver SQLite file in storage/ , or MySQL from hPanel . .env can override sensitive values; environment variables take precedence. Seed php scripts/seed.php admin email you@domain applies the schema, syncs the catalog upsert by slug — safe to re run after d"
     },
     {
-        "title": "Integrate reusable lessons from the StopPR field test",
-        "summary": "Port the generalizable product, interface, generation, provenance, and visualization improvements proven by the VibeKB-stoppr deployment back into the canonical VibeKB product, without importing StopPR application content.",
+        "title": "Build Explainable Diagrams into VibeKB V1",
+        "summary": "Turn VibeKB's source-grounded diagrams into explainable diagrams — every node states what it is, every edge states the concrete mechanism connecting its endpoints, every displayed file states why it matters, and the terminal handoff is an external source link.",
         "type": "current work",
         "url": "../current-work/index.html",
-        "body": "What the user asked for Analyze the canonical VibeKB repository and the real world VibeKB stoppr field test, then integrate the reusable product, interface, documentation, generation, provenance, and visualization improvements from StopPR back into the main VibeKB product. Audit first; copy nothing blindly. Preserve the product definition, the SousMeow canonical example, PHP 8.2 shared hosting compatibility, subfolder deployment, and all truth/provenance rules. Current architecture before .vibekb/ is the repository owned source of truth functionality first . A PHP 8.2 guide guide/ renders .vibekb/ dynamically via query string routing. No static output. No diagrams. No search. jQuery + Google Fonts loaded from external CDNs. Overview mislabels the functionality record total as \"areas\" and s"
+        "body": "What the user asked for Build Explainable Diagrams as a real V1 feature. A diagram is a visual projection of the existing living software model. It must teach at a glance labelled nodes + mechanism labelled edges reading like a sentence and reward selection per node and per edge explanations: purpose, repository location, relevant files with reasons, verification, uncertainty, and an external source link as the terminal \"show me the implementation\" . Everything must justify its own existence; every click answers the reader's next question. The experience must work without JavaScript and render identically in the dynamic guide and the static /docs snapshot. Current behaviour before .vibekb/diagrams/ holds diagram records Markdown + front matter and repository owned SVGs with accessible <tit"
     },
     {
         "title": "Current handoff",
-        "summary": "StopPR's reusable lessons are integrated into VibeKB (static /docs mode, diagrams, provenance, honest counts, search) with the SousMeow example preserved. Next, trace the remaining inferred SousMeow areas and regenerate the snapshot.",
+        "summary": "Explainable Diagrams shipped in V1 — two SousMeow diagrams now carry a repository-owned topology (nodes, edges, mechanisms, files-with-reasons, source links) rendered identically in both output modes and usable without JavaScript. Next, upgrade the remaining three diagrams and trace the still-inferred SousMeow areas.",
         "type": "handoff",
         "url": "../handoff/index.html",
-        "body": "What the software VibeKB now does VibeKB renders one .vibekb/ source through one template set in two modes: the dynamic PHP guide Mode A and a static /docs snapshot Mode B, via tools/generate static.php for GitHub Pages. Diagrams are first class source grounded records; every rendering shows objective provenance and never implies auto freshness; counts distinguish functional areas from functionality records; search and functionality filters run client side with no jQuery and no required CDN. The canonical example is still SousMeow , updated only to demonstrate the new capabilities. What was integrated from the StopPR field test Static /docs output; a maintainable PHP generator StopPR had none ; a .vibekb/diagrams/ records model with a small accurate SousMeow SVG set; a shared provenance co"
+        "body": "What the software VibeKB now does VibeKB renders one .vibekb/ source through one template set in two modes: the dynamic PHP guide Mode A and a static /docs snapshot Mode B, via tools/generate static.php . Diagrams are first class source grounded records and can now be explainable : an optional per diagram topology .vibekb/diagrams/topology/<id .json gives every node a plain language purpose, every edge a concrete mechanism from a controlled vocabulary and a one sentence explanation, every displayed file a role and a reason, a compact repository location, and a commit pinned external source link as the terminal \"show me the implementation\". Every rendering shows objective provenance and never implies auto freshness; counts distinguish areas from records; search and filters run client side w"
     }
 ]

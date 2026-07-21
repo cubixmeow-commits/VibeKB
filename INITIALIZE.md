@@ -48,14 +48,41 @@ verify the chosen output.
     a safe next action.
 11. **Create a current-work record and a handoff** (`work/current.md`,
     `work/handoff.md`) — objective, with an explicit next recommended action.
-12. **Create only source-grounded diagrams.** Add a small, accurate set under
-    `.vibekb/diagrams/` (records + repository-owned SVGs). Every SVG needs an
-    accessible `<title>` and `<desc>`; label any inferred or unverified path in
-    the diagram itself. Do not generate arbitrary diagrams to hit a number.
-13. **Validate the `.vibekb/` model** with `php tools/validate.php`. Resolve
-    every error (duplicate ids, missing references, invalid statuses/verification
-    states, missing diagram assets, diagrams lacking title/description,
-    contradictory totals).
+12. **Create only source-grounded diagrams, and make them explainable.** Add a
+    small, accurate set under `.vibekb/diagrams/` (records + repository-owned
+    SVGs). Every SVG needs an accessible `<title>` and `<desc>`; label any
+    inferred or unverified path in the diagram itself. Do not generate arbitrary
+    diagrams to hit a number. For each diagram, author a topology
+    (`diagrams/topology/<id>.json`) so it teaches how the software works before
+    any click:
+    1. Identify a small set of important software concepts (nodes) — concepts,
+       not filenames. Give each a concise title and a plain-language purpose.
+    2. Identify only meaningful relationships (edges). **Do not draw an edge
+       unless you can state a concrete mechanism explaining why the source and
+       target are connected.** "Both touch users", "both relate to
+       authentication", shared naming, shared folders, and overlapping
+       vocabulary are **not** mechanisms.
+    3. Assign each edge a mechanism from the controlled vocabulary and write one
+       sentence explaining it.
+    4. Classify each node and edge honestly as verified (traced in source) or
+       inferred (defensible from structure/DI/imports/routing/config/naming +
+       context). Do not mark something verified merely because the AI generated
+       it. There is no "hypothesized" tier — omit an edge you cannot defend and
+       record the gap in the narrative/uncertainty.
+    5. Attach only relevant files, each with a role and a one-sentence reason
+       for why it matters; show the repository location.
+    6. Connect the SVG to the topology: mark each node group with
+       `data-vibekb-node="<id>"` and each edge group with
+       `data-vibekb-edge="<id>"`, and link markers to the `#node-<id>` /
+       `#edge-<id>` anchors so the diagram is usable without JavaScript.
+    7. Quality test: read the visible nodes and edge labels as a sentence — the
+       diagram should teach how the software works before any selection.
+13. **Validate the `.vibekb/` model** with `php tools/validate.php` (and
+    `php tools/test-topology.php`). Resolve every error (duplicate ids, missing
+    references, invalid statuses/verification states, missing diagram assets,
+    diagrams lacking title/description, topology contract violations,
+    out-of-vocabulary edge mechanisms, files without reasons, SVG markers that
+    do not map to the topology, contradictory totals).
 14. **Choose and record provenance** in `manifest.json` (`provenance` block):
     source repository, branch, the **commit analyzed**, verification scope, last
     verified, and `updates_automatically: false`. Never imply auto-freshness.

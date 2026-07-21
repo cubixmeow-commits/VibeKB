@@ -6,6 +6,7 @@ summary: The verified flagship flow from building a prompt through running it in
 diagram_type: user-journey
 group: product-flows
 svg: run-recipe-flow.svg
+topology: run-recipe-flow.json
 functionality: [run-recipe, build-prompt, paste-response, review-quality-checks, approve-and-version, export-project-kit]
 files: []
 data: [artifacts, artifact_versions, quality_checks]

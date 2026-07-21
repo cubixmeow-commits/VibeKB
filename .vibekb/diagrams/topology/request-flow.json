@@ -1,0 +1,252 @@
+{
+  "version": 1,
+  "nodes": [
+    {
+      "id": "browser",
+      "title": "Browser",
+      "purpose": "The visitor's browser issues GET and POST requests and receives the rendered HTML response. It is the only client; SousMeow ships no separate front-end app.",
+      "location": "",
+      "functionality": [],
+      "files": [],
+      "verification": "verified-from-source",
+      "uncertainty": ""
+    },
+    {
+      "id": "front-controller",
+      "title": "Front controller",
+      "purpose": "Every request that is not a static file enters one PHP entry point, which sets the security headers and Content-Security-Policy, strips the base path, and hands the request to routing.",
+      "location": "public",
+      "functionality": ["route-and-secure-requests"],
+      "files": [
+        {
+          "path": "public/index.php",
+          "role": "entry point",
+          "reason": "The single front controller every dynamic request passes through before anything else runs."
+        }
+      ],
+      "verification": "verified-from-source",
+      "uncertainty": ""
+    },
+    {
+      "id": "security-gate",
+      "title": "Auth & CSRF gate",
+      "purpose": "Authenticates the session and verifies a CSRF token on every unsafe (state-changing) request. This is the one chokepoint where request security is enforced.",
+      "location": "app/Core",
+      "functionality": ["route-and-secure-requests"],
+      "files": [
+        {
+          "path": "app/Core/Csrf.php",
+          "role": "primary implementation",
+          "reason": "The single CSRF gate the front controller verifies on every POST."
+        },
+        {
+          "path": "app/Core/Auth.php",
+          "role": "dependency",
+          "reason": "Provides requireLogin / requireVerified / requireAdmin used to authorise protected actions."
+        }
+      ],
+      "verification": "verified-from-source",
+      "uncertainty": ""
+    },
+    {
+      "id": "controller",
+      "title": "Controller",
+      "purpose": "The matched controller handles the request — coordinating models and services and choosing what to render. The Runner is the busiest example.",
+      "location": "app/Controllers",
+      "functionality": ["run-recipe", "route-and-secure-requests"],
+      "files": [
+        {
+          "path": "app/Controllers/RunnerController.php",
+          "role": "primary implementation",
+          "reason": "The core-loop controller; shown here as the representative request handler."
+        },
+        {
+          "path": "app/routes.php",
+          "role": "route definition",
+          "reason": "The complete route table mapping method+path to the controller action that handles it."
+        }
+      ],
+      "verification": "verified-from-source",
+      "uncertainty": ""
+    },
+    {
+      "id": "pdo-data-path",
+      "title": "PDO data path",
+      "purpose": "The single database-access path used for every read and write. It targets SQLite in development and MySQL in production behind one interface.",
+      "location": "app/Core",
+      "functionality": ["access-database"],
+      "files": [
+        {
+          "path": "app/Core/Database.php",
+          "role": "primary implementation",
+          "reason": "The one PDO wrapper; prepared-statement helpers and transactions live here and nowhere else."
+        }
+      ],
+      "verification": "verified-from-source",
+      "uncertainty": ""
+    },
+    {
+      "id": "escaped-view",
+      "title": "Escaped view",
+      "purpose": "Renders the HTML response with all dynamic output escaped before it leaves the application, so pasted or stored content can never inject markup.",
+      "location": "app/Services",
+      "functionality": ["route-and-secure-requests"],
+      "files": [
+        {
+          "path": "app/Services/SafeText.php",
+          "role": "renderer",
+          "reason": "Escapes untrusted content first, then applies a small Markdown allowlist to the escaped text."
+        }
+      ],
+      "verification": "verified-from-source",
+      "uncertainty": ""
+    },
+    {
+      "id": "admin-cli",
+      "title": "Admin (CLI only)",
+      "purpose": "Seeding and content management run from the command line, never over HTTP. This path deliberately bypasses the web routes and the CSRF gate.",
+      "location": "scripts",
+      "functionality": ["seed-and-sync-content"],
+      "files": [
+        {
+          "path": "scripts/seed.php",
+          "role": "entry point",
+          "reason": "The CLI seeder that applies the schema and upserts the catalog; the only admin write path."
+        }
+      ],
+      "verification": "inferred-from-source",
+      "uncertainty": "The seeder is inferred-from-source; its internals were not line-traced."
+    }
+  ],
+  "edges": [
+    {
+      "id": "browser-to-front-controller",
+      "from": "browser",
+      "to": "front-controller",
+      "mechanism": "sends-to",
+      "label": "sends request",
+      "explanation": "The browser sends every dynamic HTTP request to the single front controller.",
+      "functionality": ["route-and-secure-requests"],
+      "files": [
+        {
+          "path": "public/index.php",
+          "role": "entry point",
+          "reason": "Receives the request and begins security + routing."
+        }
+      ],
+      "verification": "verified-from-source",
+      "basis": "",
+      "uncertainty": ""
+    },
+    {
+      "id": "front-controller-to-security-gate",
+      "from": "front-controller",
+      "to": "security-gate",
+      "mechanism": "validates",
+      "label": "validates request",
+      "explanation": "The front controller authenticates the session and validates the CSRF token on every unsafe method before the request may proceed.",
+      "functionality": ["route-and-secure-requests"],
+      "files": [
+        {
+          "path": "public/index.php",
+          "role": "caller",
+          "reason": "Invokes the CSRF verification on every POST."
+        },
+        {
+          "path": "app/Core/Csrf.php",
+          "role": "callee",
+          "reason": "Performs the token check that gates state-changing requests."
+        }
+      ],
+      "verification": "verified-from-source",
+      "basis": "",
+      "uncertainty": ""
+    },
+    {
+      "id": "security-gate-to-controller",
+      "from": "security-gate",
+      "to": "controller",
+      "mechanism": "routes-to",
+      "label": "routes to controller",
+      "explanation": "Once the gate passes, the router matches the path against the route table and dispatches to the matching controller action.",
+      "functionality": ["route-and-secure-requests"],
+      "files": [
+        {
+          "path": "app/routes.php",
+          "role": "route definition",
+          "reason": "The verified table that determines which controller a path reaches."
+        },
+        {
+          "path": "app/Core/Router.php",
+          "role": "primary implementation",
+          "reason": "Performs the actual match and dispatch — the step that is still inferred."
+        }
+      ],
+      "verification": "inferred-from-source",
+      "basis": "The route table (app/routes.php) is verified from source, but the Router class matching itself was not line-traced.",
+      "uncertainty": "Treat routing edge cases (parameter parsing, 404/405 handling) as inferred until the Router is traced."
+    },
+    {
+      "id": "controller-to-pdo-data-path",
+      "from": "controller",
+      "to": "pdo-data-path",
+      "mechanism": "depends-on",
+      "label": "reads & writes via PDO",
+      "explanation": "The controller performs every database read and write through the single PDO data path, never issuing SQL directly.",
+      "functionality": ["access-database", "run-recipe"],
+      "files": [
+        {
+          "path": "app/Controllers/RunnerController.php",
+          "role": "caller",
+          "reason": "Reads and writes artifacts and projects during the core loop."
+        },
+        {
+          "path": "app/Core/Database.php",
+          "role": "dependency",
+          "reason": "The only persistence path every model is built on."
+        }
+      ],
+      "verification": "verified-from-source",
+      "basis": "",
+      "uncertainty": ""
+    },
+    {
+      "id": "controller-to-escaped-view",
+      "from": "controller",
+      "to": "escaped-view",
+      "mechanism": "renders",
+      "label": "renders escaped HTML",
+      "explanation": "The controller renders an HTML view with all dynamic output escaped before the response is returned to the browser.",
+      "functionality": ["route-and-secure-requests"],
+      "files": [
+        {
+          "path": "app/Services/SafeText.php",
+          "role": "renderer",
+          "reason": "Escapes any stored or pasted content the view includes."
+        }
+      ],
+      "verification": "verified-from-source",
+      "basis": "",
+      "uncertainty": ""
+    },
+    {
+      "id": "admin-cli-to-pdo-data-path",
+      "from": "admin-cli",
+      "to": "pdo-data-path",
+      "mechanism": "writes",
+      "label": "writes directly (CLI)",
+      "explanation": "Admin seeding and management run from the CLI and write through the same PDO path directly, bypassing every web route and the CSRF gate.",
+      "functionality": ["seed-and-sync-content", "access-database"],
+      "files": [
+        {
+          "path": "scripts/seed.php",
+          "role": "entry point",
+          "reason": "Applies the schema and upserts the catalog straight through the database layer."
+        }
+      ],
+      "verification": "inferred-from-source",
+      "basis": "scripts/seed.php is inferred-from-source; the CLI write path is declared but its execution was not fully traced.",
+      "uncertainty": "The exact upsert queries were not line-traced."
+    }
+  ]
+}

@@ -6,6 +6,7 @@ summary: How a request travels from the browser through the router, the auth and
 diagram_type: request-flow
 group: product-flows
 svg: request-flow.svg
+topology: request-flow.json
 functionality: [route-and-secure-requests, access-database, view-admin-overview]
 files: [public/index.php]
 data: [SQLite (dev), MySQL (prod)]

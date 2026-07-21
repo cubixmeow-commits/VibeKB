@@ -116,18 +116,53 @@
             <div class="prose reading-column"><h3>What the software (VibeKB) now does</h3>
 <p>VibeKB renders one <code>.vibekb/</code> source through one template set in two modes: the
 dynamic PHP guide (Mode A) and a static <code>/docs</code> snapshot (Mode B, via
-<code>tools/generate-static.php</code>) for GitHub Pages. Diagrams are first-class
-source-grounded records; every rendering shows objective provenance and never
-implies auto-freshness; counts distinguish functional areas from functionality
-records; search and functionality filters run client-side with no jQuery and no
-required CDN. The canonical example is still <strong>SousMeow</strong>, updated only to
-demonstrate the new capabilities.</p>
-<h3>What was integrated from the StopPR field test</h3>
-<p>Static <code>/docs</code> output; a maintainable PHP generator (StopPR had none); a
-<code>.vibekb/diagrams/</code> records model with a small accurate SousMeow SVG set; a
-shared provenance component; client-side search + filters in vanilla JS; a
-Diagrams nav item. See <code>docs/STOPPR_INTEGRATION_AUDIT.md</code> for the full
-decision record and what was deliberately excluded.</p>
+<code>tools/generate-static.php</code>). Diagrams are first-class source-grounded records
+and can now be <strong>explainable</strong>: an optional per-diagram topology
+(<code>.vibekb/diagrams/topology/&lt;id&gt;.json</code>) gives every node a plain-language
+purpose, every edge a concrete mechanism from a controlled vocabulary and a
+one-sentence explanation, every displayed file a role and a reason, a compact
+repository location, and a commit-pinned external source link as the terminal
+&quot;show me the implementation&quot;. Every rendering shows objective provenance and
+never implies auto-freshness; counts distinguish areas from records; search and
+filters run client-side with no jQuery and no required CDN.</p>
+<h3>Explainable Diagrams — what was built this pass</h3>
+<ul>
+<li><strong>Schema + vocabulary:</strong> JSON topology (nodes/edges) referenced by a diagram</li>
+</ul>
+<p>record&#039;s <code>topology:</code> field. Single canonical <code>edge_mechanism_vocabulary()</code> and
+  <code>file_role_vocabulary()</code> in <code>guide/lib/helpers.php</code>; two edge states —
+  verified (solid) and inferred (dashed), both stated in text.</p>
+<ul>
+<li><strong>Loader + resolution:</strong> <code>Content.php</code> loads/normalises topology, resolves</li>
+</ul>
+<p>node/edge functionality and warnings, reuses <code>important-files.json</code> metadata,
+  and builds immutable GitHub source links from manifest provenance.</p>
+<ul>
+<li><strong>Validation:</strong> the loader + <code>tools/validate.php</code> enforce the full contract</li>
+</ul>
+<p>(unique ids, resolvable edges, controlled mechanisms, honest verification,
+  files-with-reasons, SVG↔topology marker mapping both ways). New
+  <code>tools/test-topology.php</code> proves malformed topology produces useful
+  diagnostics without crashing.</p>
+<ul>
+<li><strong>Rendering:</strong> semantic no-JS node/edge explanation sections</li>
+</ul>
+<p>(<code>guide/templates/partials/diagram-explain.php</code>) with <code>#node-&lt;id&gt;</code> /
+  <code>#edge-&lt;id&gt;</code> anchors; SVGs mark groups with <code>data-vibekb-node</code> /
+  <code>data-vibekb-edge</code> linking to those anchors. Small vanilla-JS enhancement adds
+  selection, dimming, and focus (<code>initDiagrams</code> in <code>guide/assets/js/guide.js</code>);
+  nothing essential is behind JS.</p>
+<ul>
+<li><strong>Search + backlinks:</strong> node titles/purposes, edge labels/explanations, and</li>
+</ul>
+<p>files-with-reasons are searchable and link to the exact anchor; functionality
+  pages deep-link to the node that represents them.</p>
+<ul>
+<li><strong>Examples:</strong> upgraded <strong>request-flow</strong> (verified web path + two inferred,</li>
+</ul>
+<p>dashed edges: the Router match and the CLI write path) and <strong>run-recipe-flow</strong>
+  (verified user journey with the untrusted-paste and read/write-coupling
+  warnings). The other three diagrams remain valid as picture + narrative.</p>
 <h3>SousMeow functionality state (unchanged this pass)</h3>
 <ul>
 <li><strong>Verified from source:</strong> discovery, auth, the full Runner</li>
@@ -143,37 +178,47 @@ decision record and what was deliberately excluded.</p>
 <li><strong>Inferred from source:</strong> <code>manage-account</code>, <code>seed-and-sync-content</code>, the</li>
 </ul>
 <p>Router, and some Model queries. No verification state was upgraded for the
-  diagrams — inferred paths are labelled in them.</p>
+  diagrams — inferred edges are drawn dashed and state their basis.</p>
 <h3>Provenance note (important)</h3>
 <p>The SousMeow model was derived read-only and is not bundled into VibeKB. It can
 go stale — re-verify against the SousMeow source
-(<code>cubixmeow-commits/dev-portfolio-v2</code>, <code>projects/sousmeow</code>) before changing any
-functionality claim. The <code>manifest.json</code> <code>provenance</code> block records the analysed
-commit and that the output does not auto-update.</p>
+(<code>cubixmeow-commits/dev-portfolio-v2</code>, <code>projects/sousmeow</code>, commit <code>c1617ab</code>)
+before changing any functionality claim. Source links are pinned to that commit.</p>
 <h3>Verification completed this pass</h3>
 <ul>
-<li><code>php -l</code> clean across <code>guide/</code> and <code>tools/</code>.</li>
-<li><code>php tools/validate.php</code> → 0 errors, 0 warnings (25 records, 9 areas, 5</li>
+<li><code>php -l</code> clean across changed <code>guide/</code> and <code>tools/</code> files.</li>
+<li><code>php tools/validate.php</code> → 0 errors (25 records, 9 areas, 5 diagrams, 2</li>
 </ul>
-<p>diagrams).</p>
+<p>explainable topologies, 13 nodes, 11 edges); warnings are only the three
+  not-yet-explainable diagrams.</p>
 <ul>
-<li>Dynamic guide: every view returns 200; Reference shows no validation errors.</li>
-<li>Static <code>/docs</code>: 57 pages; 1544 internal links resolve (0 broken, 0 absolute</li>
+<li><code>php tools/test-topology.php</code> → OK (all malformed-topology diagnostics fire;</li>
 </ul>
-<p>filesystem-path leaks); 97 search entries resolve; pages serve 200 under a
-  repository subpath; SVGs are valid XML with <code>&lt;title&gt;</code>/<code>&lt;desc&gt;</code>.</p>
+<p>good topology still resolves).</p>
+<ul>
+<li>Dynamic guide: diagrams + functionality views return 200; source links are</li>
+</ul>
+<p>commit-pinned; search index exposes node/edge/file entries with correct
+  anchors.</p>
+<ul>
+<li>Static <code>/docs</code> regenerated: node/edge anchors, relative source links, and</li>
+</ul>
+<p>functionality backlinks resolve.</p>
 <h3>Active warnings (SousMeow)</h3>
 <ul>
 <li><code>read-write-path-coupling</code>, <code>pasted-response-is-untrusted</code>,</li>
 </ul>
-<p><code>password-reset-depends-on-smtp</code>, <code>legacy-category-column</code>. The
-  <code>risk-uncertainty-map</code> diagram summarises these.</p>
+<p><code>password-reset-depends-on-smtp</code>, <code>legacy-category-column</code>.</p>
 <h3>Exact next recommended action</h3>
-<p>Trace <code>app/Controllers/AccountController.php</code>, <code>scripts/seed.php</code>, and the
-<code>Simulation*</code> services in the SousMeow source; promote <code>manage-account</code>,
-<code>seed-and-sync-content</code>, and <code>demo-simulation</code> from inferred to verified (or
-correct them) and update the <code>request-flow</code> diagram&#039;s Router step. Then run
-<code>php tools/validate.php</code> and <code>php tools/generate-static.php</code> to refresh <code>/docs</code>.</p></div>
+<p>Author topology for the remaining three diagrams (<code>app-overview</code>, <code>storage-map</code>,
+<code>risk-uncertainty-map</code>) — each currently renders as picture + narrative and is
+flagged by a non-fatal validator warning — applying the same explainability
+gate. In parallel, trace <code>app/Controllers/AccountController.php</code>,
+<code>scripts/seed.php</code>, and the <code>Simulation*</code> services in the SousMeow source to
+promote the inferred edges/records (Router match, CLI write path,
+<code>manage-account</code>, <code>seed-and-sync-content</code>) to verified where the source
+supports it. Then re-run <code>php tools/validate.php</code>, <code>php tools/test-topology.php</code>,
+and <code>php tools/generate-static.php</code>.</p></div>
         </section>
     
             <section class="doc-section">

@@ -137,7 +137,7 @@
             <h2 class="diagram-group-title reading-column">Understand the whole app</h2>
                     <p class="reading-column text-soft">The fastest visual entry points before reading records.</p>
         
-                    <section class="diagram-section wide-section" id="app-overview" aria-labelledby="app-overview-h">
+                                <section class="diagram-section wide-section" id="app-overview" aria-labelledby="app-overview-h">
                 <h3 id="app-overview-h">SousMeow at a glance</h3>
                 <p>The whole system on one page — browser, PHP front controller, the auth/CSRF gate, controllers, the single PDO data path, and the deliberate absence of any AI call.</p>
 
@@ -207,6 +207,7 @@
                     <figcaption class="diagram-caption"><strong>What am I looking at?</strong> The whole system on one page — browser, PHP front controller, the auth/CSRF gate, controllers, the single PDO data path, and the deliberate absence of any AI call.</figcaption>
                 </figure>
 
+                
                 <dl class="diagram-meta reading-column">
                                             <dt>Diagram type</dt>
                         <dd>Application overview</dd>
@@ -229,15 +230,15 @@
                     <h2 class="diagram-group-title reading-column">Understand the main product flow</h2>
                     <p class="reading-column text-soft">How the core user-facing loop and requests move through the system.</p>
         
-                    <section class="diagram-section wide-section" id="run-recipe-flow" aria-labelledby="run-recipe-flow-h">
+                                <section class="diagram-section wide-section diagram-section--explainable" id="run-recipe-flow" aria-labelledby="run-recipe-flow-h" data-diagram="run-recipe-flow">
                 <h3 id="run-recipe-flow-h">Run a Cookbook — the core loop</h3>
                 <p>The verified flagship flow from building a prompt through running it in the user&#039;s own AI, pasting the response, confirming quality checks, approving an immutable version, and exporting a project kit.</p>
 
                                 <figure class="diagram-figure">
                     <div class="diagram-scroll">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 430" role="img" aria-labelledby="rr-title rr-desc">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 900 430" role="img" aria-labelledby="rr-title rr-desc">
   <title id="rr-title">Run a Cookbook — the core loop</title>
-  <desc id="rr-desc">The verified flagship flow: SousMeow builds a prompt from a recipe and the user's pantry, the user runs it in their own AI and pastes the response back, human quality checks are confirmed, the artifact is approved as an immutable version, and finally a project kit is exported. SousMeow performs no AI call itself.</desc>
+  <desc id="rr-desc">The verified flagship flow: SousMeow builds a prompt from a recipe and the user's Pantry, the user runs it in their own AI and pastes the response back, human quality checks are confirmed, the artifact is approved as an immutable version, and finally a project kit is exported. SousMeow performs no AI call itself. Each step and arrow links to its written explanation below.</desc>
   <defs>
     <marker id="rr-arrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto">
       <path d="M0,0 L8,4 L0,8 z" fill="#4f5c56"/>
@@ -249,51 +250,329 @@
       .lbl { font-size:13.5px; font-weight:600; }
       .sm { font-size:11.5px; fill:#4f5c56; }
       .arrow { stroke:#4f5c56; stroke-width:1.6; fill:none; marker-end:url(#rr-arrow); }
+      .hit { stroke:transparent; stroke-width:16; fill:none; }
       .title { font-size:21px; font-weight:800; font-family:"Outfit","Figtree",sans-serif; }
     </style>
   </defs>
   <rect width="900" height="430" fill="#f4f0e8"/>
   <text class="t title" x="28" y="40">Run a Cookbook — the core loop</text>
-  <text class="t sm" x="28" y="62">Verified end-to-end from source. Amber steps happen in the user's own AI, outside SousMeow.</text>
+  <text class="t sm" x="28" y="62">Verified end-to-end from source. Amber steps happen in the user's own AI, outside SousMeow. Select any step or arrow for its explanation.</text>
 
-  <rect class="t step" x="30" y="95" width="150" height="70" rx="10"/>
-  <text class="t lbl" x="105" y="125" text-anchor="middle">1 · Build prompt</text>
-  <text class="t sm" x="105" y="145" text-anchor="middle">Recipe + Pantry</text>
+  <a href="#node-build-prompt" xlink:href="#node-build-prompt" class="dnode" data-vibekb-node="build-prompt">
+    <title>Build prompt — open explanation</title>
+    <rect class="t step" x="30" y="95" width="150" height="70" rx="10"/>
+    <text class="t lbl" x="105" y="125" text-anchor="middle">1 · Build prompt</text>
+    <text class="t sm" x="105" y="145" text-anchor="middle">Recipe + Pantry</text>
+  </a>
 
-  <rect class="t user" x="210" y="95" width="150" height="70" rx="10"/>
-  <text class="t lbl" x="285" y="120" text-anchor="middle">2 · Run in AI</text>
-  <text class="t sm" x="285" y="139" text-anchor="middle">User's own tool</text>
-  <text class="t sm" x="285" y="155" text-anchor="middle">(outside SousMeow)</text>
+  <a href="#node-run-in-ai" xlink:href="#node-run-in-ai" class="dnode" data-vibekb-node="run-in-ai">
+    <title>Run in the user's AI — open explanation</title>
+    <rect class="t user" x="210" y="95" width="150" height="70" rx="10"/>
+    <text class="t lbl" x="285" y="120" text-anchor="middle">2 · Run in AI</text>
+    <text class="t sm" x="285" y="139" text-anchor="middle">User's own tool</text>
+    <text class="t sm" x="285" y="155" text-anchor="middle">(outside SousMeow)</text>
+  </a>
 
-  <rect class="t user" x="390" y="95" width="150" height="70" rx="10"/>
-  <text class="t lbl" x="465" y="125" text-anchor="middle">3 · Paste response</text>
-  <text class="t sm" x="465" y="145" text-anchor="middle">Escaped + stored</text>
+  <a href="#node-paste-response" xlink:href="#node-paste-response" class="dnode" data-vibekb-node="paste-response">
+    <title>Paste response — open explanation</title>
+    <rect class="t user" x="390" y="95" width="150" height="70" rx="10"/>
+    <text class="t lbl" x="465" y="125" text-anchor="middle">3 · Paste response</text>
+    <text class="t sm" x="465" y="145" text-anchor="middle">Escaped + stored</text>
+  </a>
 
-  <rect class="t step" x="570" y="95" width="160" height="70" rx="10"/>
-  <text class="t lbl" x="650" y="120" text-anchor="middle">4 · Quality checks</text>
-  <text class="t sm" x="650" y="139" text-anchor="middle">Human confirms</text>
-  <text class="t sm" x="650" y="155" text-anchor="middle">each check</text>
+  <a href="#node-quality-checks" xlink:href="#node-quality-checks" class="dnode" data-vibekb-node="quality-checks">
+    <title>Quality checks — open explanation</title>
+    <rect class="t step" x="570" y="95" width="160" height="70" rx="10"/>
+    <text class="t lbl" x="650" y="120" text-anchor="middle">4 · Quality checks</text>
+    <text class="t sm" x="650" y="139" text-anchor="middle">Human confirms</text>
+    <text class="t sm" x="650" y="155" text-anchor="middle">each check</text>
+  </a>
 
-  <line class="arrow" x1="180" y1="130" x2="208" y2="130"/>
-  <line class="arrow" x1="360" y1="130" x2="388" y2="130"/>
-  <line class="arrow" x1="540" y1="130" x2="568" y2="130"/>
+  <a href="#edge-build-prompt-to-run-in-ai" xlink:href="#edge-build-prompt-to-run-in-ai" class="dedge" data-vibekb-edge="build-prompt-to-run-in-ai">
+    <title>emits copyable prompt — verified</title>
+    <line class="hit" x1="180" y1="130" x2="208" y2="130"/>
+    <line class="arrow" x1="180" y1="130" x2="208" y2="130"/>
+  </a>
+  <a href="#edge-run-in-ai-to-paste-response" xlink:href="#edge-run-in-ai-to-paste-response" class="dedge" data-vibekb-edge="run-in-ai-to-paste-response">
+    <title>receives pasted output — verified</title>
+    <line class="hit" x1="360" y1="130" x2="388" y2="130"/>
+    <line class="arrow" x1="360" y1="130" x2="388" y2="130"/>
+  </a>
+  <a href="#edge-paste-response-to-quality-checks" xlink:href="#edge-paste-response-to-quality-checks" class="dedge" data-vibekb-edge="paste-response-to-quality-checks">
+    <title>advances to review — verified</title>
+    <line class="hit" x1="540" y1="130" x2="568" y2="130"/>
+    <line class="arrow" x1="540" y1="130" x2="568" y2="130"/>
+  </a>
 
-  <rect class="t step" x="250" y="235" width="170" height="70" rx="10"/>
-  <text class="t lbl" x="335" y="262" text-anchor="middle">5 · Approve + version</text>
-  <text class="t sm" x="335" y="282" text-anchor="middle">Immutable artifact</text>
+  <a href="#node-approve-version" xlink:href="#node-approve-version" class="dnode" data-vibekb-node="approve-version">
+    <title>Approve + version — open explanation</title>
+    <rect class="t step" x="250" y="235" width="170" height="70" rx="10"/>
+    <text class="t lbl" x="335" y="262" text-anchor="middle">5 · Approve + version</text>
+    <text class="t sm" x="335" y="282" text-anchor="middle">Immutable artifact</text>
+  </a>
 
-  <rect class="t step" x="470" y="235" width="170" height="70" rx="10"/>
-  <text class="t lbl" x="555" y="262" text-anchor="middle">6 · Export kit</text>
-  <text class="t sm" x="555" y="282" text-anchor="middle">Project Kit (kit.html)</text>
+  <a href="#node-export-kit" xlink:href="#node-export-kit" class="dnode" data-vibekb-node="export-kit">
+    <title>Export kit — open explanation</title>
+    <rect class="t step" x="470" y="235" width="170" height="70" rx="10"/>
+    <text class="t lbl" x="555" y="262" text-anchor="middle">6 · Export kit</text>
+    <text class="t sm" x="555" y="282" text-anchor="middle">Project Kit (kit.html)</text>
+  </a>
 
-  <path class="arrow" d="M650 165 L650 205 L335 205 L335 233"/>
-  <line class="arrow" x1="420" y1="270" x2="468" y2="270"/>
+  <a href="#edge-quality-checks-to-approve-version" xlink:href="#edge-quality-checks-to-approve-version" class="dedge" data-vibekb-edge="quality-checks-to-approve-version">
+    <title>unlocks approval — verified</title>
+    <path class="hit" d="M650 165 L650 205 L335 205 L335 233"/>
+    <path class="arrow" d="M650 165 L650 205 L335 205 L335 233"/>
+  </a>
+  <a href="#edge-approve-version-to-export-kit" xlink:href="#edge-approve-version-to-export-kit" class="dedge" data-vibekb-edge="approve-version-to-export-kit">
+    <title>enables export — verified</title>
+    <line class="hit" x1="420" y1="270" x2="468" y2="270"/>
+    <line class="arrow" x1="420" y1="270" x2="468" y2="270"/>
+  </a>
 
   <text class="t sm" x="28" y="400">Related warnings: pasted responses stay escaped (including in kit.html); Pantry/Artifact read and write paths change together.</text>
 </svg>                                            </div>
                     <figcaption class="diagram-caption"><strong>What am I looking at?</strong> The verified flagship flow from building a prompt through running it in the user&#039;s own AI, pasting the response, confirming quality checks, approving an immutable version, and exporting a project kit.</figcaption>
                 </figure>
 
+                                    <div class="diagram-explain" id="run-recipe-flow-explain">
+    <div class="dx-legend" role="note">
+        <span class="dx-legend__title">How to read this</span>
+        <span class="dx-legend__item"><span class="dx-swatch dx-swatch--solid" aria-hidden="true"></span> Solid line &mdash; verified from source</span>
+        <span class="dx-legend__item"><span class="dx-swatch dx-swatch--dashed" aria-hidden="true"></span> Dashed line &mdash; inferred from source</span>
+        <span class="dx-legend__hint text-soft">Select any box or arrow in the diagram to jump to its explanation.</span>
+    </div>
+
+    <h4 class="dx-heading" id="run-recipe-flow-nodes-h">Parts &mdash; what each one is</h4>
+    <p class="dx-heading-note text-soft">Each part explains why it appears, where it lives in the repository, and which files to read.</p>
+    <div class="dx-list" role="list">
+                    <section class="dx-card dx-node" role="listitem" id="node-build-prompt" data-node="build-prompt" tabindex="-1" aria-labelledby="node-build-prompt-h">
+                <div class="dx-card__head">
+                    <h5 class="dx-card__title" id="node-build-prompt-h">Build prompt</h5>
+                                            <span class="badge badge--ok">Verified from source</span>                                    </div>
+                <p class="dx-card__purpose">Assembles the copyable prompt for a recipe step by substituting the project&#039;s Pantry values and any approved upstream artifacts. This is what the user runs in their own AI.</p>
+
+                                    <p class="dx-rel"><strong>Related functionality:</strong> <a class="chip" href="../functionality/build-prompt.html">Build the prompt</a></p>
+                
+                                                    <div class="dx-where">
+                        <span class="dx-where__label">Where it lives</span>
+                                                    <code class="dx-where__path">app/Services/</code>
+                                                <ul class="loc-tree"><li><span class="loc-dir">app/</span><ul><li><span class="loc-dir">Services/</span><ul><li><code class="loc-file">PromptBuilder.php</code></li></ul></li><li><span class="loc-dir">Models/</span><ul><li><code class="loc-file">PantryField.php</code></li></ul></li></ul></li></ul>                    </div>
+                
+                                    <div class="dx-files">
+                        <span class="dx-files__label">Files that implement or support it</span>
+                        <ul class="dx-files__list">
+                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Primary implementation</span><code class="dx-file__path">app/Services/PromptBuilder.php</code></div><p class="dx-file__reason">Builds the prompt text and the matching highlighted HTML from the recipe, Pantry, and artifacts.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> Builds the copyable prompt by substituting Pantry values and approved-Artifact contents, with matching highlighted HTML.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/Services/PromptBuilder.php" rel="noopener noreferrer">Open implementation <span aria-hidden="true">↗</span></a></p></li>                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Dependency</span><code class="dx-file__path">app/Models/PantryField.php</code></div><p class="dx-file__reason">Supplies the Pantry field values substituted into the prompt.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> Pantry field definitions per Cookbook and option decoding for select/multiselect.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/Models/PantryField.php" rel="noopener noreferrer">View source on GitHub <span aria-hidden="true">↗</span></a></p></li>                                                    </ul>
+                    </div>
+                
+                                            </section>
+                    <section class="dx-card dx-node" role="listitem" id="node-run-in-ai" data-node="run-in-ai" tabindex="-1" aria-labelledby="node-run-in-ai-h">
+                <div class="dx-card__head">
+                    <h5 class="dx-card__title" id="node-run-in-ai-h">Run in the user&#039;s AI</h5>
+                                            <span class="badge badge--ok">Verified from source</span>                                    </div>
+                <p class="dx-card__purpose">The user pastes the prompt into their own AI tool and runs it. SousMeow performs no AI call itself — this step is deliberately outside the application, which is why no code implements it.</p>
+
+                
+                                
+                
+                                                    <p class="dx-uncertain"><strong>Uncertain:</strong> This step happens entirely in the user&#039;s own AI tool, outside SousMeow; there is no source to trace here.</p>
+                            </section>
+                    <section class="dx-card dx-node" role="listitem" id="node-paste-response" data-node="paste-response" tabindex="-1" aria-labelledby="node-paste-response-h">
+                <div class="dx-card__head">
+                    <h5 class="dx-card__title" id="node-paste-response-h">Paste response</h5>
+                                            <span class="badge badge--ok">Verified from source</span>                                    </div>
+                <p class="dx-card__purpose">The user pastes the AI&#039;s output back into SousMeow, where it is escaped and stored as a new artifact version. Pasted content is always treated as untrusted.</p>
+
+                                    <p class="dx-rel"><strong>Related functionality:</strong> <a class="chip" href="../functionality/paste-response.html">Paste a response</a></p>
+                
+                                                    <div class="dx-where">
+                        <span class="dx-where__label">Where it lives</span>
+                                                    <code class="dx-where__path">app/Controllers/</code>
+                                                <ul class="loc-tree"><li><span class="loc-dir">app/</span><ul><li><span class="loc-dir">Controllers/</span><ul><li><code class="loc-file">RunnerController.php</code></li></ul></li><li><span class="loc-dir">Services/</span><ul><li><code class="loc-file">SafeText.php</code></li></ul></li></ul></li></ul>                    </div>
+                
+                                    <div class="dx-files">
+                        <span class="dx-files__label">Files that implement or support it</span>
+                        <ul class="dx-files__list">
+                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Primary implementation</span><code class="dx-file__path">app/Controllers/RunnerController.php</code></div><p class="dx-file__reason">Handles the paste write transition and records the response as an artifact version.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> The core loop: renders gather/review/approved states and every write transition (paste, checks, approve, edit, reopen, restore) with strict step ordering.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/Controllers/RunnerController.php" rel="noopener noreferrer">Open implementation <span aria-hidden="true">↗</span></a></p></li>                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Validation</span><code class="dx-file__path">app/Services/SafeText.php</code></div><p class="dx-file__reason">Escapes the pasted (untrusted) content before it is stored or ever re-displayed.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> Escapes pasted (untrusted) content first, then applies a small Markdown allowlist to the escaped text.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/Services/SafeText.php" rel="noopener noreferrer">View source on GitHub <span aria-hidden="true">↗</span></a></p></li>                                                    </ul>
+                    </div>
+                
+                                    <p class="dx-warn"><strong>&#9888; Warnings:</strong> <a class="chip" href="../why/warnings/pasted-response-is-untrusted.html">Pasted AI responses are untrusted input end to end</a></p>
+                                            </section>
+                    <section class="dx-card dx-node" role="listitem" id="node-quality-checks" data-node="quality-checks" tabindex="-1" aria-labelledby="node-quality-checks-h">
+                <div class="dx-card__head">
+                    <h5 class="dx-card__title" id="node-quality-checks-h">Quality checks</h5>
+                                            <span class="badge badge--info">Inferred from source</span>                                    </div>
+                <p class="dx-card__purpose">The human confirms each of the recipe&#039;s quality checks against the pasted response. Structural evidence is offered, but a person makes the call.</p>
+
+                                    <p class="dx-rel"><strong>Related functionality:</strong> <a class="chip" href="../functionality/review-quality-checks.html">Review Quality Checks</a></p>
+                
+                                                    <div class="dx-where">
+                        <span class="dx-where__label">Where it lives</span>
+                                                    <code class="dx-where__path">app/Services/</code>
+                                                <ul class="loc-tree"><li><span class="loc-dir">app/</span><ul><li><span class="loc-dir">Services/</span><ul><li><code class="loc-file">ResponseParser.php</code></li></ul></li><li><span class="loc-dir">Models/</span><ul><li><code class="loc-file">Artifact.php</code></li></ul></li></ul></li></ul>                    </div>
+                
+                                    <div class="dx-files">
+                        <span class="dx-files__label">Files that implement or support it</span>
+                        <ul class="dx-files__list">
+                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Primary implementation</span><code class="dx-file__path">app/Services/ResponseParser.php</code></div><p class="dx-file__reason">Parses the pasted response against the recipe&#039;s output contract to produce found/missing evidence.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> Parses a pasted response against a Recipe&#039;s output contract to produce structural evidence for Quality Checks.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/Services/ResponseParser.php" rel="noopener noreferrer">Open implementation <span aria-hidden="true">↗</span></a></p></li>                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Storage</span><code class="dx-file__path">app/Models/Artifact.php</code></div><p class="dx-file__reason">Records which checks the user has confirmed.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> Artifact and version access: addVersion (append-only), approve/reopen, confirmed checks, status-by-recipe.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/Models/Artifact.php" rel="noopener noreferrer">View source on GitHub <span aria-hidden="true">↗</span></a></p></li>                                                    </ul>
+                    </div>
+                
+                                                    <p class="dx-uncertain"><strong>Uncertain:</strong> ResponseParser is inferred-from-source; the contract-matching details were not fully line-traced.</p>
+                            </section>
+                    <section class="dx-card dx-node" role="listitem" id="node-approve-version" data-node="approve-version" tabindex="-1" aria-labelledby="node-approve-version-h">
+                <div class="dx-card__head">
+                    <h5 class="dx-card__title" id="node-approve-version-h">Approve + version</h5>
+                                            <span class="badge badge--ok">Verified from source</span>                                    </div>
+                <p class="dx-card__purpose">Approving the step writes an immutable artifact version. Versions are append-only, so the approved result is preserved exactly.</p>
+
+                                    <p class="dx-rel"><strong>Related functionality:</strong> <a class="chip" href="../functionality/approve-and-version.html">Approve &amp; version an artifact</a></p>
+                
+                                                    <div class="dx-where">
+                        <span class="dx-where__label">Where it lives</span>
+                                                    <code class="dx-where__path">app/Models/</code>
+                                                <ul class="loc-tree"><li><span class="loc-dir">app/</span><ul><li><span class="loc-dir">Models/</span><ul><li><code class="loc-file">Artifact.php</code></li></ul></li></ul></li></ul>                    </div>
+                
+                                    <div class="dx-files">
+                        <span class="dx-files__label">Files that implement or support it</span>
+                        <ul class="dx-files__list">
+                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Primary implementation</span><code class="dx-file__path">app/Models/Artifact.php</code></div><p class="dx-file__reason">addVersion is append-only; approve/reopen and confirmed checks are enforced here.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> Artifact and version access: addVersion (append-only), approve/reopen, confirmed checks, status-by-recipe.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/Models/Artifact.php" rel="noopener noreferrer">Open implementation <span aria-hidden="true">↗</span></a></p></li>                                                    </ul>
+                    </div>
+                
+                                            </section>
+                    <section class="dx-card dx-node" role="listitem" id="node-export-kit" data-node="export-kit" tabindex="-1" aria-labelledby="node-export-kit-h">
+                <div class="dx-card__head">
+                    <h5 class="dx-card__title" id="node-export-kit-h">Export kit</h5>
+                                            <span class="badge badge--ok">Verified from source</span>                                    </div>
+                <p class="dx-card__purpose">Once every step is approved, the project can be exported as a self-contained kit: numbered Markdown files plus an offline kit.html reader.</p>
+
+                                    <p class="dx-rel"><strong>Related functionality:</strong> <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a></p>
+                
+                                                    <div class="dx-where">
+                        <span class="dx-where__label">Where it lives</span>
+                                                    <code class="dx-where__path">app/Services/</code>
+                                                <ul class="loc-tree"><li><span class="loc-dir">app/</span><ul><li><span class="loc-dir">Services/</span><ul><li><code class="loc-file">ProjectKit.php</code></li></ul></li><li><span class="loc-dir">Controllers/</span><ul><li><code class="loc-file">ExportController.php</code></li></ul></li></ul></li></ul>                    </div>
+                
+                                    <div class="dx-files">
+                        <span class="dx-files__label">Files that implement or support it</span>
+                        <ul class="dx-files__list">
+                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Primary implementation</span><code class="dx-file__path">app/Services/ProjectKit.php</code></div><p class="dx-file__reason">Builds the export zip from the approved artifacts and the Pantry.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> Builds the export zip: numbered Markdown files, a self-contained kit.html reader, and a README manifest.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/Services/ProjectKit.php" rel="noopener noreferrer">Open implementation <span aria-hidden="true">↗</span></a></p></li>                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Entry point</span><code class="dx-file__path">app/Controllers/ExportController.php</code></div><p class="dx-file__reason">The export page and build gate that requires all steps approved before a kit can be produced.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> Export page, build gate (all approved), and owner-scoped zip download from outside the web root.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/Controllers/ExportController.php" rel="noopener noreferrer">Open entry point <span aria-hidden="true">↗</span></a></p></li>                                                    </ul>
+                    </div>
+                
+                                            </section>
+            </div>
+
+    <h4 class="dx-heading" id="run-recipe-flow-edges-h">Connections &mdash; why they connect</h4>
+    <p class="dx-heading-note text-soft">Each connection names the concrete mechanism linking its two parts. The mechanism is the proof the relationship passed the explainability gate.</p>
+    <div class="dx-list" role="list">
+                    <section class="dx-card dx-edge dx-edge--verified" role="listitem" id="edge-build-prompt-to-run-in-ai" data-edge="build-prompt-to-run-in-ai" tabindex="-1" aria-labelledby="edge-build-prompt-to-run-in-ai-h">
+                <div class="dx-card__head">
+                    <h5 class="dx-card__title dx-edge__title" id="edge-build-prompt-to-run-in-ai-h">
+                        <a class="dx-edge__endpoint" href="#node-build-prompt">Build prompt</a>
+                        <span class="dx-mech">emits <span aria-hidden="true">&rarr;</span></span>
+                        <a class="dx-edge__endpoint" href="#node-run-in-ai">Run in the user&#039;s AI</a>
+                    </h5>
+                    <span class="dx-verif"><span class="badge badge--ok">Verified from source</span> <span class="badge badge--ok">Solid line</span></span>
+                </div>
+                <p class="dx-card__purpose">Build-prompt emits a fully substituted, copyable prompt; the user runs it in their own AI tool, because SousMeow never calls an AI itself.</p>
+
+                
+                                    <p class="dx-rel"><strong>Related functionality:</strong> <a class="chip" href="../functionality/build-prompt.html">Build the prompt</a></p>
+                
+                                    <div class="dx-files">
+                        <span class="dx-files__label">Files behind this connection</span>
+                        <ul class="dx-files__list">
+                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Primary implementation</span><code class="dx-file__path">app/Services/PromptBuilder.php</code></div><p class="dx-file__reason">Produces the exact prompt text the user copies out.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> Builds the copyable prompt by substituting Pantry values and approved-Artifact contents, with matching highlighted HTML.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/Services/PromptBuilder.php" rel="noopener noreferrer">Open implementation <span aria-hidden="true">↗</span></a></p></li>                                                    </ul>
+                    </div>
+                
+                                            </section>
+                    <section class="dx-card dx-edge dx-edge--verified" role="listitem" id="edge-run-in-ai-to-paste-response" data-edge="run-in-ai-to-paste-response" tabindex="-1" aria-labelledby="edge-run-in-ai-to-paste-response-h">
+                <div class="dx-card__head">
+                    <h5 class="dx-card__title dx-edge__title" id="edge-run-in-ai-to-paste-response-h">
+                        <a class="dx-edge__endpoint" href="#node-run-in-ai">Run in the user&#039;s AI</a>
+                        <span class="dx-mech">receives from <span aria-hidden="true">&rarr;</span></span>
+                        <a class="dx-edge__endpoint" href="#node-paste-response">Paste response</a>
+                    </h5>
+                    <span class="dx-verif"><span class="badge badge--ok">Verified from source</span> <span class="badge badge--ok">Solid line</span></span>
+                </div>
+                <p class="dx-card__purpose">Paste-response receives the AI&#039;s output back from the user and stores it, escaped, as a new artifact version.</p>
+
+                
+                                    <p class="dx-rel"><strong>Related functionality:</strong> <a class="chip" href="../functionality/paste-response.html">Paste a response</a></p>
+                
+                                    <div class="dx-files">
+                        <span class="dx-files__label">Files behind this connection</span>
+                        <ul class="dx-files__list">
+                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Callee</span><code class="dx-file__path">app/Controllers/RunnerController.php</code></div><p class="dx-file__reason">Accepts the pasted text and writes it as an artifact version.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> The core loop: renders gather/review/approved states and every write transition (paste, checks, approve, edit, reopen, restore) with strict step ordering.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/Controllers/RunnerController.php" rel="noopener noreferrer">View callee <span aria-hidden="true">↗</span></a></p></li>                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Validation</span><code class="dx-file__path">app/Services/SafeText.php</code></div><p class="dx-file__reason">Escapes the untrusted paste on the way in.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> Escapes pasted (untrusted) content first, then applies a small Markdown allowlist to the escaped text.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/Services/SafeText.php" rel="noopener noreferrer">View source on GitHub <span aria-hidden="true">↗</span></a></p></li>                                                    </ul>
+                    </div>
+                
+                                    <p class="dx-warn"><strong>&#9888; Warnings:</strong> <a class="chip" href="../why/warnings/pasted-response-is-untrusted.html">Pasted AI responses are untrusted input end to end</a></p>
+                                            </section>
+                    <section class="dx-card dx-edge dx-edge--verified" role="listitem" id="edge-paste-response-to-quality-checks" data-edge="paste-response-to-quality-checks" tabindex="-1" aria-labelledby="edge-paste-response-to-quality-checks-h">
+                <div class="dx-card__head">
+                    <h5 class="dx-card__title dx-edge__title" id="edge-paste-response-to-quality-checks-h">
+                        <a class="dx-edge__endpoint" href="#node-paste-response">Paste response</a>
+                        <span class="dx-mech">routes to <span aria-hidden="true">&rarr;</span></span>
+                        <a class="dx-edge__endpoint" href="#node-quality-checks">Quality checks</a>
+                    </h5>
+                    <span class="dx-verif"><span class="badge badge--ok">Verified from source</span> <span class="badge badge--ok">Solid line</span></span>
+                </div>
+                <p class="dx-card__purpose">After a response is stored, the Runner advances the step to its review state where the quality checks are confirmed.</p>
+
+                
+                                    <p class="dx-rel"><strong>Related functionality:</strong> <a class="chip" href="../functionality/review-quality-checks.html">Review Quality Checks</a></p>
+                
+                                    <div class="dx-files">
+                        <span class="dx-files__label">Files behind this connection</span>
+                        <ul class="dx-files__list">
+                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Caller</span><code class="dx-file__path">app/Controllers/RunnerController.php</code></div><p class="dx-file__reason">Enforces strict step ordering: review becomes available only after a paste exists.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> The core loop: renders gather/review/approved states and every write transition (paste, checks, approve, edit, reopen, restore) with strict step ordering.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/Controllers/RunnerController.php" rel="noopener noreferrer">View caller <span aria-hidden="true">↗</span></a></p></li>                                                    </ul>
+                    </div>
+                
+                                            </section>
+                    <section class="dx-card dx-edge dx-edge--verified" role="listitem" id="edge-quality-checks-to-approve-version" data-edge="quality-checks-to-approve-version" tabindex="-1" aria-labelledby="edge-quality-checks-to-approve-version-h">
+                <div class="dx-card__head">
+                    <h5 class="dx-card__title dx-edge__title" id="edge-quality-checks-to-approve-version-h">
+                        <a class="dx-edge__endpoint" href="#node-quality-checks">Quality checks</a>
+                        <span class="dx-mech">routes to <span aria-hidden="true">&rarr;</span></span>
+                        <a class="dx-edge__endpoint" href="#node-approve-version">Approve + version</a>
+                    </h5>
+                    <span class="dx-verif"><span class="badge badge--ok">Verified from source</span> <span class="badge badge--ok">Solid line</span></span>
+                </div>
+                <p class="dx-card__purpose">When every quality check is confirmed, the Runner allows approval, which writes the immutable artifact version.</p>
+
+                
+                                    <p class="dx-rel"><strong>Related functionality:</strong> <a class="chip" href="../functionality/approve-and-version.html">Approve &amp; version an artifact</a></p>
+                
+                                    <div class="dx-files">
+                        <span class="dx-files__label">Files behind this connection</span>
+                        <ul class="dx-files__list">
+                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Caller</span><code class="dx-file__path">app/Controllers/RunnerController.php</code></div><p class="dx-file__reason">Blocks approval until the checks for the step are confirmed.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> The core loop: renders gather/review/approved states and every write transition (paste, checks, approve, edit, reopen, restore) with strict step ordering.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/Controllers/RunnerController.php" rel="noopener noreferrer">View caller <span aria-hidden="true">↗</span></a></p></li>                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Storage</span><code class="dx-file__path">app/Models/Artifact.php</code></div><p class="dx-file__reason">Writes the append-only approved version.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> Artifact and version access: addVersion (append-only), approve/reopen, confirmed checks, status-by-recipe.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/Models/Artifact.php" rel="noopener noreferrer">View source on GitHub <span aria-hidden="true">↗</span></a></p></li>                                                    </ul>
+                    </div>
+                
+                                            </section>
+                    <section class="dx-card dx-edge dx-edge--verified" role="listitem" id="edge-approve-version-to-export-kit" data-edge="approve-version-to-export-kit" tabindex="-1" aria-labelledby="edge-approve-version-to-export-kit-h">
+                <div class="dx-card__head">
+                    <h5 class="dx-card__title dx-edge__title" id="edge-approve-version-to-export-kit-h">
+                        <a class="dx-edge__endpoint" href="#node-approve-version">Approve + version</a>
+                        <span class="dx-mech">routes to <span aria-hidden="true">&rarr;</span></span>
+                        <a class="dx-edge__endpoint" href="#node-export-kit">Export kit</a>
+                    </h5>
+                    <span class="dx-verif"><span class="badge badge--ok">Verified from source</span> <span class="badge badge--ok">Solid line</span></span>
+                </div>
+                <p class="dx-card__purpose">Once all steps are approved, the export gate opens and the kit is built from the approved artifact versions.</p>
+
+                
+                                    <p class="dx-rel"><strong>Related functionality:</strong> <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a></p>
+                
+                                    <div class="dx-files">
+                        <span class="dx-files__label">Files behind this connection</span>
+                        <ul class="dx-files__list">
+                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Entry point</span><code class="dx-file__path">app/Controllers/ExportController.php</code></div><p class="dx-file__reason">The build gate that refuses to export until every step is approved.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> Export page, build gate (all approved), and owner-scoped zip download from outside the web root.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/Controllers/ExportController.php" rel="noopener noreferrer">Open entry point <span aria-hidden="true">↗</span></a></p></li>                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Callee</span><code class="dx-file__path">app/Services/ProjectKit.php</code></div><p class="dx-file__reason">Reads the approved artifacts to assemble the export.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> Builds the export zip: numbered Markdown files, a self-contained kit.html reader, and a README manifest.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/Services/ProjectKit.php" rel="noopener noreferrer">View callee <span aria-hidden="true">↗</span></a></p></li>                                                    </ul>
+                    </div>
+                
+                                    <p class="dx-warn"><strong>&#9888; Warnings:</strong> <a class="chip" href="../why/warnings/read-write-path-coupling.html">Pantry and Artifact read/write paths must change together</a></p>
+                                            </section>
+            </div>
+</div>
+                
                 <dl class="diagram-meta reading-column">
                                             <dt>Diagram type</dt>
                         <dd>User journey</dd>
@@ -314,15 +593,15 @@
                                                             <a class="chip" href="../diagrams/index.html#app-overview">SousMeow at a glance</a>                                                            <a class="chip" href="../diagrams/index.html#storage-map">Storage map — one PDO path, two dialects</a>                                                        </p>
                                             </div>
                             </section>
-                    <section class="diagram-section wide-section" id="request-flow" aria-labelledby="request-flow-h">
+                                <section class="diagram-section wide-section diagram-section--explainable" id="request-flow" aria-labelledby="request-flow-h" data-diagram="request-flow">
                 <h3 id="request-flow-h">Request flow through the front controller</h3>
                 <p>How a request travels from the browser through the router, the auth and CSRF gate, a controller, the PDO data path, and back out as an escaped view — with CLI-only admin shown as a separate path.</p>
 
                                 <figure class="diagram-figure">
                     <div class="diagram-scroll">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" role="img" aria-labelledby="rf-title rf-desc">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 900 420" role="img" aria-labelledby="rf-title rf-desc">
   <title id="rf-title">Request flow through the front controller</title>
-  <desc id="rf-desc">Every request enters public/index.php, is matched by the Router, passes an authentication check and a CSRF gate for unsafe methods, reaches a controller, which reads or writes through the single PDO data path and renders an escaped view. Admin actions are CLI-only and bypass the web routes.</desc>
+  <desc id="rf-desc">Every request enters public/index.php, passes an authentication check and a CSRF gate for unsafe methods, is routed to a controller, which reads or writes through the single PDO data path and renders an escaped view back to the browser. Admin actions are CLI-only and write directly, bypassing the web routes. Each node and edge links to its written explanation below; inferred edges are drawn with a dashed line.</desc>
   <defs>
     <marker id="rf-arrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto">
       <path d="M0,0 L8,4 L0,8 z" fill="#4f5c56"/>
@@ -332,57 +611,385 @@
       .box { stroke:#b9c6c0; stroke-width:1.5; fill:#e7f4f0; }
       .gate { fill:#f6ead4; stroke:#7a4210; stroke-width:1.5; }
       .store { fill:#fffcf7; stroke:#b9c6c0; stroke-width:1.5; }
-      .cli { fill:#e4e8e3; stroke:#4f5c56; stroke-width:1.5; stroke-dasharray:6 4; }
+      .cli { fill:#e4e8e3; stroke:#4f5c56; stroke-width:1.5; }
       .lbl { font-size:13px; font-weight:600; }
       .sm { font-size:11px; fill:#4f5c56; }
       .arrow { stroke:#4f5c56; stroke-width:1.6; fill:none; marker-end:url(#rf-arrow); }
+      .arrow-inferred { stroke:#4f5c56; stroke-width:1.6; fill:none; stroke-dasharray:7 5; marker-end:url(#rf-arrow); }
+      .hit { stroke:transparent; stroke-width:16; fill:none; }
       .title { font-size:20px; font-weight:800; font-family:"Outfit","Figtree",sans-serif; }
     </style>
   </defs>
-  <rect width="900" height="400" fill="#f4f0e8"/>
+  <rect width="900" height="420" fill="#f4f0e8"/>
   <text class="t title" x="28" y="38">Request flow</text>
+  <text class="t sm" x="28" y="58">Solid = verified from source · Dashed = inferred from source. Select any box or arrow for its explanation.</text>
 
-  <rect class="t box" x="24" y="150" width="120" height="60" rx="9"/>
-  <text class="t lbl" x="84" y="176" text-anchor="middle">Browser</text>
-  <text class="t sm" x="84" y="194" text-anchor="middle">GET / POST</text>
+  <a href="#node-browser" xlink:href="#node-browser" class="dnode" data-vibekb-node="browser">
+    <title>Browser — open explanation</title>
+    <rect class="t box" x="24" y="150" width="120" height="60" rx="9"/>
+    <text class="t lbl" x="84" y="176" text-anchor="middle">Browser</text>
+    <text class="t sm" x="84" y="194" text-anchor="middle">GET / POST</text>
+  </a>
 
-  <rect class="t box" x="168" y="150" width="130" height="60" rx="9"/>
-  <text class="t lbl" x="233" y="176" text-anchor="middle">index.php</text>
-  <text class="t sm" x="233" y="194" text-anchor="middle">Router match</text>
+  <a href="#node-front-controller" xlink:href="#node-front-controller" class="dnode" data-vibekb-node="front-controller">
+    <title>Front controller — open explanation</title>
+    <rect class="t box" x="168" y="150" width="130" height="60" rx="9"/>
+    <text class="t lbl" x="233" y="176" text-anchor="middle">index.php</text>
+    <text class="t sm" x="233" y="194" text-anchor="middle">Front controller</text>
+  </a>
 
-  <rect class="t gate" x="322" y="150" width="130" height="60" rx="9"/>
-  <text class="t lbl" x="387" y="172" text-anchor="middle">Auth check</text>
-  <text class="t sm" x="387" y="190" text-anchor="middle">+ CSRF gate</text>
-  <text class="t sm" x="387" y="204" text-anchor="middle">(unsafe methods)</text>
+  <a href="#node-security-gate" xlink:href="#node-security-gate" class="dnode" data-vibekb-node="security-gate">
+    <title>Auth &amp; CSRF gate — open explanation</title>
+    <rect class="t gate" x="322" y="150" width="130" height="60" rx="9"/>
+    <text class="t lbl" x="387" y="172" text-anchor="middle">Auth check</text>
+    <text class="t sm" x="387" y="190" text-anchor="middle">+ CSRF gate</text>
+    <text class="t sm" x="387" y="204" text-anchor="middle">(unsafe methods)</text>
+  </a>
 
-  <rect class="t box" x="476" y="150" width="130" height="60" rx="9"/>
-  <text class="t lbl" x="541" y="176" text-anchor="middle">Controller</text>
-  <text class="t sm" x="541" y="194" text-anchor="middle">Discovery/Runner</text>
+  <a href="#node-controller" xlink:href="#node-controller" class="dnode" data-vibekb-node="controller">
+    <title>Controller — open explanation</title>
+    <rect class="t box" x="476" y="150" width="130" height="60" rx="9"/>
+    <text class="t lbl" x="541" y="176" text-anchor="middle">Controller</text>
+    <text class="t sm" x="541" y="194" text-anchor="middle">Runner / others</text>
+  </a>
 
-  <rect class="t store" x="630" y="120" width="140" height="55" rx="9"/>
-  <text class="t lbl" x="700" y="143" text-anchor="middle">PDO data path</text>
-  <text class="t sm" x="700" y="161" text-anchor="middle">SQLite / MySQL</text>
+  <a href="#node-pdo-data-path" xlink:href="#node-pdo-data-path" class="dnode" data-vibekb-node="pdo-data-path">
+    <title>PDO data path — open explanation</title>
+    <rect class="t store" x="630" y="120" width="140" height="55" rx="9"/>
+    <text class="t lbl" x="700" y="143" text-anchor="middle">PDO data path</text>
+    <text class="t sm" x="700" y="161" text-anchor="middle">SQLite / MySQL</text>
+  </a>
 
-  <rect class="t box" x="630" y="190" width="140" height="55" rx="9"/>
-  <text class="t lbl" x="700" y="213" text-anchor="middle">Escaped view</text>
-  <text class="t sm" x="700" y="231" text-anchor="middle">HTML response</text>
+  <a href="#node-escaped-view" xlink:href="#node-escaped-view" class="dnode" data-vibekb-node="escaped-view">
+    <title>Escaped view — open explanation</title>
+    <rect class="t box" x="630" y="190" width="140" height="55" rx="9"/>
+    <text class="t lbl" x="700" y="213" text-anchor="middle">Escaped view</text>
+    <text class="t sm" x="700" y="231" text-anchor="middle">HTML response</text>
+  </a>
 
-  <line class="arrow" x1="144" y1="180" x2="166" y2="180"/>
-  <line class="arrow" x1="298" y1="180" x2="320" y2="180"/>
-  <line class="arrow" x1="452" y1="180" x2="474" y2="180"/>
-  <line class="arrow" x1="606" y1="168" x2="628" y2="150"/>
-  <line class="arrow" x1="606" y1="192" x2="628" y2="210"/>
+  <a href="#edge-browser-to-front-controller" xlink:href="#edge-browser-to-front-controller" class="dedge" data-vibekb-edge="browser-to-front-controller">
+    <title>sends request — verified</title>
+    <line class="hit" x1="144" y1="180" x2="166" y2="180"/>
+    <line class="arrow" x1="144" y1="180" x2="166" y2="180"/>
+  </a>
+  <a href="#edge-front-controller-to-security-gate" xlink:href="#edge-front-controller-to-security-gate" class="dedge" data-vibekb-edge="front-controller-to-security-gate">
+    <title>validates request — verified</title>
+    <line class="hit" x1="298" y1="180" x2="320" y2="180"/>
+    <line class="arrow" x1="298" y1="180" x2="320" y2="180"/>
+  </a>
+  <a href="#edge-security-gate-to-controller" xlink:href="#edge-security-gate-to-controller" class="dedge" data-vibekb-edge="security-gate-to-controller">
+    <title>routes to controller — inferred (dashed)</title>
+    <line class="hit" x1="452" y1="180" x2="474" y2="180"/>
+    <line class="arrow-inferred" x1="452" y1="180" x2="474" y2="180"/>
+  </a>
+  <a href="#edge-controller-to-pdo-data-path" xlink:href="#edge-controller-to-pdo-data-path" class="dedge" data-vibekb-edge="controller-to-pdo-data-path">
+    <title>reads &amp; writes via PDO — verified</title>
+    <line class="hit" x1="606" y1="168" x2="628" y2="150"/>
+    <line class="arrow" x1="606" y1="168" x2="628" y2="150"/>
+  </a>
+  <a href="#edge-controller-to-escaped-view" xlink:href="#edge-controller-to-escaped-view" class="dedge" data-vibekb-edge="controller-to-escaped-view">
+    <title>renders escaped HTML — verified</title>
+    <line class="hit" x1="606" y1="192" x2="628" y2="210"/>
+    <line class="arrow" x1="606" y1="192" x2="628" y2="210"/>
+  </a>
 
-  <rect class="t cli" x="168" y="290" width="284" height="56" rx="9"/>
-  <text class="t lbl" x="310" y="314" text-anchor="middle">Admin (CLI-only, dashed)</text>
-  <text class="t sm" x="310" y="332" text-anchor="middle">Seeding / management bypass the web routes</text>
-  <path class="arrow" d="M310 290 L310 250 L541 250 L541 212"/>
+  <a href="#node-admin-cli" xlink:href="#node-admin-cli" class="dnode" data-vibekb-node="admin-cli">
+    <title>Admin (CLI only) — open explanation</title>
+    <rect class="t cli" x="168" y="300" width="284" height="56" rx="9" stroke-dasharray="6 4"/>
+    <text class="t lbl" x="310" y="324" text-anchor="middle">Admin (CLI only)</text>
+    <text class="t sm" x="310" y="342" text-anchor="middle">Seeding / management bypass the web routes</text>
+  </a>
+  <a href="#edge-admin-cli-to-pdo-data-path" xlink:href="#edge-admin-cli-to-pdo-data-path" class="dedge" data-vibekb-edge="admin-cli-to-pdo-data-path">
+    <title>writes directly (CLI) — inferred (dashed)</title>
+    <path class="hit" d="M452 328 L812 328 L812 150 L772 150"/>
+    <path class="arrow-inferred" d="M452 328 L812 328 L812 150 L772 150"/>
+  </a>
 
-  <text class="t sm" x="28" y="378">Verified from source for the web routes; the Router itself and some Model queries remain inferred-from-source.</text>
+  <text class="t sm" x="28" y="398">The web routes and escaping are verified from source; the Router match and the CLI write path remain inferred.</text>
 </svg>                                            </div>
                     <figcaption class="diagram-caption"><strong>What am I looking at?</strong> How a request travels from the browser through the router, the auth and CSRF gate, a controller, the PDO data path, and back out as an escaped view — with CLI-only admin shown as a separate path.</figcaption>
                 </figure>
 
+                                    <div class="diagram-explain" id="request-flow-explain">
+    <div class="dx-legend" role="note">
+        <span class="dx-legend__title">How to read this</span>
+        <span class="dx-legend__item"><span class="dx-swatch dx-swatch--solid" aria-hidden="true"></span> Solid line &mdash; verified from source</span>
+        <span class="dx-legend__item"><span class="dx-swatch dx-swatch--dashed" aria-hidden="true"></span> Dashed line &mdash; inferred from source</span>
+        <span class="dx-legend__hint text-soft">Select any box or arrow in the diagram to jump to its explanation.</span>
+    </div>
+
+    <h4 class="dx-heading" id="request-flow-nodes-h">Parts &mdash; what each one is</h4>
+    <p class="dx-heading-note text-soft">Each part explains why it appears, where it lives in the repository, and which files to read.</p>
+    <div class="dx-list" role="list">
+                    <section class="dx-card dx-node" role="listitem" id="node-browser" data-node="browser" tabindex="-1" aria-labelledby="node-browser-h">
+                <div class="dx-card__head">
+                    <h5 class="dx-card__title" id="node-browser-h">Browser</h5>
+                                            <span class="badge badge--ok">Verified from source</span>                                    </div>
+                <p class="dx-card__purpose">The visitor&#039;s browser issues GET and POST requests and receives the rendered HTML response. It is the only client; SousMeow ships no separate front-end app.</p>
+
+                
+                                
+                
+                                            </section>
+                    <section class="dx-card dx-node" role="listitem" id="node-front-controller" data-node="front-controller" tabindex="-1" aria-labelledby="node-front-controller-h">
+                <div class="dx-card__head">
+                    <h5 class="dx-card__title" id="node-front-controller-h">Front controller</h5>
+                                            <span class="badge badge--ok">Verified from source</span>                                    </div>
+                <p class="dx-card__purpose">Every request that is not a static file enters one PHP entry point, which sets the security headers and Content-Security-Policy, strips the base path, and hands the request to routing.</p>
+
+                                    <p class="dx-rel"><strong>Related functionality:</strong> <a class="chip" href="../functionality/route-and-secure-requests.html">Route &amp; secure every request</a></p>
+                
+                                                    <div class="dx-where">
+                        <span class="dx-where__label">Where it lives</span>
+                                                    <code class="dx-where__path">public/</code>
+                                                <ul class="loc-tree"><li><span class="loc-dir">public/</span><ul><li><code class="loc-file">index.php</code></li></ul></li></ul>                    </div>
+                
+                                    <div class="dx-files">
+                        <span class="dx-files__label">Files that implement or support it</span>
+                        <ul class="dx-files__list">
+                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Entry point</span><code class="dx-file__path">public/index.php</code></div><p class="dx-file__reason">The single front controller every dynamic request passes through before anything else runs.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> Front controller: security headers, CSP, CSRF gate on every POST, base-path stripping, then routing.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/public/index.php" rel="noopener noreferrer">Open entry point <span aria-hidden="true">↗</span></a></p></li>                                                    </ul>
+                    </div>
+                
+                                            </section>
+                    <section class="dx-card dx-node" role="listitem" id="node-security-gate" data-node="security-gate" tabindex="-1" aria-labelledby="node-security-gate-h">
+                <div class="dx-card__head">
+                    <h5 class="dx-card__title" id="node-security-gate-h">Auth &amp; CSRF gate</h5>
+                                            <span class="badge badge--ok">Verified from source</span>                                    </div>
+                <p class="dx-card__purpose">Authenticates the session and verifies a CSRF token on every unsafe (state-changing) request. This is the one chokepoint where request security is enforced.</p>
+
+                                    <p class="dx-rel"><strong>Related functionality:</strong> <a class="chip" href="../functionality/route-and-secure-requests.html">Route &amp; secure every request</a></p>
+                
+                                                    <div class="dx-where">
+                        <span class="dx-where__label">Where it lives</span>
+                                                    <code class="dx-where__path">app/Core/</code>
+                                                <ul class="loc-tree"><li><span class="loc-dir">app/</span><ul><li><span class="loc-dir">Core/</span><ul><li><code class="loc-file">Csrf.php</code></li><li><code class="loc-file">Auth.php</code></li></ul></li></ul></li></ul>                    </div>
+                
+                                    <div class="dx-files">
+                        <span class="dx-files__label">Files that implement or support it</span>
+                        <ul class="dx-files__list">
+                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Primary implementation</span><code class="dx-file__path">app/Core/Csrf.php</code></div><p class="dx-file__reason">The single CSRF gate the front controller verifies on every POST.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> The single CSRF gate verified for every POST in the front controller.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/Core/Csrf.php" rel="noopener noreferrer">Open implementation <span aria-hidden="true">↗</span></a></p></li>                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Dependency</span><code class="dx-file__path">app/Core/Auth.php</code></div><p class="dx-file__reason">Provides requireLogin / requireVerified / requireAdmin used to authorise protected actions.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> Session auth: login/logout, requireLogin/requireVerified/requireAdmin, intended-URL redirects.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/Core/Auth.php" rel="noopener noreferrer">View source on GitHub <span aria-hidden="true">↗</span></a></p></li>                                                    </ul>
+                    </div>
+                
+                                            </section>
+                    <section class="dx-card dx-node" role="listitem" id="node-controller" data-node="controller" tabindex="-1" aria-labelledby="node-controller-h">
+                <div class="dx-card__head">
+                    <h5 class="dx-card__title" id="node-controller-h">Controller</h5>
+                                            <span class="badge badge--ok">Verified from source</span>                                    </div>
+                <p class="dx-card__purpose">The matched controller handles the request — coordinating models and services and choosing what to render. The Runner is the busiest example.</p>
+
+                                    <p class="dx-rel"><strong>Related functionality:</strong> <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a> <a class="chip" href="../functionality/route-and-secure-requests.html">Route &amp; secure every request</a></p>
+                
+                                                    <div class="dx-where">
+                        <span class="dx-where__label">Where it lives</span>
+                                                    <code class="dx-where__path">app/Controllers/</code>
+                                                <ul class="loc-tree"><li><span class="loc-dir">app/</span><ul><li><span class="loc-dir">Controllers/</span><ul><li><code class="loc-file">RunnerController.php</code></li></ul></li><li><code class="loc-file">routes.php</code></li></ul></li></ul>                    </div>
+                
+                                    <div class="dx-files">
+                        <span class="dx-files__label">Files that implement or support it</span>
+                        <ul class="dx-files__list">
+                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Primary implementation</span><code class="dx-file__path">app/Controllers/RunnerController.php</code></div><p class="dx-file__reason">The core-loop controller; shown here as the representative request handler.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> The core loop: renders gather/review/approved states and every write transition (paste, checks, approve, edit, reopen, restore) with strict step ordering.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/Controllers/RunnerController.php" rel="noopener noreferrer">Open implementation <span aria-hidden="true">↗</span></a></p></li>                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Route definition</span><code class="dx-file__path">app/routes.php</code></div><p class="dx-file__reason">The complete route table mapping method+path to the controller action that handles it.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> The complete route table mapping method+path to a controller action.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/routes.php" rel="noopener noreferrer">View routes <span aria-hidden="true">↗</span></a></p></li>                                                    </ul>
+                    </div>
+                
+                                            </section>
+                    <section class="dx-card dx-node" role="listitem" id="node-pdo-data-path" data-node="pdo-data-path" tabindex="-1" aria-labelledby="node-pdo-data-path-h">
+                <div class="dx-card__head">
+                    <h5 class="dx-card__title" id="node-pdo-data-path-h">PDO data path</h5>
+                                            <span class="badge badge--ok">Verified from source</span>                                    </div>
+                <p class="dx-card__purpose">The single database-access path used for every read and write. It targets SQLite in development and MySQL in production behind one interface.</p>
+
+                                    <p class="dx-rel"><strong>Related functionality:</strong> <a class="chip" href="../functionality/access-database.html">Access the database</a></p>
+                
+                                                    <div class="dx-where">
+                        <span class="dx-where__label">Where it lives</span>
+                                                    <code class="dx-where__path">app/Core/</code>
+                                                <ul class="loc-tree"><li><span class="loc-dir">app/</span><ul><li><span class="loc-dir">Core/</span><ul><li><code class="loc-file">Database.php</code></li></ul></li></ul></li></ul>                    </div>
+                
+                                    <div class="dx-files">
+                        <span class="dx-files__label">Files that implement or support it</span>
+                        <ul class="dx-files__list">
+                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Primary implementation</span><code class="dx-file__path">app/Core/Database.php</code></div><p class="dx-file__reason">The one PDO wrapper; prepared-statement helpers and transactions live here and nowhere else.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> The single PDO access path (SQLite/MySQL); prepared-statement helpers and transactions.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/Core/Database.php" rel="noopener noreferrer">Open implementation <span aria-hidden="true">↗</span></a></p></li>                                                    </ul>
+                    </div>
+                
+                                            </section>
+                    <section class="dx-card dx-node" role="listitem" id="node-escaped-view" data-node="escaped-view" tabindex="-1" aria-labelledby="node-escaped-view-h">
+                <div class="dx-card__head">
+                    <h5 class="dx-card__title" id="node-escaped-view-h">Escaped view</h5>
+                                            <span class="badge badge--ok">Verified from source</span>                                    </div>
+                <p class="dx-card__purpose">Renders the HTML response with all dynamic output escaped before it leaves the application, so pasted or stored content can never inject markup.</p>
+
+                                    <p class="dx-rel"><strong>Related functionality:</strong> <a class="chip" href="../functionality/route-and-secure-requests.html">Route &amp; secure every request</a></p>
+                
+                                                    <div class="dx-where">
+                        <span class="dx-where__label">Where it lives</span>
+                                                    <code class="dx-where__path">app/Services/</code>
+                                                <ul class="loc-tree"><li><span class="loc-dir">app/</span><ul><li><span class="loc-dir">Services/</span><ul><li><code class="loc-file">SafeText.php</code></li></ul></li></ul></li></ul>                    </div>
+                
+                                    <div class="dx-files">
+                        <span class="dx-files__label">Files that implement or support it</span>
+                        <ul class="dx-files__list">
+                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Renderer</span><code class="dx-file__path">app/Services/SafeText.php</code></div><p class="dx-file__reason">Escapes untrusted content first, then applies a small Markdown allowlist to the escaped text.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> Escapes pasted (untrusted) content first, then applies a small Markdown allowlist to the escaped text.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/Services/SafeText.php" rel="noopener noreferrer">View source on GitHub <span aria-hidden="true">↗</span></a></p></li>                                                    </ul>
+                    </div>
+                
+                                            </section>
+                    <section class="dx-card dx-node" role="listitem" id="node-admin-cli" data-node="admin-cli" tabindex="-1" aria-labelledby="node-admin-cli-h">
+                <div class="dx-card__head">
+                    <h5 class="dx-card__title" id="node-admin-cli-h">Admin (CLI only)</h5>
+                                            <span class="badge badge--info">Inferred from source</span>                                    </div>
+                <p class="dx-card__purpose">Seeding and content management run from the command line, never over HTTP. This path deliberately bypasses the web routes and the CSRF gate.</p>
+
+                                    <p class="dx-rel"><strong>Related functionality:</strong> <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a></p>
+                
+                                                    <div class="dx-where">
+                        <span class="dx-where__label">Where it lives</span>
+                                                    <code class="dx-where__path">scripts/</code>
+                                                <ul class="loc-tree"><li><span class="loc-dir">scripts/</span><ul><li><code class="loc-file">seed.php</code></li></ul></li></ul>                    </div>
+                
+                                    <div class="dx-files">
+                        <span class="dx-files__label">Files that implement or support it</span>
+                        <ul class="dx-files__list">
+                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Entry point</span><code class="dx-file__path">scripts/seed.php</code></div><p class="dx-file__reason">The CLI seeder that applies the schema and upserts the catalog; the only admin write path.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> CLI seeder: applies schema, upserts the versioned catalog by slug, provisions the admin, resets passwords.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/scripts/seed.php" rel="noopener noreferrer">Open entry point <span aria-hidden="true">↗</span></a></p></li>                                                    </ul>
+                    </div>
+                
+                                                    <p class="dx-uncertain"><strong>Uncertain:</strong> The seeder is inferred-from-source; its internals were not line-traced.</p>
+                            </section>
+            </div>
+
+    <h4 class="dx-heading" id="request-flow-edges-h">Connections &mdash; why they connect</h4>
+    <p class="dx-heading-note text-soft">Each connection names the concrete mechanism linking its two parts. The mechanism is the proof the relationship passed the explainability gate.</p>
+    <div class="dx-list" role="list">
+                    <section class="dx-card dx-edge dx-edge--verified" role="listitem" id="edge-browser-to-front-controller" data-edge="browser-to-front-controller" tabindex="-1" aria-labelledby="edge-browser-to-front-controller-h">
+                <div class="dx-card__head">
+                    <h5 class="dx-card__title dx-edge__title" id="edge-browser-to-front-controller-h">
+                        <a class="dx-edge__endpoint" href="#node-browser">Browser</a>
+                        <span class="dx-mech">sends to <span aria-hidden="true">&rarr;</span></span>
+                        <a class="dx-edge__endpoint" href="#node-front-controller">Front controller</a>
+                    </h5>
+                    <span class="dx-verif"><span class="badge badge--ok">Verified from source</span> <span class="badge badge--ok">Solid line</span></span>
+                </div>
+                <p class="dx-card__purpose">The browser sends every dynamic HTTP request to the single front controller.</p>
+
+                
+                                    <p class="dx-rel"><strong>Related functionality:</strong> <a class="chip" href="../functionality/route-and-secure-requests.html">Route &amp; secure every request</a></p>
+                
+                                    <div class="dx-files">
+                        <span class="dx-files__label">Files behind this connection</span>
+                        <ul class="dx-files__list">
+                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Entry point</span><code class="dx-file__path">public/index.php</code></div><p class="dx-file__reason">Receives the request and begins security + routing.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> Front controller: security headers, CSP, CSRF gate on every POST, base-path stripping, then routing.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/public/index.php" rel="noopener noreferrer">Open entry point <span aria-hidden="true">↗</span></a></p></li>                                                    </ul>
+                    </div>
+                
+                                            </section>
+                    <section class="dx-card dx-edge dx-edge--verified" role="listitem" id="edge-front-controller-to-security-gate" data-edge="front-controller-to-security-gate" tabindex="-1" aria-labelledby="edge-front-controller-to-security-gate-h">
+                <div class="dx-card__head">
+                    <h5 class="dx-card__title dx-edge__title" id="edge-front-controller-to-security-gate-h">
+                        <a class="dx-edge__endpoint" href="#node-front-controller">Front controller</a>
+                        <span class="dx-mech">validates <span aria-hidden="true">&rarr;</span></span>
+                        <a class="dx-edge__endpoint" href="#node-security-gate">Auth &amp; CSRF gate</a>
+                    </h5>
+                    <span class="dx-verif"><span class="badge badge--ok">Verified from source</span> <span class="badge badge--ok">Solid line</span></span>
+                </div>
+                <p class="dx-card__purpose">The front controller authenticates the session and validates the CSRF token on every unsafe method before the request may proceed.</p>
+
+                
+                                    <p class="dx-rel"><strong>Related functionality:</strong> <a class="chip" href="../functionality/route-and-secure-requests.html">Route &amp; secure every request</a></p>
+                
+                                    <div class="dx-files">
+                        <span class="dx-files__label">Files behind this connection</span>
+                        <ul class="dx-files__list">
+                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Caller</span><code class="dx-file__path">public/index.php</code></div><p class="dx-file__reason">Invokes the CSRF verification on every POST.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> Front controller: security headers, CSP, CSRF gate on every POST, base-path stripping, then routing.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/public/index.php" rel="noopener noreferrer">View caller <span aria-hidden="true">↗</span></a></p></li>                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Callee</span><code class="dx-file__path">app/Core/Csrf.php</code></div><p class="dx-file__reason">Performs the token check that gates state-changing requests.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> The single CSRF gate verified for every POST in the front controller.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/Core/Csrf.php" rel="noopener noreferrer">View callee <span aria-hidden="true">↗</span></a></p></li>                                                    </ul>
+                    </div>
+                
+                                            </section>
+                    <section class="dx-card dx-edge dx-edge--inferred" role="listitem" id="edge-security-gate-to-controller" data-edge="security-gate-to-controller" tabindex="-1" aria-labelledby="edge-security-gate-to-controller-h">
+                <div class="dx-card__head">
+                    <h5 class="dx-card__title dx-edge__title" id="edge-security-gate-to-controller-h">
+                        <a class="dx-edge__endpoint" href="#node-security-gate">Auth &amp; CSRF gate</a>
+                        <span class="dx-mech">routes to <span aria-hidden="true">&rarr;</span></span>
+                        <a class="dx-edge__endpoint" href="#node-controller">Controller</a>
+                    </h5>
+                    <span class="dx-verif"><span class="badge badge--info">Inferred from source</span> <span class="badge badge--info">Dashed line</span></span>
+                </div>
+                <p class="dx-card__purpose">Once the gate passes, the router matches the path against the route table and dispatches to the matching controller action.</p>
+
+                                    <p class="dx-basis"><strong>Basis for the inference:</strong> The route table (app/routes.php) is verified from source, but the Router class matching itself was not line-traced.</p>
+                
+                                    <p class="dx-rel"><strong>Related functionality:</strong> <a class="chip" href="../functionality/route-and-secure-requests.html">Route &amp; secure every request</a></p>
+                
+                                    <div class="dx-files">
+                        <span class="dx-files__label">Files behind this connection</span>
+                        <ul class="dx-files__list">
+                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Route definition</span><code class="dx-file__path">app/routes.php</code></div><p class="dx-file__reason">The verified table that determines which controller a path reaches.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> The complete route table mapping method+path to a controller action.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/routes.php" rel="noopener noreferrer">View routes <span aria-hidden="true">↗</span></a></p></li>                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Primary implementation</span><code class="dx-file__path">app/Core/Router.php</code></div><p class="dx-file__reason">Performs the actual match and dispatch — the step that is still inferred.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> Route matching and dispatch, including 404/405 handling.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/Core/Router.php" rel="noopener noreferrer">Open implementation <span aria-hidden="true">↗</span></a></p></li>                                                    </ul>
+                    </div>
+                
+                                                    <p class="dx-uncertain"><strong>Uncertain:</strong> Treat routing edge cases (parameter parsing, 404/405 handling) as inferred until the Router is traced.</p>
+                            </section>
+                    <section class="dx-card dx-edge dx-edge--verified" role="listitem" id="edge-controller-to-pdo-data-path" data-edge="controller-to-pdo-data-path" tabindex="-1" aria-labelledby="edge-controller-to-pdo-data-path-h">
+                <div class="dx-card__head">
+                    <h5 class="dx-card__title dx-edge__title" id="edge-controller-to-pdo-data-path-h">
+                        <a class="dx-edge__endpoint" href="#node-controller">Controller</a>
+                        <span class="dx-mech">depends on <span aria-hidden="true">&rarr;</span></span>
+                        <a class="dx-edge__endpoint" href="#node-pdo-data-path">PDO data path</a>
+                    </h5>
+                    <span class="dx-verif"><span class="badge badge--ok">Verified from source</span> <span class="badge badge--ok">Solid line</span></span>
+                </div>
+                <p class="dx-card__purpose">The controller performs every database read and write through the single PDO data path, never issuing SQL directly.</p>
+
+                
+                                    <p class="dx-rel"><strong>Related functionality:</strong> <a class="chip" href="../functionality/access-database.html">Access the database</a> <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a></p>
+                
+                                    <div class="dx-files">
+                        <span class="dx-files__label">Files behind this connection</span>
+                        <ul class="dx-files__list">
+                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Caller</span><code class="dx-file__path">app/Controllers/RunnerController.php</code></div><p class="dx-file__reason">Reads and writes artifacts and projects during the core loop.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> The core loop: renders gather/review/approved states and every write transition (paste, checks, approve, edit, reopen, restore) with strict step ordering.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/Controllers/RunnerController.php" rel="noopener noreferrer">View caller <span aria-hidden="true">↗</span></a></p></li>                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Dependency</span><code class="dx-file__path">app/Core/Database.php</code></div><p class="dx-file__reason">The only persistence path every model is built on.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> The single PDO access path (SQLite/MySQL); prepared-statement helpers and transactions.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/Core/Database.php" rel="noopener noreferrer">View source on GitHub <span aria-hidden="true">↗</span></a></p></li>                                                    </ul>
+                    </div>
+                
+                                            </section>
+                    <section class="dx-card dx-edge dx-edge--verified" role="listitem" id="edge-controller-to-escaped-view" data-edge="controller-to-escaped-view" tabindex="-1" aria-labelledby="edge-controller-to-escaped-view-h">
+                <div class="dx-card__head">
+                    <h5 class="dx-card__title dx-edge__title" id="edge-controller-to-escaped-view-h">
+                        <a class="dx-edge__endpoint" href="#node-controller">Controller</a>
+                        <span class="dx-mech">renders <span aria-hidden="true">&rarr;</span></span>
+                        <a class="dx-edge__endpoint" href="#node-escaped-view">Escaped view</a>
+                    </h5>
+                    <span class="dx-verif"><span class="badge badge--ok">Verified from source</span> <span class="badge badge--ok">Solid line</span></span>
+                </div>
+                <p class="dx-card__purpose">The controller renders an HTML view with all dynamic output escaped before the response is returned to the browser.</p>
+
+                
+                                    <p class="dx-rel"><strong>Related functionality:</strong> <a class="chip" href="../functionality/route-and-secure-requests.html">Route &amp; secure every request</a></p>
+                
+                                    <div class="dx-files">
+                        <span class="dx-files__label">Files behind this connection</span>
+                        <ul class="dx-files__list">
+                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Renderer</span><code class="dx-file__path">app/Services/SafeText.php</code></div><p class="dx-file__reason">Escapes any stored or pasted content the view includes.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> Escapes pasted (untrusted) content first, then applies a small Markdown allowlist to the escaped text.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/app/Services/SafeText.php" rel="noopener noreferrer">View source on GitHub <span aria-hidden="true">↗</span></a></p></li>                                                    </ul>
+                    </div>
+                
+                                            </section>
+                    <section class="dx-card dx-edge dx-edge--inferred" role="listitem" id="edge-admin-cli-to-pdo-data-path" data-edge="admin-cli-to-pdo-data-path" tabindex="-1" aria-labelledby="edge-admin-cli-to-pdo-data-path-h">
+                <div class="dx-card__head">
+                    <h5 class="dx-card__title dx-edge__title" id="edge-admin-cli-to-pdo-data-path-h">
+                        <a class="dx-edge__endpoint" href="#node-admin-cli">Admin (CLI only)</a>
+                        <span class="dx-mech">writes <span aria-hidden="true">&rarr;</span></span>
+                        <a class="dx-edge__endpoint" href="#node-pdo-data-path">PDO data path</a>
+                    </h5>
+                    <span class="dx-verif"><span class="badge badge--info">Inferred from source</span> <span class="badge badge--info">Dashed line</span></span>
+                </div>
+                <p class="dx-card__purpose">Admin seeding and management run from the CLI and write through the same PDO path directly, bypassing every web route and the CSRF gate.</p>
+
+                                    <p class="dx-basis"><strong>Basis for the inference:</strong> scripts/seed.php is inferred-from-source; the CLI write path is declared but its execution was not fully traced.</p>
+                
+                                    <p class="dx-rel"><strong>Related functionality:</strong> <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a> <a class="chip" href="../functionality/access-database.html">Access the database</a></p>
+                
+                                    <div class="dx-files">
+                        <span class="dx-files__label">Files behind this connection</span>
+                        <ul class="dx-files__list">
+                                                            <li class="dx-file"><div class="dx-file__head"><span class="dx-file__role">Entry point</span><code class="dx-file__path">scripts/seed.php</code></div><p class="dx-file__reason">Applies the schema and upserts the catalog straight through the database layer.</p><p class="dx-file__canon text-soft"><span class="dx-file__canon-label">Canonical purpose:</span> CLI seeder: applies schema, upserts the versioned catalog by slug, provisions the admin, resets passwords.</p><p class="dx-file__link"><a href="https://github.com/cubixmeow-commits/dev-portfolio-v2/blob/c1617ab/projects/sousmeow/scripts/seed.php" rel="noopener noreferrer">Open entry point <span aria-hidden="true">↗</span></a></p></li>                                                    </ul>
+                    </div>
+                
+                                                    <p class="dx-uncertain"><strong>Uncertain:</strong> The exact upsert queries were not line-traced.</p>
+                            </section>
+            </div>
+</div>
+                
                 <dl class="diagram-meta reading-column">
                                             <dt>Diagram type</dt>
                         <dd>Request flow</dd>
@@ -405,7 +1012,7 @@
                     <h2 class="diagram-group-title reading-column">Understand the technical system</h2>
                     <p class="reading-column text-soft">Where data lives and how it is shaped.</p>
         
-                    <section class="diagram-section wide-section" id="storage-map" aria-labelledby="storage-map-h">
+                                <section class="diagram-section wide-section" id="storage-map" aria-labelledby="storage-map-h">
                 <h3 id="storage-map-h">Storage map — one PDO path, two dialects</h3>
                 <p>The tables SousMeow uses and the single PDO path that targets SQLite in development and MySQL in production, including the legacy category column that must never be read.</p>
 
@@ -472,6 +1079,7 @@
                     <figcaption class="diagram-caption"><strong>What am I looking at?</strong> The tables SousMeow uses and the single PDO path that targets SQLite in development and MySQL in production, including the legacy category column that must never be read.</figcaption>
                 </figure>
 
+                
                 <dl class="diagram-meta reading-column">
                                             <dt>Diagram type</dt>
                         <dd>Storage map</dd>
@@ -495,7 +1103,7 @@
                     <h2 class="diagram-group-title reading-column">Understand uncertainty</h2>
                     <p class="reading-column text-soft">Where to be careful and what is not yet verified.</p>
         
-                    <section class="diagram-section wide-section" id="risk-uncertainty-map" aria-labelledby="risk-uncertainty-map-h">
+                                <section class="diagram-section wide-section" id="risk-uncertainty-map" aria-labelledby="risk-uncertainty-map-h">
                 <h3 id="risk-uncertainty-map-h">Risk and uncertainty map</h3>
                 <p>A single view of the active warnings and the still-inferred areas of the SousMeow model, so an agent sees the landmines before changing code.</p>
 
@@ -555,6 +1163,7 @@
                     <figcaption class="diagram-caption"><strong>What am I looking at?</strong> A single view of the active warnings and the still-inferred areas of the SousMeow model, so an agent sees the landmines before changing code.</figcaption>
                 </figure>
 
+                
                 <dl class="diagram-meta reading-column">
                                             <dt>Diagram type</dt>
                         <dd>Risk and uncertainty map</dd>

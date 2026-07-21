@@ -9,7 +9,8 @@
 # the guide app to render the living software model. Do not add
 # --exclude='.vibekb/'.
 # Runtime paths that must deploy: index.php, assets/ (home.css), guide/ (the V1
-# app, incl. guide/assets/), .vibekb/ (incl. diagrams/assets SVGs), README.md.
+# app, incl. guide/assets/ and guide/templates/partials/), .vibekb/ (incl.
+# diagrams/assets SVGs and diagrams/topology JSON), README.md.
 # Authoring docs (PRODUCT.md, CLAUDE.md, AGENTS.md, SCHEMA.md, MAINTENANCE.md,
 # INITIALIZE.md, BUILD_REPORT.md, DEPLOYMENT.md) are excluded — not needed at
 # runtime.

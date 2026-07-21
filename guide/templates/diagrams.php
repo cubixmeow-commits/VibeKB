@@ -43,7 +43,8 @@ $all = $content->allDiagrams();
         <?php endif; ?>
 
         <?php foreach ($group['records'] as $rec): $m = $rec['meta']; $id = (string) $m['id']; ?>
-            <section class="diagram-section wide-section" id="<?= h($id) ?>" aria-labelledby="<?= h($id) ?>-h">
+            <?php $topology = $content->resolvedTopology($id); ?>
+            <section class="diagram-section wide-section<?= $topology !== null ? ' diagram-section--explainable' : '' ?>" id="<?= h($id) ?>" aria-labelledby="<?= h($id) ?>-h"<?= $topology !== null ? ' data-diagram="' . h($id) . '"' : '' ?>>
                 <h3 id="<?= h($id) ?>-h"><?= h((string) ($m['title'] ?? $id)) ?></h3>
                 <p><?= h((string) ($m['summary'] ?? '')) ?></p>
 
@@ -58,6 +59,10 @@ $all = $content->allDiagrams();
                     </div>
                     <figcaption class="diagram-caption"><strong>What am I looking at?</strong> <?= h((string) ($m['summary'] ?? '')) ?></figcaption>
                 </figure>
+
+                <?php if ($topology !== null): ?>
+                    <?php require __DIR__ . '/partials/diagram-explain.php'; ?>
+                <?php endif; ?>
 
                 <dl class="diagram-meta reading-column">
                     <?php if (($m['diagram_type'] ?? '') !== ''): ?>
