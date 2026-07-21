@@ -26,10 +26,27 @@ See [PRODUCT.md](./PRODUCT.md) for the full definition.
 - `PRODUCT.md` — canonical product definition.
 - `SCHEMA.md` — record types, fields, statuses, verification, relationships,
   validation rules.
-- `.vibekb/` — the repository-owned content (the source of truth for the model).
-- `guide/` — the PHP V1 app that renders `.vibekb/` as the guide.
+- `.vibekb/` — the repository-owned content (the source of truth for the model),
+  including `.vibekb/diagrams/` (source-grounded SVG records).
+- `guide/` — the PHP V1 app that renders `.vibekb/` as the guide (Mode A). Its
+  `lib/` also powers the static generator: shared templates, one URL strategy
+  per mode, provenance, nav, and search.
+- `tools/` — `generate-static.php` (renders the guide into `/docs`, Mode B) and
+  `validate.php` (headless content validator).
+- `/docs` — **generated output** (the static snapshot) plus
+  `STOPPR_INTEGRATION_AUDIT.md`. Never hand-edit the generated HTML; change
+  `.vibekb/` and regenerate. `.vibekb/` is the source of truth.
+- `prompts/INTEGRATE_VIBEKB.md` — project-agnostic integration prompt.
 - `MAINTENANCE.md` — the workflow for changing a feature.
 - `INITIALIZE.md` — the process for adding VibeKB to another repository.
+
+## Two output modes, one source, honest provenance
+
+The dynamic guide (Mode A) and the static `/docs` snapshot (Mode B) render the
+same `.vibekb/` through the same templates. Every rendering must carry objective
+provenance (source commit analysed, analysis-generated time, verification scope)
+and must never imply it auto-updates — the snapshot reflects the source commit
+at generation time. Do not claim VibeKB stays current on its own; it does not.
 
 ## The canonical example is SousMeow (real, not bundled)
 

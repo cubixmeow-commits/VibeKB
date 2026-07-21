@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>One PDO connection, prepared statements only · SousMeow — VibeKB</title>
+    <title>Added a source-grounded diagram set and provenance to the SousMeow model · SousMeow — VibeKB</title>
     <meta name="description" content="A living explanation of what SousMeow currently does, how it works, what AI is changing, and why.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -105,42 +105,43 @@
                 <article class="view view-doc">
         <p class="breadcrumb"><a href="../../why/index.html">← Decisions &amp; rationale</a></p>
         <header class="page-head reading-column">
-            <p class="eyebrow">Decisions</p>
-            <h1>One PDO connection, prepared statements only</h1>
-            <p class="lede">All database access goes through a single shared PDO handle in Core/Database with prepared statements; there is no other access path.</p>
+            <p class="eyebrow">Changes</p>
+            <h1>Added a source-grounded diagram set and provenance to the SousMeow model</h1>
+            <p class="lede">The SousMeow model gained five source-grounded diagrams and an explicit provenance block; no functionality claim was upgraded.</p>
             <div class="badge-row">
-                <span class="badge badge--info">accepted</span>                                                <span class="badge badge--ok">Verified from source</span>            </div>
+                                                                            </div>
         </header>
         <div class="detail-grid">
-            <div class="detail-main"><div class="prose reading-column"><h3>Context</h3>
-<p>A small app on shared hosting needs a security posture that is easy to reason
-about, across two database dialects.</p>
-<h3>Decision</h3>
-<p><code>app/Core/Database.php</code> owns the only connection and exposes
-<code>run/fetch/fetchAll/fetchValue/lastInsertId/transaction</code>, all using prepared
-statements. Every Model uses it; nothing else opens a connection.</p>
-<h3>Reason</h3>
+            <div class="detail-main"><div class="prose reading-column"><h3>Before</h3>
+<p>The SousMeow model had no diagrams and no explicit provenance block. The
+overview relied on an undefined &quot;Last meaningful update&quot; label and counted
+functionality records as &quot;areas&quot;.</p>
+<h3>After</h3>
 <ul>
-<li>One access path makes &quot;is every query parameterised?&quot; answerable by reading</li>
+<li>Added <code>.vibekb/diagrams/</code> with five diagrams: app overview, the Run-a-Cookbook</li>
 </ul>
-<p>one file.</p>
+<p>loop, request flow, storage map, and a risk &amp; uncertainty map. Each has an
+  accessible SVG and links to related functionality and warnings.</p>
 <ul>
-<li>Swapping SQLite (dev) for MySQL (production) is a config change, not a code</li>
+<li>Added a <code>provenance</code> block to <code>manifest.json</code> (source commit analysed,</li>
 </ul>
-<p>change.</p>
-<h3>Consequences</h3>
+<p>verification scope, last verified, <code>updates_automatically: false</code>).</p>
 <ul>
-<li>Both schema dialects must be maintained in lockstep.</li>
-<li>No raw string-built SQL anywhere; values are always bound.</li>
+<li>Counts now read &quot;N functionality records across M functional areas&quot;.</li>
 </ul>
-<h3>Current status</h3>
-<p>Active and foundational to the security posture.</p></div></div>
+<h3>Impact</h3>
+<p>Documentation only — SousMeow itself was not touched and no verification state
+was upgraded for presentation. The diagrams reflect existing verified records;
+inferred areas (request-flow&#039;s Router step, <code>manage-account</code>,
+<code>seed-and-sync-content</code>, bulk <code>demo-simulation</code>) are labelled as such in the
+diagrams. This change is about the VibeKB <em>model of</em> SousMeow, produced while
+integrating reusable lessons from the StopPR field test.</p></div></div>
             <aside class="detail-rail" aria-label="Connections">
                 <div class="rail-card">
                     <h2>Affects functionality</h2>
-                    <p><a class="chip" href="../../functionality/access-database.html">Access the database</a></p>
+                    <p><a class="chip" href="../../functionality/run-recipe.html">Run a Recipe</a> <a class="chip" href="../../functionality/access-database.html">Access the database</a> <a class="chip" href="../../functionality/route-and-secure-requests.html">Route &amp; secure every request</a></p>
                 </div>
-                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">app/Core/Database.php</code></p></div>
+                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">.vibekb/diagrams/index.json</code> <code class="chip chip--file">.vibekb/manifest.json</code></p></div>
                             </aside>
         </div>
     </article>

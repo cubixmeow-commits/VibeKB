@@ -406,6 +406,13 @@
         "body": "Discovery At first read the source and the docs seemed to contradict: AuthController implements a complete web forgot/reset flow, but README.md and docs/DEPLOYMENT.md say password resets are an admin CLI action. Evidence AuthController::forgotPassword/resetPassword are fully implemented and source verified. The default mail.driver is log writes .eml , sends nothing , and the README lists \"no SMTP\" among the deliberate v1 limits. scripts/seed.php reset password is documented as the operational path. Reconciliation Both are true. The web flow is real and correct but only useful once SMTP is configured; in a default deploy the reliable path is the CLI. This is why reset password is classified partial , not broken. Affected functionality reset password . Did it change the software model? Yes —"
     },
     {
+        "title": "Added a source-grounded diagram set and provenance to the SousMeow model",
+        "summary": "The SousMeow model gained five source-grounded diagrams and an explicit provenance block; no functionality claim was upgraded.",
+        "type": "change",
+        "url": "../why/changes/add-diagrams-and-provenance.html",
+        "body": "Before The SousMeow model had no diagrams and no explicit provenance block. The overview relied on an undefined \"Last meaningful update\" label and counted functionality records as \"areas\". After Added .vibekb/diagrams/ with five diagrams: app overview, the Run a Cookbook loop, request flow, storage map, and a risk & uncertainty map. Each has an accessible SVG and links to related functionality and warnings. Added a provenance block to manifest.json source commit analysed, verification scope, last verified, updates automatically: false . Counts now read \"N functionality records across M functional areas\". Impact Documentation only — SousMeow itself was not touched and no verification state was upgraded for presentation. The diagrams reflect existing verified records; inferred areas request "
+    },
+    {
         "title": "Introduced the categories + collections taxonomy",
         "summary": "Discovery moved from a single free-text category string to a stable one-category spine plus flexible many-to-many collections, resolved in one service with an honesty gate.",
         "type": "change",
@@ -673,9 +680,9 @@
     },
     {
         "title": "Current handoff",
-        "summary": "SousMeow is now the canonical VibeKB example, source-grounded read-only. The full Run-a-Cookbook loop is verified; a few areas remain inferred and should be traced next.",
+        "summary": "StopPR's reusable lessons are integrated into VibeKB (static /docs mode, diagrams, provenance, honest counts, search) with the SousMeow example preserved. Next, trace the remaining inferred SousMeow areas and regenerate the snapshot.",
         "type": "handoff",
         "url": "../handoff/index.html",
-        "body": "What the software SousMeow currently does SousMeow packages proven workflows as Cookbooks of Recipes. A user stocks a Pantry, runs each Recipe's prompt in their own AI, pastes the answer back, confirms human Quality Checks, approves, and exports a Project Kit. SousMeow never calls an AI. It runs as plain PHP 8 on Hostinger shared hosting with SQLite dev or MySQL production . Current functionality state Verified from source solid : discovery home, marketplace, categories, collections , auth register, sign in, verify , the full Runner run recipe, build prompt, paste response, review quality checks, approve and version , export project kit, admin overview, routing/security, database access. Partial: reset password web flow depends on SMTP the default deploy lacks ; demo simulation paste examp"
+        "body": "What the software VibeKB now does VibeKB renders one .vibekb/ source through one template set in two modes: the dynamic PHP guide Mode A and a static /docs snapshot Mode B, via tools/generate static.php for GitHub Pages. Diagrams are first class source grounded records; every rendering shows objective provenance and never implies auto freshness; counts distinguish functional areas from functionality records; search and functionality filters run client side with no jQuery and no required CDN. The canonical example is still SousMeow , updated only to demonstrate the new capabilities. What was integrated from the StopPR field test Static /docs output; a maintainable PHP generator StopPR had none ; a .vibekb/diagrams/ records model with a small accurate SousMeow SVG set; a shared provenance co"
     }
 ]

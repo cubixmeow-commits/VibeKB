@@ -90,10 +90,20 @@ Before adding any page, record, or feature, ask:
 
 ## V1 scope
 
-The working V1 is a repository-owned content model (`.vibekb/`) plus a PHP guide
-app (`guide/`) with these views: Software Overview, Functionality Index,
-Functionality Detail, How It Works, Data & Storage, Files That Matter, Current
-AI Work, Changes, Why It Works This Way, AI Handoff, and Reference.
+The working V1 is a repository-owned content model (`.vibekb/`) rendered through
+one template set in two output modes over the same source: a **dynamic PHP
+guide** (`guide/`) and a **static snapshot** (`/docs`, via
+`tools/generate-static.php`) for GitHub Pages and any static host. Views:
+Software Overview, Functionality Index, Functionality Detail, How It Works,
+Diagrams, Data & Storage, Files That Matter, Current AI Work, Changes, Why It
+Works This Way, AI Handoff, Reference, and Search.
+
+Every rendering carries **objective provenance** — the source commit analysed,
+when the analysis was generated, the verification scope, and that the output
+does not update itself. **Diagrams** are first-class, source-grounded records.
+The static snapshot is generated output; `.vibekb/` remains the source of
+truth. None of this changes the promise: it exists to help a vibe coder
+understand what the software is doing right now.
 
 ## Non-goals
 

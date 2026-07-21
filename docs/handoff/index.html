@@ -111,65 +111,69 @@
 
             <section class="doc-section callout callout--work">
             <div class="badge-row">
-                                    <span class="badge badge--info">Verification: mixed</span>                                <span class="muted">Updated 2026-07-20</span>
+                                    <span class="badge badge--info">Verification: mixed</span>                                <span class="muted">Updated 2026-07-21</span>
             </div>
-            <div class="prose reading-column"><h3>What the software (SousMeow) currently does</h3>
-<p>SousMeow packages proven workflows as Cookbooks of Recipes. A user stocks a
-Pantry, runs each Recipe&#039;s prompt in their own AI, pastes the answer back,
-confirms human Quality Checks, approves, and exports a Project Kit. SousMeow
-never calls an AI. It runs as plain PHP 8 on Hostinger shared hosting with
-SQLite (dev) or MySQL (production).</p>
-<h3>Current functionality state</h3>
+            <div class="prose reading-column"><h3>What the software (VibeKB) now does</h3>
+<p>VibeKB renders one <code>.vibekb/</code> source through one template set in two modes: the
+dynamic PHP guide (Mode A) and a static <code>/docs</code> snapshot (Mode B, via
+<code>tools/generate-static.php</code>) for GitHub Pages. Diagrams are first-class
+source-grounded records; every rendering shows objective provenance and never
+implies auto-freshness; counts distinguish functional areas from functionality
+records; search and functionality filters run client-side with no jQuery and no
+required CDN. The canonical example is still <strong>SousMeow</strong>, updated only to
+demonstrate the new capabilities.</p>
+<h3>What was integrated from the StopPR field test</h3>
+<p>Static <code>/docs</code> output; a maintainable PHP generator (StopPR had none); a
+<code>.vibekb/diagrams/</code> records model with a small accurate SousMeow SVG set; a
+shared provenance component; client-side search + filters in vanilla JS; a
+Diagrams nav item. See <code>docs/STOPPR_INTEGRATION_AUDIT.md</code> for the full
+decision record and what was deliberately excluded.</p>
+<h3>SousMeow functionality state (unchanged this pass)</h3>
 <ul>
-<li><strong>Verified from source (solid):</strong> discovery (home, marketplace, categories,</li>
+<li><strong>Verified from source:</strong> discovery, auth, the full Runner</li>
 </ul>
-<p>collections), auth (register, sign-in, verify), the full Runner (run-recipe,
-  build-prompt, paste-response, review-quality-checks, approve-and-version),
-  export-project-kit, admin overview, routing/security, database access.</p>
+<p>(run-recipe → build-prompt → paste-response → review-quality-checks →
+  approve-and-version), export-project-kit, admin overview, routing/security,
+  database access.</p>
 <ul>
-<li><strong>Partial:</strong> <code>reset-password</code> (web flow depends on SMTP the default deploy</li>
+<li><strong>Partial:</strong> <code>reset-password</code> (SMTP-dependent web flow); <code>demo-simulation</code></li>
 </ul>
-<p>lacks); <code>demo-simulation</code> (paste-example verified; bulk simulation inferred).</p>
+<p>(paste-example verified; bulk inferred).</p>
 <ul>
-<li><strong>Inferred from source:</strong> <code>manage-account</code> (AccountController not line-traced),</li>
+<li><strong>Inferred from source:</strong> <code>manage-account</code>, <code>seed-and-sync-content</code>, the</li>
 </ul>
-<p><code>seed-and-sync-content</code> (scripts/seed.php not line-traced), the <code>Router</code>,
-  and some Model queries.</p>
+<p>Router, and some Model queries. No verification state was upgraded for the
+  diagrams — inferred paths are labelled in them.</p>
 <h3>Provenance note (important)</h3>
-<p>This model was derived by reading SousMeow read-only. SousMeow is <strong>not</strong> bundled
-into VibeKB. It can go stale — **re-verify against the SousMeow source
+<p>The SousMeow model was derived read-only and is not bundled into VibeKB. It can
+go stale — re-verify against the SousMeow source
 (<code>cubixmeow-commits/dev-portfolio-v2</code>, <code>projects/sousmeow</code>) before changing any
-functionality claim.**</p>
-<h3>Changes completed this pass</h3>
+functionality claim. The <code>manifest.json</code> <code>provenance</code> block records the analysed
+commit and that the output does not auto-update.</p>
+<h3>Verification completed this pass</h3>
 <ul>
-<li>Replaced the entire SaaS Idea Manager sample with the SousMeow model.</li>
-<li>Homepage live-example + guide overview now feature SousMeow with counts</li>
+<li><code>php -l</code> clean across <code>guide/</code> and <code>tools/</code>.</li>
+<li><code>php tools/validate.php</code> → 0 errors, 0 warnings (25 records, 9 areas, 5</li>
 </ul>
-<p>computed from the loaded content.</p>
-<h3>Verification completed</h3>
+<p>diagrams).</p>
 <ul>
-<li>Flagship &quot;Run a Cookbook&quot; source-traced end to end (files listed in the</li>
+<li>Dynamic guide: every view returns 200; Reference shows no validation errors.</li>
+<li>Static <code>/docs</code>: 57 pages; 1544 internal links resolve (0 broken, 0 absolute</li>
 </ul>
-<p>session record).</p>
+<p>filesystem-path leaks); 97 search entries resolve; pages serve 200 under a
+  repository subpath; SVGs are valid XML with <code>&lt;title&gt;</code>/<code>&lt;desc&gt;</code>.</p>
+<h3>Active warnings (SousMeow)</h3>
 <ul>
-<li>VibeKB validation clean; <code>php -l</code> clean; all views load; 404s behave.</li>
+<li><code>read-write-path-coupling</code>, <code>pasted-response-is-untrusted</code>,</li>
 </ul>
-<h3>Active warnings</h3>
-<ul>
-<li><code>read-write-path-coupling</code> — change Pantry/Artifact read and write paths together.</li>
-<li><code>pasted-response-is-untrusted</code> — keep pasted content escaped, including in kit.html.</li>
-<li><code>password-reset-depends-on-smtp</code> — web reset silently no-ops without SMTP.</li>
-<li><code>legacy-category-column</code> — never read <code>cookbooks.category</code>.</li>
-</ul>
-<h3>Assumptions requiring verification</h3>
-<ul>
-<li><code>ai-output-is-markdownish</code> — confirm output-contract parsing against real responses.</li>
-</ul>
+<p><code>password-reset-depends-on-smtp</code>, <code>legacy-category-column</code>. The
+  <code>risk-uncertainty-map</code> diagram summarises these.</p>
 <h3>Exact next recommended action</h3>
 <p>Trace <code>app/Controllers/AccountController.php</code>, <code>scripts/seed.php</code>, and the
-<code>Simulation*</code> services in the SousMeow source, then promote <code>manage-account</code>,
+<code>Simulation*</code> services in the SousMeow source; promote <code>manage-account</code>,
 <code>seed-and-sync-content</code>, and <code>demo-simulation</code> from inferred to verified (or
-correct them). Re-run VibeKB validation afterward.</p></div>
+correct them) and update the <code>request-flow</code> diagram&#039;s Router step. Then run
+<code>php tools/validate.php</code> and <code>php tools/generate-static.php</code> to refresh <code>/docs</code>.</p></div>
         </section>
     
             <section class="doc-section">
@@ -202,7 +206,7 @@ correct them). Re-run VibeKB validation afterward.</p></div>
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-21 08:37 UTC · source commit c1617ab (2026-07-16) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-21 · source commit c1617ab (2026-07-16) · not auto-updating</p>
             </div>
         </footer>
     </div>

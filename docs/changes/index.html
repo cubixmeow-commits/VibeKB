@@ -112,6 +112,41 @@
             <ol class="change-list">
                             <li class="change-card">
                     <div class="change-card__head">
+                        <h2>Added a source-grounded diagram set and provenance to the SousMeow model</h2>
+                        <div class="badge-row">
+                                                                                    <span class="muted">2026-07-21</span>
+                        </div>
+                    </div>
+                    <p>The SousMeow model gained five source-grounded diagrams and an explicit provenance block; no functionality claim was upgraded.</p>
+                    <div class="prose reading-column change-card__body"><h3>Before</h3>
+<p>The SousMeow model had no diagrams and no explicit provenance block. The
+overview relied on an undefined &quot;Last meaningful update&quot; label and counted
+functionality records as &quot;areas&quot;.</p>
+<h3>After</h3>
+<ul>
+<li>Added <code>.vibekb/diagrams/</code> with five diagrams: app overview, the Run-a-Cookbook</li>
+</ul>
+<p>loop, request flow, storage map, and a risk &amp; uncertainty map. Each has an
+  accessible SVG and links to related functionality and warnings.</p>
+<ul>
+<li>Added a <code>provenance</code> block to <code>manifest.json</code> (source commit analysed,</li>
+</ul>
+<p>verification scope, last verified, <code>updates_automatically: false</code>).</p>
+<ul>
+<li>Counts now read &quot;N functionality records across M functional areas&quot;.</li>
+</ul>
+<h3>Impact</h3>
+<p>Documentation only — SousMeow itself was not touched and no verification state
+was upgraded for presentation. The diagrams reflect existing verified records;
+inferred areas (request-flow&#039;s Router step, <code>manage-account</code>,
+<code>seed-and-sync-content</code>, bulk <code>demo-simulation</code>) are labelled as such in the
+diagrams. This change is about the VibeKB <em>model of</em> SousMeow, produced while
+integrating reusable lessons from the StopPR field test.</p></div>
+                                            <p class="change-card__links"><strong>Affected:</strong>
+                            <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a> <a class="chip" href="../functionality/access-database.html">Access the database</a> <a class="chip" href="../functionality/route-and-secure-requests.html">Route &amp; secure every request</a>                        </p>
+                                    </li>
+                            <li class="change-card">
+                    <div class="change-card__head">
                         <h2>Introduced the categories + collections taxonomy</h2>
                         <div class="badge-row">
                             <span class="badge badge--info">shipped</span>                            <span class="badge badge--ok">Verified from source</span>                            <span class="muted">2026-07-16</span>
@@ -163,7 +198,7 @@ collection controllers were traced.</p>
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-21 08:37 UTC · source commit c1617ab (2026-07-16) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-21 · source commit c1617ab (2026-07-16) · not auto-updating</p>
             </div>
         </footer>
     </div>
