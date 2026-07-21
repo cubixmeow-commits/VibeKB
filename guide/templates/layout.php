@@ -48,6 +48,10 @@ $isActive = static function (string $itemView, string $currentView): bool {
                 <span class="brand__mark">VibeKB</span>
                 <span class="brand__project"><?= h($projectName) ?></span>
             </a>
+            <form class="site-search" role="search" action="<?= h(guide_url('search')) ?>">
+                <label class="visually-hidden" for="site-search-input">Search guide</label>
+                <input id="site-search-input" name="q" type="search" placeholder="Search guide…" autocomplete="off">
+            </form>
             <button
                 class="nav-toggle"
                 type="button"
@@ -91,6 +95,12 @@ $isActive = static function (string $itemView, string $currentView): bool {
     </aside>
 
     <div class="app-main">
+        <?php if (($generation['mode'] ?? 'dynamic') === 'static'): ?>
+            <p class="generated-notice" role="note">
+                Generated output — this is a static snapshot rendered from <code>.vibekb/</code>. The
+                <code>.vibekb/</code> content is the source of truth. See <a href="<?= h(guide_url('reference')) ?>">Reference</a> for provenance.
+            </p>
+        <?php endif; ?>
         <?php if ($devMode && $errorCount > 0): ?>
             <div class="wrap">
                 <p class="content-alert" role="status">

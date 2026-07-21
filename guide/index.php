@@ -14,6 +14,8 @@ declare(strict_types=1);
 require_once __DIR__ . '/lib/helpers.php';
 require_once __DIR__ . '/lib/Content.php';
 require_once __DIR__ . '/lib/Provenance.php';
+require_once __DIR__ . '/lib/nav.php';
+require_once __DIR__ . '/lib/search.php';
 
 // Mode A — the live PHP guide. The static generator (Mode B) overrides both the
 // URL strategy and this generation context.
@@ -50,56 +52,27 @@ if ($view === '') {
     $view = 'overview';
 }
 
-// Whitelist of views -> template files. `functionality` is special-cased
-// because it renders either the index or a detail page depending on `?id`.
-$routes = [
-    'overview' => 'overview',
-    'functionality' => null,
-    'how-it-works' => 'how-it-works',
-    'diagrams' => 'diagrams',
-    'data' => 'data',
-    'files' => 'files',
-    'current-work' => 'current-work',
-    'changes' => 'changes',
-    'why' => 'why',
-    'handoff' => 'handoff',
-    'reference' => 'reference',
-];
+// Live search index endpoint (dynamic mode). Returns only public guide content.
+if ($view === 'search' && ($_GET['data'] ?? '') === 'json') {
+    if (!headers_sent()) {
+        header('Content-Type: application/json; charset=utf-8');
+    }
+    echo json_encode(
+        build_search_index($content, guide_url_strategy()),
+        JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+    );
+    return;
+}
 
-// Primary answers the product questions in order; secondary holds deeper
-// exploration. Labels may differ from historical wording; routes stay intact.
-$navPrimary = [
-    ['view' => 'overview', 'label' => 'Overview'],
-    ['view' => 'functionality', 'label' => 'Functionality'],
-    ['view' => 'how-it-works', 'label' => 'Architecture'],
-    ['view' => 'diagrams', 'label' => 'Diagrams'],
-    ['view' => 'current-work', 'label' => 'Current work'],
-];
-
-$navSecondary = [
-    ['view' => 'data', 'label' => 'Data &amp; storage'],
-    ['view' => 'files', 'label' => 'Files that matter'],
-    ['view' => 'changes', 'label' => 'Changes'],
-    ['view' => 'why', 'label' => 'Decisions &amp; rationale'],
-    ['view' => 'handoff', 'label' => 'AI handoff'],
-    ['view' => 'reference', 'label' => 'Reference'],
-];
-
+// Whitelist of views -> template files, plus the shared navigation and page
+// titles. `functionality` is special-cased because it renders either the index
+// or a detail page depending on `?id`. Defined once in lib/nav.php so the
+// static generator presents the identical page inventory.
+$routes = guide_routes();
+$navPrimary = guide_nav_primary();
+$navSecondary = guide_nav_secondary();
 $navItems = array_merge($navPrimary, $navSecondary);
-
-$pageTitles = [
-    'overview' => 'Overview',
-    'functionality' => 'Functionality',
-    'how-it-works' => 'Architecture',
-    'diagrams' => 'Diagrams',
-    'data' => 'Data & storage',
-    'files' => 'Files that matter',
-    'current-work' => 'Current work',
-    'changes' => 'Changes',
-    'why' => 'Decisions & rationale',
-    'handoff' => 'AI handoff',
-    'reference' => 'Reference',
-];
+$pageTitles = guide_page_titles();
 
 $identity = $content->projectDoc('identity');
 $projectName = (string) ($identity['meta']['title'] ?? 'Software Guide');

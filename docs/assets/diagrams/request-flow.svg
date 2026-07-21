@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" role="img" aria-labelledby="rf-title rf-desc">
+  <title id="rf-title">Request flow through the front controller</title>
+  <desc id="rf-desc">Every request enters public/index.php, is matched by the Router, passes an authentication check and a CSRF gate for unsafe methods, reaches a controller, which reads or writes through the single PDO data path and renders an escaped view. Admin actions are CLI-only and bypass the web routes.</desc>
+  <defs>
+    <marker id="rf-arrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#4f5c56"/>
+    </marker>
+    <style>
+      .t { font-family:"Figtree","Segoe UI",sans-serif; fill:#1a2421; }
+      .box { stroke:#b9c6c0; stroke-width:1.5; fill:#e7f4f0; }
+      .gate { fill:#f6ead4; stroke:#7a4210; stroke-width:1.5; }
+      .store { fill:#fffcf7; stroke:#b9c6c0; stroke-width:1.5; }
+      .cli { fill:#e4e8e3; stroke:#4f5c56; stroke-width:1.5; stroke-dasharray:6 4; }
+      .lbl { font-size:13px; font-weight:600; }
+      .sm { font-size:11px; fill:#4f5c56; }
+      .arrow { stroke:#4f5c56; stroke-width:1.6; fill:none; marker-end:url(#rf-arrow); }
+      .title { font-size:20px; font-weight:800; font-family:"Outfit","Figtree",sans-serif; }
+    </style>
+  </defs>
+  <rect width="900" height="400" fill="#f4f0e8"/>
+  <text class="t title" x="28" y="38">Request flow</text>
+
+  <rect class="t box" x="24" y="150" width="120" height="60" rx="9"/>
+  <text class="t lbl" x="84" y="176" text-anchor="middle">Browser</text>
+  <text class="t sm" x="84" y="194" text-anchor="middle">GET / POST</text>
+
+  <rect class="t box" x="168" y="150" width="130" height="60" rx="9"/>
+  <text class="t lbl" x="233" y="176" text-anchor="middle">index.php</text>
+  <text class="t sm" x="233" y="194" text-anchor="middle">Router match</text>
+
+  <rect class="t gate" x="322" y="150" width="130" height="60" rx="9"/>
+  <text class="t lbl" x="387" y="172" text-anchor="middle">Auth check</text>
+  <text class="t sm" x="387" y="190" text-anchor="middle">+ CSRF gate</text>
+  <text class="t sm" x="387" y="204" text-anchor="middle">(unsafe methods)</text>
+
+  <rect class="t box" x="476" y="150" width="130" height="60" rx="9"/>
+  <text class="t lbl" x="541" y="176" text-anchor="middle">Controller</text>
+  <text class="t sm" x="541" y="194" text-anchor="middle">Discovery/Runner</text>
+
+  <rect class="t store" x="630" y="120" width="140" height="55" rx="9"/>
+  <text class="t lbl" x="700" y="143" text-anchor="middle">PDO data path</text>
+  <text class="t sm" x="700" y="161" text-anchor="middle">SQLite / MySQL</text>
+
+  <rect class="t box" x="630" y="190" width="140" height="55" rx="9"/>
+  <text class="t lbl" x="700" y="213" text-anchor="middle">Escaped view</text>
+  <text class="t sm" x="700" y="231" text-anchor="middle">HTML response</text>
+
+  <line class="arrow" x1="144" y1="180" x2="166" y2="180"/>
+  <line class="arrow" x1="298" y1="180" x2="320" y2="180"/>
+  <line class="arrow" x1="452" y1="180" x2="474" y2="180"/>
+  <line class="arrow" x1="606" y1="168" x2="628" y2="150"/>
+  <line class="arrow" x1="606" y1="192" x2="628" y2="210"/>
+
+  <rect class="t cli" x="168" y="290" width="284" height="56" rx="9"/>
+  <text class="t lbl" x="310" y="314" text-anchor="middle">Admin (CLI-only, dashed)</text>
+  <text class="t sm" x="310" y="332" text-anchor="middle">Seeding / management bypass the web routes</text>
+  <path class="arrow" d="M310 290 L310 250 L541 250 L541 212"/>
+
+  <text class="t sm" x="28" y="378">Verified from source for the web routes; the Router itself and some Model queries remain inferred-from-source.</text>
+</svg>
