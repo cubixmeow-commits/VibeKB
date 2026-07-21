@@ -7,6 +7,8 @@ declare(strict_types=1);
  * controlled vocabularies the content model validates against.
  */
 
+require_once __DIR__ . '/UrlStrategy.php';
+
 /** HTML-escape a value for output. */
 function h(?string $value): string
 {
@@ -14,37 +16,38 @@ function h(?string $value): string
 }
 
 /**
- * Base URL of the guide app (directory containing index.php), with a
- * trailing slash. Works when deployed at the web root or in a subfolder,
- * because it derives from SCRIPT_NAME at request time.
+ * The current URL strategy. Pass a strategy to switch modes (the static
+ * generator does this once per page); call with no argument to read it. The
+ * dynamic strategy is the default so the PHP guide behaves exactly as before.
  */
-function guide_base(): string
+function guide_url_strategy(?UrlStrategy $set = null): UrlStrategy
 {
-    $script = $_SERVER['SCRIPT_NAME'] ?? '/guide/index.php';
-    $dir = str_replace('\\', '/', dirname($script));
-    return rtrim($dir, '/') . '/';
+    static $current = null;
+    if ($set !== null) {
+        $current = $set;
+    }
+    if ($current === null) {
+        $current = new DynamicUrlStrategy();
+    }
+    return $current;
 }
 
 /**
- * Cache-busting URL for a guide asset. Appends the file's modification time as
- * `?v=` so browsers refetch whenever the asset changes (no build step needed).
+ * Cache-busting/relative URL for a guide asset. In dynamic mode this appends
+ * the file's modification time as `?v=` (no build step needed); in static mode
+ * it returns a deterministic relative path.
  *
  * @param string $rel path relative to the guide directory, e.g. "assets/css/guide.css"
  */
 function guide_asset(string $rel): string
 {
-    $rel = ltrim($rel, '/');
-    $fsPath = dirname(__DIR__) . '/' . $rel; // guide/lib -> guide/
-    $version = is_file($fsPath) ? (string) filemtime($fsPath) : '1';
-    return guide_base() . $rel . '?v=' . $version;
+    return guide_url_strategy()->asset($rel);
 }
 
 /** URL of the site root (parent of the guide directory). */
 function site_root_url(): string
 {
-    $base = guide_base();
-    $parent = rtrim(str_replace('\\', '/', dirname(rtrim($base, '/'))), '/');
-    return ($parent === '' ? '' : $parent) . '/';
+    return guide_url_strategy()->siteRoot();
 }
 
 /**
@@ -54,30 +57,25 @@ function site_root_url(): string
  */
 function guide_url(string $view = '', array $params = []): string
 {
-    $query = [];
-    if ($view !== '' && $view !== 'overview') {
-        $query['view'] = $view;
-    }
-    foreach ($params as $key => $value) {
-        $query[$key] = $value;
-    }
-    $base = guide_base();
-    if ($query === []) {
-        return $base;
-    }
-    return $base . '?' . http_build_query($query);
+    return guide_url_strategy()->view($view, $params);
 }
 
 /** URL for a single functionality record. */
 function functionality_url(string $id): string
 {
-    return guide_url('functionality', ['id' => $id]);
+    return guide_url_strategy()->functionality($id);
 }
 
 /** URL for a memory record (decision, warning, assumption, ...). */
 function memory_url(string $type, string $id): string
 {
-    return guide_url('why', ['type' => $type, 'id' => $id]);
+    return guide_url_strategy()->memory($type, $id);
+}
+
+/** URL for the diagrams page, optionally anchored to a diagram id. */
+function diagram_url(string $id = ''): string
+{
+    return guide_url_strategy()->diagram($id);
 }
 
 /** Allowed functionality statuses. */
@@ -280,4 +278,38 @@ function file_chips(mixed $paths): string
         $out[] = '<code class="chip chip--file">' . h((string) $p) . '</code>';
     }
     return implode(' ', $out);
+}
+
+/*
+ * Count vocabulary.
+ *
+ * VibeKB counts three different things and they must never be conflated:
+ *   - functional AREAS  — grouped product categories (functionality/index.json).
+ *   - functionality RECORDS — individual behaviours (functionality/records/*.md).
+ *   - STATUS counts — records tallied by lifecycle status.
+ * Every total the interface prints must identify its unit. These helpers make
+ * that the default path so a contradictory or unit-less total is hard to ship.
+ */
+
+/** "N functionality records across M functional areas". */
+function count_records_phrase(int $records, int $areas): string
+{
+    return $records . ' functionality record' . ($records === 1 ? '' : 's')
+        . ' across ' . $areas . ' functional area' . ($areas === 1 ? '' : 's');
+}
+
+/**
+ * Render the status tally as unit-labelled badges (e.g. "Implemented · 23").
+ *
+ * @param array<string, int> $statusCounts
+ */
+function status_count_badges(array $statusCounts): string
+{
+    $out = [];
+    foreach (status_vocabulary() as $key => $label) {
+        if (!empty($statusCounts[$key])) {
+            $out[] = badge($label . ' · ' . $statusCounts[$key], status_tone($key));
+        }
+    }
+    return $out === [] ? '<span class="muted">No records yet.</span>' : implode(' ', $out);
 }

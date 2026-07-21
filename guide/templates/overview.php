@@ -19,6 +19,8 @@ $oneLiner = (string) ($identity['meta']['one_liner'] ?? $identity['meta']['summa
 $identitySummary = (string) ($identity['meta']['summary'] ?? '');
 $currentSummary = (string) ($currentState['meta']['summary'] ?? '');
 $total = array_sum($statusCounts);
+$generation = $GLOBALS['vibekb_generation'] ?? ['mode' => 'dynamic'];
+$provenance = provenance_data($content->manifest(), $generation);
 $example = is_array($content->manifest()['example_project'] ?? null) ? $content->manifest()['example_project'] : [];
 $exampleRepo = (string) ($example['source_repository'] ?? '');
 $exampleName = (string) ($example['name'] ?? $projectName);
@@ -53,17 +55,13 @@ $exampleName = (string) ($example['name'] ?? $projectName);
         </aside>
     </header>
 
+    <?php $areaCount = count($groups); ?>
     <section class="snapshot-bar wide-section" aria-label="At a glance">
         <div class="snapshot-bar__item">
             <p class="snapshot-bar__label">Tracked functionality</p>
-            <p class="snapshot-bar__value"><?= (int) $total ?> area<?= $total === 1 ? '' : 's' ?></p>
-            <p class="badge-row">
-                <?php foreach (status_vocabulary() as $key => $label): ?>
-                    <?php if (!empty($statusCounts[$key])): ?>
-                        <?= badge($label . ' · ' . $statusCounts[$key], status_tone($key)) ?>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-            </p>
+            <p class="snapshot-bar__value"><?= (int) $total ?> record<?= $total === 1 ? '' : 's' ?></p>
+            <p class="snapshot-bar__value snapshot-bar__value--quiet"><?= (int) $areaCount ?> functional area<?= $areaCount === 1 ? '' : 's' ?></p>
+            <p class="badge-row"><?= status_count_badges($statusCounts) ?></p>
         </div>
         <div class="snapshot-bar__item">
             <p class="snapshot-bar__label">Storage</p>
@@ -71,10 +69,15 @@ $exampleName = (string) ($example['name'] ?? $projectName);
             <p><a class="text-link" href="<?= h(guide_url('data')) ?>">Data &amp; storage →</a></p>
         </div>
         <div class="snapshot-bar__item">
-            <p class="snapshot-bar__label">Last meaningful update</p>
-            <p class="snapshot-bar__value snapshot-bar__value--quiet"><?= h((string) ($currentState['meta']['updated'] ?? 'unknown')) ?></p>
+            <p class="snapshot-bar__label">Source commit analyzed</p>
+            <p class="snapshot-bar__value snapshot-bar__value--quiet"><?= h((string) ($provenance['source_commit'] ?? 'unknown')) ?></p>
+            <?php if (($provenance['last_verified'] ?? '') !== ''): ?>
+                <p class="snapshot-bar__text">Last verified against source: <?= h((string) $provenance['last_verified']) ?></p>
+            <?php endif; ?>
         </div>
     </section>
+
+    <?= provenance_panel($provenance) ?>
 
     <section class="content-section reading-column" aria-labelledby="ov-what">
         <header class="section-intro">
@@ -104,7 +107,7 @@ $exampleName = (string) ($example['name'] ?? $projectName);
     <section class="content-section wide-section" aria-labelledby="ov-areas">
         <header class="section-intro reading-column">
             <h2 id="ov-areas">Functional areas</h2>
-            <p class="section-intro__support">A compact map of the system. Open any area for its records, or browse the full index.</p>
+            <p class="section-intro__support"><?= h(count_records_phrase($total, count($groups))) ?>. Open any area for its records, or browse the full index.</p>
         </header>
         <ul class="area-summary-list">
             <?php foreach ($groups as $group): ?>

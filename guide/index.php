@@ -13,6 +13,12 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/lib/helpers.php';
 require_once __DIR__ . '/lib/Content.php';
+require_once __DIR__ . '/lib/Provenance.php';
+
+// Mode A — the live PHP guide. The static generator (Mode B) overrides both the
+// URL strategy and this generation context.
+guide_url_strategy(new DynamicUrlStrategy());
+$GLOBALS['vibekb_generation'] = ['mode' => 'dynamic'];
 
 // Revalidate the HTML each load so freshly versioned asset URLs are picked up.
 if (!headers_sent()) {

@@ -1081,3 +1081,133 @@ td code {
         border-bottom: 1px solid var(--border);
     }
 }
+
+/* ---- provenance panel (Mode A + Mode B) ---- */
+.provenance {
+    margin: 0.5rem 0 1.5rem;
+    padding: 16px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+}
+.provenance__title {
+    margin: 0 0 6px;
+    font-size: 1.05rem;
+}
+.provenance__disclaimer {
+    margin: 0 0 4px;
+    color: var(--text);
+    font-weight: 600;
+    font-size: 0.94rem;
+}
+.provenance__note {
+    margin: 0 0 10px;
+    font-size: 0.88rem;
+}
+.provenance__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 8px 20px;
+    margin: 0;
+}
+.provenance__row {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    padding: 4px 0;
+    border-top: 1px solid var(--border);
+}
+.provenance__row dt {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0;
+}
+.provenance__row dd {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--text-soft);
+    word-break: break-word;
+}
+.provenance__row dd code { font-size: 0.85rem; }
+.site-footer__provenance {
+    margin-top: 4px;
+    font-size: 0.82rem;
+}
+
+/* ---- generated-output notice (static /docs only) ---- */
+.generated-notice {
+    margin: 0;
+    padding: 8px 16px;
+    background: var(--warn-bg);
+    color: var(--warn-fg);
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+    text-align: center;
+}
+.generated-notice a { color: inherit; }
+
+/* ---- diagrams ---- */
+.diagram-toc {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    margin: 1.25rem 0 1.75rem;
+    padding: 0;
+    list-style: none;
+}
+.diagram-toc a {
+    display: block;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    text-decoration: none;
+    color: inherit;
+}
+.diagram-toc a:hover { border-color: var(--accent); }
+.diagram-toc strong { display: block; }
+.diagram-group-title { margin: 2.25rem 0 0.5rem; }
+.diagram-section {
+    margin: 1.75rem 0;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+}
+.diagram-section:first-of-type { border-top: 0; padding-top: 0; }
+.diagram-figure { margin: 1rem 0 1.25rem; }
+.diagram-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface-raised);
+    padding: 8px;
+}
+.diagram-svg,
+.diagram-figure img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+}
+.diagram-caption { margin-top: 10px; font-size: 0.92rem; color: var(--text-soft); }
+.diagram-meta {
+    margin-top: 12px;
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    background: var(--surface-inset);
+    border: 1px solid var(--border);
+}
+.diagram-meta dt { font-weight: 700; margin-top: 8px; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+.diagram-meta dt:first-child { margin-top: 0; }
+.diagram-meta dd { margin: 2px 0 0; color: var(--text-soft); font-size: 0.92rem; }
+.related-diagrams {
+    margin-top: 1rem;
+    padding: 10px 14px;
+    border-left: 3px solid var(--accent);
+    background: var(--surface-inset);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}

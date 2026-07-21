@@ -16,6 +16,8 @@ $issues = $content->issues();
 $errorCount = count(array_filter($issues, fn ($i) => $i['level'] === 'error'));
 $navPrimary = $navPrimary ?? $navItems;
 $navSecondary = $navSecondary ?? [];
+$generation = $GLOBALS['vibekb_generation'] ?? ['mode' => 'dynamic'];
+$provenance = provenance_data($content->manifest(), $generation);
 
 $isActive = static function (string $itemView, string $currentView): bool {
     return ($itemView === $currentView)
@@ -30,10 +32,13 @@ $isActive = static function (string $itemView, string $currentView): bool {
     <meta name="description" content="A living explanation of what <?= h($projectName) ?> currently does, how it works, what AI is changing, and why.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Web fonts are a progressive enhancement only. The stylesheet ships a
+         full system-font fallback stack, so the guide renders correctly with no
+         external CDN — required for offline and locked-down static hosting. -->
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= h(guide_asset('assets/css/guide.css')) ?>">
 </head>
-<body>
+<body data-mode="<?= h((string) ($generation['mode'] ?? 'dynamic')) ?>">
 <a class="skip-link" href="#main">Skip to content</a>
 
 <div class="app-shell">
@@ -113,12 +118,12 @@ $isActive = static function (string $itemView, string $currentView): bool {
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="<?= h(site_root_url()) ?>">About VibeKB</a>
                 </p>
+                <p class="muted site-footer__provenance"><?= provenance_stamp($provenance) ?></p>
             </div>
         </footer>
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="<?= h(guide_asset('assets/js/guide.js')) ?>" defer></script>
 </body>
 </html>
