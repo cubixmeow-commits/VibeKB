@@ -36,6 +36,10 @@ final class Content
     private array $system = [];
     /** @var list<array<string, mixed>> */
     private array $files = [];
+    /** @var array<string, array<string, mixed>> id => diagram record */
+    private array $diagrams = [];
+    /** @var array<string, mixed> diagrams index config */
+    private array $diagramsIndex = [];
     /** @var array<string, array<string, array<string, mixed>>> type => id => record */
     private array $memory = [];
     /** @var array<string, mixed>|null */
@@ -94,6 +98,19 @@ final class Content
 
         $filesData = $this->readJson('files/important-files.json');
         $this->files = is_array($filesData['files'] ?? null) ? $filesData['files'] : [];
+
+        $this->diagramsIndex = $this->readJson('diagrams/index.json');
+        foreach ($this->safeGlob($this->root . '/diagrams/records', '*.md') as $file) {
+            $doc = $this->loadRecord($file, 'diagram');
+            if ($doc === null) {
+                continue;
+            }
+            $id = (string) ($doc['meta']['id'] ?? basename($file, '.md'));
+            if (isset($this->diagrams[$id])) {
+                $this->issues[] = ['level' => 'error', 'message' => "Duplicate diagram id: {$id}"];
+            }
+            $this->diagrams[$id] = $doc;
+        }
 
         foreach (self::MEMORY_TYPES as $type) {
             $this->memory[$type] = [];
@@ -222,6 +239,148 @@ final class Content
     public function files(): array
     {
         return $this->files;
+    }
+
+    /** @return array<string, array<string,mixed>> */
+    public function allDiagrams(): array
+    {
+        return $this->diagrams;
+    }
+
+    /**
+     * Normalise a front-matter value (scalar or list) to a list of strings.
+     * Public wrapper around the internal helper for use in templates.
+     *
+     * @param mixed $value
+     * @return list<string>
+     */
+    public function asList(mixed $value): array
+    {
+        return $this->toList($value);
+    }
+
+    /** @return array<string, mixed>|null */
+    public function diagram(string $id): ?array
+    {
+        return $this->diagrams[$id] ?? null;
+    }
+
+    /**
+     * Diagrams grouped by the groups defined in diagrams/index.json, ordered by
+     * the index `order`. Diagrams in unknown groups fall into an "Other" group
+     * so nothing is silently dropped.
+     *
+     * @return list<array{id: string, title: string, description: string, records: list<array<string,mixed>>}>
+     */
+    public function diagramGroups(): array
+    {
+        $groupDefs = is_array($this->diagramsIndex['groups'] ?? null) ? $this->diagramsIndex['groups'] : [];
+        $order = is_array($this->diagramsIndex['order'] ?? null) ? $this->diagramsIndex['order'] : [];
+        $rank = array_flip(array_map('strval', $order));
+
+        $records = $this->diagrams;
+        uasort($records, function ($a, $b) use ($rank) {
+            $ai = $rank[$a['meta']['id'] ?? ''] ?? 999;
+            $bi = $rank[$b['meta']['id'] ?? ''] ?? 999;
+            if ($ai === $bi) {
+                return strcmp((string) ($a['meta']['title'] ?? ''), (string) ($b['meta']['title'] ?? ''));
+            }
+            return $ai <=> $bi;
+        });
+
+        $groups = [];
+        $groupIndex = [];
+        foreach ($groupDefs as $g) {
+            if (!is_array($g)) {
+                continue;
+            }
+            $gid = (string) ($g['id'] ?? '');
+            if ($gid === '') {
+                continue;
+            }
+            $groupIndex[$gid] = count($groups);
+            $groups[] = [
+                'id' => $gid,
+                'title' => (string) ($g['title'] ?? ucfirst(str_replace('-', ' ', $gid))),
+                'description' => (string) ($g['description'] ?? ''),
+                'records' => [],
+            ];
+        }
+        foreach ($records as $rec) {
+            $group = (string) ($rec['meta']['group'] ?? 'other');
+            if (!isset($groupIndex[$group])) {
+                $groupIndex[$group] = count($groups);
+                $groups[] = [
+                    'id' => $group,
+                    'title' => ucfirst(str_replace('-', ' ', $group)),
+                    'description' => '',
+                    'records' => [],
+                ];
+            }
+            $groups[$groupIndex[$group]]['records'][] = $rec;
+        }
+
+        return array_values(array_filter($groups, fn ($g) => $g['records'] !== []));
+    }
+
+    /**
+     * Inline SVG markup for a diagram, read from diagrams/assets/ (confined to
+     * the content root). The XML declaration is stripped so the markup can be
+     * embedded directly in an HTML page. Returns null if the asset is missing.
+     */
+    public function diagramSvg(string $svgFile): ?string
+    {
+        $svgFile = (string) preg_replace('#[^a-z0-9\-_.]#i', '', basename($svgFile));
+        if ($svgFile === '') {
+            return null;
+        }
+        $path = $this->root . '/diagrams/assets/' . $svgFile;
+        if (!$this->isInsideRoot($path) || !is_file($path)) {
+            return null;
+        }
+        $raw = @file_get_contents($path);
+        if ($raw === false) {
+            return null;
+        }
+        // Drop the XML prolog; inline SVG in HTML must not carry it.
+        return trim((string) preg_replace('/^\s*<\?xml.*?\?>\s*/s', '', $raw));
+    }
+
+    /**
+     * Resolve a list of diagram ids into linkable summaries.
+     *
+     * @param mixed $ids
+     * @return list<array{id: string, title: string, resolved: bool}>
+     */
+    public function resolveDiagrams(mixed $ids): array
+    {
+        $out = [];
+        foreach ($this->toList($ids) as $id) {
+            $rec = $this->diagrams[$id] ?? null;
+            $out[] = [
+                'id' => $id,
+                'title' => $rec !== null ? (string) ($rec['meta']['title'] ?? $id) : $id,
+                'resolved' => $rec !== null,
+            ];
+        }
+        return $out;
+    }
+
+    /**
+     * Diagrams that declare a relationship to a functionality id.
+     *
+     * @return list<array{id: string, title: string, resolved: bool}>
+     */
+    public function diagramsForFunctionality(string $id): array
+    {
+        $out = [];
+        foreach ($this->diagrams as $did => $rec) {
+            $fns = $this->toList($rec['meta']['functionality'] ?? []);
+            if (in_array($id, $fns, true)) {
+                $out[] = ['id' => $did, 'title' => (string) ($rec['meta']['title'] ?? $did), 'resolved' => true];
+            }
+        }
+        return $out;
     }
 
     /** @return array<string, array<string, array<string,mixed>>> */
@@ -444,6 +603,57 @@ final class Content
             foreach ($this->toList($file['functionality'] ?? []) as $fn) {
                 if (!isset($this->functionality[$fn])) {
                     $this->issues[] = ['level' => 'warn', 'message' => "File '{$path}' links to unknown functionality: {$fn}"];
+                }
+            }
+        }
+
+        foreach ($this->diagrams as $id => $rec) {
+            $meta = $rec['meta'];
+            foreach (['id', 'title', 'svg'] as $req) {
+                if (($meta[$req] ?? '') === '') {
+                    $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$id}' missing required field: {$req}"];
+                }
+            }
+            $ver = (string) ($meta['verification'] ?? '');
+            if ($ver !== '' && !in_array($ver, $verVocab, true)) {
+                $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$id}' has unknown verification: {$ver}"];
+            }
+
+            $svgFile = (string) ($meta['svg'] ?? '');
+            if ($svgFile !== '') {
+                $svgPath = $this->root . '/diagrams/assets/' . basename($svgFile);
+                if (!$this->isInsideRoot($svgPath) || !is_file($svgPath)) {
+                    $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$id}' references missing SVG asset: {$svgFile}"];
+                } else {
+                    $dom = new DOMDocument();
+                    $raw = (string) @file_get_contents($svgPath);
+                    if (@$dom->loadXML($raw) === false) {
+                        $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$id}' SVG is not well-formed XML: {$svgFile}"];
+                    } else {
+                        $xp = new DOMXPath($dom);
+                        if ($xp->query('//*[local-name()="title"]')->length === 0) {
+                            $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$id}' SVG is missing an accessible <title>: {$svgFile}"];
+                        }
+                        if ($xp->query('//*[local-name()="desc"]')->length === 0) {
+                            $this->issues[] = ['level' => 'warn', 'message' => "Diagram '{$id}' SVG is missing an accessible <desc>: {$svgFile}"];
+                        }
+                    }
+                }
+            }
+
+            foreach ($this->toList($meta['functionality'] ?? []) as $fn) {
+                if (!isset($this->functionality[$fn])) {
+                    $this->issues[] = ['level' => 'warn', 'message' => "Diagram '{$id}' links to unknown functionality: {$fn}"];
+                }
+            }
+            foreach ($this->toList($meta['warnings'] ?? []) as $wn) {
+                if (!isset($this->memory['warnings'][$wn])) {
+                    $this->issues[] = ['level' => 'warn', 'message' => "Diagram '{$id}' links to unknown warning: {$wn}"];
+                }
+            }
+            foreach ($this->toList($meta['diagrams'] ?? []) as $dg) {
+                if (!isset($this->diagrams[$dg])) {
+                    $this->issues[] = ['level' => 'warn', 'message' => "Diagram '{$id}' links to unknown diagram: {$dg}"];
                 }
             }
         }

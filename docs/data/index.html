@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Data &amp; storage · SousMeow — VibeKB</title>
+    <meta name="description" content="A living explanation of what SousMeow currently does, how it works, what AI is changing, and why.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Web fonts are a progressive enhancement only. The stylesheet ships a
+         full system-font fallback stack, so the guide renders correctly with no
+         external CDN — required for offline and locked-down static hosting. -->
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/guide.css">
+</head>
+<body data-mode="static">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="app-shell">
+    <header class="site-header">
+        <div class="site-header__inner">
+            <a class="brand" href="../index.html">
+                <span class="brand__mark">VibeKB</span>
+                <span class="brand__project">SousMeow</span>
+            </a>
+            <form class="site-search" role="search" action="../search/index.html">
+                <label class="visually-hidden" for="site-search-input">Search guide</label>
+                <input id="site-search-input" name="q" type="search" placeholder="Search guide…" autocomplete="off">
+            </form>
+            <button
+                class="nav-toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="guide-sidebar"
+                hidden
+            >Menu</button>
+        </div>
+    </header>
+
+    <div class="nav-backdrop" id="nav-backdrop" hidden></div>
+
+    <aside class="sidebar" id="guide-sidebar" aria-label="Guide navigation">
+        <nav class="sidebar-nav" aria-label="Guide sections">
+            <p class="sidebar-nav__label" id="nav-primary-label">Primary</p>
+            <ul class="sidebar-nav__list" aria-labelledby="nav-primary-label">
+                                                        <li>
+                        <a href="../index.html">
+                            Overview                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../functionality/index.html">
+                            Functionality                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../how-it-works/index.html">
+                            Architecture                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../diagrams/index.html">
+                            Diagrams                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../current-work/index.html">
+                            Current work                        </a>
+                    </li>
+                            </ul>
+
+                            <p class="sidebar-nav__label" id="nav-explore-label">Explore</p>
+                <ul class="sidebar-nav__list sidebar-nav__list--secondary" aria-labelledby="nav-explore-label">
+                                                                    <li>
+                            <a href="../data/index.html" aria-current="page">
+                                Data &amp; storage                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../files/index.html">
+                                Files that matter                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../changes/index.html">
+                                Changes                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../why/index.html">
+                                Decisions &amp; rationale                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../handoff/index.html">
+                                AI handoff                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../reference/index.html">
+                                Reference                            </a>
+                        </li>
+                                    </ul>
+                    </nav>
+    </aside>
+
+    <div class="app-main">
+                    <p class="generated-notice" role="note">
+                Generated output — this is a static snapshot rendered from <code>.vibekb/</code>. The
+                <code>.vibekb/</code> content is the source of truth. See <a href="../reference/index.html">Reference</a> for provenance.
+            </p>
+                
+        <main id="main" class="wrap">
+            <article class="view view-doc">
+    <header class="page-head reading-column">
+        <p class="eyebrow">Data &amp; storage</p>
+        <h1>What the software stores</h1>
+        <p class="lede">Where data comes from, where it goes, and what it means to the application.</p>
+    </header>
+
+            <section class="doc-section content-section"><div class="prose reading-column"><h3>What is stored, and where</h3>
+<p>All structured data is in one database — SQLite (<code>storage/sousmeow.sqlite</code>) in
+dev or MySQL in production, same schema. Export zips are files in
+<code>storage/exports/</code> (outside the web root). Sessions use PHP&#039;s session store.
+There is no external storage.</p>
+<h3>The catalog (seeded, read-mostly)</h3>
+<div class="table-wrap"><table>
+<tr>
+<th>Table</th>
+<th>Meaning</th>
+</tr>
+<tr>
+<td><code>cookbooks</code></td>
+<td>Workflows: slug, status, <code>is_executable</code>, difficulty, category</td>
+</tr>
+<tr>
+<td><code>cookbook_stages</code>, <code>recipes</code></td>
+<td>Ordered steps, prompts, output contracts</td>
+</tr>
+<tr>
+<td><code>recipe_checks</code></td>
+<td>Per-recipe Quality Checks (+ evidence keys)</td>
+</tr>
+<tr>
+<td><code>pantry_fields</code></td>
+<td>Typed input definitions per Cookbook</td>
+</tr>
+<tr>
+<td><code>sousmeow_categories</code>, <code>sousmeow_collections</code>, <code>sousmeow_cookbook_collections</code></td>
+<td>Discovery taxonomy (prefixed to avoid collisions on shared hosting)</td>
+</tr>
+</table></div>
+<h3>User work (written during a run)</h3>
+<div class="table-wrap"><table>
+<tr>
+<th>Table</th>
+<th>Meaning</th>
+<th>Written by</th>
+</tr>
+<tr>
+<td><code>users</code></td>
+<td>Accounts, roles, verification, <code>simulation</code> flag</td>
+<td>Auth/Account</td>
+</tr>
+<tr>
+<td><code>projects</code></td>
+<td>A user&#039;s run of a Cookbook</td>
+<td>Start / Pantry / Runner</td>
+</tr>
+<tr>
+<td><code>pantry_values</code></td>
+<td>The facts entered (unique per project+field)</td>
+<td>Fill the Pantry</td>
+</tr>
+<tr>
+<td><code>artifacts</code></td>
+<td>One per project+recipe; status + approved version</td>
+<td>Runner</td>
+</tr>
+<tr>
+<td><code>artifact_versions</code></td>
+<td>Immutable, append-only (pasted/example/edited/restored)</td>
+<td>Paste / Approve</td>
+</tr>
+<tr>
+<td><code>artifact_checks</code></td>
+<td>A confirmed check against a specific version</td>
+<td>Review</td>
+</tr>
+<tr>
+<td><code>exports</code></td>
+<td>A built kit&#039;s filename, size, count</td>
+<td>Export</td>
+</tr>
+<tr>
+<td><code>simulation_runs</code></td>
+<td>Daily demo-activity log</td>
+<td>Simulation</td>
+</tr>
+</table></div>
+<h3>Durability, backup, sensitivity</h3>
+<ul>
+<li>Backup = the SQLite file or a MySQL dump; export zips are copied separately.</li>
+<li>Table names for the taxonomy carry a <code>sousmeow_</code> prefix because the</li>
+</ul>
+<p>production database is shared with other apps on the account.</p>
+<ul>
+<li>Passwords are hashed (<code>password_hash</code>); pasted content is the only untrusted</li>
+</ul>
+<p>bulk data and is sanitised/escaped.</p></div></section>
+    
+            <section class="doc-section content-section">
+            <header class="section-intro reading-column">
+                <h2>How data flows</h2>
+            </header>
+            <div class="prose reading-column"><h3>From facts to finished kit</h3>
+<p>``<code>
+Pantry values ─► PromptBuilder ─► prompt (copied) ─► [your AI] ─► pasted text
+                                                                      │
+                                          cleanContent (sanitise) ────┘
+                                                       │
+                                       artifact_versions (immutable, append-only)
+                                                       │
+                            ResponseParser ─► Quality Check evidence ─► artifact_checks
+                                                       │  (all confirmed)
+                                                    approve ─► approved version
+                                                       │
+                     chains into later prompts  ◄──────┤
+                                                       ▼
+                                              ProjectKit ─► export zip
+</code>``</p>
+<h3>What is trusted where</h3>
+<ul>
+<li><strong>Pantry input</strong> is validated per type before storage (<code>savePantry</code>).</li>
+<li><strong>Pasted AI output</strong> is untrusted: sanitised on store (<code>cleanContent</code>) and</li>
+</ul>
+<p>escaped on render (<code>SafeText</code>) end to end.</p>
+<ul>
+<li><strong>SQL parameters</strong> are always bound (one PDO path); never interpolated.</li>
+<li><strong>Ownership</strong> is enforced at the data layer; ids are never leaked.</li>
+</ul>
+<h3>The alignment rule</h3>
+<p>The fields written for the Pantry and Artifacts must match the fields read by
+<code>PromptBuilder</code>, the Runner, and <code>ProjectKit</code>. When they drift, prompts get
+<code>[missing:]</code> values or the export omits content — the failure the
+<code>read-write-path-coupling</code> warning describes.</p></div>
+        </section>
+    
+    <section class="doc-section content-section wide-section" aria-labelledby="data-use">
+        <header class="section-intro reading-column">
+            <h2 id="data-use">Which functionality touches each store</h2>
+        </header>
+                    <div class="table-wrap">
+                <table>
+                    <tr><th>Store</th><th>Written by</th><th>Read by</th></tr>
+                                            <tr>
+                            <td><code>artifact_checks</code></td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/review-quality-checks.html">Review Quality Checks</a>
+                                                                                            </td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/approve-and-version.html">Approve &amp; version an artifact</a>
+                                                                    <a class="chip" href="../functionality/review-quality-checks.html">Review Quality Checks</a>
+                                                                    <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a>
+                                                                                            </td>
+                        </tr>
+                                            <tr>
+                            <td><code>artifact_versions</code></td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/approve-and-version.html">Approve &amp; version an artifact</a>
+                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
+                                                                    <a class="chip" href="../functionality/paste-response.html">Paste a response</a>
+                                                                                            </td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/approve-and-version.html">Approve &amp; version an artifact</a>
+                                                                    <a class="chip" href="../functionality/build-prompt.html">Build the prompt</a>
+                                                                    <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a>
+                                                                    <a class="chip" href="../functionality/manage-account.html">Manage your account</a>
+                                                                    <a class="chip" href="../functionality/paste-response.html">Paste a response</a>
+                                                                    <a class="chip" href="../functionality/review-quality-checks.html">Review Quality Checks</a>
+                                                                    <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a>
+                                                                                            </td>
+                        </tr>
+                                            <tr>
+                            <td><code>artifacts</code></td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/approve-and-version.html">Approve &amp; version an artifact</a>
+                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
+                                                                    <a class="chip" href="../functionality/paste-response.html">Paste a response</a>
+                                                                                            </td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/approve-and-version.html">Approve &amp; version an artifact</a>
+                                                                    <a class="chip" href="../functionality/build-prompt.html">Build the prompt</a>
+                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
+                                                                    <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a>
+                                                                    <a class="chip" href="../functionality/manage-account.html">Manage your account</a>
+                                                                    <a class="chip" href="../functionality/paste-response.html">Paste a response</a>
+                                                                    <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a>
+                                                                    <a class="chip" href="../functionality/track-project-progress.html">Track project progress</a>
+                                                                    <a class="chip" href="../functionality/view-admin-overview.html">View the admin overview</a>
+                                                                                            </td>
+                        </tr>
+                                            <tr>
+                            <td><code>cookbook_stages</code></td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
+                                                                                            </td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/view-cookbook-detail.html">View a Cookbook detail</a>
+                                                                    <a class="chip" href="../functionality/view-marketing-home.html">View the marketing home</a>
+                                                                                            </td>
+                        </tr>
+                                            <tr>
+                            <td><code>cookbooks</code></td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
+                                                                                            </td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/browse-categories.html">Browse by category</a>
+                                                                    <a class="chip" href="../functionality/browse-marketplace.html">Browse the marketplace</a>
+                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
+                                                                    <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
+                                                                    <a class="chip" href="../functionality/start-project.html">Start a project</a>
+                                                                    <a class="chip" href="../functionality/view-admin-overview.html">View the admin overview</a>
+                                                                    <a class="chip" href="../functionality/view-collection.html">View a collection</a>
+                                                                    <a class="chip" href="../functionality/view-cookbook-detail.html">View a Cookbook detail</a>
+                                                                    <a class="chip" href="../functionality/view-kitchen.html">View My Kitchen</a>
+                                                                    <a class="chip" href="../functionality/view-marketing-home.html">View the marketing home</a>
+                                                                                            </td>
+                        </tr>
+                                            <tr>
+                            <td><code>exports</code></td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
+                                                                    <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a>
+                                                                                            </td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
+                                                                    <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a>
+                                                                    <a class="chip" href="../functionality/manage-account.html">Manage your account</a>
+                                                                    <a class="chip" href="../functionality/view-admin-overview.html">View the admin overview</a>
+                                                                                            </td>
+                        </tr>
+                                            <tr>
+                            <td><code>pantry_fields</code></td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
+                                                                                            </td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/build-prompt.html">Build the prompt</a>
+                                                                    <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a>
+                                                                    <a class="chip" href="../functionality/fill-pantry.html">Fill the Pantry</a>
+                                                                    <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a>
+                                                                    <a class="chip" href="../functionality/view-cookbook-detail.html">View a Cookbook detail</a>
+                                                                                            </td>
+                        </tr>
+                                            <tr>
+                            <td><code>pantry_values</code></td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
+                                                                    <a class="chip" href="../functionality/fill-pantry.html">Fill the Pantry</a>
+                                                                                            </td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/build-prompt.html">Build the prompt</a>
+                                                                    <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a>
+                                                                    <a class="chip" href="../functionality/fill-pantry.html">Fill the Pantry</a>
+                                                                    <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a>
+                                                                                            </td>
+                        </tr>
+                                            <tr>
+                            <td><code>password_reset_tokens</code></td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/reset-password.html">Reset a password</a>
+                                                                                            </td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/reset-password.html">Reset a password</a>
+                                                                                            </td>
+                        </tr>
+                                            <tr>
+                            <td><code>projects</code></td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/approve-and-version.html">Approve &amp; version an artifact</a>
+                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
+                                                                    <a class="chip" href="../functionality/fill-pantry.html">Fill the Pantry</a>
+                                                                    <a class="chip" href="../functionality/start-project.html">Start a project</a>
+                                                                    <a class="chip" href="../functionality/track-project-progress.html">Track project progress</a>
+                                                                                            </td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
+                                                                    <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a>
+                                                                    <a class="chip" href="../functionality/fill-pantry.html">Fill the Pantry</a>
+                                                                    <a class="chip" href="../functionality/manage-account.html">Manage your account</a>
+                                                                    <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a>
+                                                                    <a class="chip" href="../functionality/track-project-progress.html">Track project progress</a>
+                                                                    <a class="chip" href="../functionality/view-admin-overview.html">View the admin overview</a>
+                                                                    <a class="chip" href="../functionality/view-kitchen.html">View My Kitchen</a>
+                                                                                            </td>
+                        </tr>
+                                            <tr>
+                            <td><code>rate_events</code></td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/register-account.html">Register an account</a>
+                                                                    <a class="chip" href="../functionality/reset-password.html">Reset a password</a>
+                                                                    <a class="chip" href="../functionality/sign-in.html">Sign in</a>
+                                                                    <a class="chip" href="../functionality/verify-email.html">Verify your email</a>
+                                                                                            </td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/register-account.html">Register an account</a>
+                                                                    <a class="chip" href="../functionality/reset-password.html">Reset a password</a>
+                                                                    <a class="chip" href="../functionality/sign-in.html">Sign in</a>
+                                                                                            </td>
+                        </tr>
+                                            <tr>
+                            <td><code>recipe_checks</code></td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
+                                                                                            </td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/approve-and-version.html">Approve &amp; version an artifact</a>
+                                                                    <a class="chip" href="../functionality/review-quality-checks.html">Review Quality Checks</a>
+                                                                    <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a>
+                                                                    <a class="chip" href="../functionality/view-cookbook-detail.html">View a Cookbook detail</a>
+                                                                                            </td>
+                        </tr>
+                                            <tr>
+                            <td><code>recipes</code></td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
+                                                                                            </td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/approve-and-version.html">Approve &amp; version an artifact</a>
+                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
+                                                                    <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a>
+                                                                    <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a>
+                                                                    <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
+                                                                    <a class="chip" href="../functionality/track-project-progress.html">Track project progress</a>
+                                                                    <a class="chip" href="../functionality/view-admin-overview.html">View the admin overview</a>
+                                                                    <a class="chip" href="../functionality/view-cookbook-detail.html">View a Cookbook detail</a>
+                                                                    <a class="chip" href="../functionality/view-marketing-home.html">View the marketing home</a>
+                                                                                            </td>
+                        </tr>
+                                            <tr>
+                            <td><code>simulation_runs</code></td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
+                                                                                            </td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
+                                                                    <a class="chip" href="../functionality/view-admin-overview.html">View the admin overview</a>
+                                                                                            </td>
+                        </tr>
+                                            <tr>
+                            <td><code>sousmeow_categories</code></td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
+                                                                                            </td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/browse-categories.html">Browse by category</a>
+                                                                    <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
+                                                                    <a class="chip" href="../functionality/view-cookbook-detail.html">View a Cookbook detail</a>
+                                                                                            </td>
+                        </tr>
+                                            <tr>
+                            <td><code>sousmeow_collections</code></td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
+                                                                                            </td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/browse-categories.html">Browse by category</a>
+                                                                    <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
+                                                                    <a class="chip" href="../functionality/view-collection.html">View a collection</a>
+                                                                    <a class="chip" href="../functionality/view-cookbook-detail.html">View a Cookbook detail</a>
+                                                                    <a class="chip" href="../functionality/view-marketing-home.html">View the marketing home</a>
+                                                                                            </td>
+                        </tr>
+                                            <tr>
+                            <td><code>sousmeow_cookbook_collections</code></td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
+                                                                                            </td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/browse-categories.html">Browse by category</a>
+                                                                    <a class="chip" href="../functionality/view-collection.html">View a collection</a>
+                                                                                            </td>
+                        </tr>
+                                            <tr>
+                            <td><code>users</code></td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
+                                                                    <a class="chip" href="../functionality/manage-account.html">Manage your account</a>
+                                                                    <a class="chip" href="../functionality/register-account.html">Register an account</a>
+                                                                    <a class="chip" href="../functionality/reset-password.html">Reset a password</a>
+                                                                    <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
+                                                                    <a class="chip" href="../functionality/sign-in.html">Sign in</a>
+                                                                    <a class="chip" href="../functionality/verify-email.html">Verify your email</a>
+                                                                                            </td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
+                                                                    <a class="chip" href="../functionality/manage-account.html">Manage your account</a>
+                                                                    <a class="chip" href="../functionality/register-account.html">Register an account</a>
+                                                                    <a class="chip" href="../functionality/reset-password.html">Reset a password</a>
+                                                                    <a class="chip" href="../functionality/sign-in.html">Sign in</a>
+                                                                    <a class="chip" href="../functionality/verify-email.html">Verify your email</a>
+                                                                    <a class="chip" href="../functionality/view-admin-overview.html">View the admin overview</a>
+                                                                                            </td>
+                        </tr>
+                                    </table>
+            </div>
+            </section>
+</article>
+        </main>
+
+        <footer class="site-footer">
+            <div class="wrap site-footer__inner">
+                <p><strong>VibeKB</strong> — Understand what your software is doing.</p>
+                <p class="muted">
+                    A living explanation generated from repository-owned content in <code>.vibekb/</code>.
+                    <a href="../index.html">About VibeKB</a>
+                </p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-21 · source commit c1617ab (2026-07-16) · not auto-updating</p>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script src="../assets/js/guide.js" defer></script>
+</body>
+</html>

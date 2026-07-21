@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Review Quality Checks · SousMeow — VibeKB</title>
+    <meta name="description" content="A living explanation of what SousMeow currently does, how it works, what AI is changing, and why.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Web fonts are a progressive enhancement only. The stylesheet ships a
+         full system-font fallback stack, so the guide renders correctly with no
+         external CDN — required for offline and locked-down static hosting. -->
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/guide.css">
+</head>
+<body data-mode="static">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="app-shell">
+    <header class="site-header">
+        <div class="site-header__inner">
+            <a class="brand" href="../index.html">
+                <span class="brand__mark">VibeKB</span>
+                <span class="brand__project">SousMeow</span>
+            </a>
+            <form class="site-search" role="search" action="../search/index.html">
+                <label class="visually-hidden" for="site-search-input">Search guide</label>
+                <input id="site-search-input" name="q" type="search" placeholder="Search guide…" autocomplete="off">
+            </form>
+            <button
+                class="nav-toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="guide-sidebar"
+                hidden
+            >Menu</button>
+        </div>
+    </header>
+
+    <div class="nav-backdrop" id="nav-backdrop" hidden></div>
+
+    <aside class="sidebar" id="guide-sidebar" aria-label="Guide navigation">
+        <nav class="sidebar-nav" aria-label="Guide sections">
+            <p class="sidebar-nav__label" id="nav-primary-label">Primary</p>
+            <ul class="sidebar-nav__list" aria-labelledby="nav-primary-label">
+                                                        <li>
+                        <a href="../index.html">
+                            Overview                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../functionality/index.html" aria-current="page">
+                            Functionality                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../how-it-works/index.html">
+                            Architecture                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../diagrams/index.html">
+                            Diagrams                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../current-work/index.html">
+                            Current work                        </a>
+                    </li>
+                            </ul>
+
+                            <p class="sidebar-nav__label" id="nav-explore-label">Explore</p>
+                <ul class="sidebar-nav__list sidebar-nav__list--secondary" aria-labelledby="nav-explore-label">
+                                                                    <li>
+                            <a href="../data/index.html">
+                                Data &amp; storage                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../files/index.html">
+                                Files that matter                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../changes/index.html">
+                                Changes                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../why/index.html">
+                                Decisions &amp; rationale                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../handoff/index.html">
+                                AI handoff                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../reference/index.html">
+                                Reference                            </a>
+                        </li>
+                                    </ul>
+                    </nav>
+    </aside>
+
+    <div class="app-main">
+                    <p class="generated-notice" role="note">
+                Generated output — this is a static snapshot rendered from <code>.vibekb/</code>. The
+                <code>.vibekb/</code> content is the source of truth. See <a href="../reference/index.html">Reference</a> for provenance.
+            </p>
+                
+        <main id="main" class="wrap">
+            <article class="view view-func-detail">
+    <p class="breadcrumb"><a href="../functionality/index.html">← All functionality</a></p>
+
+    <header class="page-head reading-column">
+        <p class="eyebrow">Artifacts quality</p>
+        <h1>Review Quality Checks</h1>
+        <p class="lede">The human review step — confirm each Quality Check against the exact version, aided by structural evidence parsed from the response but never graded automatically.</p>
+        <div class="badge-row">
+            <span class="badge badge--ok">Implemented</span>            <span class="badge badge--ok">Verified from source</span>            <span class="badge badge--info">User-facing</span>        </div>
+    </header>
+
+    <div class="detail-grid">
+        <div class="detail-main">
+                            <div class="prose reading-column"><h3>In one sentence</h3>
+<p>You confirm each Quality Check against the exact text you are looking at;
+SousMeow shows structural evidence but never decides for you.</p>
+<h3>User experience</h3>
+<p>Each check is a card. When the Recipe has an output contract, the card shows
+whether the expected section is present (found / missing / manual) with the
+parsed evidence — but confirming is always your explicit judgement.</p>
+<h3>Current behavior</h3>
+<p><code>toggleCheck()</code> requires verification and always targets the <strong>latest</strong> version
+(checking a box means &quot;I read THIS text&quot;). It accepts either a single
+<code>check_id</code>+<code>confirmed</code> toggle (answered as JSON for <code>fetch()</code>) or a plain
+<code>checks[]</code> form (answered by redirect). Confirmations are stored in
+<code>artifact_checks</code> keyed by version, so a new version starts unconfirmed by
+construction. Evidence comes from <code>ResponseParser::parse()</code> against the recipe&#039;s
+<code>output_contract</code>; recipes without a contract fall back to manual full-response
+review and parsing never blocks anything.</p>
+<h3>Step-by-step flow</h3>
+<ol>
+<li>User posts a toggle to <code>/projects/{id}/run/{position}/checks</code>.</li>
+<li>The check id is validated against the recipe&#039;s checks.</li>
+<li><code>Artifact::setCheck(versionId, checkId, on)</code> records or clears it.</li>
+<li>The response reports <code>confirmed/total</code> and whether approval is now allowed.</li>
+</ol>
+<h3>Implementation map</h3>
+<ul>
+<li><code>app/Controllers/RunnerController.php</code> — <code>toggleCheck()</code>, <code>checkResponse()</code>.</li>
+<li><code>app/Services/ResponseParser.php</code> — section parsing + <code>checkStatus()</code>.</li>
+<li><code>app/Services/OutputContract.php</code> — the contract shape.</li>
+</ul>
+<h3>Data used</h3>
+<ul>
+<li><strong>Reads:</strong> <code>recipe_checks</code>, the latest <code>artifact_versions</code> row.</li>
+<li><strong>Writes:</strong> <code>artifact_checks</code> (unique per version+check).</li>
+</ul>
+<h3>Dependencies</h3>
+<p>A pasted version exists (<code>paste-response</code>).</p>
+<h3>Dependents</h3>
+<p><strong>Approve &amp; version</strong> — approval requires every check confirmed.</p>
+<h3>Failure cases</h3>
+<ul>
+<li>No version yet → &quot;paste a response before reviewing&quot;.</li>
+<li>Unknown check id → rejected.</li>
+</ul>
+<h3>Current state</h3>
+<ul>
+<li><strong>Status:</strong> implemented. <strong>Verification:</strong> verified from source</li>
+</ul>
+<p>(<code>toggleCheck</code> + parser usage traced; the <code>ResponseParser</code> internals were read
+  at the call boundary).</p>
+<h3>Use caution</h3>
+<p>Confirmations bind to a specific version. Never migrate a confirmation to a new
+version — that would silently mark unreviewed text as reviewed.</p>
+<h3>Why it works this way</h3>
+<p>The product&#039;s promise is human review, not automated grading; evidence assists
+judgement, it does not replace it.</p>
+<h3>Related functionality</h3>
+<ul>
+<li>Paste a response</li>
+<li>Approve &amp; version an artifact</li>
+</ul></div>
+                    </div>
+
+        <aside class="detail-rail" aria-label="Record metadata">
+            <div class="rail-card metadata-group">
+                <h2>Status</h2>
+                <dl class="rail-dl">
+                    <dt>Status</dt>
+                    <dd><span class="badge badge--ok">Implemented</span></dd>
+                                            <dt>Verification</dt>
+                        <dd><span class="badge badge--ok">Verified from source</span></dd>
+                                        <dt>Updated</dt>
+                    <dd>2026-07-16</dd>
+                    <dt>Facing</dt>
+                    <dd>User-facing</dd>
+                </dl>
+            </div>
+
+                            <div class="rail-card metadata-group">
+                    <h2>Trigger</h2>
+                    <p>A user toggles a check on &quot;.../checks&quot; for a Recipe step.</p>
+                </div>
+            
+            <div class="rail-card metadata-group">
+                <h2>Data read or written</h2>
+                <p><strong>Reads:</strong> <code class="chip chip--file">recipe_checks</code> <code class="chip chip--file">artifact_versions</code> <code class="chip chip--file">artifact_checks</code></p>
+                <p><strong>Writes:</strong> <code class="chip chip--file">artifact_checks</code></p>
+                            </div>
+
+            <div class="rail-card metadata-group">
+                <h2>Files involved</h2>
+                                                        <ul class="rail-list">
+                                                    <li>
+                                <a href="../files/index.html#app%2FControllers%2FRunnerController.php"><code>app/Controllers/RunnerController.php</code></a>
+                                <span class="badge badge--danger">High impact</span>                            </li>
+                                                    <li>
+                                <a href="../files/index.html#app%2FServices%2FResponseParser.php"><code>app/Services/ResponseParser.php</code></a>
+                                <span class="badge badge--info">Moderate impact</span>                            </li>
+                                                    <li>
+                                <a href="../files/index.html#app%2FServices%2FSafeText.php"><code>app/Services/SafeText.php</code></a>
+                                <span class="badge badge--danger">High impact</span>                            </li>
+                                                    <li>
+                                <a href="../files/index.html#app%2FModels%2FArtifact.php"><code>app/Models/Artifact.php</code></a>
+                                <span class="badge badge--danger">High impact</span>                            </li>
+                                                    <li>
+                                <a href="../files/index.html#app%2FModels%2FRecipe.php"><code>app/Models/Recipe.php</code></a>
+                                <span class="badge badge--info">Moderate impact</span>                            </li>
+                                            </ul>
+                                                </div>
+
+            <div class="rail-card metadata-group">
+                <h2>Dependencies</h2>
+                                    <p><strong>Depends on:</strong> <a class="chip" href="../functionality/paste-response.html">Paste a response</a></p>
+                                                    <p><strong>Depended on by:</strong> <a class="chip" href="../functionality/approve-and-version.html">Approve &amp; version an artifact</a></p>
+                            </div>
+
+                            <div class="rail-card metadata-group">
+                    <h2>Related diagrams</h2>
+                    <p>
+                                                    <a class="chip" href="../diagrams/index.html#run-recipe-flow">Run a Cookbook — the core loop</a>
+                                            </p>
+                </div>
+            
+            <div class="rail-card metadata-group">
+                <h2>Related rationale</h2>
+                                    <p><a class="chip" href="../why/decisions/immutable-artifact-versions.html">Artifacts are immutable, append-only versions</a></p>
+                            </div>
+        </aside>
+    </div>
+</article>
+        </main>
+
+        <footer class="site-footer">
+            <div class="wrap site-footer__inner">
+                <p><strong>VibeKB</strong> — Understand what your software is doing.</p>
+                <p class="muted">
+                    A living explanation generated from repository-owned content in <code>.vibekb/</code>.
+                    <a href="../index.html">About VibeKB</a>
+                </p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-21 · source commit c1617ab (2026-07-16) · not auto-updating</p>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script src="../assets/js/guide.js" defer></script>
+</body>
+</html>

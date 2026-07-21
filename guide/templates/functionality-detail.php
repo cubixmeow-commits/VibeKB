@@ -14,6 +14,7 @@ $deps = $content->resolveFunctionality($m['depends_on'] ?? []);
 $dependents = $content->dependentsOf($id);
 $mem = $content->resolveMemory($m['related_memory'] ?? []);
 $fileRecords = $content->filesForFunctionality($id);
+$relatedDiagrams = $content->diagramsForFunctionality($id);
 $reads = is_array($m['reads'] ?? null) ? $m['reads'] : [];
 $writes = is_array($m['writes'] ?? null) ? $m['writes'] : [];
 $config = $m['config'] ?? [];
@@ -133,6 +134,17 @@ $longFiles = count($fileRecords) > 8 || (is_array($primaryFiles) && count($prima
                     <p><strong>Depended on by:</strong> <?= functionality_chips($dependents) ?></p>
                 <?php endif; ?>
             </div>
+
+            <?php if ($relatedDiagrams !== []): ?>
+                <div class="rail-card metadata-group">
+                    <h2>Related diagrams</h2>
+                    <p>
+                        <?php foreach ($relatedDiagrams as $d): ?>
+                            <a class="chip" href="<?= h(diagram_url($d['id'])) ?>"><?= h($d['title']) ?></a>
+                        <?php endforeach; ?>
+                    </p>
+                </div>
+            <?php endif; ?>
 
             <div class="rail-card metadata-group">
                 <h2>Related rationale</h2>

@@ -30,10 +30,14 @@ something `verified-from-source` you did not trace.
 2. Record current work in `.vibekb/work/current.md`.
 3. Implement.
 4. Verify — and record the honest verification state.
-5. Update the living software model (`.vibekb/` functionality + system + files).
+5. Update the living software model (`.vibekb/` functionality + system + files +
+   diagrams). If a change alters what a diagram shows, update the diagram record
+   and its SVG; keep it accessible and label inferred paths.
 6. Update repository memory (only meaningful records, each linked to
    functionality).
-7. Update the handoff (`.vibekb/work/handoff.md`).
+7. Update the handoff (`.vibekb/work/handoff.md`); refresh `manifest.json`
+   provenance if you re-verified against source. If `/docs` is published, run
+   `php tools/generate-static.php` to refresh the snapshot.
 
 Do not mark work complete because code was written. Do not present intended or
 generated behaviour as verified. See [MAINTENANCE.md](./MAINTENANCE.md).

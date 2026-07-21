@@ -1,7 +1,7 @@
 {
   "vibekb_version": "1.0",
   "content_model": "functionality-first",
-  "updated": "2026-07-20",
+  "updated": "2026-07-21",
   "example_project": {
     "name": "SousMeow",
     "is_sample": true,
@@ -10,11 +10,23 @@
     "source_commit": "c1617ab (2026-07-16)",
     "note": "SousMeow is a real application. This VibeKB model was derived by reading the SousMeow source read-only; SousMeow is NOT bundled into VibeKB. File paths in these records are relative to projects/sousmeow/ in the source repository. This model can go stale if SousMeow changes — future agents must re-verify against the source before changing functionality claims."
   },
+  "provenance": {
+    "name": "SousMeow",
+    "source_repository": "https://github.com/cubixmeow-commits/dev-portfolio-v2",
+    "source_subpath": "projects/sousmeow",
+    "source_commit": "c1617ab (2026-07-16)",
+    "analyzed": "2026-07-16",
+    "verification_scope": "Full Run-a-Cookbook loop traced from source; discovery, auth, export, admin, routing verified. manage-account, seed-and-sync-content and bulk demo-simulation remain inferred-from-source.",
+    "last_verified": "2026-07-16",
+    "updates_automatically": false,
+    "freshness_note": "SousMeow is a real, separate application analysed read-only; it is not bundled into VibeKB and may have changed since the commit above. Re-verify against the SousMeow source before changing any functionality claim."
+  },
   "structure": {
     "project": "project/ — identity, intent, current state, constraints",
     "functionality": "functionality/ — index.json + records/ (the primary unit)",
     "system": "system/ — mental model, components, flows, storage, deployment",
     "files": "files/important-files.json — curated important files",
+    "diagrams": "diagrams/ — index.json + records/ (source-grounded SVG diagrams)",
     "memory": "memory/ — decisions, constraints, assumptions, warnings, discoveries, changes",
     "work": "work/ — current AI work, handoff, sessions"
   }

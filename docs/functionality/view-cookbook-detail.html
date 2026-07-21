@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>View a Cookbook detail · SousMeow — VibeKB</title>
+    <meta name="description" content="A living explanation of what SousMeow currently does, how it works, what AI is changing, and why.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Web fonts are a progressive enhancement only. The stylesheet ships a
+         full system-font fallback stack, so the guide renders correctly with no
+         external CDN — required for offline and locked-down static hosting. -->
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/guide.css">
+</head>
+<body data-mode="static">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="app-shell">
+    <header class="site-header">
+        <div class="site-header__inner">
+            <a class="brand" href="../index.html">
+                <span class="brand__mark">VibeKB</span>
+                <span class="brand__project">SousMeow</span>
+            </a>
+            <form class="site-search" role="search" action="../search/index.html">
+                <label class="visually-hidden" for="site-search-input">Search guide</label>
+                <input id="site-search-input" name="q" type="search" placeholder="Search guide…" autocomplete="off">
+            </form>
+            <button
+                class="nav-toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="guide-sidebar"
+                hidden
+            >Menu</button>
+        </div>
+    </header>
+
+    <div class="nav-backdrop" id="nav-backdrop" hidden></div>
+
+    <aside class="sidebar" id="guide-sidebar" aria-label="Guide navigation">
+        <nav class="sidebar-nav" aria-label="Guide sections">
+            <p class="sidebar-nav__label" id="nav-primary-label">Primary</p>
+            <ul class="sidebar-nav__list" aria-labelledby="nav-primary-label">
+                                                        <li>
+                        <a href="../index.html">
+                            Overview                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../functionality/index.html" aria-current="page">
+                            Functionality                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../how-it-works/index.html">
+                            Architecture                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../diagrams/index.html">
+                            Diagrams                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../current-work/index.html">
+                            Current work                        </a>
+                    </li>
+                            </ul>
+
+                            <p class="sidebar-nav__label" id="nav-explore-label">Explore</p>
+                <ul class="sidebar-nav__list sidebar-nav__list--secondary" aria-labelledby="nav-explore-label">
+                                                                    <li>
+                            <a href="../data/index.html">
+                                Data &amp; storage                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../files/index.html">
+                                Files that matter                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../changes/index.html">
+                                Changes                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../why/index.html">
+                                Decisions &amp; rationale                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../handoff/index.html">
+                                AI handoff                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../reference/index.html">
+                                Reference                            </a>
+                        </li>
+                                    </ul>
+                    </nav>
+    </aside>
+
+    <div class="app-main">
+                    <p class="generated-notice" role="note">
+                Generated output — this is a static snapshot rendered from <code>.vibekb/</code>. The
+                <code>.vibekb/</code> content is the source of truth. See <a href="../reference/index.html">Reference</a> for provenance.
+            </p>
+                
+        <main id="main" class="wrap">
+            <article class="view view-func-detail">
+    <p class="breadcrumb"><a href="../functionality/index.html">← All functionality</a></p>
+
+    <header class="page-head reading-column">
+        <p class="eyebrow">Explore discovery</p>
+        <h1>View a Cookbook detail</h1>
+        <p class="lede">The full Cookbook page — stages, every Recipe with its Quality Checks and Pantry fields, related Cookbooks, and the start action.</p>
+        <div class="badge-row">
+            <span class="badge badge--ok">Implemented</span>            <span class="badge badge--ok">Verified from source</span>            <span class="badge badge--info">User-facing</span>        </div>
+    </header>
+
+    <div class="detail-grid">
+        <div class="detail-main">
+                            <div class="prose reading-column"><h3>In one sentence</h3>
+<p>Everything about one Cookbook — its stages, Recipes, Quality Checks, Pantry
+fields, category, collections, and related Cookbooks — with the button to start.</p>
+<h3>Current behavior</h3>
+<p><code>MarketplaceController::show($slug)</code> loads the Cookbook by slug (404 if absent),
+its recipes and their checks, the surfaced Collections it belongs to, its
+Pantry fields, and a set of related Cookbooks. Related selection is
+special-cased for the money and career collections (via helper files) and
+otherwise falls back to same-category peers. The start action posts to
+<code>/projects</code>.</p>
+<h3>Step-by-step flow</h3>
+<ol>
+<li>Visitor opens <code>/cookbooks/{slug}</code>.</li>
+<li><code>Cookbook::findBySlug()</code> loads it, or a 404 view renders.</li>
+<li>Recipes, per-recipe checks, stages, and Pantry fields load.</li>
+<li>Surfaced collections and related Cookbooks are computed.</li>
+<li><code>marketplace/show</code> renders; the start button posts to <strong>Start a project</strong>.</li>
+</ol>
+<h3>Implementation map</h3>
+<ul>
+<li><code>app/Controllers/MarketplaceController.php</code> — <code>show()</code>.</li>
+<li><code>app/Models/Cookbook.php</code>, <code>Recipe.php</code>, <code>CookbookStage.php</code>,</li>
+</ul>
+<p><code>PantryField.php</code>, <code>Category.php</code>, <code>Collection.php</code>.</p>
+<ul>
+<li><code>database/seeds/career_helpers.php</code>, <code>money_helpers.php</code> — related-slug logic.</li>
+</ul>
+<h3>Data used</h3>
+<ul>
+<li><strong>Reads:</strong> the Cookbook and its recipes/checks/fields/stages plus taxonomy.</li>
+<li><strong>Writes:</strong> none.</li>
+</ul>
+<h3>Dependencies</h3>
+<p>Seeded catalog; the discovery taxonomy (<code>categories-collections-taxonomy</code>).</p>
+<h3>Dependents</h3>
+<p><strong>Start a project</strong> begins from this page.</p>
+<h3>Failure cases</h3>
+<ul>
+<li>Unknown slug → 404 view.</li>
+</ul>
+<h3>Current state</h3>
+<ul>
+<li><strong>Status:</strong> implemented. <strong>Verification:</strong> verified from source</li>
+</ul>
+<p>(<code>MarketplaceController::show</code> traced end to end).</p>
+<h3>Safe to change</h3>
+<p>Layout, related-Cookbook count, and copy are safe to adjust.</p>
+<h3>Use caution</h3>
+<p>The start button only works for executable Cookbooks; the server re-checks this
+in <strong>Start a project</strong> (a preview Cookbook can never start).</p>
+<h3>Related functionality</h3>
+<ul>
+<li>Start a project</li>
+<li>Browse by category</li>
+<li>View a collection</li>
+</ul></div>
+                    </div>
+
+        <aside class="detail-rail" aria-label="Record metadata">
+            <div class="rail-card metadata-group">
+                <h2>Status</h2>
+                <dl class="rail-dl">
+                    <dt>Status</dt>
+                    <dd><span class="badge badge--ok">Implemented</span></dd>
+                                            <dt>Verification</dt>
+                        <dd><span class="badge badge--ok">Verified from source</span></dd>
+                                        <dt>Updated</dt>
+                    <dd>2026-07-16</dd>
+                    <dt>Facing</dt>
+                    <dd>User-facing</dd>
+                </dl>
+            </div>
+
+                            <div class="rail-card metadata-group">
+                    <h2>Trigger</h2>
+                    <p>A visitor opens &quot;/cookbooks/{slug}&quot;.</p>
+                </div>
+            
+            <div class="rail-card metadata-group">
+                <h2>Data read or written</h2>
+                <p><strong>Reads:</strong> <code class="chip chip--file">cookbooks</code> <code class="chip chip--file">cookbook_stages</code> <code class="chip chip--file">recipes</code> <code class="chip chip--file">recipe_checks</code> <code class="chip chip--file">pantry_fields</code> <code class="chip chip--file">sousmeow_categories</code> <code class="chip chip--file">sousmeow_collections</code></p>
+                <p><strong>Writes:</strong> <span class="muted">None.</span></p>
+                            </div>
+
+            <div class="rail-card metadata-group">
+                <h2>Files involved</h2>
+                                                        <ul class="rail-list">
+                                                    <li>
+                                <a href="../files/index.html#app%2FControllers%2FMarketplaceController.php"><code>app/Controllers/MarketplaceController.php</code></a>
+                                <span class="badge badge--info">Moderate impact</span>                            </li>
+                                                    <li>
+                                <a href="../files/index.html#app%2FModels%2FCookbook.php"><code>app/Models/Cookbook.php</code></a>
+                                <span class="badge badge--info">Moderate impact</span>                            </li>
+                                                    <li>
+                                <a href="../files/index.html#app%2FModels%2FRecipe.php"><code>app/Models/Recipe.php</code></a>
+                                <span class="badge badge--info">Moderate impact</span>                            </li>
+                                                    <li>
+                                <a href="../files/index.html#app%2FModels%2FPantryField.php"><code>app/Models/PantryField.php</code></a>
+                                <span class="badge badge--info">Moderate impact</span>                            </li>
+                                            </ul>
+                                                </div>
+
+            <div class="rail-card metadata-group">
+                <h2>Dependencies</h2>
+                                    <p><strong>Depends on:</strong> <span class="muted">None.</span></p>
+                                                    <p><strong>Depended on by:</strong> <a class="chip" href="../functionality/start-project.html">Start a project</a></p>
+                            </div>
+
+            
+            <div class="rail-card metadata-group">
+                <h2>Related rationale</h2>
+                                    <p><a class="chip" href="../why/decisions/categories-collections-taxonomy.html">Categories are the stable spine; Collections are flexible views</a></p>
+                            </div>
+        </aside>
+    </div>
+</article>
+        </main>
+
+        <footer class="site-footer">
+            <div class="wrap site-footer__inner">
+                <p><strong>VibeKB</strong> — Understand what your software is doing.</p>
+                <p class="muted">
+                    A living explanation generated from repository-owned content in <code>.vibekb/</code>.
+                    <a href="../index.html">About VibeKB</a>
+                </p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-21 · source commit c1617ab (2026-07-16) · not auto-updating</p>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script src="../assets/js/guide.js" defer></script>
+</body>
+</html>

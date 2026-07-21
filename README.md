@@ -20,19 +20,40 @@ mental model. VibeKB keeps that mental model accurate — organized around
 ## How V1 works
 
 - **Content** lives in `.vibekb/` as Markdown + small JSON manifests — readable
-  by humans, editable by AI, versioned with your code. No database.
-- **The guide** (`guide/`) is a plain PHP 8.2 app that loads that content,
-  resolves the relationships between records, validates it, and renders it.
+  by humans, editable by AI, versioned with your code. This is the **single
+  source of truth**. No database.
 - **Functionality is the primary unit.** Each functionality record explains a
   behaviour in plain language, with a step-by-step flow, the files and data
   involved, dependencies, failure cases, and its real status and verification
   state.
 
+### Two output modes over one source
+
+Both modes render the **same** `.vibekb/` content through the **same** templates:
+
+- **Mode A — Dynamic guide (`guide/`):** a plain PHP 8.2 app that reads
+  `.vibekb/` live. Runs on cPanel shared hosting or locally; works in a
+  subfolder with no rewrite rules; no build step.
+- **Mode B — Static snapshot (`/docs`):** `php tools/generate-static.php`
+  renders the guide into a self-contained static site for GitHub Pages or any
+  static host — no PHP, no CDN, no network. It is a **snapshot of the source
+  commit at generation time and does not update itself**; re-run the generator
+  to refresh it. `/docs` is generated output, clearly labelled as such; the
+  source of truth remains `.vibekb/`.
+
+Every page states its **provenance** — which source commit was analysed, when
+the analysis was generated, the verification scope, and that it is not
+auto-updating.
+
 ### The V1 views
 
 Overview · Functionality Index · Functionality Detail · How It Works ·
-Data & Storage · Files That Matter · Current AI Work · Changes · Why It Works
-This Way · AI Handoff · Reference.
+**Diagrams** · Data & Storage · Files That Matter · Current AI Work · Changes ·
+Why It Works This Way · AI Handoff · Reference · Search.
+
+**Diagrams** are first-class, source-grounded SVG records in `.vibekb/diagrams/`
+(accessible `<title>`/`<desc>`, inferred paths labelled) that cross-link to the
+functionality and warnings they explain.
 
 The included `.vibekb/` content models a **real** application — **SousMeow**, a
 guided AI-workflow platform — so every view is demonstrated with realistic,
@@ -57,6 +78,18 @@ Then open:
 `VIBEKB_DEV=1` shows full errors and a validation banner; leave it unset for
 production-style restraint.
 
+## Generate the static snapshot
+
+```bash
+php tools/validate.php           # gate: no content errors
+php tools/generate-static.php    # renders /docs from .vibekb/
+```
+
+Then open `docs/index.html` (or publish `/docs` via GitHub Pages:
+Settings → Pages → branch → `/docs`). The output uses relative links, so it
+works at the web root or under a repository subpath. It does not require PHP,
+a database, a CDN, or a network connection.
+
 ## Deploy to cPanel
 
 Plain PHP, no build step. The repository syncs into a cPanel public folder (or
@@ -73,6 +106,7 @@ deployed (it is the content). See [DEPLOYMENT.md](./DEPLOYMENT.md).
   functionality/  index.json + records/ (the primary unit)
   system/         mental-model, components, request-flow, data-flow, storage, deployment
   files/          important-files.json
+  diagrams/       index.json + records/ + assets/ (source-grounded SVGs)
   memory/         decisions, constraints, assumptions, warnings, discoveries, changes
   work/           current, handoff, sessions/
 ```

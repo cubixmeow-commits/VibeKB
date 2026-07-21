@@ -81,9 +81,7 @@ $shown = 0;
             </label>
             <div class="filters__actions">
                 <button type="submit" class="btn btn--primary">Filter</button>
-                <?php if ($anyFilter): ?>
-                    <a class="btn" href="<?= h(guide_url('functionality')) ?>">Clear</a>
-                <?php endif; ?>
+                <a class="btn" id="clear-filters" href="<?= h(guide_url('functionality')) ?>">Clear</a>
             </div>
         </div>
     </form>
@@ -100,7 +98,11 @@ $shown = 0;
             </header>
             <ul class="record-list">
                 <?php foreach ($rows as $rec): $m = $rec['meta']; $shown++; ?>
-                    <li class="record-card">
+                    <li class="record-card"
+                        data-status="<?= h((string) ($m['status'] ?? '')) ?>"
+                        data-area="<?= h((string) ($m['area'] ?? '')) ?>"
+                        data-verification="<?= h((string) ($m['verification'] ?? '')) ?>"
+                        data-facing="<?= !empty($m['user_facing']) ? 'user' : 'system' ?>">
                         <div class="record-card__row">
                             <h3 class="record-card__title">
                                 <a class="record-card__link" href="<?= h(functionality_url((string) $m['id'])) ?>">
@@ -140,7 +142,5 @@ $shown = 0;
         </section>
     <?php endforeach; ?>
 
-    <?php if ($shown === 0): ?>
-        <p class="empty-state">No functionality matches these filters. <a href="<?= h(guide_url('functionality')) ?>">Clear filters</a>.</p>
-    <?php endif; ?>
+    <p class="empty-state" id="filter-empty"<?= $shown === 0 ? '' : ' hidden' ?>>No functionality matches these filters. <a href="<?= h(guide_url('functionality')) ?>">Clear filters</a>.</p>
 </article>

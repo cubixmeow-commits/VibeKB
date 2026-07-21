@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Architecture · SousMeow — VibeKB</title>
+    <meta name="description" content="A living explanation of what SousMeow currently does, how it works, what AI is changing, and why.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Web fonts are a progressive enhancement only. The stylesheet ships a
+         full system-font fallback stack, so the guide renders correctly with no
+         external CDN — required for offline and locked-down static hosting. -->
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/guide.css">
+</head>
+<body data-mode="static">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="app-shell">
+    <header class="site-header">
+        <div class="site-header__inner">
+            <a class="brand" href="../index.html">
+                <span class="brand__mark">VibeKB</span>
+                <span class="brand__project">SousMeow</span>
+            </a>
+            <form class="site-search" role="search" action="../search/index.html">
+                <label class="visually-hidden" for="site-search-input">Search guide</label>
+                <input id="site-search-input" name="q" type="search" placeholder="Search guide…" autocomplete="off">
+            </form>
+            <button
+                class="nav-toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="guide-sidebar"
+                hidden
+            >Menu</button>
+        </div>
+    </header>
+
+    <div class="nav-backdrop" id="nav-backdrop" hidden></div>
+
+    <aside class="sidebar" id="guide-sidebar" aria-label="Guide navigation">
+        <nav class="sidebar-nav" aria-label="Guide sections">
+            <p class="sidebar-nav__label" id="nav-primary-label">Primary</p>
+            <ul class="sidebar-nav__list" aria-labelledby="nav-primary-label">
+                                                        <li>
+                        <a href="../index.html">
+                            Overview                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../functionality/index.html">
+                            Functionality                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../how-it-works/index.html" aria-current="page">
+                            Architecture                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../diagrams/index.html">
+                            Diagrams                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../current-work/index.html">
+                            Current work                        </a>
+                    </li>
+                            </ul>
+
+                            <p class="sidebar-nav__label" id="nav-explore-label">Explore</p>
+                <ul class="sidebar-nav__list sidebar-nav__list--secondary" aria-labelledby="nav-explore-label">
+                                                                    <li>
+                            <a href="../data/index.html">
+                                Data &amp; storage                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../files/index.html">
+                                Files that matter                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../changes/index.html">
+                                Changes                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../why/index.html">
+                                Decisions &amp; rationale                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../handoff/index.html">
+                                AI handoff                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../reference/index.html">
+                                Reference                            </a>
+                        </li>
+                                    </ul>
+                    </nav>
+    </aside>
+
+    <div class="app-main">
+                    <p class="generated-notice" role="note">
+                Generated output — this is a static snapshot rendered from <code>.vibekb/</code>. The
+                <code>.vibekb/</code> content is the source of truth. See <a href="../reference/index.html">Reference</a> for provenance.
+            </p>
+                
+        <main id="main" class="wrap">
+            <article class="view view-doc">
+    <header class="page-head reading-column">
+        <p class="eyebrow">Architecture</p>
+        <h1>How the software works</h1>
+        <p class="lede">A paced, system-level explanation — the mental model first, then the parts, the request lifecycle, and how it ships.</p>
+    </header>
+
+                    <section class="doc-section content-section" aria-labelledby="hiw-mental-model">
+            <header class="section-intro reading-column">
+                <h2 id="hiw-mental-model">The simplest mental model</h2>
+            </header>
+            <div class="prose reading-column"><h3>Hold this picture in your head</h3>
+<p>``<code>
+Cookbook (workflow)  →  Recipes (steps)
+      │
+Pantry (your facts)  →  PromptBuilder  →  prompt you copy
+      │                                        │
+      │                          run in YOUR AI (SousMeow never does)
+      ▼                                        ▼
+Artifact versions (immutable)  ←  paste the answer back
+      │
+Quality Checks (human)  →  Approve (all checks)  →  next Recipe
+      │
+   all approved  →  Project Kit (zip: Markdown + kit.html + README)
+</code>``</p>
+<h3>The five nouns</h3>
+<ul>
+<li><strong>Cookbook</strong> — a proven workflow. <strong>Recipe</strong> — one ordered step in it.</li>
+<li><strong>Pantry</strong> — the facts you enter once; every prompt is built from them.</li>
+<li><strong>Project</strong> — your run of a Cookbook (owns the Pantry values and Artifacts).</li>
+<li><strong>Artifact</strong> — the reviewed output of one Recipe, kept as immutable versions.</li>
+<li><strong>Project Kit</strong> — the exported deliverable.</li>
+</ul>
+<h3>The one rule that explains everything</h3>
+<p><strong>SousMeow never calls an AI.</strong> It builds the prompt, you run it in the AI you
+already pay for, and you paste the answer back. Everything else — versioning,
+human Quality Checks, the approval gate, chaining approved Artifacts into later
+prompts — exists to make that loop trustworthy.</p>
+<h3>What this means for change</h3>
+<p>Change what a Recipe <em>asks for</em> → touch the seed content and maybe the output
+contract. Change how an Artifact is <em>stored or reviewed</em> → touch the Runner,
+<code>Artifact</code>, and the schema together. Change the <em>look</em> → touch a view. Knowing
+which case you are in is most of the work.</p></div>
+        </section>
+                    <section class="doc-section content-section" aria-labelledby="hiw-components">
+            <header class="section-intro reading-column">
+                <h2 id="hiw-components">Major components</h2>
+            </header>
+            <div class="prose reading-column"><h3>The parts and their jobs</h3>
+<div class="table-wrap"><table>
+<tr>
+<th>Component</th>
+<th>Responsibility</th>
+</tr>
+<tr>
+<td><code>public/index.php</code></td>
+<td>Front controller: security headers, CSP, CSRF gate, dispatch</td>
+</tr>
+<tr>
+<td><code>app/Core/Router.php</code></td>
+<td>Route table and dispatch (<code>app/routes.php</code> defines routes)</td>
+</tr>
+<tr>
+<td><code>app/Core/</code></td>
+<td>Framework: <code>Auth</code>, <code>Csrf</code>, <code>Database</code>, <code>Config</code>, <code>Env</code>, <code>Session</code>, <code>Flash</code>, <code>RateLimiter</code>, <code>Mailer</code>, <code>View</code></td>
+</tr>
+<tr>
+<td><code>app/Controllers/</code></td>
+<td>One class per area (Marketing, Marketplace, Category, Collection, Auth, Account, Kitchen, Project, Runner, Export, Admin, Legal, Philosophy)</td>
+</tr>
+<tr>
+<td><code>app/Models/</code></td>
+<td>Table access: <code>Cookbook</code>, <code>Recipe</code>, <code>PantryField</code>, <code>Project</code>, <code>Artifact</code>, <code>Category</code>, <code>Collection</code>, <code>Export</code>, <code>User</code>, <code>CookbookStage</code>, <code>PasswordReset</code></td>
+</tr>
+<tr>
+<td><code>app/Services/</code></td>
+<td>Logic: <code>PromptBuilder</code>, <code>ResponseParser</code>, <code>OutputContract</code>, <code>ProjectKit</code>, <code>SafeText</code>, <code>CollectionResolver</code>, <code>SiteStats</code>, <code>Simulation*</code>, <code>Accent</code>, mailers</td>
+</tr>
+<tr>
+<td><code>app/Views/</code></td>
+<td>Server-rendered PHP templates under a shared <code>layout/app.php</code></td>
+</tr>
+<tr>
+<td><code>database/</code>, <code>scripts/seed.php</code></td>
+<td>Two schema dialects, versioned seeds, the CLI seeder</td>
+</tr>
+</table></div>
+<h3>Where behaviour lives</h3>
+<ul>
+<li><strong>Prompt assembly</strong> is only in <code>PromptBuilder</code>.</li>
+<li><strong>Review parsing</strong> is only in <code>ResponseParser</code> / <code>OutputContract</code>.</li>
+<li><strong>SQL</strong> lives in Models; <strong>the connection</strong> only in <code>Core/Database</code>.</li>
+<li><strong>CSRF</strong> is one gate in the front controller; <strong>auth</strong> is <code>Core/Auth</code>.</li>
+<li><strong>Escaping</strong> of untrusted (pasted) content is <code>Services/SafeText</code>.</li>
+</ul>
+<p>Keeping these boundaries is what keeps the read and write paths aligned; when
+they blur, the <code>read-write-path-coupling</code> warning becomes a real bug.</p></div>
+        </section>
+                    <section class="doc-section content-section" aria-labelledby="hiw-request-flow">
+            <header class="section-intro reading-column">
+                <h2 id="hiw-request-flow">The request lifecycle</h2>
+            </header>
+            <div class="prose reading-column"><h3>One request, start to finish</h3>
+<ol>
+<li>Apache (<code>public/.htaccess</code>) or the dev server sends the request to</li>
+</ol>
+<p><code>public/index.php</code>; real asset files are served directly.</p>
+<ol>
+<li>Security headers and the CSP are sent.</li>
+<li><code>app/bootstrap.php</code> loads config and the autoloader; an exception handler is</li>
+</ol>
+<p>installed (detailed errors only in development).</p>
+<ol>
+<li><code>app.base_path</code> is stripped so the app works from a subdirectory.</li>
+<li><strong>Every POST</strong> passes <code>Csrf::verify()</code> before routing.</li>
+<li><code>Router::dispatch()</code> matches the method+path and calls the controller.</li>
+<li>The controller reads input, calls Models/Services, and either renders a</li>
+</ol>
+<p><code>View</code> or issues a redirect (post/redirect/get for writes).</p>
+<h3>Authentication in the flow</h3>
+<p>Controllers call <code>Auth::requireLogin()</code> / <code>requireVerified()</code> / <code>requireAdmin()</code>
+as needed. Write actions in the Runner and Export require a verified account.
+Ownership is enforced at the data layer (<code>findForUser</code>), and unknown ids return
+404 without revealing other users&#039; data.</p>
+<h3>Errors</h3>
+<ul>
+<li>Failed CSRF → 419. Unknown route → 404. Wrong method → 405.</li>
+<li>Uncaught exceptions are logged; production shows a generic 500 view, dev shows</li>
+</ul>
+<p>the trace.</p></div>
+        </section>
+                    <section class="doc-section content-section" aria-labelledby="hiw-deployment">
+            <header class="section-intro reading-column">
+                <h2 id="hiw-deployment">Deployment</h2>
+            </header>
+            <div class="prose reading-column"><h3>How it ships</h3>
+<p>SousMeow is plain PHP 8 plus MySQL or SQLite — no Node, no Composer, no
+workers. The <code>projects/sousmeow</code> folder is uploaded and the domain document root
+points at <code>sousmeow/public</code>. <code>app/</code>, <code>config/</code>, <code>database/</code>, <code>scripts/</code>, and
+<code>storage/</code> must sit <strong>above</strong> the document root. <code>public/.htaccess</code> routes clean
+URLs through <code>index.php</code> (mod_rewrite).</p>
+<h3>Configure</h3>
+<p>Copy <code>config/config.example.php</code> to <code>config/config.php</code> (gitignored) and set:
+<code>app.env = &#039;production&#039;</code>, <code>app.base_url</code>, <code>app.base_path</code> (if under a
+subdirectory), <code>session.secure = true</code>, and the DB driver (SQLite file in
+<code>storage/</code>, or MySQL from hPanel). <code>.env</code> can override sensitive values;
+environment variables take precedence.</p>
+<h3>Seed</h3>
+<p><code>php scripts/seed.php --admin-email you@domain</code> applies the schema, syncs the
+catalog (upsert by slug — safe to re-run after deploys), and prints the admin&#039;s
+temporary password once. <code>--status</code> reports catalog health; <code>--fresh</code> wipes all
+data; <code>--reset-password</code> rotates a password. The script is CLI-only (404 over
+HTTP).</p>
+<h3>Subfolder-aware</h3>
+<p>The front controller strips <code>app.base_path</code>, so the app runs at the domain root
+or under a subdirectory (e.g. <code>/iain/projects/sousmeow/public</code>). Email links use
+<code>APP_URL</code> + <code>APP_BASE_PATH</code>; a mismatch causes &quot;page not found&quot; links
+(<code>scripts/print-url-config.php</code> diagnoses it).</p>
+<h3>The constraints behind this</h3>
+<p>Everything here follows from <code>php8-shared-hosting</code>, <code>public-root-subfolder</code>,
+<code>sqlite-and-mysql</code>, and <code>cli-only-admin</code>. Requires PHP 8.1+ with
+<code>pdo_sqlite</code>/<code>pdo_mysql</code>, <code>mbstring</code>, and <code>zip</code>.</p></div>
+        </section>
+    
+    <nav class="cross-links" aria-label="Related views">
+        <a class="btn" href="../data/index.html">Data &amp; storage →</a>
+        <a class="btn" href="../files/index.html">Files that matter →</a>
+    </nav>
+</article>
+        </main>
+
+        <footer class="site-footer">
+            <div class="wrap site-footer__inner">
+                <p><strong>VibeKB</strong> — Understand what your software is doing.</p>
+                <p class="muted">
+                    A living explanation generated from repository-owned content in <code>.vibekb/</code>.
+                    <a href="../index.html">About VibeKB</a>
+                </p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-21 · source commit c1617ab (2026-07-16) · not auto-updating</p>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script src="../assets/js/guide.js" defer></script>
+</body>
+</html>

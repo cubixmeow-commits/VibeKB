@@ -69,6 +69,21 @@ Add only meaningful records:
 - a `warning` or `discovery` if you learned something risky.
 Do not log every edit.
 
+## 7a. Update diagrams if the picture changed
+
+If a behaviour change alters something a diagram shows (a flow, a storage map,
+a risk), update the affected `.vibekb/diagrams/` record **and its SVG**. Keep
+the SVG accessible (`<title>` + `<desc>`) and keep inferred/unverified paths
+visibly labelled. Diagrams must never claim behaviour not traced to source; set
+the diagram's `verification` and `last_verified` honestly. Do not add diagrams
+you cannot ground in source.
+
+## 7b. Refresh provenance
+
+If you re-verified against source, update the `manifest.json` `provenance` block
+(`source_commit`, `last_verified`, `verification_scope`). Never imply the guide
+auto-updates.
+
 ## 8. Update the handoff
 
 Update `.vibekb/work/handoff.md`: current functionality state, completed work,
@@ -76,16 +91,32 @@ verification done, what's still open, active warnings, and the exact next
 recommended action. Clear or update `.vibekb/work/current.md` when the work is
 done.
 
+## 8a. Regenerate the static snapshot (if `/docs` is published)
+
+If this repository publishes the static snapshot, regenerate it so the
+published guide reflects the model change:
+
+```bash
+php tools/generate-static.php   # rebuilds /docs from .vibekb/
+```
+
+`/docs` is **generated output**, not the source of truth. The generator refuses
+to build if the model has validation errors.
+
 ## After every change: run the checks
 
 ```bash
 # Syntax
-find guide -name '*.php' -print0 | xargs -0 -n1 php -l
+find guide tools -name '*.php' -print0 | xargs -0 -n1 php -l
+
+# Headless content validation (CI-friendly; exits non-zero on errors)
+php tools/validate.php
 
 # Load the guide and read the Reference view's validation section
 VIBEKB_DEV=1 php -S 127.0.0.1:8080 -t .
 # open http://127.0.0.1:8080/guide/?view=reference
 ```
 
-The Reference view must show no validation errors. Every relationship you added
-must resolve (no ⚠ broken chips).
+`php tools/validate.php` and the Reference view must show no validation errors.
+Every relationship you added must resolve (no ⚠ broken chips), every diagram SVG
+must be valid XML with a `<title>`/`<desc>`, and every total must state its unit.

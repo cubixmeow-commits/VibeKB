@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" role="img" aria-labelledby="sm-title sm-desc">
+  <title id="sm-title">Storage map — one PDO path, two dialects</title>
+  <desc id="sm-desc">SousMeow uses a single PDO data path that targets SQLite in development and MySQL in production. The main tables are cookbooks, recipes, quality checks, pantry entries, artifacts and their immutable versions, and projects. A legacy cookbooks.category column exists but must never be read.</desc>
+  <defs>
+    <style>
+      .t { font-family:"Figtree","Segoe UI",sans-serif; fill:#1a2421; }
+      .db { fill:#d5ebe5; stroke:#0c7c6c; stroke-width:1.5; }
+      .tbl { fill:#fffcf7; stroke:#b9c6c0; stroke-width:1.3; }
+      .legacy { fill:#f6dede; stroke:#9e2424; stroke-width:1.3; stroke-dasharray:5 4; }
+      .lbl { font-size:13px; font-weight:600; }
+      .sm { font-size:11px; fill:#4f5c56; }
+      .title { font-size:20px; font-weight:800; font-family:"Outfit","Figtree",sans-serif; }
+    </style>
+  </defs>
+  <rect width="900" height="420" fill="#f4f0e8"/>
+  <text class="t title" x="28" y="38">Storage map</text>
+  <text class="t sm" x="28" y="60">One PDO path, chosen by environment. Schema kept compatible across both dialects.</text>
+
+  <rect class="t db" x="30" y="95" width="180" height="80" rx="12"/>
+  <text class="t lbl" x="120" y="128" text-anchor="middle">Single PDO path</text>
+  <text class="t sm" x="120" y="148" text-anchor="middle">SQLite (dev)</text>
+  <text class="t sm" x="120" y="164" text-anchor="middle">MySQL (prod)</text>
+
+  <g>
+    <rect class="t tbl" x="270" y="90" width="150" height="46" rx="8"/>
+    <text class="t lbl" x="345" y="112" text-anchor="middle">cookbooks</text>
+    <text class="t sm" x="345" y="128" text-anchor="middle">+ recipes</text>
+
+    <rect class="t tbl" x="440" y="90" width="150" height="46" rx="8"/>
+    <text class="t lbl" x="515" y="112" text-anchor="middle">quality_checks</text>
+    <text class="t sm" x="515" y="128" text-anchor="middle">per recipe</text>
+
+    <rect class="t tbl" x="610" y="90" width="160" height="46" rx="8"/>
+    <text class="t lbl" x="690" y="112" text-anchor="middle">pantry_entries</text>
+    <text class="t sm" x="690" y="128" text-anchor="middle">per project</text>
+
+    <rect class="t tbl" x="270" y="160" width="150" height="46" rx="8"/>
+    <text class="t lbl" x="345" y="182" text-anchor="middle">artifacts</text>
+    <text class="t sm" x="345" y="198" text-anchor="middle">+ versions</text>
+
+    <rect class="t tbl" x="440" y="160" width="150" height="46" rx="8"/>
+    <text class="t lbl" x="515" y="182" text-anchor="middle">projects</text>
+    <text class="t sm" x="515" y="198" text-anchor="middle">user-owned</text>
+
+    <rect class="t tbl" x="610" y="160" width="160" height="46" rx="8"/>
+    <text class="t lbl" x="690" y="182" text-anchor="middle">users</text>
+    <text class="t sm" x="690" y="198" text-anchor="middle">auth</text>
+  </g>
+
+  <line x1="210" y1="135" x2="268" y2="115" stroke="#4f5c56" stroke-width="1.4"/>
+  <line x1="210" y1="145" x2="268" y2="183" stroke="#4f5c56" stroke-width="1.4"/>
+
+  <rect class="t legacy" x="270" y="255" width="500" height="60" rx="10"/>
+  <text class="t lbl" x="520" y="280" text-anchor="middle" fill="#9e2424">Legacy: cookbooks.category — never read</text>
+  <text class="t sm" x="520" y="300" text-anchor="middle" fill="#9e2424">Superseded by the categories/collections taxonomy. Reading it reintroduces a resolved bug.</text>
+
+  <text class="t sm" x="28" y="388">Immutable artifact versions: approving creates a new version rather than editing in place.</text>
+</svg>

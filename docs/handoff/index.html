@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AI handoff · SousMeow — VibeKB</title>
+    <meta name="description" content="A living explanation of what SousMeow currently does, how it works, what AI is changing, and why.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Web fonts are a progressive enhancement only. The stylesheet ships a
+         full system-font fallback stack, so the guide renders correctly with no
+         external CDN — required for offline and locked-down static hosting. -->
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/guide.css">
+</head>
+<body data-mode="static">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="app-shell">
+    <header class="site-header">
+        <div class="site-header__inner">
+            <a class="brand" href="../index.html">
+                <span class="brand__mark">VibeKB</span>
+                <span class="brand__project">SousMeow</span>
+            </a>
+            <form class="site-search" role="search" action="../search/index.html">
+                <label class="visually-hidden" for="site-search-input">Search guide</label>
+                <input id="site-search-input" name="q" type="search" placeholder="Search guide…" autocomplete="off">
+            </form>
+            <button
+                class="nav-toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="guide-sidebar"
+                hidden
+            >Menu</button>
+        </div>
+    </header>
+
+    <div class="nav-backdrop" id="nav-backdrop" hidden></div>
+
+    <aside class="sidebar" id="guide-sidebar" aria-label="Guide navigation">
+        <nav class="sidebar-nav" aria-label="Guide sections">
+            <p class="sidebar-nav__label" id="nav-primary-label">Primary</p>
+            <ul class="sidebar-nav__list" aria-labelledby="nav-primary-label">
+                                                        <li>
+                        <a href="../index.html">
+                            Overview                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../functionality/index.html">
+                            Functionality                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../how-it-works/index.html">
+                            Architecture                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../diagrams/index.html">
+                            Diagrams                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../current-work/index.html">
+                            Current work                        </a>
+                    </li>
+                            </ul>
+
+                            <p class="sidebar-nav__label" id="nav-explore-label">Explore</p>
+                <ul class="sidebar-nav__list sidebar-nav__list--secondary" aria-labelledby="nav-explore-label">
+                                                                    <li>
+                            <a href="../data/index.html">
+                                Data &amp; storage                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../files/index.html">
+                                Files that matter                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../changes/index.html">
+                                Changes                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../why/index.html">
+                                Decisions &amp; rationale                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../handoff/index.html" aria-current="page">
+                                AI handoff                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../reference/index.html">
+                                Reference                            </a>
+                        </li>
+                                    </ul>
+                    </nav>
+    </aside>
+
+    <div class="app-main">
+                    <p class="generated-notice" role="note">
+                Generated output — this is a static snapshot rendered from <code>.vibekb/</code>. The
+                <code>.vibekb/</code> content is the source of truth. See <a href="../reference/index.html">Reference</a> for provenance.
+            </p>
+                
+        <main id="main" class="wrap">
+            <article class="view view-doc">
+    <header class="page-head reading-column">
+        <p class="eyebrow">AI handoff</p>
+        <h1>Start here before you change anything</h1>
+        <p class="lede">Everything the next human or AI session needs to avoid reconstructing the project incorrectly.</p>
+    </header>
+
+            <section class="doc-section callout callout--work">
+            <div class="badge-row">
+                                    <span class="badge badge--info">Verification: mixed</span>                                <span class="muted">Updated 2026-07-21</span>
+            </div>
+            <div class="prose reading-column"><h3>What the software (VibeKB) now does</h3>
+<p>VibeKB renders one <code>.vibekb/</code> source through one template set in two modes: the
+dynamic PHP guide (Mode A) and a static <code>/docs</code> snapshot (Mode B, via
+<code>tools/generate-static.php</code>) for GitHub Pages. Diagrams are first-class
+source-grounded records; every rendering shows objective provenance and never
+implies auto-freshness; counts distinguish functional areas from functionality
+records; search and functionality filters run client-side with no jQuery and no
+required CDN. The canonical example is still <strong>SousMeow</strong>, updated only to
+demonstrate the new capabilities.</p>
+<h3>What was integrated from the StopPR field test</h3>
+<p>Static <code>/docs</code> output; a maintainable PHP generator (StopPR had none); a
+<code>.vibekb/diagrams/</code> records model with a small accurate SousMeow SVG set; a
+shared provenance component; client-side search + filters in vanilla JS; a
+Diagrams nav item. See <code>docs/STOPPR_INTEGRATION_AUDIT.md</code> for the full
+decision record and what was deliberately excluded.</p>
+<h3>SousMeow functionality state (unchanged this pass)</h3>
+<ul>
+<li><strong>Verified from source:</strong> discovery, auth, the full Runner</li>
+</ul>
+<p>(run-recipe → build-prompt → paste-response → review-quality-checks →
+  approve-and-version), export-project-kit, admin overview, routing/security,
+  database access.</p>
+<ul>
+<li><strong>Partial:</strong> <code>reset-password</code> (SMTP-dependent web flow); <code>demo-simulation</code></li>
+</ul>
+<p>(paste-example verified; bulk inferred).</p>
+<ul>
+<li><strong>Inferred from source:</strong> <code>manage-account</code>, <code>seed-and-sync-content</code>, the</li>
+</ul>
+<p>Router, and some Model queries. No verification state was upgraded for the
+  diagrams — inferred paths are labelled in them.</p>
+<h3>Provenance note (important)</h3>
+<p>The SousMeow model was derived read-only and is not bundled into VibeKB. It can
+go stale — re-verify against the SousMeow source
+(<code>cubixmeow-commits/dev-portfolio-v2</code>, <code>projects/sousmeow</code>) before changing any
+functionality claim. The <code>manifest.json</code> <code>provenance</code> block records the analysed
+commit and that the output does not auto-update.</p>
+<h3>Verification completed this pass</h3>
+<ul>
+<li><code>php -l</code> clean across <code>guide/</code> and <code>tools/</code>.</li>
+<li><code>php tools/validate.php</code> → 0 errors, 0 warnings (25 records, 9 areas, 5</li>
+</ul>
+<p>diagrams).</p>
+<ul>
+<li>Dynamic guide: every view returns 200; Reference shows no validation errors.</li>
+<li>Static <code>/docs</code>: 57 pages; 1544 internal links resolve (0 broken, 0 absolute</li>
+</ul>
+<p>filesystem-path leaks); 97 search entries resolve; pages serve 200 under a
+  repository subpath; SVGs are valid XML with <code>&lt;title&gt;</code>/<code>&lt;desc&gt;</code>.</p>
+<h3>Active warnings (SousMeow)</h3>
+<ul>
+<li><code>read-write-path-coupling</code>, <code>pasted-response-is-untrusted</code>,</li>
+</ul>
+<p><code>password-reset-depends-on-smtp</code>, <code>legacy-category-column</code>. The
+  <code>risk-uncertainty-map</code> diagram summarises these.</p>
+<h3>Exact next recommended action</h3>
+<p>Trace <code>app/Controllers/AccountController.php</code>, <code>scripts/seed.php</code>, and the
+<code>Simulation*</code> services in the SousMeow source; promote <code>manage-account</code>,
+<code>seed-and-sync-content</code>, and <code>demo-simulation</code> from inferred to verified (or
+correct them) and update the <code>request-flow</code> diagram&#039;s Router step. Then run
+<code>php tools/validate.php</code> and <code>php tools/generate-static.php</code> to refresh <code>/docs</code>.</p></div>
+        </section>
+    
+            <section class="doc-section">
+            <h2>Recent work sessions</h2>
+            <ul class="why-list">
+                                    <li class="why-item">
+                        <div class="why-item__head">
+                            <h3>Migrate the VibeKB example to SousMeow</h3>
+                            <div class="badge-row">
+                                <span class="badge badge--ok">Verified from source</span>                                <span class="muted">2026-07-20</span>
+                            </div>
+                        </div>
+                        <p>Replaced the fictional SaaS Idea Manager sample with a source-grounded VibeKB model of the real SousMeow application.</p>
+                                                    <p class="why-item__links"><a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a> <a class="chip" href="../functionality/build-prompt.html">Build the prompt</a> <a class="chip" href="../functionality/paste-response.html">Paste a response</a> <a class="chip" href="../functionality/review-quality-checks.html">Review Quality Checks</a> <a class="chip" href="../functionality/approve-and-version.html">Approve &amp; version an artifact</a> <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a></p>
+                                            </li>
+                            </ul>
+        </section>
+    
+    <nav class="cross-links" aria-label="Related views">
+        <a class="btn" href="../current-work/index.html">Current AI work →</a>
+        <a class="btn" href="../index.html">Overview →</a>
+    </nav>
+</article>
+        </main>
+
+        <footer class="site-footer">
+            <div class="wrap site-footer__inner">
+                <p><strong>VibeKB</strong> — Understand what your software is doing.</p>
+                <p class="muted">
+                    A living explanation generated from repository-owned content in <code>.vibekb/</code>.
+                    <a href="../index.html">About VibeKB</a>
+                </p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-21 · source commit c1617ab (2026-07-16) · not auto-updating</p>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script src="../assets/js/guide.js" defer></script>
+</body>
+</html>
