@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 470" role="img" aria-labelledby="ao-title ao-desc">
+  <title id="ao-title">SousMeow at a glance</title>
+  <desc id="ao-desc">A user's browser talks to a single PHP front controller, which routes through an auth and CSRF gate to controllers backed by one PDO data path over SQLite in development or MySQL in production. SousMeow never calls an external AI service.</desc>
+  <defs>
+    <marker id="ao-arrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#4f5c56"/>
+    </marker>
+    <style>
+      .t { font-family: "Figtree", "Segoe UI", sans-serif; fill: #1a2421; }
+      .lbl { font-size: 15px; font-weight: 600; }
+      .sm { font-size: 12px; fill: #4f5c56; }
+      .box { stroke: #b9c6c0; stroke-width: 1.5; rx: 10; }
+      .user { fill: #0c7c6c; }
+      .userT { fill: #ffffff; font-weight: 700; }
+      .php { fill: #d5ebe5; }
+      .gate { fill: #f6ead4; stroke: #7a4210; }
+      .ctrl { fill: #e7f4f0; }
+      .store { fill: #fffcf7; }
+      .noai { fill: #f6dede; stroke: #9e2424; stroke-dasharray: 6 4; }
+      .arrow { stroke: #4f5c56; stroke-width: 1.6; fill: none; marker-end: url(#ao-arrow); }
+      .title { font-size: 21px; font-weight: 800; font-family: "Outfit","Figtree",sans-serif; }
+    </style>
+  </defs>
+  <rect width="900" height="470" fill="#f4f0e8"/>
+  <text class="t title" x="28" y="40">SousMeow at a glance</text>
+  <text class="t sm" x="28" y="62">Plain PHP 8 app: package proven AI workflows as Cookbooks, run them in your own AI, keep the results.</text>
+
+  <rect class="box user" x="34" y="190" width="120" height="60" rx="10"/>
+  <text class="t userT lbl" x="94" y="216" text-anchor="middle">User</text>
+  <text class="t userT sm" x="94" y="236" text-anchor="middle" fill="#eafaf5">Browser</text>
+
+  <line class="arrow" x1="154" y1="220" x2="205" y2="220"/>
+
+  <rect class="box php" x="210" y="120" width="200" height="210" rx="10"/>
+  <text class="t lbl" x="310" y="146" text-anchor="middle">public/index.php</text>
+  <text class="t sm" x="310" y="165" text-anchor="middle">Front controller</text>
+  <rect class="box gate" x="230" y="182" width="160" height="46" rx="8"/>
+  <text class="t lbl" x="310" y="203" text-anchor="middle">Auth + CSRF gate</text>
+  <text class="t sm" x="310" y="220" text-anchor="middle">Router → Controller</text>
+  <rect class="box ctrl" x="230" y="248" width="160" height="60" rx="8"/>
+  <text class="t sm" x="310" y="270" text-anchor="middle">Discovery · Runner</text>
+  <text class="t sm" x="310" y="288" text-anchor="middle">Export · Admin (CLI)</text>
+
+  <line class="arrow" x1="410" y1="220" x2="470" y2="220"/>
+
+  <rect class="box store" x="475" y="150" width="180" height="70" rx="10"/>
+  <text class="t lbl" x="565" y="182" text-anchor="middle">Single PDO path</text>
+  <text class="t sm" x="565" y="202" text-anchor="middle">SQLite (dev) · MySQL (prod)</text>
+
+  <rect class="box store" x="475" y="238" width="180" height="66" rx="10"/>
+  <text class="t sm" x="565" y="264" text-anchor="middle">Cookbooks · Recipes</text>
+  <text class="t sm" x="565" y="282" text-anchor="middle">Pantry · Artifacts · Projects</text>
+
+  <rect class="box noai" x="690" y="190" width="180" height="70" rx="10"/>
+  <text class="t lbl" x="780" y="218" text-anchor="middle" fill="#9e2424">No AI calls</text>
+  <text class="t sm" x="780" y="238" text-anchor="middle" fill="#9e2424">User runs prompts</text>
+  <text class="t sm" x="780" y="254" text-anchor="middle" fill="#9e2424">in their own AI</text>
+  <line class="arrow" x1="655" y1="200" x2="688" y2="210"/>
+
+  <text class="t sm" x="28" y="440">Legend: dashed red = deliberate non-goal (SousMeow never contacts an AI provider). Amber = security gate.</text>
+</svg>
