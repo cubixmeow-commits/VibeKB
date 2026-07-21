@@ -110,79 +110,100 @@
     </header>
 
             <section class="work-summary callout callout--work">
-            <h2>Integrate reusable lessons from the StopPR field test</h2>
+            <h2>Build Explainable Diagrams into VibeKB V1</h2>
             <div class="badge-row">
                 <span class="badge badge--info">completed</span>                                    <span class="badge badge--ok">Verified manually</span>                            </div>
             <dl class="rail-dl work-meta">
-                <dt>Objective</dt><dd>Upgrade VibeKB&#039;s product, templates, initialization workflow, rendered guide, and canonical example to reflect the strongest lessons from the StopPR deployment while keeping the promise &quot;Understand what your software is doing.&quot;</dd>                                                    <dt>Expected files</dt><dd><code class="chip chip--file">docs/STOPPR_INTEGRATION_AUDIT.md</code> <code class="chip chip--file">guide/lib/helpers.php</code> <code class="chip chip--file">guide/lib/Content.php</code> <code class="chip chip--file">guide/lib/Provenance.php</code> <code class="chip chip--file">guide/lib/UrlStrategy.php</code> <code class="chip chip--file">guide/templates/*.php</code> <code class="chip chip--file">guide/assets/js/guide.js</code> <code class="chip chip--file">tools/generate-static.php</code> <code class="chip chip--file">tools/validate.php</code> <code class="chip chip--file">.vibekb/diagrams/*</code> <code class="chip chip--file">.vibekb/manifest.json</code> <code class="chip chip--file">prompts/INTEGRATE_VIBEKB.md</code> <code class="chip chip--file">SCHEMA.md, INITIALIZE.md, MAINTENANCE.md, README.md, PRODUCT.md, DEPLOYMENT.md, AGENTS.md, CLAUDE.md</code></dd>
-                                <dt>Data impact</dt><dd>None to SousMeow or StopPR (both read-only). VibeKB product + content only.</dd>                <dt>Risks</dt><dd>Turning VibeKB into a generic documentation generator or static-site theme (explicitly out of bounds). Importing StopPR application content (Flutter/Firebase/subscription specifics) into the canonical example. Two divergent renderers (PHP guide vs static docs) drifting apart. Overstating freshness — implying the static snapshot auto-updates.</dd>            </dl>
+                <dt>Objective</dt><dd>Add a repository-owned topology model (nodes, edges, edge mechanisms, per-node/edge files with reasons, repository locations, verification) that projects the existing living software model into diagrams that teach how the software works before any click, rendered identically in the dynamic guide and the static snapshot, without JavaScript.</dd>                                                    <dt>Expected files</dt><dd><code class="chip chip--file">guide/lib/helpers.php</code> <code class="chip chip--file">guide/lib/Content.php</code> <code class="chip chip--file">guide/lib/search.php</code> <code class="chip chip--file">guide/templates/diagrams.php</code> <code class="chip chip--file">guide/templates/functionality-detail.php</code> <code class="chip chip--file">guide/assets/css/guide.css</code> <code class="chip chip--file">guide/assets/js/guide.js</code> <code class="chip chip--file">tools/validate.php</code> <code class="chip chip--file">tools/generate-static.php</code> <code class="chip chip--file">.vibekb/diagrams/topology/*.json</code> <code class="chip chip--file">.vibekb/diagrams/records/*.md</code> <code class="chip chip--file">.vibekb/diagrams/assets/*.svg</code> <code class="chip chip--file">SCHEMA.md, PRODUCT.md, INITIALIZE.md, MAINTENANCE.md, prompts/INTEGRATE_VIBEKB.md</code></dd>
+                                <dt>Data impact</dt><dd>None to SousMeow (analysed read-only, never modified). VibeKB product code + repository-owned content only.</dd>                <dt>Risks</dt><dd>Turning VibeKB into a code browser / graph editor / IDE (explicitly out of bounds). Drawing edges without a concrete, stateable mechanism (coincidence edges). Marking an inferred relationship as verified. Fabricating source line numbers or claiming an inferred location is verified. The dynamic guide and static snapshot drifting apart (must share one template). Front-matter fragility if topology were forced into scalar/list front matter.</dd>            </dl>
         </section>
 
         <section class="doc-section content-section">
             <div class="prose reading-column"><h3>What the user asked for</h3>
-<p>Analyze the canonical VibeKB repository and the real-world VibeKB-stoppr
-field test, then integrate the reusable product, interface, documentation,
-generation, provenance, and visualization improvements from StopPR back into
-the main VibeKB product. Audit first; copy nothing blindly. Preserve the
-product definition, the SousMeow canonical example, PHP 8.2 shared-hosting
-compatibility, subfolder deployment, and all truth/provenance rules.</p>
-<h3>Current architecture (before)</h3>
+<p>Build <strong>Explainable Diagrams</strong> as a real V1 feature. A diagram is a visual
+projection of the existing living software model. It must teach at a glance
+(labelled nodes + mechanism-labelled edges reading like a sentence) and reward
+selection (per-node and per-edge explanations: purpose, repository location,
+relevant files with reasons, verification, uncertainty, and an external source
+link as the terminal &quot;show me the implementation&quot;). Everything must justify its
+own existence; every click answers the reader&#039;s next question. The experience
+must work without JavaScript and render identically in the dynamic guide and the
+static <code>/docs</code> snapshot.</p>
+<h3>Current behaviour (before)</h3>
 <ul>
-<li><code>.vibekb/</code> is the repository-owned source of truth (functionality-first).</li>
-<li>A PHP 8.2 guide (<code>guide/</code>) renders <code>.vibekb/</code> dynamically via query-string</li>
+<li><code>.vibekb/diagrams/</code> holds diagram records (Markdown + front matter) and</li>
 </ul>
-<p>routing. No static output. No diagrams. No search. jQuery + Google Fonts
-  loaded from external CDNs. Overview mislabels the functionality-record total
-  as &quot;areas&quot; and shows an undefined &quot;Last meaningful update&quot;.</p>
-<h3>Proposed architecture (after)</h3>
+<p>repository-owned SVGs with accessible <code>&lt;title&gt;</code>/<code>&lt;desc&gt;</code>.</p>
 <ul>
-<li>Two output modes over the <strong>same</strong> <code>.vibekb/</code> source and the <strong>same</strong></li>
+<li><code>Content.php</code> loads records, inlines the SVG, and resolves back-links to</li>
 </ul>
-<p>templates:</p>
+<p>functionality, warnings, and other diagrams. <code>diagrams.php</code> renders the SVG
+  plus a prose caption and relationship rails.</p>
 <ul>
-<li><strong>Mode A — Dynamic guide:</strong> the existing PHP renderer (cPanel / local PHP).</li>
-<li><strong>Mode B — Static snapshot:</strong> <code>tools/generate-static.php</code> renders the same</li>
+<li>A diagram is a picture plus narrative. There is <strong>no structured topology</strong> — no</li>
 </ul>
-<p>templates through a static URL strategy into <code>/docs</code> for GitHub Pages and
-    any static host. Clearly labelled as a source-commit snapshot; no implied
-    auto-freshness.</p>
+<p>node/edge records, no edge mechanisms, no per-file reasons, no source links,
+  and no way to select a node or edge and learn about it.</p>
+<h3>Proposed behaviour (after)</h3>
 <ul>
-<li>A shared <strong>provenance</strong> component (source repo/branch/commit, generation</li>
+<li>A new optional <strong>topology</strong> file per diagram:</li>
 </ul>
-<p>time, mode, verification scope, freshness disclaimer) on both modes.</p>
+<p><code>.vibekb/diagrams/topology/&lt;diagram-id&gt;.json</code> (referenced by the record&#039;s
+  <code>topology:</code> field). Simple, human-readable, AI-editable JSON — no YAML, no
+  database, no build step. Contains <code>version</code>, <code>nodes[]</code>, <code>edges[]</code>.</p>
 <ul>
-<li>A first-class <strong>diagrams</strong> model in <code>.vibekb/diagrams/</code> (records + repo-owned</li>
+<li>A single <strong>controlled edge-mechanism vocabulary</strong> and a **file-role</li>
 </ul>
-<p>SVGs with accessible <code>&lt;title&gt;</code>/<code>&lt;desc&gt;</code>), rendered in both modes and
-  cross-linked to functionality and warnings.</p>
+<p>vocabulary**, defined once in <code>guide/lib/helpers.php</code> and used by loading,
+  validation, and documentation. Vague mechanisms (relates-to, works-with,
+  interacts-with, associated-with, connected-to) are rejected by the validator.</p>
 <ul>
-<li>Consistent count vocabulary: <strong>functional areas</strong> vs <strong>functionality records</strong></li>
+<li>Two edge verification states in V1: verified (solid line) and inferred (dashed</li>
 </ul>
-<p>vs <strong>status counts</strong>, with validation against contradictory totals.</p>
+<p>line). Both must pass the explainability gate; verification communicates how
+  well the mechanism is grounded, not whether an unexplained edge is allowed.</p>
 <ul>
-<li>Client-side search (vanilla JS over a generated <code>search.json</code>) and</li>
+<li><code>Content.php</code> loads and normalises topology, resolves node/edge functionality,</li>
 </ul>
-<p>client-side functionality filters; no external services, no jQuery, no
-  required CDN.</p>
+<p>warnings, and files (reusing <code>important-files.json</code> metadata), and generates
+  immutable GitHub source links from manifest provenance (commit-pinned; no
+  fabricated line numbers).</p>
+<ul>
+<li><code>diagrams.php</code> renders complete semantic node/edge explanation sections with</li>
+</ul>
+<p>stable anchors (<code>#node-&lt;id&gt;</code>, <code>#edge-&lt;id&gt;</code>) that the SVG&#039;s
+  <code>data-vibekb-node</code> / <code>data-vibekb-edge</code> markers point at. A small,
+  unobtrusive vanilla-JS enhancement adds selection, dimming, and a synced
+  detail panel; nothing essential is hidden behind it.</p>
+<ul>
+<li>Validation (loader + <code>tools/validate.php</code>) enforces the topology contract and</li>
+</ul>
+<p>the SVG-marker↔topology-id mapping in both directions. Malformed topology is
+  reported as a Reference diagnostic; legacy diagrams without topology still
+  render.</p>
 <h3>Affected VibeKB functionality</h3>
-<p>VibeKB&#039;s own guide app (the product), not the SousMeow example behaviour. The
-SousMeow model is updated only enough to demonstrate the new capabilities
-(provenance block, a small accurate diagram set, count clarity).</p>
-<h3>Migration approach</h3>
-<p>Audit → provenance/count/schema → diagrams model → static generator + URL
-strategy → search/nav → initialization workflow + prompt → canonical example
-refresh + validation → docs + verification + handoff. Focused commits per
-concern.</p>
-<h3>Validation plan</h3>
+<p>VibeKB&#039;s own guide app (the product) and its documentation. The SousMeow model
+is upgraded only enough to demonstrate the feature honestly on representative
+diagrams (request-flow, run-recipe-flow), re-verified against the recorded
+source commit; SousMeow itself is never modified.</p>
+<h3>Verification plan</h3>
 <ul>
-<li><code>php -l</code> across <code>guide/</code> and <code>tools/</code>.</li>
-<li><code>php tools/validate.php</code> (headless validator) reports zero errors.</li>
-<li>Dynamic guide loads every view; Reference shows no validation errors.</li>
-<li><code>php tools/generate-static.php</code> produces <code>/docs</code>; every generated internal</li>
+<li><code>php -l</code> across changed <code>guide/</code> and <code>tools/</code> files.</li>
+<li><code>php tools/validate.php</code> reports zero errors, including the new topology and</li>
 </ul>
-<p>link resolves; assets are relative (subpath-safe); SVGs are well-formed XML
-  with title/desc; search.json entries point to existing pages; no absolute
-  local filesystem paths leak; no StopPR content in the canonical example.</p></div>
+<p>SVG-marker checks; a deliberately malformed topology fixture produces a useful
+  diagnostic and a non-zero exit.</p>
+<ul>
+<li><code>php tools/generate-static.php</code> regenerates <code>/docs</code>; every node/edge anchor,</li>
+</ul>
+<p>internal link, and commit-pinned source link resolves.</p>
+<ul>
+<li>Manually confirm: verified edges render solid, inferred edges render dashed,</li>
+</ul>
+<p>verification is also stated in text; keyboard users reach nodes/edges;
+  no-JavaScript users can read every explanation; the layout holds at mobile
+  widths; legacy diagrams without topology still render; search links reach the
+  correct diagram anchor; no source outside VibeKB was modified.</p></div>
         </section>
     
     <nav class="cross-links" aria-label="Related views">

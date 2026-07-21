@@ -1,0 +1,230 @@
+{
+  "version": 1,
+  "nodes": [
+    {
+      "id": "build-prompt",
+      "title": "Build prompt",
+      "purpose": "Assembles the copyable prompt for a recipe step by substituting the project's Pantry values and any approved upstream artifacts. This is what the user runs in their own AI.",
+      "location": "app/Services",
+      "functionality": ["build-prompt"],
+      "files": [
+        {
+          "path": "app/Services/PromptBuilder.php",
+          "role": "primary implementation",
+          "reason": "Builds the prompt text and the matching highlighted HTML from the recipe, Pantry, and artifacts."
+        },
+        {
+          "path": "app/Models/PantryField.php",
+          "role": "dependency",
+          "reason": "Supplies the Pantry field values substituted into the prompt."
+        }
+      ],
+      "verification": "verified-from-source",
+      "uncertainty": ""
+    },
+    {
+      "id": "run-in-ai",
+      "title": "Run in the user's AI",
+      "purpose": "The user pastes the prompt into their own AI tool and runs it. SousMeow performs no AI call itself — this step is deliberately outside the application, which is why no code implements it.",
+      "location": "",
+      "functionality": [],
+      "files": [],
+      "verification": "verified-from-source",
+      "uncertainty": "This step happens entirely in the user's own AI tool, outside SousMeow; there is no source to trace here."
+    },
+    {
+      "id": "paste-response",
+      "title": "Paste response",
+      "purpose": "The user pastes the AI's output back into SousMeow, where it is escaped and stored as a new artifact version. Pasted content is always treated as untrusted.",
+      "location": "app/Controllers",
+      "functionality": ["paste-response"],
+      "files": [
+        {
+          "path": "app/Controllers/RunnerController.php",
+          "role": "primary implementation",
+          "reason": "Handles the paste write transition and records the response as an artifact version."
+        },
+        {
+          "path": "app/Services/SafeText.php",
+          "role": "validation",
+          "reason": "Escapes the pasted (untrusted) content before it is stored or ever re-displayed."
+        }
+      ],
+      "verification": "verified-from-source",
+      "warnings": ["pasted-response-is-untrusted"],
+      "uncertainty": ""
+    },
+    {
+      "id": "quality-checks",
+      "title": "Quality checks",
+      "purpose": "The human confirms each of the recipe's quality checks against the pasted response. Structural evidence is offered, but a person makes the call.",
+      "location": "app/Services",
+      "functionality": ["review-quality-checks"],
+      "files": [
+        {
+          "path": "app/Services/ResponseParser.php",
+          "role": "primary implementation",
+          "reason": "Parses the pasted response against the recipe's output contract to produce found/missing evidence."
+        },
+        {
+          "path": "app/Models/Artifact.php",
+          "role": "storage",
+          "reason": "Records which checks the user has confirmed."
+        }
+      ],
+      "verification": "inferred-from-source",
+      "uncertainty": "ResponseParser is inferred-from-source; the contract-matching details were not fully line-traced."
+    },
+    {
+      "id": "approve-version",
+      "title": "Approve + version",
+      "purpose": "Approving the step writes an immutable artifact version. Versions are append-only, so the approved result is preserved exactly.",
+      "location": "app/Models",
+      "functionality": ["approve-and-version"],
+      "files": [
+        {
+          "path": "app/Models/Artifact.php",
+          "role": "primary implementation",
+          "reason": "addVersion is append-only; approve/reopen and confirmed checks are enforced here."
+        }
+      ],
+      "verification": "verified-from-source",
+      "uncertainty": ""
+    },
+    {
+      "id": "export-kit",
+      "title": "Export kit",
+      "purpose": "Once every step is approved, the project can be exported as a self-contained kit: numbered Markdown files plus an offline kit.html reader.",
+      "location": "app/Services",
+      "functionality": ["export-project-kit"],
+      "files": [
+        {
+          "path": "app/Services/ProjectKit.php",
+          "role": "primary implementation",
+          "reason": "Builds the export zip from the approved artifacts and the Pantry."
+        },
+        {
+          "path": "app/Controllers/ExportController.php",
+          "role": "entry point",
+          "reason": "The export page and build gate that requires all steps approved before a kit can be produced."
+        }
+      ],
+      "verification": "verified-from-source",
+      "uncertainty": ""
+    }
+  ],
+  "edges": [
+    {
+      "id": "build-prompt-to-run-in-ai",
+      "from": "build-prompt",
+      "to": "run-in-ai",
+      "mechanism": "emits",
+      "label": "emits copyable prompt",
+      "explanation": "Build-prompt emits a fully substituted, copyable prompt; the user runs it in their own AI tool, because SousMeow never calls an AI itself.",
+      "functionality": ["build-prompt"],
+      "files": [
+        {
+          "path": "app/Services/PromptBuilder.php",
+          "role": "primary implementation",
+          "reason": "Produces the exact prompt text the user copies out."
+        }
+      ],
+      "verification": "verified-from-source",
+      "basis": "",
+      "uncertainty": ""
+    },
+    {
+      "id": "run-in-ai-to-paste-response",
+      "from": "run-in-ai",
+      "to": "paste-response",
+      "mechanism": "receives-from",
+      "label": "receives pasted output",
+      "explanation": "Paste-response receives the AI's output back from the user and stores it, escaped, as a new artifact version.",
+      "functionality": ["paste-response"],
+      "files": [
+        {
+          "path": "app/Controllers/RunnerController.php",
+          "role": "callee",
+          "reason": "Accepts the pasted text and writes it as an artifact version."
+        },
+        {
+          "path": "app/Services/SafeText.php",
+          "role": "validation",
+          "reason": "Escapes the untrusted paste on the way in."
+        }
+      ],
+      "verification": "verified-from-source",
+      "basis": "",
+      "warnings": ["pasted-response-is-untrusted"],
+      "uncertainty": ""
+    },
+    {
+      "id": "paste-response-to-quality-checks",
+      "from": "paste-response",
+      "to": "quality-checks",
+      "mechanism": "routes-to",
+      "label": "advances to review",
+      "explanation": "After a response is stored, the Runner advances the step to its review state where the quality checks are confirmed.",
+      "functionality": ["review-quality-checks"],
+      "files": [
+        {
+          "path": "app/Controllers/RunnerController.php",
+          "role": "caller",
+          "reason": "Enforces strict step ordering: review becomes available only after a paste exists."
+        }
+      ],
+      "verification": "verified-from-source",
+      "basis": "",
+      "uncertainty": ""
+    },
+    {
+      "id": "quality-checks-to-approve-version",
+      "from": "quality-checks",
+      "to": "approve-version",
+      "mechanism": "routes-to",
+      "label": "unlocks approval",
+      "explanation": "When every quality check is confirmed, the Runner allows approval, which writes the immutable artifact version.",
+      "functionality": ["approve-and-version"],
+      "files": [
+        {
+          "path": "app/Controllers/RunnerController.php",
+          "role": "caller",
+          "reason": "Blocks approval until the checks for the step are confirmed."
+        },
+        {
+          "path": "app/Models/Artifact.php",
+          "role": "storage",
+          "reason": "Writes the append-only approved version."
+        }
+      ],
+      "verification": "verified-from-source",
+      "basis": "",
+      "uncertainty": ""
+    },
+    {
+      "id": "approve-version-to-export-kit",
+      "from": "approve-version",
+      "to": "export-kit",
+      "mechanism": "routes-to",
+      "label": "enables export",
+      "explanation": "Once all steps are approved, the export gate opens and the kit is built from the approved artifact versions.",
+      "functionality": ["export-project-kit"],
+      "files": [
+        {
+          "path": "app/Controllers/ExportController.php",
+          "role": "entry point",
+          "reason": "The build gate that refuses to export until every step is approved."
+        },
+        {
+          "path": "app/Services/ProjectKit.php",
+          "role": "callee",
+          "reason": "Reads the approved artifacts to assemble the export."
+        }
+      ],
+      "verification": "verified-from-source",
+      "basis": "",
+      "warnings": ["read-write-path-coupling"],
+      "uncertainty": ""
+    }
+  ]
+}

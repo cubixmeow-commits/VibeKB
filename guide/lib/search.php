@@ -53,7 +53,10 @@ function build_search_index(Content $content, UrlStrategy $strategy): array
         ];
     }
 
-    // Diagrams.
+    // Diagrams — the record itself, then each explainable node and edge so a
+    // reader can search node titles/purposes, edge labels/explanations, and the
+    // files (with their reasons) and land on the exact node/edge anchor.
+    $diagramsBase = $strategy->diagram('');
     foreach ($content->allDiagrams() as $id => $rec) {
         $m = $rec['meta'];
         $index[] = [
@@ -63,6 +66,38 @@ function build_search_index(Content $content, UrlStrategy $strategy): array
             'url' => $strategy->diagram((string) $id),
             'body' => $plain((string) ($rec['body'] ?? '')),
         ];
+
+        $topo = $content->resolvedTopology((string) $id);
+        if ($topo === null) {
+            continue;
+        }
+        $fileBody = static function (array $files): string {
+            $parts = [];
+            foreach ($files as $f) {
+                $parts[] = trim((string) ($f['path'] ?? '') . ' ' . (string) ($f['reason'] ?? ''));
+            }
+            return trim(implode(' · ', array_filter($parts)));
+        };
+        foreach ($topo['nodes'] as $nid => $node) {
+            $index[] = [
+                'title' => (string) $node['title'],
+                'summary' => (string) $node['purpose'],
+                'type' => 'diagram node',
+                'url' => $diagramsBase . '#node-' . $nid,
+                'body' => $fileBody($node['files']),
+            ];
+        }
+        foreach ($topo['edges'] as $edge) {
+            $label = (string) ($edge['label'] ?? '');
+            $index[] = [
+                'title' => (string) $edge['from_title'] . ' → ' . (string) $edge['to_title']
+                    . ($label !== '' ? ' (' . $label . ')' : ''),
+                'summary' => (string) $edge['explanation'],
+                'type' => 'diagram connection',
+                'url' => $diagramsBase . '#edge-' . (string) $edge['id'],
+                'body' => trim((string) $edge['basis'] . ' ' . $fileBody($edge['files'])),
+            ];
+        }
     }
 
     // Repository memory (decisions, constraints, warnings, ...).

@@ -108,9 +108,11 @@ above, logs/temp, OS junk, tooling manifests, and host metadata. Also excluded:
 (authoring), and `docs/` (the Mode B static snapshot is published via GitHub
 Pages, not this PHP host). See `.cpanel.yml` for the authoritative exclude list.
 
-The diagram SVGs under `.vibekb/diagrams/assets/` **do** deploy — the dynamic
-guide reads and inlines them; the `.vibekb/.htaccess` guard still denies direct
-web access to raw content.
+The diagram SVGs under `.vibekb/diagrams/assets/` and the explainable-diagram
+topology under `.vibekb/diagrams/topology/` **do** deploy — the dynamic guide
+reads and inlines/renders them; the `.vibekb/.htaccess` guard still denies direct
+web access to raw content. The new shared partials under
+`guide/templates/partials/` also deploy with the rest of `guide/`.
 
 ## Persistent directories protected
 

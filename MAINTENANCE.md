@@ -78,6 +78,14 @@ visibly labelled. Diagrams must never claim behaviour not traced to source; set
 the diagram's `verification` and `last_verified` honestly. Do not add diagrams
 you cannot ground in source.
 
+If the diagram is **explainable** (has a `diagrams/topology/<id>.json`), keep the
+topology in lockstep: update node purposes, edge mechanisms and explanations,
+per-file reasons, and verified/inferred states to match the new behaviour, and
+keep the SVG's `data-vibekb-node` / `data-vibekb-edge` markers mapped to the
+topology ids. Never mark an inferred edge verified, and never keep an edge whose
+mechanism you can no longer state — delete it and record the gap. Re-run
+`php tools/validate.php` and `php tools/test-topology.php`.
+
 ## 7b. Refresh provenance
 
 If you re-verified against source, update the `manifest.json` `provenance` block
@@ -119,4 +127,6 @@ VIBEKB_DEV=1 php -S 127.0.0.1:8080 -t .
 
 `php tools/validate.php` and the Reference view must show no validation errors.
 Every relationship you added must resolve (no ⚠ broken chips), every diagram SVG
-must be valid XML with a `<title>`/`<desc>`, and every total must state its unit.
+must be valid XML with a `<title>`/`<desc>`, every explainable topology must pass
+the contract (unique ids, resolvable edges, controlled mechanisms, files with
+reasons, SVG markers mapped both ways), and every total must state its unit.

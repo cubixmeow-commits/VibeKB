@@ -29,6 +29,7 @@
     initMobileNav();
     initFunctionalityFilters();
     initSearch();
+    initDiagrams();
   });
 
   // ---- Mobile navigation drawer -------------------------------------------
@@ -149,6 +150,97 @@
         if (params.get(s.name)) { s.value = params.get(s.name); }
       });
       apply();
+    }
+  }
+
+  // ---- Explainable diagrams ------------------------------------------------
+  // Progressive enhancement only. Without JS, the SVG markers are ordinary
+  // in-page links to the explanation sections and every explanation is fully
+  // readable. With JS, selecting a node or edge (in the diagram or in the list)
+  // highlights it, dims the rest, and focuses its explanation; Escape clears.
+  function initDiagrams() {
+    var sections = document.querySelectorAll('.diagram-section--explainable');
+    if (!sections.length) {
+      return;
+    }
+
+    function clearSelection(section) {
+      section.classList.remove('dx-has-selection');
+      section.querySelectorAll('.is-selected').forEach(function (el) { el.classList.remove('is-selected'); });
+      section.querySelectorAll('.dx-card.is-active').forEach(function (el) { el.classList.remove('is-active'); });
+    }
+
+    function select(section, type, id, opts) {
+      opts = opts || {};
+      clearSelection(section);
+      var svg = section.querySelector('.diagram-figure svg');
+      var marker = svg ? svg.querySelector('[data-vibekb-' + type + '="' + id + '"]') : null;
+      var card = document.getElementById(type + '-' + id);
+      if (marker) {
+        marker.classList.add('is-selected');
+        section.classList.add('dx-has-selection');
+      }
+      if (card) {
+        card.classList.add('is-active');
+        if (opts.scroll !== false) {
+          card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        if (opts.focus !== false) {
+          try { card.focus({ preventScroll: true }); } catch (e) { card.focus(); }
+        }
+      }
+    }
+
+    sections.forEach(function (section) {
+      var svg = section.querySelector('.diagram-figure svg');
+      if (svg) {
+        svg.addEventListener('click', function (e) {
+          var a = e.target.closest('[data-vibekb-node],[data-vibekb-edge]');
+          if (!a) { return; }
+          e.preventDefault();
+          if (a.hasAttribute('data-vibekb-node')) {
+            select(section, 'node', a.getAttribute('data-vibekb-node'));
+          } else {
+            select(section, 'edge', a.getAttribute('data-vibekb-edge'));
+          }
+        });
+      }
+
+      // Selecting a card syncs the diagram (without stealing focus/scroll).
+      section.querySelectorAll('.dx-card').forEach(function (card) {
+        card.addEventListener('click', function (e) {
+          if (e.target.closest('a')) { return; }
+          var type = card.hasAttribute('data-node') ? 'node' : 'edge';
+          select(section, type, card.getAttribute('data-' + type), { scroll: false, focus: false });
+        });
+      });
+
+      // An edge's endpoint link selects the referenced node rather than jumping.
+      section.querySelectorAll('.dx-edge__endpoint').forEach(function (a) {
+        a.addEventListener('click', function (e) {
+          var href = a.getAttribute('href') || '';
+          if (href.indexOf('#node-') !== 0) { return; }
+          e.preventDefault();
+          select(section, 'node', href.slice('#node-'.length));
+        });
+      });
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        sections.forEach(clearSelection);
+      }
+    });
+
+    // Honour a deep link (#node-x / #edge-x) on load.
+    var hash = window.location.hash || '';
+    var m = /^#(node|edge)-(.+)$/.exec(hash);
+    if (m) {
+      var el = document.getElementById(m[1] + '-' + m[2]);
+      var section = el && el.closest('.diagram-section--explainable');
+      if (section) {
+        select(section, m[1], m[2], { scroll: true, focus: true });
+      }
     }
   }
 

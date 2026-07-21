@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" role="img" aria-labelledby="rf-title rf-desc">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 900 420" role="img" aria-labelledby="rf-title rf-desc">
   <title id="rf-title">Request flow through the front controller</title>
-  <desc id="rf-desc">Every request enters public/index.php, is matched by the Router, passes an authentication check and a CSRF gate for unsafe methods, reaches a controller, which reads or writes through the single PDO data path and renders an escaped view. Admin actions are CLI-only and bypass the web routes.</desc>
+  <desc id="rf-desc">Every request enters public/index.php, passes an authentication check and a CSRF gate for unsafe methods, is routed to a controller, which reads or writes through the single PDO data path and renders an escaped view back to the browser. Admin actions are CLI-only and write directly, bypassing the web routes. Each node and edge links to its written explanation below; inferred edges are drawn with a dashed line.</desc>
   <defs>
     <marker id="rf-arrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto">
       <path d="M0,0 L8,4 L0,8 z" fill="#4f5c56"/>
@@ -11,51 +11,99 @@
       .box { stroke:#b9c6c0; stroke-width:1.5; fill:#e7f4f0; }
       .gate { fill:#f6ead4; stroke:#7a4210; stroke-width:1.5; }
       .store { fill:#fffcf7; stroke:#b9c6c0; stroke-width:1.5; }
-      .cli { fill:#e4e8e3; stroke:#4f5c56; stroke-width:1.5; stroke-dasharray:6 4; }
+      .cli { fill:#e4e8e3; stroke:#4f5c56; stroke-width:1.5; }
       .lbl { font-size:13px; font-weight:600; }
       .sm { font-size:11px; fill:#4f5c56; }
       .arrow { stroke:#4f5c56; stroke-width:1.6; fill:none; marker-end:url(#rf-arrow); }
+      .arrow-inferred { stroke:#4f5c56; stroke-width:1.6; fill:none; stroke-dasharray:7 5; marker-end:url(#rf-arrow); }
+      .hit { stroke:transparent; stroke-width:16; fill:none; }
       .title { font-size:20px; font-weight:800; font-family:"Outfit","Figtree",sans-serif; }
     </style>
   </defs>
-  <rect width="900" height="400" fill="#f4f0e8"/>
+  <rect width="900" height="420" fill="#f4f0e8"/>
   <text class="t title" x="28" y="38">Request flow</text>
+  <text class="t sm" x="28" y="58">Solid = verified from source · Dashed = inferred from source. Select any box or arrow for its explanation.</text>
 
-  <rect class="t box" x="24" y="150" width="120" height="60" rx="9"/>
-  <text class="t lbl" x="84" y="176" text-anchor="middle">Browser</text>
-  <text class="t sm" x="84" y="194" text-anchor="middle">GET / POST</text>
+  <a href="#node-browser" xlink:href="#node-browser" class="dnode" data-vibekb-node="browser">
+    <title>Browser — open explanation</title>
+    <rect class="t box" x="24" y="150" width="120" height="60" rx="9"/>
+    <text class="t lbl" x="84" y="176" text-anchor="middle">Browser</text>
+    <text class="t sm" x="84" y="194" text-anchor="middle">GET / POST</text>
+  </a>
 
-  <rect class="t box" x="168" y="150" width="130" height="60" rx="9"/>
-  <text class="t lbl" x="233" y="176" text-anchor="middle">index.php</text>
-  <text class="t sm" x="233" y="194" text-anchor="middle">Router match</text>
+  <a href="#node-front-controller" xlink:href="#node-front-controller" class="dnode" data-vibekb-node="front-controller">
+    <title>Front controller — open explanation</title>
+    <rect class="t box" x="168" y="150" width="130" height="60" rx="9"/>
+    <text class="t lbl" x="233" y="176" text-anchor="middle">index.php</text>
+    <text class="t sm" x="233" y="194" text-anchor="middle">Front controller</text>
+  </a>
 
-  <rect class="t gate" x="322" y="150" width="130" height="60" rx="9"/>
-  <text class="t lbl" x="387" y="172" text-anchor="middle">Auth check</text>
-  <text class="t sm" x="387" y="190" text-anchor="middle">+ CSRF gate</text>
-  <text class="t sm" x="387" y="204" text-anchor="middle">(unsafe methods)</text>
+  <a href="#node-security-gate" xlink:href="#node-security-gate" class="dnode" data-vibekb-node="security-gate">
+    <title>Auth &amp; CSRF gate — open explanation</title>
+    <rect class="t gate" x="322" y="150" width="130" height="60" rx="9"/>
+    <text class="t lbl" x="387" y="172" text-anchor="middle">Auth check</text>
+    <text class="t sm" x="387" y="190" text-anchor="middle">+ CSRF gate</text>
+    <text class="t sm" x="387" y="204" text-anchor="middle">(unsafe methods)</text>
+  </a>
 
-  <rect class="t box" x="476" y="150" width="130" height="60" rx="9"/>
-  <text class="t lbl" x="541" y="176" text-anchor="middle">Controller</text>
-  <text class="t sm" x="541" y="194" text-anchor="middle">Discovery/Runner</text>
+  <a href="#node-controller" xlink:href="#node-controller" class="dnode" data-vibekb-node="controller">
+    <title>Controller — open explanation</title>
+    <rect class="t box" x="476" y="150" width="130" height="60" rx="9"/>
+    <text class="t lbl" x="541" y="176" text-anchor="middle">Controller</text>
+    <text class="t sm" x="541" y="194" text-anchor="middle">Runner / others</text>
+  </a>
 
-  <rect class="t store" x="630" y="120" width="140" height="55" rx="9"/>
-  <text class="t lbl" x="700" y="143" text-anchor="middle">PDO data path</text>
-  <text class="t sm" x="700" y="161" text-anchor="middle">SQLite / MySQL</text>
+  <a href="#node-pdo-data-path" xlink:href="#node-pdo-data-path" class="dnode" data-vibekb-node="pdo-data-path">
+    <title>PDO data path — open explanation</title>
+    <rect class="t store" x="630" y="120" width="140" height="55" rx="9"/>
+    <text class="t lbl" x="700" y="143" text-anchor="middle">PDO data path</text>
+    <text class="t sm" x="700" y="161" text-anchor="middle">SQLite / MySQL</text>
+  </a>
 
-  <rect class="t box" x="630" y="190" width="140" height="55" rx="9"/>
-  <text class="t lbl" x="700" y="213" text-anchor="middle">Escaped view</text>
-  <text class="t sm" x="700" y="231" text-anchor="middle">HTML response</text>
+  <a href="#node-escaped-view" xlink:href="#node-escaped-view" class="dnode" data-vibekb-node="escaped-view">
+    <title>Escaped view — open explanation</title>
+    <rect class="t box" x="630" y="190" width="140" height="55" rx="9"/>
+    <text class="t lbl" x="700" y="213" text-anchor="middle">Escaped view</text>
+    <text class="t sm" x="700" y="231" text-anchor="middle">HTML response</text>
+  </a>
 
-  <line class="arrow" x1="144" y1="180" x2="166" y2="180"/>
-  <line class="arrow" x1="298" y1="180" x2="320" y2="180"/>
-  <line class="arrow" x1="452" y1="180" x2="474" y2="180"/>
-  <line class="arrow" x1="606" y1="168" x2="628" y2="150"/>
-  <line class="arrow" x1="606" y1="192" x2="628" y2="210"/>
+  <a href="#edge-browser-to-front-controller" xlink:href="#edge-browser-to-front-controller" class="dedge" data-vibekb-edge="browser-to-front-controller">
+    <title>sends request — verified</title>
+    <line class="hit" x1="144" y1="180" x2="166" y2="180"/>
+    <line class="arrow" x1="144" y1="180" x2="166" y2="180"/>
+  </a>
+  <a href="#edge-front-controller-to-security-gate" xlink:href="#edge-front-controller-to-security-gate" class="dedge" data-vibekb-edge="front-controller-to-security-gate">
+    <title>validates request — verified</title>
+    <line class="hit" x1="298" y1="180" x2="320" y2="180"/>
+    <line class="arrow" x1="298" y1="180" x2="320" y2="180"/>
+  </a>
+  <a href="#edge-security-gate-to-controller" xlink:href="#edge-security-gate-to-controller" class="dedge" data-vibekb-edge="security-gate-to-controller">
+    <title>routes to controller — inferred (dashed)</title>
+    <line class="hit" x1="452" y1="180" x2="474" y2="180"/>
+    <line class="arrow-inferred" x1="452" y1="180" x2="474" y2="180"/>
+  </a>
+  <a href="#edge-controller-to-pdo-data-path" xlink:href="#edge-controller-to-pdo-data-path" class="dedge" data-vibekb-edge="controller-to-pdo-data-path">
+    <title>reads &amp; writes via PDO — verified</title>
+    <line class="hit" x1="606" y1="168" x2="628" y2="150"/>
+    <line class="arrow" x1="606" y1="168" x2="628" y2="150"/>
+  </a>
+  <a href="#edge-controller-to-escaped-view" xlink:href="#edge-controller-to-escaped-view" class="dedge" data-vibekb-edge="controller-to-escaped-view">
+    <title>renders escaped HTML — verified</title>
+    <line class="hit" x1="606" y1="192" x2="628" y2="210"/>
+    <line class="arrow" x1="606" y1="192" x2="628" y2="210"/>
+  </a>
 
-  <rect class="t cli" x="168" y="290" width="284" height="56" rx="9"/>
-  <text class="t lbl" x="310" y="314" text-anchor="middle">Admin (CLI-only, dashed)</text>
-  <text class="t sm" x="310" y="332" text-anchor="middle">Seeding / management bypass the web routes</text>
-  <path class="arrow" d="M310 290 L310 250 L541 250 L541 212"/>
+  <a href="#node-admin-cli" xlink:href="#node-admin-cli" class="dnode" data-vibekb-node="admin-cli">
+    <title>Admin (CLI only) — open explanation</title>
+    <rect class="t cli" x="168" y="300" width="284" height="56" rx="9" stroke-dasharray="6 4"/>
+    <text class="t lbl" x="310" y="324" text-anchor="middle">Admin (CLI only)</text>
+    <text class="t sm" x="310" y="342" text-anchor="middle">Seeding / management bypass the web routes</text>
+  </a>
+  <a href="#edge-admin-cli-to-pdo-data-path" xlink:href="#edge-admin-cli-to-pdo-data-path" class="dedge" data-vibekb-edge="admin-cli-to-pdo-data-path">
+    <title>writes directly (CLI) — inferred (dashed)</title>
+    <path class="hit" d="M452 328 L812 328 L812 150 L772 150"/>
+    <path class="arrow-inferred" d="M452 328 L812 328 L812 150 L772 150"/>
+  </a>
 
-  <text class="t sm" x="28" y="378">Verified from source for the web routes; the Router itself and some Model queries remain inferred-from-source.</text>
+  <text class="t sm" x="28" y="398">The web routes and escaping are verified from source; the Router match and the CLI write path remain inferred.</text>
 </svg>

@@ -147,6 +147,49 @@ integrating reusable lessons from the StopPR field test.</p></div>
                                     </li>
                             <li class="change-card">
                     <div class="change-card__head">
+                        <h2>Made diagrams explainable — nodes, edges, mechanisms, files-with-reasons</h2>
+                        <div class="badge-row">
+                                                                                    <span class="muted">2026-07-21</span>
+                        </div>
+                    </div>
+                    <p>Two SousMeow diagrams gained a repository-owned topology so every node states what it is, every edge states a concrete mechanism, every file states why it matters, and external source links reach the implementation — without upgrading any verification claim.</p>
+                    <div class="prose reading-column change-card__body"><h3>Before</h3>
+<p>Diagrams were a picture plus prose. There was no way to select a box or arrow
+and learn what it is, why it connects to its neighbour, which files implement
+it, or where to open the code. Relationships had no stated mechanism.</p>
+<h3>After</h3>
+<ul>
+<li>Added an optional per-diagram topology (<code>.vibekb/diagrams/topology/&lt;id&gt;.json</code>)</li>
+</ul>
+<p>with nodes (title + plain-language purpose), edges (a controlled <strong>mechanism</strong>
+  and a one-sentence explanation), per-node/edge files with roles and reasons,
+  repository locations, and honest verified/inferred states.</p>
+<ul>
+<li>Upgraded two representative diagrams: <strong>Request flow</strong> (verified web path with</li>
+</ul>
+<p>two inferred, dashed edges — the Router match and the CLI write path) and
+  <strong>Run a Cookbook — the core loop</strong> (a verified user journey with the pasted-
+  response and read/write-coupling warnings attached).</p>
+<ul>
+<li>Marked each SVG&#039;s node/edge groups with <code>data-vibekb-node</code> /</li>
+</ul>
+<p><code>data-vibekb-edge</code>, linked to <code>#node-&lt;id&gt;</code> / <code>#edge-&lt;id&gt;</code> anchors so every
+  explanation is reachable without JavaScript. External source links are
+  commit-pinned to the analysed SousMeow commit; no line numbers were invented.</p>
+<h3>Impact</h3>
+<p>VibeKB product + model only — SousMeow itself was not touched, and no
+verification state was upgraded for presentation. The topology reuses existing
+functionality records, <code>important-files.json</code>, and warnings rather than
+duplicating them. Inferred edges are drawn dashed and state their basis;
+verified edges are solid. The loader, <code>tools/validate.php</code>, and a new
+<code>tools/test-topology.php</code> enforce the topology contract (unique ids, resolvable
+edges, controlled mechanisms, files-with-reasons, SVG↔topology marker mapping).
+The other three diagrams remain valid as picture + narrative.</p></div>
+                                            <p class="change-card__links"><strong>Affected:</strong>
+                            <a class="chip" href="../functionality/route-and-secure-requests.html">Route &amp; secure every request</a> <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a> <a class="chip" href="../functionality/access-database.html">Access the database</a>                        </p>
+                                    </li>
+                            <li class="change-card">
+                    <div class="change-card__head">
                         <h2>Introduced the categories + collections taxonomy</h2>
                         <div class="badge-row">
                             <span class="badge badge--info">shipped</span>                            <span class="badge badge--ok">Verified from source</span>                            <span class="muted">2026-07-16</span>

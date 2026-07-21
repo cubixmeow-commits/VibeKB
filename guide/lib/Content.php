@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/FrontMatter.php';
 require_once __DIR__ . '/Markdown.php';
+require_once __DIR__ . '/Provenance.php';
 
 /**
  * The VibeKB content layer.
@@ -40,6 +41,12 @@ final class Content
     private array $diagrams = [];
     /** @var array<string, mixed> diagrams index config */
     private array $diagramsIndex = [];
+    /** @var array<string, array{version:int, nodes: array<string,array<string,mixed>>, edges: list<array<string,mixed>>, file: string}> diagram id => normalised topology */
+    private array $topology = [];
+    /** @var array<string, string|bool> normalised source provenance (for source links) */
+    private array $sourceProvenance = [];
+    /** @var array<string, array<string,mixed>>|null important-files index by path */
+    private ?array $fileIndex = null;
     /** @var array<string, array<string, array<string, mixed>>> type => id => record */
     private array $memory = [];
     /** @var array<string, mixed>|null */
@@ -53,6 +60,8 @@ final class Content
 
     private const MEMORY_TYPES = ['decisions', 'constraints', 'assumptions', 'warnings', 'discoveries', 'changes'];
     private const SYSTEM_DOCS = ['mental-model', 'components', 'request-flow', 'data-flow', 'storage', 'deployment'];
+    /** Explainable-diagram topology schema versions this loader understands. */
+    private const TOPOLOGY_VERSIONS = [1];
 
     public function __construct(string $root)
     {
@@ -67,6 +76,7 @@ final class Content
         $this->loaded = true;
 
         $this->manifest = $this->readJson('manifest.json');
+        $this->sourceProvenance = provenance_data($this->manifest);
 
         foreach (['identity', 'intent', 'current-state', 'constraints'] as $name) {
             $doc = $this->readMarkdown('project/' . $name . '.md');
@@ -110,6 +120,16 @@ final class Content
                 $this->issues[] = ['level' => 'error', 'message' => "Duplicate diagram id: {$id}"];
             }
             $this->diagrams[$id] = $doc;
+        }
+
+        // Explainable-diagram topology is optional and loaded per diagram that
+        // references it. A malformed or missing topology is reported as an issue,
+        // never fatal — the diagram still renders as a picture + narrative.
+        foreach ($this->diagrams as $id => $rec) {
+            $topoName = (string) ($rec['meta']['topology'] ?? '');
+            if ($topoName !== '') {
+                $this->loadTopology((string) $id, $topoName);
+            }
         }
 
         foreach (self::MEMORY_TYPES as $type) {
@@ -379,6 +399,210 @@ final class Content
             if (in_array($id, $fns, true)) {
                 $out[] = ['id' => $did, 'title' => (string) ($rec['meta']['title'] ?? $did), 'resolved' => true];
             }
+        }
+        return $out;
+    }
+
+    // ---- explainable-diagram topology ---------------------------------
+
+    /** Whether a diagram has a loaded (well-formed) explainable topology. */
+    public function hasTopology(string $diagramId): bool
+    {
+        return isset($this->topology[$diagramId]);
+    }
+
+    /**
+     * Raw normalised topology for a diagram (nodes keyed by id, edges as a
+     * list), or null if the diagram has no topology or it failed to load.
+     *
+     * @return array{version:int, nodes: array<string,array<string,mixed>>, edges: list<array<string,mixed>>, file: string}|null
+     */
+    public function diagramTopology(string $diagramId): ?array
+    {
+        return $this->topology[$diagramId] ?? null;
+    }
+
+    /** Normalised source provenance used to build immutable source links. */
+    public function sourceProvenance(): array
+    {
+        return $this->sourceProvenance;
+    }
+
+    /**
+     * Topology nodes (across all diagrams) that reference a functionality id, so
+     * a functionality page can deep-link to the exact node that represents it.
+     *
+     * @return list<array{diagram: string, diagram_title: string, node: string, node_title: string}>
+     */
+    public function diagramNodesForFunctionality(string $fnId): array
+    {
+        $out = [];
+        foreach ($this->topology as $did => $topo) {
+            $dTitle = (string) ($this->diagrams[$did]['meta']['title'] ?? $did);
+            foreach ($topo['nodes'] as $nid => $n) {
+                if (in_array($fnId, $this->toList($n['functionality'] ?? []), true)) {
+                    $out[] = [
+                        'diagram' => (string) $did,
+                        'diagram_title' => $dTitle,
+                        'node' => (string) $nid,
+                        'node_title' => (string) ($n['title'] ?? $nid),
+                    ];
+                }
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * A fully resolved, template-ready projection of a diagram's topology:
+     * nodes and edges with their functionality/warning links resolved, files
+     * enriched with canonical metadata from important-files.json and an
+     * immutable source link, and endpoint titles filled in. Returns null when
+     * the diagram has no usable topology.
+     *
+     * @return array{version:int, nodes: array<string,array<string,mixed>>, edges: list<array<string,mixed>>}|null
+     */
+    public function resolvedTopology(string $diagramId): ?array
+    {
+        $topo = $this->topology[$diagramId] ?? null;
+        if ($topo === null) {
+            return null;
+        }
+
+        $prov = $this->sourceProvenance;
+        $nodeTitles = [];
+        foreach ($topo['nodes'] as $nid => $n) {
+            $nodeTitles[$nid] = (string) ($n['title'] ?? $nid);
+        }
+
+        $resolveFiles = function (mixed $files) use ($prov): array {
+            $out = [];
+            if (!is_array($files)) {
+                return $out;
+            }
+            foreach ($files as $f) {
+                if (!is_array($f)) {
+                    continue;
+                }
+                $path = (string) ($f['path'] ?? '');
+                if ($path === '') {
+                    continue;
+                }
+                $canon = $this->fileMeta($path);
+                $out[] = [
+                    'path' => $path,
+                    'role' => (string) ($f['role'] ?? ''),
+                    'reason' => (string) ($f['reason'] ?? ''),
+                    'canonical_purpose' => (string) ($canon['purpose'] ?? ''),
+                    'safety' => (string) ($canon['safety'] ?? ''),
+                    'provenance' => (string) ($canon['provenance'] ?? ''),
+                    'known' => $canon !== null,
+                    'url' => source_link_url($prov, $path, (string) ($f['lines'] ?? '')),
+                ];
+            }
+            return $out;
+        };
+
+        $nodes = [];
+        foreach ($topo['nodes'] as $nid => $n) {
+            $nodes[$nid] = [
+                'id' => $nid,
+                'title' => (string) ($n['title'] ?? $nid),
+                'purpose' => (string) ($n['purpose'] ?? ''),
+                'location' => (string) ($n['location'] ?? ''),
+                'functionality' => $this->resolveFunctionality($n['functionality'] ?? []),
+                'warnings' => $this->resolveMemory(array_map(
+                    fn ($w) => 'warning:' . $w,
+                    $this->toList($n['warnings'] ?? [])
+                )),
+                'files' => $resolveFiles($n['files'] ?? []),
+                'verification' => (string) ($n['verification'] ?? ''),
+                'uncertainty' => (string) ($n['uncertainty'] ?? ''),
+            ];
+        }
+
+        $edges = [];
+        foreach ($topo['edges'] as $e) {
+            $from = (string) ($e['from'] ?? '');
+            $to = (string) ($e['to'] ?? '');
+            $ver = (string) ($e['verification'] ?? '');
+            $edges[] = [
+                'id' => (string) ($e['id'] ?? ''),
+                'from' => $from,
+                'to' => $to,
+                'from_title' => $nodeTitles[$from] ?? $from,
+                'to_title' => $nodeTitles[$to] ?? $to,
+                'mechanism' => (string) ($e['mechanism'] ?? ''),
+                'label' => (string) ($e['label'] ?? ''),
+                'explanation' => (string) ($e['explanation'] ?? ''),
+                'basis' => (string) ($e['basis'] ?? ''),
+                'functionality' => $this->resolveFunctionality($e['functionality'] ?? []),
+                'warnings' => $this->resolveMemory(array_map(
+                    fn ($w) => 'warning:' . $w,
+                    $this->toList($e['warnings'] ?? [])
+                )),
+                'files' => $resolveFiles($e['files'] ?? []),
+                'verification' => $ver,
+                'verified' => edge_verification_is_verified($ver),
+                'uncertainty' => (string) ($e['uncertainty'] ?? ''),
+            ];
+        }
+
+        return ['version' => $topo['version'], 'nodes' => $nodes, 'edges' => $edges];
+    }
+
+    /**
+     * Canonical metadata for an important file by path, or null if the file is
+     * not in important-files.json. Lets diagram topology reuse the curated
+     * purpose/safety/provenance instead of restating them.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function fileMeta(string $path): ?array
+    {
+        if ($this->fileIndex === null) {
+            $this->fileIndex = [];
+            foreach ($this->files as $file) {
+                $p = (string) ($file['path'] ?? '');
+                if ($p !== '') {
+                    $this->fileIndex[$p] = $file;
+                }
+            }
+        }
+        return $this->fileIndex[$path] ?? null;
+    }
+
+    /**
+     * Extract the `data-vibekb-node` / `data-vibekb-edge` marker ids present in
+     * a diagram SVG, so validation can confirm the SVG and topology agree.
+     *
+     * @return array{nodes: list<string>, edges: list<string>}
+     */
+    public function diagramSvgMarkers(string $svgFile): array
+    {
+        $out = ['nodes' => [], 'edges' => []];
+        $svgFile = (string) preg_replace('#[^a-z0-9\-_.]#i', '', basename($svgFile));
+        if ($svgFile === '') {
+            return $out;
+        }
+        $path = $this->root . '/diagrams/assets/' . $svgFile;
+        if (!$this->isInsideRoot($path) || !is_file($path)) {
+            return $out;
+        }
+        $raw = (string) @file_get_contents($path);
+        if ($raw === '') {
+            return $out;
+        }
+        $dom = new DOMDocument();
+        if (@$dom->loadXML($raw) === false) {
+            return $out;
+        }
+        $xp = new DOMXPath($dom);
+        foreach ($xp->query('//*[@data-vibekb-node]') as $el) {
+            $out['nodes'][] = $el->getAttribute('data-vibekb-node');
+        }
+        foreach ($xp->query('//*[@data-vibekb-edge]') as $el) {
+            $out['edges'][] = $el->getAttribute('data-vibekb-edge');
         }
         return $out;
     }
@@ -656,6 +880,158 @@ final class Content
                     $this->issues[] = ['level' => 'warn', 'message' => "Diagram '{$id}' links to unknown diagram: {$dg}"];
                 }
             }
+
+            // Explainable-diagram topology: a compatibility note when absent, the
+            // full contract when present.
+            if (($meta['topology'] ?? '') === '') {
+                $this->issues[] = ['level' => 'warn', 'message' => "Diagram '{$id}' has no explainable topology yet (renders as a picture + narrative only)."];
+            } elseif (isset($this->topology[$id])) {
+                $this->validateTopology($id, (string) ($meta['svg'] ?? ''));
+            }
+        }
+    }
+
+    /**
+     * Semantic validation of a loaded explainable-diagram topology and its
+     * agreement with the SVG markers. Structural problems were already reported
+     * by loadTopology(); this enforces the explainability contract: every node
+     * has a purpose, every edge names a controlled mechanism and states an
+     * explanation, endpoints resolve, verification is honest, references resolve,
+     * every displayed file has a reason, and the SVG and topology map both ways.
+     */
+    private function validateTopology(string $diagramId, string $svgFile): void
+    {
+        $topo = $this->topology[$diagramId];
+        $verVocab = array_keys(verification_vocabulary());
+        $mechVocab = array_keys(edge_mechanism_vocabulary());
+        $roleVocab = array_keys(file_role_vocabulary());
+
+        $checkFiles = function (mixed $files, string $where) use ($diagramId, $roleVocab): void {
+            if (!is_array($files)) {
+                return;
+            }
+            foreach ($files as $f) {
+                if (!is_array($f)) {
+                    continue;
+                }
+                $path = (string) ($f['path'] ?? '');
+                if ($path === '') {
+                    $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' {$where} has a file entry with no path."];
+                    continue;
+                }
+                $norm = str_replace('\\', '/', $path);
+                if (str_starts_with($norm, '/') || str_contains($norm, '../') || str_contains($norm, "\0")) {
+                    $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' {$where} has an unsafe (non-repository-relative) file path: {$path}"];
+                }
+                if (trim((string) ($f['reason'] ?? '')) === '') {
+                    $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' {$where} shows file '{$path}' without a reason."];
+                }
+                $role = (string) ($f['role'] ?? '');
+                if ($role !== '' && !in_array($role, $roleVocab, true)) {
+                    $this->issues[] = ['level' => 'warn', 'message' => "Diagram '{$diagramId}' {$where} file '{$path}' has an unlisted role: {$role}"];
+                }
+            }
+        };
+
+        // Nodes.
+        foreach ($topo['nodes'] as $nid => $n) {
+            if (trim((string) ($n['title'] ?? '')) === '') {
+                $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' node '{$nid}' is missing a title."];
+            }
+            if (trim((string) ($n['purpose'] ?? '')) === '') {
+                $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' node '{$nid}' is missing a purpose (every node must answer 'what is this?')."];
+            }
+            $ver = (string) ($n['verification'] ?? '');
+            if ($ver !== '' && !in_array($ver, $verVocab, true)) {
+                $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' node '{$nid}' has unknown verification: {$ver}"];
+            }
+            foreach ($this->toList($n['functionality'] ?? []) as $fn) {
+                if (!isset($this->functionality[$fn])) {
+                    $this->issues[] = ['level' => 'warn', 'message' => "Diagram '{$diagramId}' node '{$nid}' references unknown functionality: {$fn}"];
+                }
+            }
+            foreach ($this->toList($n['warnings'] ?? []) as $wn) {
+                if (!isset($this->memory['warnings'][$wn])) {
+                    $this->issues[] = ['level' => 'warn', 'message' => "Diagram '{$diagramId}' node '{$nid}' references unknown warning: {$wn}"];
+                }
+            }
+            $checkFiles($n['files'] ?? [], "node '{$nid}'");
+        }
+
+        // Edges.
+        foreach ($topo['edges'] as $e) {
+            $eid = (string) ($e['id'] ?? '(unnamed)');
+            $from = (string) ($e['from'] ?? '');
+            $to = (string) ($e['to'] ?? '');
+            if ($eid === '(unnamed)') {
+                $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' has an edge with no id."];
+            }
+            if ($from === '' || !isset($topo['nodes'][$from])) {
+                $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' edge '{$eid}' has an unresolved source node: '{$from}'"];
+            }
+            if ($to === '' || !isset($topo['nodes'][$to])) {
+                $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' edge '{$eid}' has an unresolved target node: '{$to}'"];
+            }
+            $mech = (string) ($e['mechanism'] ?? '');
+            if ($mech === '') {
+                $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' edge '{$eid}' has no mechanism (every edge must answer 'why are these connected?')."];
+            } elseif (!in_array($mech, $mechVocab, true)) {
+                $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' edge '{$eid}' uses an out-of-vocabulary mechanism: {$mech}"];
+            }
+            if (trim((string) ($e['explanation'] ?? '')) === '') {
+                $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' edge '{$eid}' is missing a one-sentence explanation."];
+            }
+            $ver = (string) ($e['verification'] ?? '');
+            if ($ver === '') {
+                $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' edge '{$eid}' is missing a verification state."];
+            } elseif (!in_array($ver, $verVocab, true)) {
+                $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' edge '{$eid}' has unknown verification: {$ver}"];
+            }
+            // An inferred edge must state its basis so the inference is defensible.
+            if ($ver !== '' && !edge_verification_is_verified($ver) && trim((string) ($e['basis'] ?? '')) === '') {
+                $this->issues[] = ['level' => 'warn', 'message' => "Diagram '{$diagramId}' edge '{$eid}' is inferred but does not state a basis."];
+            }
+            foreach ($this->toList($e['functionality'] ?? []) as $fn) {
+                if (!isset($this->functionality[$fn])) {
+                    $this->issues[] = ['level' => 'warn', 'message' => "Diagram '{$diagramId}' edge '{$eid}' references unknown functionality: {$fn}"];
+                }
+            }
+            foreach ($this->toList($e['warnings'] ?? []) as $wn) {
+                if (!isset($this->memory['warnings'][$wn])) {
+                    $this->issues[] = ['level' => 'warn', 'message' => "Diagram '{$diagramId}' edge '{$eid}' references unknown warning: {$wn}"];
+                }
+            }
+            $checkFiles($e['files'] ?? [], "edge '{$eid}'");
+        }
+
+        // SVG markers must map to topology ids, and vice versa, in both
+        // directions — so a diagram can never point at a node/edge it can't
+        // explain, and every explained node/edge is reachable in the picture.
+        $markers = $this->diagramSvgMarkers($svgFile);
+        $svgNodes = array_unique($markers['nodes']);
+        $svgEdges = array_unique($markers['edges']);
+        $topoNodeIds = array_keys($topo['nodes']);
+        $topoEdgeIds = array_values(array_filter(array_map(fn ($e) => (string) ($e['id'] ?? ''), $topo['edges'])));
+
+        foreach ($topoNodeIds as $nid) {
+            if (!in_array($nid, $svgNodes, true)) {
+                $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' node '{$nid}' has no data-vibekb-node marker in the SVG."];
+            }
+        }
+        foreach ($topoEdgeIds as $eid) {
+            if (!in_array($eid, $svgEdges, true)) {
+                $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' edge '{$eid}' has no data-vibekb-edge marker in the SVG."];
+            }
+        }
+        foreach ($svgNodes as $nid) {
+            if (!in_array($nid, $topoNodeIds, true)) {
+                $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' SVG marks node '{$nid}' that is not in the topology."];
+            }
+        }
+        foreach ($svgEdges as $eid) {
+            if (!in_array($eid, $topoEdgeIds, true)) {
+                $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' SVG marks edge '{$eid}' that is not in the topology."];
+            }
         }
     }
 
@@ -673,6 +1049,85 @@ final class Content
         $doc['meta']['id'] = $doc['meta']['id'] ?? basename($path, '.md');
         $doc['meta']['type'] = $doc['meta']['type'] ?? $expectedType;
         return $doc;
+    }
+
+    /**
+     * Load and normalise a diagram's topology JSON (nodes + edges). Structural
+     * problems (unsafe name, missing file, bad JSON, unsupported version,
+     * duplicate ids) are recorded as issues here; the richer semantic checks
+     * (required fields, vocabulary, endpoint resolution, SVG-marker mapping) run
+     * in validateTopology() once all content is loaded. A topology that cannot be
+     * loaded is simply absent — the diagram still renders without it.
+     */
+    private function loadTopology(string $diagramId, string $file): void
+    {
+        $file = basename($file);
+        if (!preg_match('/^[a-z0-9\-_.]+\.json$/i', $file) || str_contains($file, '..')) {
+            $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' has an unsafe topology filename: {$file}"];
+            return;
+        }
+        $path = $this->root . '/diagrams/topology/' . $file;
+        if (!$this->isInsideRoot($path) || !is_file($path)) {
+            $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' references a missing topology file: diagrams/topology/{$file}"];
+            return;
+        }
+        $raw = @file_get_contents($path);
+        if ($raw === false) {
+            $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' topology is unreadable: {$file}"];
+            return;
+        }
+        $data = json_decode($raw, true);
+        if (!is_array($data)) {
+            $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' topology is not valid JSON: {$file}"];
+            return;
+        }
+
+        $version = (int) ($data['version'] ?? 0);
+        if (!in_array($version, self::TOPOLOGY_VERSIONS, true)) {
+            $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' topology has unsupported schema version: " . ($data['version'] ?? '(none)')];
+            // Still normalise what we can so the rest of the checks can run.
+        }
+
+        $nodes = [];
+        foreach ((array) ($data['nodes'] ?? []) as $n) {
+            if (!is_array($n)) {
+                $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' topology has a malformed node entry."];
+                continue;
+            }
+            $nid = (string) ($n['id'] ?? '');
+            if ($nid === '') {
+                $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' topology has a node with no id."];
+                continue;
+            }
+            if (isset($nodes[$nid])) {
+                $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' topology has a duplicate node id: {$nid}"];
+            }
+            $nodes[$nid] = $n;
+        }
+
+        $edges = [];
+        $edgeIds = [];
+        foreach ((array) ($data['edges'] ?? []) as $e) {
+            if (!is_array($e)) {
+                $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' topology has a malformed edge entry."];
+                continue;
+            }
+            $eid = (string) ($e['id'] ?? '');
+            if ($eid !== '') {
+                if (isset($edgeIds[$eid])) {
+                    $this->issues[] = ['level' => 'error', 'message' => "Diagram '{$diagramId}' topology has a duplicate edge id: {$eid}"];
+                }
+                $edgeIds[$eid] = true;
+            }
+            $edges[] = $e;
+        }
+
+        $this->topology[$diagramId] = [
+            'version' => $version,
+            'nodes' => $nodes,
+            'edges' => array_values($edges),
+            'file' => $file,
+        ];
     }
 
     /**

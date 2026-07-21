@@ -83,9 +83,23 @@ if (is_file($searchJson)) {
     }
 }
 
+// ---- explainable-diagram topology summary ---------------------------------
+$topoCount = 0;
+$nodeCount = 0;
+$edgeCount = 0;
+foreach ($content->allDiagrams() as $did => $rec) {
+    $topo = $content->diagramTopology((string) $did);
+    if ($topo !== null) {
+        $topoCount++;
+        $nodeCount += count($topo['nodes']);
+        $edgeCount += count($topo['edges']);
+    }
+}
+
 // ---- report ---------------------------------------------------------------
 echo "VibeKB content validation\n";
 echo "  functionality records: {$records}  functional areas: {$areas}  diagrams: " . count($content->allDiagrams()) . "\n";
+echo "  explainable topologies: {$topoCount}  nodes: {$nodeCount}  edges: {$edgeCount}\n";
 echo '  errors: ' . count($errors) . '  warnings: ' . count($warnings) . "\n";
 
 foreach ($errors as $e) {

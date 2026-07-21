@@ -31,7 +31,9 @@ diagnostics.
 ├── diagrams/
 │   ├── index.json                # diagram group definitions + display order
 │   ├── records/*.md              # one file per diagram (record + metadata)
-│   └── assets/*.svg              # repository-owned SVGs (accessible title+desc)
+│   ├── assets/*.svg              # repository-owned SVGs (accessible title+desc)
+│   └── topology/*.json           # optional explainable topology per diagram
+│                                 #   (nodes, edges, mechanisms, files+reasons)
 ├── memory/
 │   ├── decisions/*.md
 │   ├── constraints/*.md
@@ -97,13 +99,16 @@ depends_on[], safety, test_after_change, provenance`.
 
 ### diagram (`diagrams/records/*.md`)
 Source-grounded SVG maps of how the software works. Front matter: `id, title,
-summary, diagram_type, group, svg, functionality[], files[], data[],
+summary, diagram_type, group, svg, topology, functionality[], files[], data[],
 warnings[], diagrams[], status, verification, provenance, last_verified,
 uncertainty, created, updated`. The Markdown body explains what the viewer is
 seeing ("What am I looking at?", "Why it matters", "What is uncertain").
 
 - `svg` is a filename in `diagrams/assets/`; the SVG **must** be well-formed XML
   with an accessible `<title>` and `<desc>`, and is rendered inline.
+- `topology` (optional) is a filename in `diagrams/topology/` that upgrades the
+  diagram into an **explainable diagram** (see below). Diagrams without it keep
+  rendering as a picture + narrative.
 - `group` must match a group id in `diagrams/index.json` (unknown groups fall
   into an "Other" group).
 - `functionality[]`, `warnings[]`, and `diagrams[]` are back-links resolved and
@@ -115,6 +120,105 @@ seeing ("What am I looking at?", "Why it matters", "What is uncertain").
   *supported* types, not mandatory diagrams — a repository ships only the
   diagrams it can ground in source, and must label inferred or unverified paths
   in the diagram itself.
+
+### explainable-diagram topology (`diagrams/topology/<diagram-id>.json`)
+An **explainable diagram** is a visual projection of the living software model:
+every node states what it is, every edge states the concrete mechanism
+connecting its endpoints, every displayed file states why it matters, and the
+terminal handoff is an external source link. The topology adds only the
+graph-specific knowledge (nodes, edges, mechanisms, per-node/edge file roles and
+reasons, repository locations) that does not already live in functionality
+records, `important-files.json`, memory, or provenance — those are **reused and
+resolved**, never duplicated.
+
+JSON, so the limited front-matter parser is never asked to hold a nested graph.
+No YAML, no database, no build step. Shape:
+
+```json
+{
+  "version": 1,
+  "nodes": [
+    {
+      "id": "login-controller",
+      "title": "Login Controller",
+      "purpose": "Validates login requests and delegates authentication.",
+      "location": "app/Controllers",
+      "functionality": ["user-login"],
+      "warnings": [],
+      "files": [
+        { "path": "app/Controllers/LoginController.php",
+          "role": "primary implementation",
+          "reason": "Receives and validates the login request." }
+      ],
+      "verification": "verified-from-source",
+      "uncertainty": ""
+    }
+  ],
+  "edges": [
+    {
+      "id": "login-controller-to-auth-service",
+      "from": "login-controller",
+      "to": "auth-service",
+      "mechanism": "delegates-to",
+      "label": "delegates authentication",
+      "explanation": "The login controller validates the request and delegates credential checking to the authentication service.",
+      "functionality": ["user-login"],
+      "warnings": [],
+      "files": [
+        { "path": "app/Services/AuthService.php", "role": "callee",
+          "reason": "Performs credential validation." }
+      ],
+      "verification": "inferred-from-source",
+      "basis": "The controller receives the service via DI and exposes a login action that delegates credential handling.",
+      "uncertainty": "The exact runtime call site was not traced."
+    }
+  ]
+}
+```
+
+Rules (enforced by the loader and `tools/validate.php`):
+
+- `version` must be a supported schema version (currently `1`).
+- Node ids and edge ids are each unique within the diagram.
+- Every node needs a `title` and a `purpose` (nodes answer *what is this?*).
+- Every edge needs `from`, `to`, a `mechanism`, and a one-sentence `explanation`
+  (edges answer *why are these connected?*). `from`/`to` must resolve to nodes
+  in the same topology.
+- `mechanism` must be a value from the **controlled edge-mechanism vocabulary**
+  (below). Vague pseudo-mechanisms are rejected.
+- `verification` uses the shared verification vocabulary. V1 renders two states:
+  **verified** (`verified-*`) as a solid line and **inferred**
+  (`inferred-from-source`, or any non-verified state) as a dashed line. Line
+  style and colour are never the only signal — the state is stated in text too.
+  There is no "hypothesized" tier: if a mechanism cannot be named and defended,
+  the edge is omitted and the gap is recorded in the narrative/uncertainty.
+- Every displayed file must be a safe **repository-relative** path with a
+  non-empty `reason`. `role` should come from the file-role vocabulary. A file's
+  canonical purpose/safety are pulled from `important-files.json` when it is a
+  known important file; the topology `reason` is the diagram-specific context.
+- `functionality[]` and `warnings[]` on nodes/edges must resolve.
+- The SVG must mark each node with `data-vibekb-node="<node-id>"` and each edge
+  with `data-vibekb-edge="<edge-id>"`; the topology ids and SVG markers must map
+  **both ways** (no orphan markers, no unmarked nodes/edges). The SVG stays
+  valid XML with an accessible `<title>`/`<desc>`; markers link to the
+  `#node-<id>` / `#edge-<id>` explanation anchors so a no-JavaScript reader can
+  follow any element to its written explanation.
+- Malformed topology is reported as a Reference diagnostic and fails
+  `tools/validate.php`; it never crashes the guide, and a diagram with no
+  topology still renders.
+
+**Controlled edge-mechanism vocabulary** (single source: `edge_mechanism_vocabulary()`
+in `guide/lib/helpers.php`): `calls`, `delegates-to`, `reads`, `writes`,
+`configures`, `instantiates`, `depends-on`, `emits`, `listens-to`, `validates`,
+`stores-in`, `retrieves-from`, `creates`, `updates`, `deletes`, `routes-to`,
+`renders`, `returns-to`, `sends-to`, `receives-from`. Vague mechanisms
+(`relates-to`, `works-with`, `interacts-with`, `associated-with`,
+`connected-to`, and bare `uses`) are **not** permitted.
+
+**File-role vocabulary** (`file_role_vocabulary()`): `primary implementation`,
+`entry point`, `caller`, `callee`, `dependency`, `configuration`, `data model`,
+`storage`, `renderer`, `route definition`, `validation`, `integration adapter`,
+`supporting utility`, `test or verification evidence`.
 
 ### memory records (`memory/<type>/*.md`)
 `decision, constraint, assumption, warning, discovery, change`. Each links back
@@ -184,6 +288,13 @@ the records themselves so they cannot silently contradict each other.
   that exists, is well-formed XML, and has an accessible `<title>` (and
   ideally `<desc>`); and resolvable `functionality`, `warnings`, and `diagrams`
   links.
+- A diagram's optional `topology` file must exist, be valid JSON of a supported
+  schema version, have unique node/edge ids, resolvable edge endpoints,
+  controlled mechanisms, valid verification states, resolvable
+  functionality/warning references, safe repository-relative file paths each
+  with a non-empty reason, and SVG markers that map to the topology ids in both
+  directions. A diagram with no topology is reported only as a non-fatal
+  compatibility warning.
 - `tools/validate.php` additionally checks provenance completeness, that
   area/record/status totals reconcile, and — when a `/docs` snapshot exists —
   that its search entries point at pages that exist. It exits non-zero on error.
