@@ -16,6 +16,7 @@ require_once __DIR__ . '/lib/Content.php';
 require_once __DIR__ . '/lib/Provenance.php';
 require_once __DIR__ . '/lib/nav.php';
 require_once __DIR__ . '/lib/search.php';
+require_once __DIR__ . '/lib/map.php';
 
 // Mode A — the live PHP guide. The static generator (Mode B) overrides both the
 // URL strategy and this generation context.

@@ -32,7 +32,9 @@ unknown view or missing record renders `not-found` with the right HTTP status;
 `functionality` is special-cased for index vs detail by `?id`; a dev flag
 (`VIBEKB_DEV`, or localhost) enables full errors and the validation banner.
 Navigation, routes, and page titles come from `guide/lib/nav.php` so both modes
-present the identical inventory.
+present the identical inventory. The overview's first screen is the interactive
+functionality map (see **Render the interactive functionality map**), not
+documentation.
 
 ## Step-by-step flow
 

@@ -47,6 +47,7 @@
     "record-current-work",
     "hand-off-to-next-agent",
     "render-guide",
+    "render-functionality-map",
     "show-provenance",
     "search-the-model",
     "generate-static-snapshot",

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Parse records (front matter + Markdown) · VibeKB — VibeKB</title>
+    <title>Render the interactive functionality map · VibeKB — VibeKB</title>
     <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -106,42 +106,92 @@
     <p class="breadcrumb"><a href="../functionality/index.html">← All functionality</a></p>
 
     <header class="page-head reading-column">
-        <p class="eyebrow">Living model</p>
-        <h1>Parse records (front matter + Markdown)</h1>
-        <p class="lede">A small front-matter parser and a pragmatic Markdown subset turn each `.vibekb/` file into structured metadata plus rendered HTML, without pulling in a Markdown library or a build step.</p>
+        <p class="eyebrow">Dynamic guide</p>
+        <h1>Render the interactive functionality map</h1>
+        <p class="lede">The overview&#039;s first screen is an interactive, zoomable map of the application&#039;s functionality — Level 1 areas expand to Level 2 capabilities and open into the Level 3 documentation — built from the existing model with no parallel data, degrading to an accessible list without JavaScript.</p>
         <div class="badge-row">
-            <span class="badge badge--ok">Implemented</span>            <span class="badge badge--ok">Verified from source</span>            <span class="badge badge--muted">System</span>        </div>
+            <span class="badge badge--ok">Implemented</span>            <span class="badge badge--ok">Verified from source</span>            <span class="badge badge--info">User-facing</span>        </div>
     </header>
 
     <div class="detail-grid">
         <div class="detail-main">
                             <div class="prose reading-column"><h3>In one sentence</h3>
-<p>Each record file is split into a <code>---</code> fenced front-matter block (scalars,
-quoted strings, booleans, ints, inline and block lists) and a Markdown body that
-is rendered by a deliberately small, dependency-free renderer.</p>
+<p>Before any documentation, the guide shows a high-level map of what the software
+does — areas → capabilities → docs — so a reader builds a mental model in
+seconds, then clicks into the pages the rest of the guide already renders.</p>
 <h3>Current behavior</h3>
-<p><code>FrontMatter::parse()</code> reads the leading fenced block and returns
-<code>[&#039;meta&#039; =&gt; ..., &#039;body&#039; =&gt; ...]</code>. <code>Markdown::toHtml()</code> supports the subset the
-guide actually needs — headings, lists, tables, fenced code, emphasis, links,
-and blockquotes — and escapes output. Anything outside the subset is rendered as
-plain text rather than executed.</p>
+<p><code>build_functionality_map()</code> (<code>guide/lib/map.php</code>) turns the living model into the
+map&#039;s data — inventing nothing. Level 1 nodes are the functionality groups
+(<code>functionalityGroups()</code>); Level 2 nodes are the functionality records inside an
+area; every &quot;open documentation&quot; link is the same detail page
+(<code>functionality_url()</code>) the rest of the guide uses. It also assembles live,
+clickable statistics (functionalities, areas, systems, key files, relationships,
+diagrams) and a current-context signal read from <code>work/current.md</code>&#039;s
+<code>affected_functionality</code> — architected so <code>php tools/vibekb.php context</code> can feed
+it later without changing the shape.</p>
+<p>The partial <code>partials/functionality-map.php</code> renders three things from that one
+model: a slim hero, the statistics, and — always in the DOM — an accessible
+fallback of expandable area cards that link straight into the docs. On capable
+screens <code>guide.js</code> builds an interactive, pannable/zoomable canvas on top of the
+fallback (Level 1 areas radiating from the application node; clicking an area
+lazily expands its Level 2 children; double-click opens documentation; a current
+context glows). Without JavaScript, on small screens, or in list mode, the
+fallback is the experience. Both are the same data, so they cannot disagree, and
+both output modes share the builder so the map never diverges from the guide.</p>
+<h3>Step-by-step flow</h3>
+<ol>
+<li><code>overview.php</code> requires the map partial as the page&#039;s centerpiece.</li>
+<li>The partial calls <code>build_functionality_map()</code> and renders stats + fallback,</li>
+</ol>
+<p>and embeds the model as JSON for the client.</p>
+<ol>
+<li><code>guide.js</code> <code>initFunctionalityMap()</code> reads the JSON; on <code>min-width: 760px</code> it</li>
+</ol>
+<p>builds the canvas, otherwise the fallback cards remain the experience.</p>
+<ol>
+<li>Expansion is lazy — Level 2 nodes exist only for expanded areas.</li>
+</ol>
 <h3>Implementation map</h3>
 <ul>
-<li><code>guide/lib/FrontMatter.php</code> — the value-form parser (no YAML dependency).</li>
-<li><code>guide/lib/Markdown.php</code> — the Markdown subset renderer.</li>
+<li><code>guide/lib/map.php</code> — the map model builder (areas, children, stats, context).</li>
+<li><code>guide/templates/partials/functionality-map.php</code> — hero, stats, canvas mount,</li>
+</ul>
+<p>accessible fallback, embedded JSON.</p>
+<ul>
+<li><code>guide/templates/overview.php</code> — includes the partial as the first screen.</li>
+<li><code>guide/assets/js/guide.js</code> — <code>initFunctionalityMap()</code> (pan/zoom/expand/tooltip,</li>
+</ul>
+<p>list-mode toggle, mobile handling).</p>
+<ul>
+<li><code>guide/assets/css/guide.css</code> — the map&#039;s styles (<code>.fmap*</code>).</li>
+</ul>
+<h3>Data used</h3>
+<ul>
+<li><strong>Reads:</strong> functionality groups and records, system doc count, important-files,</li>
+</ul>
+<p>diagrams, and the current work record (for context highlighting).</p>
+<ul>
+<li><strong>Writes:</strong> nothing.</li>
 </ul>
 <h3>Failure cases</h3>
 <ul>
-<li>A record with no front-matter block still parses (empty meta, full body).</li>
-<li>Unsupported Markdown constructs degrade to text; they are never a hard error.</li>
+<li>No JavaScript, small screen, or list mode → the accessible fallback renders the</li>
 </ul>
+<p>same areas, capabilities, and documentation links.</p>
+<ul>
+<li>A malformed embedded model → the script returns early, leaving the fallback.</li>
+</ul>
+<h3>Safe to change</h3>
+<p>Node styling, layout radii, copy, and which statistics are shown are safe. The
+fallback markup is the accessibility contract — keep it a real, linked list.</p>
 <h3>Use caution</h3>
-<p>This is <strong>not</strong> full CommonMark. If a record needs a construct the renderer does
-not support, extend the renderer deliberately rather than assuming it works — and
-keep escaping first.</p>
+<p>The map must never become a new source of truth: it is a visualization of the
+existing model. Keep it reading through <code>Content</code> accessors, keep every link
+pointing at the real documentation, and keep the no-JavaScript fallback working.</p>
 <h3>Why it works this way</h3>
-<p>Avoiding a Markdown library and a build step is what keeps VibeKB deployable on
-plain PHP 8.2 shared hosting. The subset is a constraint, documented as one.</p></div>
+<p>VibeKB&#039;s promise is &quot;understand what your software is doing.&quot; Leading with a map
+answers that in seconds and makes the diagram the primary navigation, while the
+written pages remain the detail — understanding first, documentation second.</p></div>
                     </div>
 
         <aside class="detail-rail" aria-label="Record metadata">
@@ -155,18 +205,18 @@ plain PHP 8.2 shared hosting. The subset is a constraint, documented as one.</p>
                                         <dt>Updated</dt>
                     <dd>2026-07-22</dd>
                     <dt>Facing</dt>
-                    <dd>System</dd>
+                    <dd>User-facing</dd>
                 </dl>
             </div>
 
                             <div class="rail-card metadata-group">
                     <h2>Trigger</h2>
-                    <p>The loader reads any `.md` record.</p>
+                    <p>A reader opens the overview (the guide&#039;s landing page) in either output mode.</p>
                 </div>
             
             <div class="rail-card metadata-group">
                 <h2>Data read or written</h2>
-                <p><strong>Reads:</strong> <span class="muted">None.</span></p>
+                <p><strong>Reads:</strong> <code class="chip chip--file">.vibekb/functionality</code> <code class="chip chip--file">.vibekb/system</code> <code class="chip chip--file">.vibekb/files/important-files.json</code> <code class="chip chip--file">.vibekb/diagrams</code> <code class="chip chip--file">.vibekb/work/current.md</code></p>
                 <p><strong>Writes:</strong> <span class="muted">None.</span></p>
                             </div>
 
@@ -174,34 +224,24 @@ plain PHP 8.2 shared hosting. The subset is a constraint, documented as one.</p>
                 <h2>Files involved</h2>
                                                         <ul class="rail-list">
                                                     <li>
-                                <a href="../files/index.html#guide%2Flib%2FFrontMatter.php"><code>guide/lib/FrontMatter.php</code></a>
+                                <a href="../files/index.html#guide%2Flib%2Fmap.php"><code>guide/lib/map.php</code></a>
                                 <span class="badge badge--info">Moderate impact</span>                            </li>
                                                     <li>
-                                <a href="../files/index.html#guide%2Flib%2FMarkdown.php"><code>guide/lib/Markdown.php</code></a>
+                                <a href="../files/index.html#guide%2Ftemplates%2Fpartials%2Ffunctionality-map.php"><code>guide/templates/partials/functionality-map.php</code></a>
                                 <span class="badge badge--info">Moderate impact</span>                            </li>
                                             </ul>
                                                 </div>
 
             <div class="rail-card metadata-group">
                 <h2>Dependencies</h2>
-                                    <p><strong>Depends on:</strong> <span class="muted">None.</span></p>
-                                                    <p><strong>Depended on by:</strong> <a class="chip" href="../functionality/load-living-model.html">Load the living model</a></p>
+                                    <p><strong>Depends on:</strong> <a class="chip" href="../functionality/load-living-model.html">Load the living model</a> <a class="chip" href="../functionality/resolve-relationships.html">Resolve relationships between records</a> <a class="chip" href="../functionality/render-guide.html">Render the dynamic guide</a></p>
+                                                    <p><strong>Depended on by:</strong> <span class="muted">None.</span></p>
                             </div>
 
-                            <div class="rail-card metadata-group">
-                    <h2>Related diagrams</h2>
-                                            <p>
-                                                            <a class="chip" href="../diagrams/index.html#content-load-flow">How the model is loaded and validated</a>
-                                                    </p>
-                                                                <p class="rail-note text-soft">Appears as a node in:</p>
-                        <ul class="rail-list">
-                                                            <li><a href="../diagrams/index.html#node-content-files">Content files (.vibekb/)</a> <span class="text-soft">· How the model is loaded and validated</span></li>
-                                                    </ul>
-                                    </div>
             
             <div class="rail-card metadata-group">
                 <h2>Related rationale</h2>
-                                    <p><a class="chip" href="../why/constraints/no-build-step-portable.html">Runs on PHP 8.2 shared hosting with no build step</a></p>
+                                    <p><a class="chip" href="../why/decisions/functionality-first-not-files.html">Functionality is the primary unit, not files</a> <a class="chip" href="../why/constraints/no-build-step-portable.html">Runs on PHP 8.2 shared hosting with no build step</a></p>
                             </div>
         </aside>
     </div>

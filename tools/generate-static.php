@@ -35,6 +35,7 @@ require_once $guideLib . '/Content.php';
 require_once $guideLib . '/Provenance.php';
 require_once $guideLib . '/nav.php';
 require_once $guideLib . '/search.php';
+require_once $guideLib . '/map.php';
 
 $contentRoot = $repoRoot . '/.vibekb';
 // The output directory defaults to /docs but can be redirected with
