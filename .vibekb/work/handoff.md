@@ -10,7 +10,7 @@ verification_state: verified-manually
 ## Completed this change
 
 - Resized/renamed hero image to `assets/images/homepage-developer-journey.webp` (+ PNG fallback).
-- Placed image next to hero copy via `hp-hero-lead` grid; metrics card unchanged on the right.
+- Placed image next to hero copy in a flat three-column grid (copy | comic | metrics); equal widths on desktop.
 - Responsive stack on narrow screens.
 
 ## Verification completed
