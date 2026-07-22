@@ -10,8 +10,8 @@ verification_state: verified-manually
 ## What changed
 
 - Source asset `assets/7E1D04F9-6324-4E51-AF19-65328ABA0308.png` (~1.4 MB on main) was resized and renamed to `assets/images/homepage-developer-journey.webp` (~19 KB) with a PNG fallback (~52 KB).
-- `index.php` section 1 wraps copy + `<picture>` in `hp-hero-lead`; live metrics card stays in the right column.
-- `homepage.css` adds `hp-hero-lead` grid and image styling; stacks on narrow viewports.
+- `index.php` section 1 uses a flat three-column hero grid: copy, comic, live metrics card.
+- `homepage.css` uses equal `1fr` columns on desktop; stacks on narrow viewports.
 
 ## Verification
 

@@ -526,14 +526,14 @@
     },
     {
         "title": "index.php",
-        "summary": "The public homepage: story-driven copy (developer journey arc) plus a live preview card and functionality carousel driven by the active .vibekb/ model.",
+        "summary": "The public homepage: story-driven copy (developer journey arc + hero comic), live preview card, and functionality carousel driven by the active .vibekb/ model.",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
     },
     {
         "title": "assets/css/homepage.css",
-        "summary": "Homepage styling: three-section layout (arc, pillars, guide carousel, shared hp-* chrome).",
+        "summary": "Homepage styling: three-section layout (hero lead + comic, arc, pillars, guide carousel, shared hp-* chrome).",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
