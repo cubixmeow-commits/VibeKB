@@ -318,16 +318,18 @@
                         <div class="file-card__badges">
                             <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
                     </div>
-                    <p class="file-card__purpose">The public homepage: story-driven copy (developer journey arc + hero comic), live preview card, and functionality carousel driven by the active .vibekb/ model.</p>
+                    <p class="file-card__purpose">The public homepage: hero/problem, three-step install fast-start (#install), what-you-get pillars, live preview card, and functionality carousel driven by the active .vibekb/ model.</p>
                     <dl class="file-card__meta">
                                                     <div><dt>Runs when</dt><dd>Every browser request to the site root.</dd></div>
                                                                             <div><dt>Implements</dt><dd>
                                                                                                             <a class="chip" href="../functionality/load-living-model.html">Load the living model</a>
+                                                                                                                                                <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a>
+                                                                                                                                                <a class="chip" href="../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a>
                                                                                                 </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">guide/lib/Content.php</code> <code class="chip chip--file">guide/lib/helpers.php</code> <code class="chip chip--file">.vibekb/project/identity.md</code> <code class="chip chip--file">assets/css/homepage.css</code> <code class="chip chip--file">assets/js/homepage.js</code> <code class="chip chip--file">assets/images/homepage-developer-journey.webp</code> <code class="chip chip--file">assets/images/homepage-developer-journey.png</code></dd></div>
+                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">guide/lib/Content.php</code> <code class="chip chip--file">guide/lib/helpers.php</code> <code class="chip chip--file">.vibekb/project/identity.md</code> <code class="chip chip--file">assets/css/homepage.css</code> <code class="chip chip--file">assets/js/homepage.js</code> <code class="chip chip--file">assets/images/homepage-developer-journey.webp</code> <code class="chip chip--file">assets/images/homepage-developer-journey.png</code> <code class="chip chip--file">install.php</code> <code class="chip chip--file">INSTALLER.md</code> <code class="chip chip--file">prompts/INTEGRATE_VIBEKB.md</code></dd></div>
                                                                             <div><dt>Depended on by</dt><dd>
                                 Public landing / Mode A deployment                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Load the homepage; confirm three sections, hero image beside copy, arc + pillars, and carousel render from the active model.</dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Load the homepage; confirm section order problem → install → understanding → proof; verify install commands match INSTALLER.md; confirm copy buttons and no-JS readability.</dd></div>
                                             </dl>
                 </section>
                             <section class="file-card" id="assets/css/homepage.css">
@@ -336,15 +338,16 @@
                         <div class="file-card__badges">
                             <span class="badge badge--ok">Low impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
                     </div>
-                    <p class="file-card__purpose">Homepage styling: three-section layout (hero lead + comic, arc, pillars, guide carousel, shared hp-* chrome).</p>
+                    <p class="file-card__purpose">Homepage styling: hero, three-step install cards, pillars, guide carousel, shared hp-* chrome.</p>
                     <dl class="file-card__meta">
                                                     <div><dt>Runs when</dt><dd>Every homepage request.</dd></div>
                                                                             <div><dt>Implements</dt><dd>
                                                                                                             <a class="chip" href="../functionality/load-living-model.html">Load the living model</a>
+                                                                                                                                                <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a>
                                                                                                 </dd></div>
                                                                                                     <div><dt>Depended on by</dt><dd>
                                 index.php                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Load the homepage at mobile and desktop widths; confirm journey and transform layouts.</dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Load the homepage at mobile and desktop widths; confirm install cards stack with connectors on narrow viewports and sit in one row on wide viewports; no horizontal overflow.</dd></div>
                                             </dl>
                 </section>
                             <section class="file-card" id="assets/js/homepage.js">
@@ -353,15 +356,16 @@
                         <div class="file-card__badges">
                             <span class="badge badge--ok">Low impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
                     </div>
-                    <p class="file-card__purpose">Homepage progressive enhancement: guide-preview carousel only; degrades without JS.</p>
+                    <p class="file-card__purpose">Homepage progressive enhancement: guide-preview carousel and reusable copy buttons for install commands / Cursor prompt; degrades without JS.</p>
                     <dl class="file-card__meta">
                                                     <div><dt>Runs when</dt><dd>Homepage with JavaScript enabled.</dd></div>
                                                                             <div><dt>Implements</dt><dd>
                                                                                                             <a class="chip" href="../functionality/load-living-model.html">Load the living model</a>
+                                                                                                                                                <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a>
                                                                                                 </dd></div>
                                                                                                     <div><dt>Depended on by</dt><dd>
                                 index.php                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Confirm story dots, carousel, and tab widgets work with JS and degrade without it.</dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Confirm carousel and copy buttons work with JS; commands remain visible and selectable without JS; Clipboard API failure falls back gracefully.</dd></div>
                                             </dl>
                 </section>
                             <section class="file-card" id="guide/templates/layout.php">
@@ -577,7 +581,7 @@
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 22:10 UTC · source commit 3651d1e (2026-07-22) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 23:38 UTC · source commit 3651d1e (2026-07-22) · not auto-updating</p>
             </div>
         </footer>
     </div>

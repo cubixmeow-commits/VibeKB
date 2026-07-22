@@ -53,7 +53,7 @@
         "summary": "A PHP installer (`install.php`) that copies the VibeKB runtime into a target repository and scaffolds a fresh, empty-but-valid `.vibekb/` workspace — without touching the application's code and without analysing it — so adopting VibeKB is a command, not a manual copy.",
         "type": "functionality",
         "url": "../functionality/install-into-a-repository.html",
-        "body": "In one sentence php install.php /path/to/repo prepares any repository for VibeKB — it installs the guide, the tools, the agent instructions, and the VibeKB docs, then lays down a fresh empty model — and then hands off to an AI agent to build the model. User experience The developer runs one command and sees a plan what will be created, replaced, skipped, and that .vibekb/ is a fresh model , confirms, and gets a verified installation with explicit next steps. dry run shows the full plan and changes nothing; yes runs non interactively; force overwrites pre existing files including resetting an existing model ; an existing installation is auto detected and upgraded runtime refreshed, .vibekb/ preserved . Current behavior The installer resolves its own clone as the source and the argument or t"
+        "body": "In one sentence php install.php /path/to/repo prepares any repository for VibeKB — it installs the guide, the tools, the agent instructions, and the VibeKB docs, then lays down a fresh empty model — and then hands off to an AI agent to build the model. User experience The public homepage surfaces the intended first run path in three steps under install : clone VibeKB, run php VibeKB/install.php /path/to/your/project , then ask Cursor to build the model with prompts/INTEGRATE VIBEKB.md . That page is marketing copy only — the installer itself is unchanged. The developer runs one command and sees a plan what will be created, replaced, skipped, and that .vibekb/ is a fresh model , confirms, and gets a verified installation with explicit next steps. dry run shows the full plan and changes noth"
     },
     {
         "title": "Load the living model",
@@ -490,6 +490,13 @@
         "body": "What changed Source asset assets/7E1D04F9 6324 4E51 AF19 65328ABA0308.png ~1.4 MB on main was resized and renamed to assets/images/homepage developer journey.webp ~19 KB with a PNG fallback ~52 KB . index.php section 1: two columns — copy left; comic stacked above live metrics card in the right column. homepage.css : hp hero aside flex column on desktop; stacks on narrow viewports. Verification Image files present at expected paths; php l index.php ; php tools/vibekb.php check clean."
     },
     {
+        "title": "Homepage install fast-start under the hero",
+        "summary": "The homepage now places a three-step install section (clone → install.php → Cursor prompt) directly under the hero, with copy buttons, a result strip that labels docs/ as generated later, and an expandable installer disclosure — without implying automatic repository understanding.",
+        "type": "change",
+        "url": "../why/changes/homepage-install-fast-start.html",
+        "body": "Before A short install block sat between \"What you get\" and live proof. It mixed a combined command block with a six step list that mentioned upgrades and bootstrap , burying the real public workflow. After Page flow is: hero/problem → Add VibeKB to your repository → what you get → live proof. The install section shows exactly three primary steps matching INSTALLER.md / install.php : 1. git clone https://github.com/cubixmeow commits/VibeKB.git 2. php VibeKB/install.php /path/to/your/project plus example path; PHP 8.2+ 3. A copyable Cursor prompt pointing at prompts/INTEGRATE VIBEKB.md Copy buttons live in homepage.js . The result strip distinguishes installed runtime .vibekb/ , guide/ , tools/ from docs/ generated later via php tools/vibekb.php generate . A disclosure covers what the insta"
+    },
+    {
         "title": "Replace leftover SousMeow homepage tagline with VibeKB self-hosting copy",
         "summary": "The homepage hero card no longer falls back to an old workflow-platform tagline; it uses VibeKB's identity one_liner/summary, and adjacent framing now describes VibeKB explaining itself.",
         "type": "change",
@@ -582,21 +589,21 @@
     },
     {
         "title": "index.php",
-        "summary": "The public homepage: story-driven copy (developer journey arc + hero comic), live preview card, and functionality carousel driven by the active .vibekb/ model.",
+        "summary": "The public homepage: hero/problem, three-step install fast-start (#install), what-you-get pillars, live preview card, and functionality carousel driven by the active .vibekb/ model.",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
     },
     {
         "title": "assets/css/homepage.css",
-        "summary": "Homepage styling: three-section layout (hero lead + comic, arc, pillars, guide carousel, shared hp-* chrome).",
+        "summary": "Homepage styling: hero, three-step install cards, pillars, guide carousel, shared hp-* chrome.",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
     },
     {
         "title": "assets/js/homepage.js",
-        "summary": "Homepage progressive enhancement: guide-preview carousel only; degrades without JS.",
+        "summary": "Homepage progressive enhancement: guide-preview carousel and reusable copy buttons for install commands / Cursor prompt; degrades without JS.",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
@@ -721,17 +728,17 @@
         "body": "Mode A — the dynamic guide on shared hosting .cpanel.yml rsyncs the runtime paths index.php , assets/ , guide/ , .vibekb/ into a cPanel public folder and excludes development only paths tools/ , prompts/ , docs/ , authoring docs, examples/ . Query string routing means no .htaccess rewrite rules are needed and the app runs in a subfolder. .vibekb/ must deploy — it is the content. Mode B — the static snapshot php tools/generate static.php builds /docs ; publish it via GitHub Pages Settings → Pages → branch → /docs or any static host. Relative links make it work at a web root or under a repository subpath. No PHP, database, CDN, or network required. Deployment is part of the application Whenever repository structure, runtime folders, or deployment requirements change, .cpanel.yml and DEPLOYME"
     },
     {
-        "title": "First-class VibeKB installer",
-        "summary": "Installer + bootstrap + starter library added and reconciled into the model. See handoff.md.",
+        "title": "Homepage install fast-start",
+        "summary": "Complete — homepage #install redesigned and moved beneath the hero; model reconciled. See handoff.md.",
         "type": "current work",
         "url": "../current-work/index.html",
-        "body": "Status Complete and reconciled into the model. The installer prepares the workspace; an AI agent still builds the model. See .vibekb/work/handoff.md ."
+        "body": "Status Complete. The homepage shows the real public install workflow under the hero without claiming the installer understands the application. See .vibekb/work/handoff.md ."
     },
     {
         "title": "Current handoff",
-        "summary": "VibeKB now has a first-class installer (`php install.php`) plus a `vibekb bootstrap` command and a shared starter library, so adopting VibeKB into another repository is one command that prepares the workspace and hands off to an agent. Next: keep the model reconciled as VibeKB changes.",
+        "summary": "The homepage now leads with a three-step install fast-start (clone → install.php → Cursor prompt) under the hero, matching the real installer. Next: keep the model reconciled as VibeKB changes.",
         "type": "handoff",
         "url": "../handoff/index.html",
-        "body": "Completed this change New install.php — the VibeKB installer. Detects the target, reads template/manifest.json , shows a create/replace/skip/preserve plan, copies the VibeKB owned payload, scaffolds a fresh empty .vibekb/ , records installer state in .vibekb/.installer.json , and verifies including the target's own vibekb check . Supports dry run , yes , force , and auto detected upgrades that preserve .vibekb/ . Refuses to install into VibeKB's own repo. New tools/lib/Starter.php — the single source of truth for the starter workspace required dirs + starter files + verify/scaffold helpers , shared by the installer and bootstrap. Writes only empty placeholders — never functionality about the target. New bootstrap command in tools/vibekb.php — verifies and repairs a workspace \"git init for "
+        "body": "Completed this change Homepage install moved directly under the hero before “What you get” . Three primary steps with working copy buttons: clone command, install command + example , and a Cursor prompt pointing at prompts/INTEGRATE VIBEKB.md . Result strip distinguishes installed runtime from docs/ generated later . Expandable “What does the installer do?” disclosure with payload list and optional dry run . Nav order: The problem → Install → What you get → See it work. Model reconciled: important files for homepage assets, new change record homepage install fast start , installer/initialize records linked, provenance and work records updated. Verification completed Displayed commands checked against install.php / INSTALLER.md / template/manifest.json no fabricated commands . php l index.p"
     }
 ]

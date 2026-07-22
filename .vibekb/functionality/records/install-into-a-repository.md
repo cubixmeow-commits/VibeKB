@@ -15,7 +15,7 @@ reads: [template/manifest.json]
 writes: []
 config: []
 depends_on: [bootstrap-workspace, load-living-model]
-related_memory: [decision:installer-template-not-duplicated-tree, decision:installer-prepares-agent-interprets, change:first-class-installer]
+related_memory: [decision:installer-template-not-duplicated-tree, decision:installer-prepares-agent-interprets, change:first-class-installer, change:homepage-install-fast-start]
 ---
 
 ## In one sentence
@@ -25,6 +25,11 @@ the guide, the tools, the agent instructions, and the VibeKB docs, then lays dow
 a fresh empty model — and then hands off to an AI agent to build the model.
 
 ## User experience
+
+The public homepage surfaces the intended first-run path in three steps under
+`#install`: clone VibeKB, run `php VibeKB/install.php /path/to/your/project`,
+then ask Cursor to build the model with `prompts/INTEGRATE_VIBEKB.md`. That page
+is marketing copy only — the installer itself is unchanged.
 
 The developer runs one command and sees a plan (what will be created, replaced,
 skipped, and that `.vibekb/` is a fresh model), confirms, and gets a verified

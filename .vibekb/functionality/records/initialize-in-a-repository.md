@@ -14,7 +14,7 @@ files: [INITIALIZE.md, prompts/INTEGRATE_VIBEKB.md]
 reads: []
 writes: []
 depends_on: [install-into-a-repository, load-living-model, validate-model, generate-static-snapshot]
-related_memory: [assumption:agents-follow-session-workflow]
+related_memory: [assumption:agents-follow-session-workflow, change:homepage-install-fast-start]
 ---
 
 ## In one sentence
