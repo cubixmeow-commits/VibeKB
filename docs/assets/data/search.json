@@ -445,7 +445,7 @@
         "summary": "Optimized and renamed the developer-journey comic; placed beside hero copy in section 1 with responsive layout.",
         "type": "change",
         "url": "../why/changes/homepage-hero-image.html",
-        "body": "What changed Source asset assets/7E1D04F9 6324 4E51 AF19 65328ABA0308.png ~1.4 MB on main was resized and renamed to assets/images/homepage developer journey.webp ~19 KB with a PNG fallback ~52 KB . index.php section 1: hero comic spans full width above a two column row copy metrics . homepage.css : two column grid on desktop; image centered above; stacks on narrow viewports. Verification Image files present at expected paths; php l index.php ; php tools/vibekb.php check clean."
+        "body": "What changed Source asset assets/7E1D04F9 6324 4E51 AF19 65328ABA0308.png ~1.4 MB on main was resized and renamed to assets/images/homepage developer journey.webp ~19 KB with a PNG fallback ~52 KB . index.php section 1: two columns — copy left; comic stacked above live metrics card in the right column. homepage.css : hp hero aside flex column on desktop; stacks on narrow viewports. Verification Image files present at expected paths; php l index.php ; php tools/vibekb.php check clean."
     },
     {
         "title": "Replace leftover SousMeow homepage tagline with VibeKB self-hosting copy",
@@ -655,6 +655,6 @@
         "summary": "Homepage hero now shows the optimized developer-journey comic beside section-1 copy; three-section structure unchanged. Next: keep model reconciled as VibeKB changes.",
         "type": "handoff",
         "url": "../handoff/index.html",
-        "body": "Completed this change Resized/renamed hero image to assets/images/homepage developer journey.webp + PNG fallback . Hero layout: comic centered above; copy and metrics card in two columns below on desktop. Responsive stack on narrow screens. Verification completed php l index.php ; image assets on disk; php tools/vibekb.php check OK; /docs regenerated. Exact next recommended action php tools/vibekb.php status before the next change; affected → update model → check + generate before commit."
+        "body": "Completed this change Resized/renamed hero image to assets/images/homepage developer journey.webp + PNG fallback . Hero layout: copy left; journey comic above live metrics card in the right column on desktop. Responsive stack on narrow screens. Verification completed php l index.php ; image assets on disk; php tools/vibekb.php check OK; /docs regenerated. Exact next recommended action php tools/vibekb.php status before the next change; affected → update model → check + generate before commit."
     }
 ]

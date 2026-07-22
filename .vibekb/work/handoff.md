@@ -10,7 +10,7 @@ verification_state: verified-manually
 ## Completed this change
 
 - Resized/renamed hero image to `assets/images/homepage-developer-journey.webp` (+ PNG fallback).
-- Hero layout: comic centered above; copy and metrics card in two columns below on desktop.
+- Hero layout: copy left; journey comic above live metrics card in the right column on desktop.
 - Responsive stack on narrow screens.
 
 ## Verification completed
