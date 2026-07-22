@@ -10,7 +10,7 @@ user_facing: true
 trigger: A developer clones VibeKB and runs `php install.php [target]` (or `php install.php` in the current directory).
 updated: 2026-07-22
 tags: [integration, installer, onboarding, scaffolding]
-files: [install.php, template/manifest.json, tools/lib/Starter.php]
+files: [install.php, template/manifest.json, tools/lib/Starter.php, index.php, assets/css/homepage.css, assets/js/homepage.js]
 reads: [template/manifest.json]
 writes: []
 config: []

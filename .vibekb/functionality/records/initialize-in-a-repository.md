@@ -10,7 +10,7 @@ user_facing: true
 trigger: A developer runs `php install.php` to prepare the repo, then runs the integration prompt in their coding agent.
 updated: 2026-07-22
 tags: [integration, onboarding, process]
-files: [INITIALIZE.md, prompts/INTEGRATE_VIBEKB.md]
+files: [INITIALIZE.md, prompts/INTEGRATE_VIBEKB.md, index.php]
 reads: []
 writes: []
 depends_on: [install-into-a-repository, load-living-model, validate-model, generate-static-snapshot]
