@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Replace leftover SousMeow homepage tagline with VibeKB self-hosting copy · VibeKB — VibeKB</title>
+    <title>Homepage hero journey image · VibeKB — VibeKB</title>
     <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -106,39 +106,27 @@
         <p class="breadcrumb"><a href="../../why/index.html">← Decisions &amp; rationale</a></p>
         <header class="page-head reading-column">
             <p class="eyebrow">Changes</p>
-            <h1>Replace leftover SousMeow homepage tagline with VibeKB self-hosting copy</h1>
-            <p class="lede">The homepage hero card no longer falls back to an old workflow-platform tagline; it uses VibeKB&#039;s identity one_liner/summary, and adjacent framing now describes VibeKB explaining itself.</p>
+            <h1>Homepage hero journey image</h1>
+            <p class="lede">Optimized and renamed the developer-journey comic; placed beside hero copy in section 1 with responsive layout.</p>
             <div class="badge-row">
-                <span class="badge badge--info">implemented</span>                                                <span class="badge badge--ok">Verified manually</span>            </div>
+                                                                            </div>
         </header>
         <div class="detail-grid">
-            <div class="detail-main"><div class="prose reading-column"><h3>Before</h3>
-<p>The homepage hero card read <code>identity.meta.one_liner</code> only. VibeKB&#039;s identity had
-a <code>summary</code> but no <code>one_liner</code>, so the card fell back to a hardcoded SousMeow-era
-sentence (&quot;A platform for running step-by-step AI workflows…&quot;). Nearby copy still
-framed the active model as a separate sample application.</p>
-<h3>After</h3>
+            <div class="detail-main"><div class="prose reading-column"><h3>What changed</h3>
 <ul>
-<li>Identity carries a VibeKB <code>one_liner</code>.</li>
-<li>The homepage prefers <code>one_liner</code>, then <code>summary</code>, with a VibeKB-accurate</li>
+<li>Source asset <code>assets/7E1D04F9-6324-4E51-AF19-65328ABA0308.png</code> (~1.4 MB on main) was resized and renamed to <code>assets/images/homepage-developer-journey.webp</code> (~19 KB) with a PNG fallback (~52 KB).</li>
+<li><code>index.php</code> section 1 wraps copy + <code>&lt;picture&gt;</code> in <code>hp-hero-lead</code>; live metrics card stays in the right column.</li>
+<li><code>homepage.css</code> adds <code>hp-hero-lead</code> grid and image styling; stacks on narrow viewports.</li>
 </ul>
-<p>fallback (same pattern as the guide overview).</p>
+<h3>Verification</h3>
 <ul>
-<li>When <code>self_hosted</code> / non-sample, the hero card, functionality carousel, and</li>
-</ul>
-<p>final CTA describe VibeKB explaining itself.</p>
-<ul>
-<li><code>index.php</code> is recorded in important-files so future <code>affected</code> runs map it.</li>
-</ul>
-<h3>Impact</h3>
-<p>Visitors see an accurate product description on the landing page. The guide
-overview also surfaces the new one_liner.</p></div></div>
+<li>Image files present at expected paths; <code>php -l index.php</code>; <code>php tools/vibekb.php check</code> clean.</li>
+</ul></div></div>
             <aside class="detail-rail" aria-label="Connections">
                 <div class="rail-card">
                     <h2>Affects functionality</h2>
-                    <p><a class="chip" href="../../functionality/load-living-model.html">Load the living model</a></p>
+                    <p><span class="muted">None.</span></p>
                 </div>
-                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">index.php</code> <code class="chip chip--file">.vibekb/project/identity.md</code></p></div>
                             </aside>
         </div>
     </article>

@@ -441,6 +441,13 @@
         "body": "Before The homepage explained what VibeKB records and how the repository model works — accurate, but category first. It did not lead with the moment a developer realizes they shipped faster than they understood. After Hero and CTA centre on: AI helped you build it. VibeKB helps you understand it. Six beat developer journey section with comic inspired emotional pacing — balanced for vibe coders building their own software and developers extending open source. Uncertainty section names fear/guessing, not \"documentation.\" VibeKB introduced only after the problem lands, as the missing understanding layer. Before/after transformation section; live proof carousel retained. Story dot navigation progressive enhancement in homepage.js. Impact Visitors should recognize their own arc within the first"
     },
     {
+        "title": "Homepage hero journey image",
+        "summary": "Optimized and renamed the developer-journey comic; placed beside hero copy in section 1 with responsive layout.",
+        "type": "change",
+        "url": "../why/changes/homepage-hero-image.html",
+        "body": "What changed Source asset assets/7E1D04F9 6324 4E51 AF19 65328ABA0308.png ~1.4 MB on main was resized and renamed to assets/images/homepage developer journey.webp ~19 KB with a PNG fallback ~52 KB . index.php section 1 wraps copy + <picture in hp hero lead ; live metrics card stays in the right column. homepage.css adds hp hero lead grid and image styling; stacks on narrow viewports. Verification Image files present at expected paths; php l index.php ; php tools/vibekb.php check clean."
+    },
+    {
         "title": "Replace leftover SousMeow homepage tagline with VibeKB self-hosting copy",
         "summary": "The homepage hero card no longer falls back to an old workflow-platform tagline; it uses VibeKB's identity one_liner/summary, and adjacent framing now describes VibeKB explaining itself.",
         "type": "change",
@@ -641,13 +648,13 @@
         "summary": "Idle. See handoff.md.",
         "type": "current work",
         "url": "../current-work/index.html",
-        "body": "Status Homepage three section distill complete. See .vibekb/memory/changes/homepage three sections.md ."
+        "body": "Status Homepage hero image complete. See .vibekb/memory/changes/homepage hero image.md ."
     },
     {
         "title": "Current handoff",
-        "summary": "Homepage distilled to three sections (problem → what you get → live proof + CTA) while keeping the developer-journey message, vibe-coder + fork balance, and coding-agent list. Next: keep model reconciled as VibeKB changes.",
+        "summary": "Homepage hero now shows the optimized developer-journey comic beside section-1 copy; three-section structure unchanged. Next: keep model reconciled as VibeKB changes.",
         "type": "handoff",
         "url": "../handoff/index.html",
-        "body": "Completed this change Collapsed eleven homepage sections into three scannable sections ~355 lines vs ~750 . Section 1: thesis + three beat arc + live metrics card. Section 2: understanding layer + four pillar cards to guide views. Section 3: functionality carousel + CTA. Trimmed homepage.js to carousel only progressive enhancement. Verification completed php l index.php ; rendered HTML has exactly three <section elements. php tools/vibekb.php check OK; /docs regenerated. Exact next recommended action php tools/vibekb.php status before the next change; affected → update model → check + generate before commit."
+        "body": "Completed this change Resized/renamed hero image to assets/images/homepage developer journey.webp + PNG fallback . Placed image next to hero copy via hp hero lead grid; metrics card unchanged on the right. Responsive stack on narrow screens. Verification completed php l index.php ; image assets on disk; php tools/vibekb.php check OK; /docs regenerated. Exact next recommended action php tools/vibekb.php status before the next change; affected → update model → check + generate before commit."
     }
 ]

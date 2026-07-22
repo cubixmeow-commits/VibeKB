@@ -101,18 +101,18 @@
     },
     {
       "path": "index.php",
-      "purpose": "The public homepage: story-driven copy (developer journey arc) plus a live preview card and functionality carousel driven by the active .vibekb/ model.",
+      "purpose": "The public homepage: story-driven copy (developer journey arc + hero comic), live preview card, and functionality carousel driven by the active .vibekb/ model.",
       "functionality": ["load-living-model"],
       "runs_when": "Every browser request to the site root.",
       "depended_on_by": ["Public landing / Mode A deployment"],
-      "depends_on": ["guide/lib/Content.php", "guide/lib/helpers.php", ".vibekb/project/identity.md", "assets/css/homepage.css", "assets/js/homepage.js"],
+      "depends_on": ["guide/lib/Content.php", "guide/lib/helpers.php", ".vibekb/project/identity.md", "assets/css/homepage.css", "assets/js/homepage.js", "assets/images/homepage-developer-journey.webp", "assets/images/homepage-developer-journey.png"],
       "safety": "moderate-impact",
-      "test_after_change": "Load the homepage; confirm three sections, arc + pillars, and carousel render from the active model.",
+      "test_after_change": "Load the homepage; confirm three sections, hero image beside copy, arc + pillars, and carousel render from the active model.",
       "provenance": "verified-from-source"
     },
     {
       "path": "assets/css/homepage.css",
-      "purpose": "Homepage styling: three-section layout (arc, pillars, guide carousel, shared hp-* chrome).",
+      "purpose": "Homepage styling: three-section layout (hero lead + comic, arc, pillars, guide carousel, shared hp-* chrome).",
       "functionality": ["load-living-model"],
       "runs_when": "Every homepage request.",
       "depended_on_by": ["index.php"],

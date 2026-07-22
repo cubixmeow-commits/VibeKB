@@ -192,6 +192,25 @@ to touch — not as a documentation generator.</p></div>
                                     </li>
                             <li class="change-card">
                     <div class="change-card__head">
+                        <h2>Homepage hero journey image</h2>
+                        <div class="badge-row">
+                                                                                    <span class="muted">2026-07-22</span>
+                        </div>
+                    </div>
+                    <p>Optimized and renamed the developer-journey comic; placed beside hero copy in section 1 with responsive layout.</p>
+                    <div class="prose reading-column change-card__body"><h3>What changed</h3>
+<ul>
+<li>Source asset <code>assets/7E1D04F9-6324-4E51-AF19-65328ABA0308.png</code> (~1.4 MB on main) was resized and renamed to <code>assets/images/homepage-developer-journey.webp</code> (~19 KB) with a PNG fallback (~52 KB).</li>
+<li><code>index.php</code> section 1 wraps copy + <code>&lt;picture&gt;</code> in <code>hp-hero-lead</code>; live metrics card stays in the right column.</li>
+<li><code>homepage.css</code> adds <code>hp-hero-lead</code> grid and image styling; stacks on narrow viewports.</li>
+</ul>
+<h3>Verification</h3>
+<ul>
+<li>Image files present at expected paths; <code>php -l index.php</code>; <code>php tools/vibekb.php check</code> clean.</li>
+</ul></div>
+                                    </li>
+                            <li class="change-card">
+                    <div class="change-card__head">
                         <h2>Replace leftover SousMeow homepage tagline with VibeKB self-hosting copy</h2>
                         <div class="badge-row">
                             <span class="badge badge--info">implemented</span>                            <span class="badge badge--ok">Verified manually</span>                            <span class="muted">2026-07-22</span>
@@ -255,7 +274,7 @@ before/after, workflow timeline, repo map, and separate CTA. Accurate but too lo
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 08:41 UTC · source commit 943da30 (2026-07-22) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 08:44 UTC · source commit b8de993 (2026-07-22) · not auto-updating</p>
             </div>
         </footer>
     </div>
