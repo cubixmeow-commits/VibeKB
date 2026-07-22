@@ -434,6 +434,13 @@
         "body": "Before The active .vibekb/ model described SousMeow a separate app . VibeKB had a strong renderer, validator, and explainable diagram system, but no repository resident model of itself and no tooling to help an agent run the maintenance lifecycle or detect drift. Maintenance was prose only CLAUDE.md / MAINTENANCE.md . After The active root .vibekb/ is VibeKB's own model this content . The SousMeow model and the StopPR field test audit moved under examples/ ; a VIBEKB CONTENT ROOT override keeps them previewable/validatable. A new tools/vibekb.php CLI provides status session start , check drift + validate + snapshot sync , affected files → functionality , plus validate and generate passthroughs. Agent instructions were unified: CLAUDE.md is canonical; AGENTS.md and .cursor/rules/vibekb.mdc "
     },
     {
+        "title": "Rewrite homepage around the developer journey story",
+        "summary": "The homepage now follows the comic-inspired emotional arc (excitement → confusion → fear → VibeKB → confidence) with \"AI helped you build it. VibeKB helps you understand it.\" as the spine — selling understanding, not documentation.",
+        "type": "change",
+        "url": "../why/changes/homepage-developer-journey.html",
+        "body": "Before The homepage explained what VibeKB records and how the repository model works — accurate, but category first. It did not lead with the moment a developer realizes they shipped faster than they understood. After Hero and CTA centre on: AI helped you build it. VibeKB helps you understand it. Six beat developer journey section with comic inspired emotional pacing. Uncertainty section names fear/guessing, not \"documentation.\" VibeKB introduced only after the problem lands, as the missing understanding layer. Before/after transformation section; live proof carousel retained. Story dot navigation progressive enhancement in homepage.js. Impact Visitors should recognize their own arc within the first scroll and describe VibeKB as the thing that helps them understand the AI built app they we"
+    },
+    {
         "title": "Replace leftover SousMeow homepage tagline with VibeKB self-hosting copy",
         "summary": "The homepage hero card no longer falls back to an old workflow-platform tagline; it uses VibeKB's identity one_liner/summary, and adjacent framing now describes VibeKB explaining itself.",
         "type": "change",
@@ -505,7 +512,21 @@
     },
     {
         "title": "index.php",
-        "summary": "The public homepage: product copy plus a live preview card driven by the active .vibekb/ model (identity one_liner/summary, functionality metrics, current work).",
+        "summary": "The public homepage: story-driven copy (developer journey arc) plus a live preview card and functionality carousel driven by the active .vibekb/ model.",
+        "type": "file",
+        "url": "../files/index.html",
+        "body": ""
+    },
+    {
+        "title": "assets/css/homepage.css",
+        "summary": "Homepage styling: journey mood panels, uncertainty questions, before/after transform, and shared hp-* chrome.",
+        "type": "file",
+        "url": "../files/index.html",
+        "body": ""
+    },
+    {
+        "title": "assets/js/homepage.js",
+        "summary": "Homepage progressive enhancement: story-journey dots, guide-preview carousel, workflow tabs, repo map — all degrade without JS.",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
@@ -610,16 +631,16 @@
     },
     {
         "title": "(none — ready for next task)",
-        "summary": "Idle. See handoff.md for the last completed change and the next recommended action.",
+        "summary": "Idle. See handoff.md for the last completed change.",
         "type": "current work",
         "url": "../current-work/index.html",
-        "body": "Status No active work. The token economics evaluation is complete — see .vibekb/work/handoff.md and TOKEN ECONOMICS.md . A recommended future item is promoting the measurement methodology to a php tools/vibekb.php context command optimization 3 in the report ."
+        "body": "Status No active work. The developer journey homepage rewrite is complete — see .vibekb/work/handoff.md and .vibekb/memory/changes/homepage developer journey.md ."
     },
     {
         "title": "Current handoff",
-        "summary": "Added TOKEN_ECONOMICS.md — an evidence-based evaluation of VibeKB's token cost/benefit with an empirical cost model, five scenarios, and a break-even framework — and a \"Context economy\" rule in CLAUDE.md enforcing selective retrieval (never load docs/ or examples/ into working context). Analysis only; no runtime/product behaviour change. Next: keep the model reconciled as VibeKB changes; optionally promote the measurement script to a `tools/vibekb.php context` command.",
+        "summary": "Homepage rewritten around the developer journey (comic-inspired emotional arc) with \"AI helped you build it. VibeKB helps you understand it.\" as the spine. Next: keep the model reconciled as VibeKB changes.",
         "type": "handoff",
         "url": "../handoff/index.html",
-        "body": "What the software VibeKB now does Runtime behaviour is unchanged — this was an analysis pass plus a documentation guardrail. Two prior homepage changes remain in place. The new material: TOKEN ECONOMICS.md at the repo root evaluates whether maintaining/using VibeKB is token justified, and CLAUDE.md gained a \"Context economy\" section directing agents to orient cheaply status ~400 tok + CLAUDE.md , retrieve by affected scope, let the deterministic CLI do mechanical work, and never load the generated docs/ or examples/ trees into context. Completed this change TOKEN ECONOMICS.md : executive conclusion, implementation analysis, measured context whole repo/by kind/by load behaviour/per file , baseline comparison, five scenarios, a break even model N = B + C·M /S , risk adjusted value, ranked op"
+        "body": "What the software VibeKB now does VibeKB remains self hosted with the dynamic guide and static /docs . The public homepage now leads with the developer journey — open source excitement, AI assisted building, growing confusion, fear of change, then VibeKB as the missing understanding layer — before the feature views and live proof carousel. Completed this change Story driven homepage: six beat journey, uncertainty questions, before/after transformation, reframed hero/CTA/footer. Comic inspired visual pacing in assets/css/homepage.css mood tints, journey panels, transform cards . Story dot navigation in assets/js/homepage.js progressive enhancement . Change memory homepage developer journey ; important files updated for homepage assets. Verification completed php l index.php clean; rendered "
     }
 ]

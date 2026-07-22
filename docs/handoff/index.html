@@ -114,77 +114,37 @@
                                     <span class="badge badge--info">Verification: verified manually</span>                                <span class="muted">Updated 2026-07-22</span>
             </div>
             <div class="prose reading-column"><h3>What the software (VibeKB) now does</h3>
-<p>Runtime behaviour is unchanged — this was an analysis pass plus a documentation
-guardrail. Two prior homepage changes remain in place. The new material:
-<code>TOKEN_ECONOMICS.md</code> at the repo root evaluates whether maintaining/using VibeKB
-is token-justified, and CLAUDE.md gained a &quot;Context economy&quot; section directing
-agents to orient cheaply (<code>status</code> ~400 tok + CLAUDE.md), retrieve by affected
-scope, let the deterministic CLI do mechanical work, and never load the generated
-<code>docs/</code> or <code>examples/</code> trees into context.</p>
+<p>VibeKB remains self-hosted with the dynamic guide and static <code>/docs</code>. The public
+homepage now leads with the developer journey — open-source excitement, AI-assisted
+building, growing confusion, fear of change, then VibeKB as the missing
+understanding layer — before the feature views and live proof carousel.</p>
 <h3>Completed this change</h3>
 <ul>
-<li><code>TOKEN_ECONOMICS.md</code>: executive conclusion, implementation analysis, measured</li>
+<li>Story-driven homepage: six-beat journey, uncertainty questions, before/after</li>
 </ul>
-<p>context (whole-repo/by-kind/by-load-behaviour/per-file), baseline comparison,
-  five scenarios, a break-even model (<code>N* = (B + C·M)/S</code>), risk-adjusted value,
-  ranked optimizations, recommended operating model, go/no-go, and a
-  reproducible measurement appendix.</p>
+<p>transformation, reframed hero/CTA/footer.</p>
 <ul>
-<li><code>CLAUDE.md</code>: new &quot;Context economy (keep VibeKB token-positive)&quot; section after</li>
+<li>Comic-inspired visual pacing in <code>assets/css/homepage.css</code> (mood tints, journey</li>
 </ul>
-<p>the session-start orientation line; links to TOKEN_ECONOMICS.md.</p>
-<h3>Key measured findings (chars/4 ≈ tokens, approximate)</h3>
+<p>panels, transform cards).</p>
 <ul>
-<li>Total tracked ~402K tok. Generated <code>docs/</code> ~206K (51%), <code>examples/</code> ~56.6K</li>
+<li>Story dot navigation in <code>assets/js/homepage.js</code> (progressive enhancement).</li>
+<li>Change memory <code>homepage-developer-journey</code>; important-files updated for</li>
 </ul>
-<p>(14%) → ~264K (65%) that should NEVER enter agent context.</p>
-<ul>
-<li>Active <code>.vibekb/</code> source ~35.5K tok across 56 files; honest session-start floor</li>
-</ul>
-<p>~2K (CLAUDE.md + <code>status</code> output), not the full ~5.7K &quot;always&quot; set.</p>
-<ul>
-<li><code>status</code>/<code>check</code>/<code>affected</code>/<code>validate</code>/<code>generate</code> are deterministic PHP — 0 LLM</li>
-</ul>
-<p>tokens; agent pays only to read compact output (~220–430 tok) and write updates.</p>
-<ul>
-<li>Anchor: understanding drift-detection from source ~22K tok vs the detect-drift</li>
-</ul>
-<p>record ~1K tok = ~20x compression.</p>
-<ul>
-<li>Break-even ≈ 6–15 fresh sessions/handoffs for this medium-small repo;</li>
-</ul>
-<p>token-negative for one-offs and single-session same-context work.</p>
+<p>homepage assets.</p>
 <h3>Verification completed</h3>
 <ul>
-<li>Measurement reproduced deterministically over <code>git ls-files</code>; command-output</li>
+<li><code>php -l index.php</code> clean; rendered homepage HTML contains journey + thesis copy.</li>
+<li><code>php tools/vibekb.php check</code> and <code>php tools/test-topology.php</code> before finish.</li>
 </ul>
-<p>sizes measured by byte count; subsystem anchor measured from real file sizes.</p>
-<ul>
-<li><code>php tools/vibekb.php check</code> and <code>php tools/test-topology.php</code> run before finish;</li>
-</ul>
-<p><code>/docs</code> regenerated. (CLAUDE.md and TOKEN_ECONOMICS.md are not rendered into
-  <code>/docs</code>, so the snapshot is unaffected by them.)</p>
 <h3>Active warnings (VibeKB)</h3>
 <ul>
 <li><code>model-can-drift-from-code</code>, <code>docs-is-generated-never-hand-edit</code>,</li>
 </ul>
 <p><code>verification-must-reflect-evidence</code>.</p>
-<h3>Honest limitations / not verified</h3>
-<ul>
-<li>Token figures use the chars/4 approximation, not a real tokenizer; exploration</li>
-</ul>
-<p>and per-change costs are modelled estimates, not A/B telemetry. The report
-  labels these throughout and lists them as evidence still needed.</p>
-<ul>
-<li>The measurement script remains in the session scratchpad; it was intentionally</li>
-</ul>
-<p>not promoted to permanent tooling (recommended as future work #3).</p>
 <h3>Exact next recommended action</h3>
-<p>For any future change, start with <code>php tools/vibekb.php status</code>, use <code>affected</code>
-to find impacted records, update them, and finish with <code>check</code> + <code>generate</code>
-before committing. If pursuing the economics work: implement
-<code>php tools/vibekb.php context</code> (optimization #3) with its own functionality
-record, reusing the appendix methodology in TOKEN_ECONOMICS.md.</p></div>
+<p>For any future change: <code>php tools/vibekb.php status</code> → <code>affected</code> → update model →
+<code>check</code> + <code>generate</code> before committing.</p></div>
         </section>
     
             <section class="doc-section">
@@ -217,7 +177,7 @@ record, reusing the appendix methodology in TOKEN_ECONOMICS.md.</p></div>
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 07:44 UTC · source commit 73c5ea4 (2026-07-22) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 08:18 UTC · source commit cfcf931 (2026-07-22) · not auto-updating</p>
             </div>
         </footer>
     </div>

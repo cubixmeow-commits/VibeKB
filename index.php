@@ -3,18 +3,17 @@
 declare(strict_types=1);
 
 /**
- * VibeKB homepage — a landing page for the product, positioned as a
- * repository-native understanding layer for AI-assisted development. The copy is
- * organized around one spine ("AI can change six files faster than you can
- * rebuild your mental model") and the guide-preview carousel + hero metrics are
- * driven by real functionality records from `.vibekb/` (never invented).
+ * VibeKB homepage — a story-driven landing page for AI-assisted developers.
+ * The copy follows the emotional arc of the product story: open-source excitement,
+ * AI-assisted building, growing confusion, fear of change, then VibeKB as the
+ * missing understanding layer, ending in confidence. Live metrics and the
+ * guide-preview carousel are driven by real `.vibekb/` records (never invented).
  *
- * Structure is seven sections: hero, the problem, what VibeKB adds, live proof,
- * the AI-assisted workflow, why the repository-owned model matters, final CTA.
+ * Structure: hero → developer journey → uncertainty → the gap → VibeKB → what it
+ * shows → live proof → before/after → workflow → repository model → CTA.
  *
- * Interactions live in assets/js/homepage.js (progressive enhancement over
- * jQuery); styling in assets/css/homepage.css. All widgets degrade to their
- * .hp-*-fallback content without JavaScript.
+ * Interactions live in assets/js/homepage.js; styling in assets/css/homepage.css.
+ * All widgets degrade to their .hp-*-fallback content without JavaScript.
  */
 
 require_once __DIR__ . '/guide/lib/helpers.php';
@@ -135,13 +134,74 @@ if ($loaded) {
         }
     }
 }
+
+/** Comic-inspired story beats — emotional pacing, not a product feature list. */
+$storyBeats = [
+    [
+        'mood' => 'excited',
+        'step' => '1',
+        'kicker' => 'Open source still feels incredible',
+        'title' => 'You find something brilliant on GitHub.',
+        'body' => 'Someone built something useful and gave it away. You can see how it works — at least, you think you can — and you already have ideas for what to build on top of it.',
+        'aside' => 'Someone built this and released it for free. Brilliant.',
+    ],
+    [
+        'mood' => 'building',
+        'step' => '2',
+        'kicker' => 'AI makes building easy',
+        'title' => 'Cursor. Claude Code. Copy, modify, ship.',
+        'body' => 'You fork the repo, describe what you want, accept a few diffs, and suddenly you have a working app that is yours. The velocity is real. Shipping feels closer than it has ever been.',
+        'aside' => 'New idea. New features. Let&#39;s go.',
+    ],
+    [
+        'mood' => 'confused',
+        'step' => '3',
+        'kicker' => 'Then reality hits',
+        'title' => 'It works. You don&#39;t actually understand it.',
+        'body' => 'The tests pass. The demo runs. But the codebase is no longer the project you mentally modelled — it is a blend of the original author&#39;s intent, six agent sessions, and decisions you never consciously made.',
+        'aside' => 'It runs. I don&#39;t get it.',
+    ],
+    [
+        'mood' => 'afraid',
+        'step' => '4',
+        'kicker' => 'Confidence disappears',
+        'title' => 'Every change feels dangerous.',
+        'body' => 'You hesitate before editing a file you did not write. You re-read the same modules before every session. You ask the agent the same architecture questions again because yesterday&#39;s answer is buried in chat history.',
+        'aside' => 'One wrong move and it all breaks.',
+    ],
+    [
+        'mood' => 'relief',
+        'step' => '5',
+        'kicker' => 'The missing layer',
+        'title' => 'VibeKB is the understanding layer your repo is missing.',
+        'body' => 'Not another coding agent. Not documentation. Not a knowledge base. A living model in <code>.vibekb/</code> that explains what your software is doing right now — architecture, relationships, key files, active work, and what is actually verified.',
+        'aside' => 'AI helped you build it. VibeKB helps you understand it.',
+    ],
+    [
+        'mood' => 'confident',
+        'step' => '6',
+        'kicker' => 'Understanding returns',
+        'title' => 'You know what you can safely change.',
+        'body' => 'You open the guide before you edit. You see which functionality owns a behaviour, which files participate, what data moves, and what the last agent was trying to do. Changes feel deliberate again.',
+        'aside' => 'Calm. Confident. In control.',
+    ],
+];
+
+$uncertaintyQuestions = [
+    'Why does this file exist?',
+    'Why is this dependency here?',
+    'What breaks if I change this?',
+    'Which files actually matter?',
+    'Why is authentication implemented this way?',
+    'Why does this feature depend on five other systems?',
+];
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>VibeKB — Understand the software AI helped you build</title>
-    <meta name="description" content="VibeKB adds a repository-native understanding layer for AI-assisted software, connecting current functionality, files, data, active work, decisions, warnings, and verification — so every human and coding agent starts from the current reality.">
+    <title>VibeKB — AI helped you build it. VibeKB helps you understand it.</title>
+    <meta name="description" content="You shipped with Cursor and Claude Code faster than you understood what you built. VibeKB is the missing understanding layer — a living model in your repo that explains architecture, relationships, key files, and active work.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -154,8 +214,9 @@ if ($loaded) {
         <div class="hp-wrap hp-top-inner">
             <a class="hp-wordmark" href="./">VibeKB</a>
             <nav class="hp-nav" aria-label="Primary">
-                <a href="#what">What it records</a>
-                <a href="#workflow">How it works</a>
+                <a href="#story">The story</a>
+                <a href="#solution">Understanding</a>
+                <a href="#sample">See it work</a>
                 <a class="hp-nav-cta" href="<?= hp_e($guideUrl) ?>">Open the guide</a>
             </nav>
         </div>
@@ -163,21 +224,20 @@ if ($loaded) {
 
     <main id="main">
 
-        <!-- 1. Hero — define the category -->
+        <!-- 1. Hero — recognition first -->
         <section class="hp-section hp-hero" id="top" aria-labelledby="hero-title">
             <div class="hp-wrap hp-hero-grid">
                 <div class="hp-hero-copy">
-                    <p class="hp-eyebrow">Repository understanding for AI-assisted development</p>
-                    <h1 id="hero-title">Understand the software AI helped you build.</h1>
+                    <p class="hp-eyebrow">For developers who ship with AI</p>
+                    <h1 id="hero-title">AI helped you build it. VibeKB helps you understand it.</h1>
                     <p class="hp-hero-support">
-                        VibeKB adds a structured understanding layer to your Git repository. It records what
-                        the software does, how its functionality connects to files and data, what AI is
-                        changing, and what has actually been verified — so every new session starts from the
-                        current reality instead of reconstructing the project from scratch.
+                        You found a great repo, extended it with Cursor or Claude Code, and shipped something
+                        real. The app runs — but the mental model didn&#39;t keep up. That gap between
+                        <em>working</em> and <em>understanding</em> is the problem VibeKB exists to solve.
                     </p>
                     <div class="hp-actions">
-                        <a class="hp-btn hp-btn-primary" href="<?= hp_e($guideUrl) ?>">Explore the live guide</a>
-                        <a class="hp-btn hp-btn-ghost" href="<?= hp_e($repoUrl) ?>" rel="noopener noreferrer">View the GitHub repository</a>
+                        <a class="hp-btn hp-btn-primary" href="#story">That&#39;s exactly what happened to me</a>
+                        <a class="hp-btn hp-btn-ghost" href="<?= hp_e($guideUrl) ?>">Open the live guide</a>
                     </div>
                 </div>
                 <?php if ($loaded): ?>
@@ -210,45 +270,132 @@ if ($loaded) {
             </div>
         </section>
 
-        <!-- 2. The problem — the spine of the page -->
-        <section class="hp-section" id="problem" aria-labelledby="problem-title">
+        <!-- 2. Developer journey — comic-inspired emotional arc -->
+        <section class="hp-section hp-journey-section" id="story" aria-labelledby="story-title">
+            <div class="hp-wrap">
+                <p class="hp-kicker">The story</p>
+                <h2 id="story-title">Building software has changed. Understanding didn&#39;t.</h2>
+                <p class="hp-lead">
+                    This is not a product tour. It is the arc most AI-assisted developers eventually hit —
+                    whether they forked open source or generated a codebase from scratch.
+                </p>
+
+                <ol class="hp-journey" data-story-journey>
+                    <?php foreach ($storyBeats as $i => $beat): ?>
+                        <li class="hp-journey-panel hp-journey-panel--<?= hp_e($beat['mood']) ?><?= $i === 0 ? ' is-active' : '' ?>" data-story-panel="<?= (int) $i ?>">
+                            <p class="hp-journey-step" aria-hidden="true"><?= hp_e($beat['step']) ?></p>
+                            <p class="hp-journey-kicker"><?= hp_e($beat['kicker']) ?></p>
+                            <h3 class="hp-journey-title"><?= $beat['title'] ?></h3>
+                            <p class="hp-journey-body"><?= $beat['body'] ?></p>
+                            <p class="hp-journey-aside"><?= $beat['aside'] ?></p>
+                        </li>
+                    <?php endforeach; ?>
+                </ol>
+
+                <div class="hp-journey-nav" data-story-nav aria-label="Story beats">
+                    <?php foreach ($storyBeats as $i => $beat): ?>
+                        <button
+                            type="button"
+                            class="hp-journey-dot<?= $i === 0 ? ' is-active' : '' ?>"
+                            data-story-dot="<?= (int) $i ?>"
+                            aria-label="Step <?= hp_e($beat['step']) ?>: <?= hp_e($beat['kicker']) ?>"
+                            <?= $i === 0 ? 'aria-current="step"' : '' ?>
+                        ></button>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Uncertainty — name the feeling, not "documentation" -->
+        <section class="hp-section hp-surface hp-mood-confused" id="uncertainty" aria-labelledby="uncertainty-title">
             <div class="hp-wrap hp-narrow">
-                <p class="hp-kicker">Why it exists</p>
-                <h2 id="problem-title">AI can change six files faster than you can rebuild your mental model.</h2>
+                <p class="hp-kicker">The feeling</p>
+                <h2 id="uncertainty-title">The app runs. Understanding does not.</h2>
                 <p class="hp-lead">
-                    Writing code stopped being the bottleneck. Understanding what the agent just built is the
-                    new one. One session implements a feature, another revises it, the decisions stay buried in
-                    chat history — and the code works, but the project gets harder to explain with every change.
-                </p>
-                <p class="hp-lead">
-                    Each new session then spends its first minutes rediscovering behaviour, dependencies, and
-                    risks that a previous session already knew. That cost repeats whether the next session is a
-                    coding agent or a human coming back to their own project.
+                    This is not a documentation problem. It is uncertainty — guessing which files matter,
+                    fearing that the next edit breaks something unrelated, re-asking the same questions every
+                    session because nothing durable captured the answers.
                 </p>
 
-                <p class="hp-thesis">
-                    VibeKB keeps that understanding in the repository — instead of leaving it scattered across
-                    code, prompts, and old conversations.
-                </p>
+                <ul class="hp-question-list">
+                    <?php foreach ($uncertaintyQuestions as $q): ?>
+                        <li><?= hp_e($q) ?></li>
+                    <?php endforeach; ?>
+                </ul>
 
-                <p class="hp-note">
-                    Written for people who build with coding agents — Claude Code, Cursor, Codex, Copilot,
-                    Gemini CLI — from solo developers shipping fast to experienced developers inheriting an
-                    AI-generated codebase. The software may run fine; what&#39;s missing is a dependable model
-                    of the whole project. VibeKB restores it.
+                <p class="hp-thesis hp-thesis-warn">
+                    You are not blocked on writing code anymore. You are blocked on knowing what the code
+                    you have is actually doing.
                 </p>
             </div>
         </section>
 
-        <!-- 3. What VibeKB adds to the repository -->
-        <section class="hp-section hp-surface" id="what" aria-labelledby="what-title">
-            <div class="hp-wrap">
-                <p class="hp-kicker">What VibeKB adds to the repository</p>
-                <h2 id="what-title">One model. Four things it keeps current.</h2>
+        <!-- 4. The gap -->
+        <section class="hp-section" id="gap" aria-labelledby="gap-title">
+            <div class="hp-wrap hp-narrow">
+                <p class="hp-kicker">That&#39;s the real problem</p>
+                <h2 id="gap-title">AI made building easy. Nobody made understanding keep up.</h2>
                 <p class="hp-lead">
-                    The primary unit is <strong>functionality</strong> — the things your software does — and
-                    everything else connects back to it. These are four parts of one coherent model, and each
-                    is a real view in the guide.
+                    Agents are excellent at producing diffs. They are not a substitute for a durable model of
+                    the whole application — what each behaviour does, how pieces connect, what is verified,
+                    and what the last session changed.
+                </p>
+                <p class="hp-lead">
+                    Without that model, every new session — human or agent — pays the rediscovery tax again.
+                    The codebase grows. Confidence shrinks.
+                </p>
+            </div>
+        </section>
+
+        <!-- 5. VibeKB — introduce the product after the problem lands -->
+        <section class="hp-section hp-surface hp-mood-relief" id="solution" aria-labelledby="solution-title">
+            <div class="hp-wrap">
+                <p class="hp-kicker">VibeKB</p>
+                <h2 id="solution-title">The missing understanding layer — living in your repository.</h2>
+                <p class="hp-lead">
+                    VibeKB is not another AI coding tool. It does not replace your agent. It gives you and
+                    every future session a structured, honest picture of what the software is doing <em>right
+                    now</em> — organized around functionality, not folders.
+                </p>
+
+                <div class="hp-understanding-grid">
+                    <div>
+                        <h3 class="hp-understanding-label">It explains</h3>
+                        <ul class="hp-plain-list">
+                            <li>Architecture and how components connect</li>
+                            <li>Which files implement each behaviour</li>
+                            <li>Data flow and dependencies between features</li>
+                            <li>What AI is changing in the active work record</li>
+                            <li>What is verified — and what is still guessing</li>
+                            <li>What is safe to change vs what needs caution</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="hp-understanding-label">It is not</h3>
+                        <ul class="hp-plain-list hp-plain-list-muted">
+                            <li>A documentation generator you write once and forget</li>
+                            <li>A code browser that dumps the file tree</li>
+                            <li>An AI chat log or activity archive</li>
+                            <li>A magic auto-updater that interprets diffs for you</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <p class="hp-thesis">
+                    AI helped you build the application. VibeKB helps you understand the application.
+                </p>
+            </div>
+        </section>
+
+        <!-- 6. What you finally see — proof of the model -->
+        <section class="hp-section" id="what" aria-labelledby="what-title">
+            <div class="hp-wrap">
+                <p class="hp-kicker">Here&#39;s how</p>
+                <h2 id="what-title">One model. Four views into what your software is actually doing.</h2>
+                <p class="hp-lead">
+                    Everything connects back to <strong>functionality</strong> — the things your software does
+                    from a user&#39;s or system&#39;s point of view. Each lens below is a real view in the guide,
+                    kept current as the code changes.
                 </p>
 
                 <div class="hp-outcome" data-tabs="outcomes">
@@ -292,25 +439,21 @@ if ($loaded) {
             </div>
         </section>
 
-        <!-- 4. Live proof — VibeKB explains itself -->
+        <!-- 7. Live proof -->
         <?php if ($previewItems !== []): ?>
-        <section class="hp-section" id="sample" aria-labelledby="sample-title">
+        <section class="hp-section hp-surface" id="sample" aria-labelledby="sample-title">
             <div class="hp-wrap">
-                <p class="hp-kicker">A real repository, explained by VibeKB</p>
-                <h2 id="sample-title">See VibeKB explain its own functionality.</h2>
+                <p class="hp-kicker">See it on a real repository</p>
+                <h2 id="sample-title">This is what understanding looks like — not a marketing slide.</h2>
                 <p class="hp-lead">
                     <?php if ($selfHosted): ?>
-                        The records below come directly from this repository&#39;s <code>.vibekb/</code> model.
-                        Each one describes real behaviour in the codebase — its current status, verification
-                        state, flow, relevant files, data, and failure cases. This is not a hand-written
-                        product tour; it is the same repository-owned model a developer or coding agent uses
-                        to understand the project.
+                        Every record below comes from this repository&#39;s <code>.vibekb/</code> model — real
+                        functionality, honest status, verification state, and flows traced from source. Open
+                        any one to see the kind of clarity you were missing when the codebase felt fragile.
                     <?php else: ?>
-                        The records below come directly from the <?= hp_e($sampleName) ?> repository&#39;s
-                        <code>.vibekb/</code> model. Each one describes real behaviour in that codebase — its
-                        current status, verification state, flow, relevant files, data, and failure cases —
-                        the same repository-owned model a developer or coding agent uses to understand the
-                        project.
+                        Every record below comes from the <?= hp_e($sampleName) ?> repository&#39;s
+                        <code>.vibekb/</code> model — real functionality with honest status and verification.
+                        Open any one to see the kind of clarity you were missing when the codebase felt fragile.
                     <?php endif; ?>
                 </p>
 
@@ -386,15 +529,46 @@ if ($loaded) {
         </section>
         <?php endif; ?>
 
-        <!-- 5. How it fits into AI-assisted development -->
+        <!-- 8. Before / after — emotional transformation -->
+        <section class="hp-section" id="transform" aria-labelledby="transform-title">
+            <div class="hp-wrap">
+                <p class="hp-kicker">Build with confidence</p>
+                <h2 id="transform-title">From afraid to edit → calm enough to ship.</h2>
+
+                <div class="hp-transform">
+                    <article class="hp-transform-card hp-transform-card--before" aria-labelledby="transform-before">
+                        <h3 id="transform-before">Before VibeKB</h3>
+                        <ul class="hp-plain-list">
+                            <li>Confused about what the agent actually built</li>
+                            <li>Afraid every edit might break something unrelated</li>
+                            <li>Re-reading the same files before every change</li>
+                            <li>Asking AI the same architecture questions every session</li>
+                            <li>Guessing which parts of the codebase matter</li>
+                        </ul>
+                    </article>
+                    <article class="hp-transform-card hp-transform-card--after" aria-labelledby="transform-after">
+                        <h3 id="transform-after">After VibeKB</h3>
+                        <ul class="hp-plain-list">
+                            <li>Understand the architecture in plain language</li>
+                            <li>Know which files implement each behaviour</li>
+                            <li>See what the current AI work is changing and why</li>
+                            <li>Open the guide before you edit — not after something breaks</li>
+                            <li>Ship faster because you understand the system</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. How understanding stays current -->
         <section class="hp-section hp-surface" id="workflow" aria-labelledby="workflow-title">
             <div class="hp-wrap">
-                <p class="hp-kicker">How it fits into AI-assisted development</p>
-                <h2 id="workflow-title">Understand before changing. Update after.</h2>
+                <p class="hp-kicker">How it stays current</p>
+                <h2 id="workflow-title">Understanding is part of the change — not an afterthought.</h2>
                 <p class="hp-lead">
-                    VibeKB is used <em>with</em> coding agents. The human or agent reads the model before a
-                    change and brings it current after — so the guide describes the current software, not a
-                    past version.
+                    VibeKB works <em>with</em> your coding agents. Read the model before you change the code.
+                    Update it after — with honest verification. The guide then describes the software as it is
+                    today, not as it was three sessions ago.
                 </p>
 
                 <div class="hp-timeline" data-pipeline data-timeline>
@@ -455,16 +629,15 @@ if ($loaded) {
             </div>
         </section>
 
-        <!-- 6. Why the repository-owned model matters -->
+        <!-- 10. Repository-owned understanding -->
         <section class="hp-section" id="architecture" aria-labelledby="arch-title">
             <div class="hp-wrap">
-                <p class="hp-kicker">Why the repository-owned model matters</p>
+                <p class="hp-kicker">Where it lives</p>
                 <h2 id="arch-title">Chat context expires. Repository context remains.</h2>
                 <p class="hp-lead">
-                    The model is plain files under <code>.vibekb/</code>, committed with your code. Changes are
-                    reviewed in Git, humans and agents can read and update it, and the generated guide is a
-                    presentation layer — the repository stays the source of truth, with uncertainty and
-                    verification kept explicit.
+                    The model is plain files under <code>.vibekb/</code>, committed with your code. Reviewed in
+                    Git. Readable by humans and agents. The website is a view — the repository stays the source
+                    of truth, with uncertainty kept visible.
                 </p>
 
                 <ul class="hp-plain-list hp-arch-points">
@@ -537,19 +710,17 @@ if ($loaded) {
             </div>
         </section>
 
-        <!-- 7. Final CTA -->
-        <section class="hp-section hp-final" id="cta" aria-labelledby="cta-title">
+        <!-- 11. Final CTA -->
+        <section class="hp-section hp-final hp-mood-confident" id="cta" aria-labelledby="cta-title">
             <div class="hp-wrap hp-narrow">
-                <h2 id="cta-title">Keep the understanding with the code.</h2>
+                <h2 id="cta-title">Stop guessing. Start understanding.</h2>
                 <p>
                     <?php if ($selfHosted): ?>
-                        Explore the live guide to see VibeKB working on a real repository — its own — then add
-                        the model to your own project so the next human or AI session can understand what
-                        exists before changing it.
+                        Open the live guide to see VibeKB on a real repository — its own — then add
+                        <code>.vibekb/</code> to your project so the next session starts from clarity, not fear.
                     <?php else: ?>
-                        Explore the live guide to see VibeKB working on <?= hp_e($sampleName) ?>, a real
-                        repository — then add the model to your own project so the next human or AI session can
-                        understand what exists before changing it.
+                        Open the live guide on <?= hp_e($sampleName) ?>, then add <code>.vibekb/</code> to your
+                        own project so the next session starts from clarity, not fear.
                     <?php endif; ?>
                 </p>
                 <p class="hp-thesis">
@@ -567,7 +738,7 @@ if ($loaded) {
 
     <footer class="hp-footer">
         <div class="hp-wrap hp-footer-inner">
-            <p><strong>VibeKB.</strong> Understand the software AI helped you build.</p>
+            <p><strong>VibeKB.</strong> The understanding layer for the application you&#39;re afraid to touch.</p>
             <p class="hp-footer-note">Version 1 · Lives in your repo (<code>.vibekb/</code>) · <a href="<?= hp_e($guideUrl) ?>">Software guide</a></p>
         </div>
     </footer>
