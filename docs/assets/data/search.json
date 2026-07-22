@@ -438,7 +438,7 @@
         "summary": "The homepage now follows the comic-inspired emotional arc (excitement → confusion → fear → VibeKB → confidence) with \"AI helped you build it. VibeKB helps you understand it.\" as the spine — selling understanding, not documentation.",
         "type": "change",
         "url": "../why/changes/homepage-developer-journey.html",
-        "body": "Before The homepage explained what VibeKB records and how the repository model works — accurate, but category first. It did not lead with the moment a developer realizes they shipped faster than they understood. After Hero and CTA centre on: AI helped you build it. VibeKB helps you understand it. Six beat developer journey section with comic inspired emotional pacing. Uncertainty section names fear/guessing, not \"documentation.\" VibeKB introduced only after the problem lands, as the missing understanding layer. Before/after transformation section; live proof carousel retained. Story dot navigation progressive enhancement in homepage.js. Impact Visitors should recognize their own arc within the first scroll and describe VibeKB as the thing that helps them understand the AI built app they we"
+        "body": "Before The homepage explained what VibeKB records and how the repository model works — accurate, but category first. It did not lead with the moment a developer realizes they shipped faster than they understood. After Hero and CTA centre on: AI helped you build it. VibeKB helps you understand it. Six beat developer journey section with comic inspired emotional pacing — balanced for vibe coders building their own software and developers extending open source. Uncertainty section names fear/guessing, not \"documentation.\" VibeKB introduced only after the problem lands, as the missing understanding layer. Before/after transformation section; live proof carousel retained. Story dot navigation progressive enhancement in homepage.js. Impact Visitors should recognize their own arc within the first"
     },
     {
         "title": "Replace leftover SousMeow homepage tagline with VibeKB self-hosting copy",
@@ -446,6 +446,13 @@
         "type": "change",
         "url": "../why/changes/homepage-tagline-self-hosting.html",
         "body": "Before The homepage hero card read identity.meta.one liner only. VibeKB's identity had a summary but no one liner , so the card fell back to a hardcoded SousMeow era sentence \"A platform for running step by step AI workflows…\" . Nearby copy still framed the active model as a separate sample application. After Identity carries a VibeKB one liner . The homepage prefers one liner , then summary , with a VibeKB accurate fallback same pattern as the guide overview . When self hosted / non sample, the hero card, functionality carousel, and final CTA describe VibeKB explaining itself. index.php is recorded in important files so future affected runs map it. Impact Visitors see an accurate product description on the landing page. The guide overview also surfaces the new one liner."
+    },
+    {
+        "title": "Distill homepage to three sections",
+        "summary": "Collapsed the long story-driven homepage into three sections — the problem (with a three-beat arc), what you get (four pillars), and live proof + CTA — while keeping the developer-journey message and real carousel.",
+        "type": "change",
+        "url": "../why/changes/homepage-three-sections.html",
+        "body": "Before Eleven sections: six beat journey, uncertainty questions, gap, solution, tabs, carousel, before/after, workflow timeline, repo map, and separate CTA. Accurate but too long to scan. After Three sections: 1. The problem — thesis, recognition copy, three beat arc ship / lose plot / fear change , live metrics card. 2. What you get — understanding layer + four pillar cards linking to guide views. 3. See it work — functionality carousel + CTA. homepage.js trimmed to guide carousel only."
     },
     {
         "title": "guide/lib/Content.php",
@@ -519,14 +526,14 @@
     },
     {
         "title": "assets/css/homepage.css",
-        "summary": "Homepage styling: journey mood panels, uncertainty questions, before/after transform, and shared hp-* chrome.",
+        "summary": "Homepage styling: three-section layout (arc, pillars, guide carousel, shared hp-* chrome).",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
     },
     {
         "title": "assets/js/homepage.js",
-        "summary": "Homepage progressive enhancement: story-journey dots, guide-preview carousel, workflow tabs, repo map — all degrade without JS.",
+        "summary": "Homepage progressive enhancement: guide-preview carousel only; degrades without JS.",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
@@ -631,16 +638,16 @@
     },
     {
         "title": "(none — ready for next task)",
-        "summary": "Idle. See handoff.md for the last completed change.",
+        "summary": "Idle. See handoff.md.",
         "type": "current work",
         "url": "../current-work/index.html",
-        "body": "Status No active work. The developer journey homepage rewrite is complete — see .vibekb/work/handoff.md and .vibekb/memory/changes/homepage developer journey.md ."
+        "body": "Status Homepage three section distill complete. See .vibekb/memory/changes/homepage three sections.md ."
     },
     {
         "title": "Current handoff",
-        "summary": "Homepage rewritten around the developer journey (comic-inspired emotional arc) with \"AI helped you build it. VibeKB helps you understand it.\" as the spine. Next: keep the model reconciled as VibeKB changes.",
+        "summary": "Homepage distilled to three sections (problem → what you get → live proof + CTA) while keeping the developer-journey message, vibe-coder + fork balance, and coding-agent list. Next: keep model reconciled as VibeKB changes.",
         "type": "handoff",
         "url": "../handoff/index.html",
-        "body": "What the software VibeKB now does VibeKB remains self hosted with the dynamic guide and static /docs . The public homepage now leads with the developer journey — open source excitement, AI assisted building, growing confusion, fear of change, then VibeKB as the missing understanding layer — before the feature views and live proof carousel. Completed this change Story driven homepage: six beat journey, uncertainty questions, before/after transformation, reframed hero/CTA/footer. Comic inspired visual pacing in assets/css/homepage.css mood tints, journey panels, transform cards . Story dot navigation in assets/js/homepage.js progressive enhancement . Change memory homepage developer journey ; important files updated for homepage assets. Verification completed php l index.php clean; rendered "
+        "body": "Completed this change Collapsed eleven homepage sections into three scannable sections ~355 lines vs ~750 . Section 1: thesis + three beat arc + live metrics card. Section 2: understanding layer + four pillar cards to guide views. Section 3: functionality carousel + CTA. Trimmed homepage.js to carousel only progressive enhancement. Verification completed php l index.php ; rendered HTML has exactly three <section elements. php tools/vibekb.php check OK; /docs regenerated. Exact next recommended action php tools/vibekb.php status before the next change; affected → update model → check + generate before commit."
     }
 ]

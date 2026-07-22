@@ -107,12 +107,12 @@
       "depended_on_by": ["Public landing / Mode A deployment"],
       "depends_on": ["guide/lib/Content.php", "guide/lib/helpers.php", ".vibekb/project/identity.md", "assets/css/homepage.css", "assets/js/homepage.js"],
       "safety": "moderate-impact",
-      "test_after_change": "Load the homepage; confirm the journey story, thesis line, live metrics card, and carousel render from the active model.",
+      "test_after_change": "Load the homepage; confirm three sections, arc + pillars, and carousel render from the active model.",
       "provenance": "verified-from-source"
     },
     {
       "path": "assets/css/homepage.css",
-      "purpose": "Homepage styling: journey mood panels, uncertainty questions, before/after transform, and shared hp-* chrome.",
+      "purpose": "Homepage styling: three-section layout (arc, pillars, guide carousel, shared hp-* chrome).",
       "functionality": ["load-living-model"],
       "runs_when": "Every homepage request.",
       "depended_on_by": ["index.php"],
@@ -123,7 +123,7 @@
     },
     {
       "path": "assets/js/homepage.js",
-      "purpose": "Homepage progressive enhancement: story-journey dots, guide-preview carousel, workflow tabs, repo map — all degrade without JS.",
+      "purpose": "Homepage progressive enhancement: guide-preview carousel only; degrades without JS.",
       "functionality": ["load-living-model"],
       "runs_when": "Homepage with JavaScript enabled.",
       "depended_on_by": ["index.php"],
