@@ -104,6 +104,7 @@
     init: function () {
       document.documentElement.classList.add('js');
       this.bindLayerControls();
+      this.bindStoryJourney();
       this.bindGuidePreview();
       this.bindPipeline();
       this.bindDepthSelector();
@@ -119,18 +120,42 @@
 
     bindLayerControls: function () {
       bindTabGroup({
-        root: '[data-stepper="problem"]',
-        tab: '[data-step]',
-        panel: '[data-step-panel]',
-        attr: 'data-step'
-      });
-
-      bindTabGroup({
         root: '[data-tabs="outcomes"]',
         tab: '[data-tab]',
         panel: '[data-tab-panel]',
         attr: 'data-tab'
       });
+    },
+
+    bindStoryJourney: function () {
+      var $root = $('[data-story-journey]');
+      if (!$root.length) {
+        return;
+      }
+
+      var $panels = $root.find('[data-story-panel]');
+      var $dots = $('[data-story-nav] [data-story-dot]');
+
+      function show(index) {
+        if (index < 0 || index >= $panels.length) {
+          return;
+        }
+        $panels.removeClass('is-active').eq(index).addClass('is-active');
+        $dots.removeClass('is-active').removeAttr('aria-current').eq(index)
+          .addClass('is-active').attr('aria-current', 'step');
+        if (!reducedMotion && $panels.eq(index)[0]) {
+          $panels.eq(index)[0].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }
+
+      $dots.on('click', function () {
+        var index = parseInt($(this).attr('data-story-dot'), 10);
+        if (!isNaN(index)) {
+          show(index);
+        }
+      });
+
+      show(0);
     },
 
     bindGuidePreview: function () {
