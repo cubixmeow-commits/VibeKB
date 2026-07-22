@@ -647,6 +647,82 @@ html.js .hp-journey-panel.is-active {
   background: linear-gradient(145deg, #f6fcfa, rgba(255, 252, 247, 0.95));
 }
 
+/* Three-beat arc (section 1) */
+
+.hp-arc {
+  list-style: none;
+  margin: 1.35rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.hp-arc li {
+  padding: 0.85rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--hp-line);
+  background: rgba(255, 252, 247, 0.85);
+  color: var(--hp-ink-soft);
+  font-size: 0.98rem;
+}
+
+.hp-arc li strong {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: var(--hp-ink);
+  font-family: var(--hp-display);
+}
+
+.hp-arc li:nth-child(1) { border-left: 3px solid var(--hp-accent); }
+.hp-arc li:nth-child(2) { border-left: 3px solid #c47a20; }
+.hp-arc li:nth-child(3) { border-left: 3px solid #b04a3a; }
+
+/* Four pillars (section 2) */
+
+.hp-pillars {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.hp-pillars article {
+  margin: 0;
+  padding: 1.1rem 1.15rem;
+  border-radius: var(--hp-radius);
+  border: 1px solid var(--hp-line);
+  background: rgba(255, 252, 247, 0.92);
+  box-shadow: var(--hp-shadow);
+}
+
+.hp-pillars h3 {
+  margin: 0 0 0.4rem;
+  font-family: var(--hp-display);
+  font-size: 1.05rem;
+}
+
+.hp-pillars p {
+  margin: 0 0 0.65rem;
+  color: var(--hp-ink-soft);
+  font-size: 0.96rem;
+}
+
+/* Inline CTA (section 3) */
+
+.hp-final-inline {
+  margin-top: 1.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--hp-line);
+}
+
+.hp-final-inline .hp-thesis {
+  margin-top: 0;
+}
+
+.hp-final-inline .hp-actions {
+  margin-top: 1rem;
+}
+
 /* Day-one workflow timeline */
 
 .hp-timeline-track {
@@ -1119,11 +1195,12 @@ html:not(.js) .hp-guide-panel {
   }
 
   .hp-understanding-grid,
-  .hp-transform {
+  .hp-transform,
+  .hp-pillars {
     grid-template-columns: 1fr;
   }
 
-  .hp-nav a[href="#story"] {
+  .hp-nav a[href="#problem"] {
     display: inline;
   }
 }

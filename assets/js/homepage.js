@@ -1,6 +1,5 @@
 /**
- * VibeKB layered homepage interactions.
- * Progressive enhancement only — hidden/collapsed states apply after init.
+ * VibeKB homepage — guide carousel only. Progressive enhancement.
  */
 (function (window, document, $) {
   'use strict';
@@ -11,17 +10,6 @@
 
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  function isTyping(el) {
-    if (!el || !el.tagName) {
-      return false;
-    }
-    var tag = el.tagName.toLowerCase();
-    return tag === 'input' || tag === 'textarea' || tag === 'select' || !!el.isContentEditable;
-  }
-
-  /**
-   * Accessible tab/step activator shared by homepage widgets.
-   */
   function bindTabGroup(options) {
     var $root = $(options.root);
     if (!$root.length) {
@@ -91,71 +79,17 @@
       activate(next, true);
     });
 
-    // Ensure initial ARIA/hidden sync without wiping no-JS content before this ran.
     activate(0, false);
 
-    return {
-      activate: activate,
-      count: $tabs.length
-    };
+    return { activate: activate, count: $tabs.length };
   }
 
   window.VibeKBHomepage = {
     init: function () {
       document.documentElement.classList.add('js');
-      this.bindLayerControls();
-      this.bindStoryJourney();
       this.bindGuidePreview();
-      this.bindPipeline();
-      this.bindDepthSelector();
-      this.bindAccordions();
-      this.bindHeroFlow();
-      this.bindManifesto();
-      this.bindCompare();
-      this.bindRelevance();
-      this.bindRepoMap();
       this.restoreState();
       this.bindHashNav();
-    },
-
-    bindLayerControls: function () {
-      bindTabGroup({
-        root: '[data-tabs="outcomes"]',
-        tab: '[data-tab]',
-        panel: '[data-tab-panel]',
-        attr: 'data-tab'
-      });
-    },
-
-    bindStoryJourney: function () {
-      var $root = $('[data-story-journey]');
-      if (!$root.length) {
-        return;
-      }
-
-      var $panels = $root.find('[data-story-panel]');
-      var $dots = $('[data-story-nav] [data-story-dot]');
-
-      function show(index) {
-        if (index < 0 || index >= $panels.length) {
-          return;
-        }
-        $panels.removeClass('is-active').eq(index).addClass('is-active');
-        $dots.removeClass('is-active').removeAttr('aria-current').eq(index)
-          .addClass('is-active').attr('aria-current', 'step');
-        if (!reducedMotion && $panels.eq(index)[0]) {
-          $panels.eq(index)[0].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-      }
-
-      $dots.on('click', function () {
-        var index = parseInt($(this).attr('data-story-dot'), 10);
-        if (!isNaN(index)) {
-          show(index);
-        }
-      });
-
-      show(0);
     },
 
     bindGuidePreview: function () {
@@ -189,114 +123,6 @@
       });
     },
 
-    bindPipeline: function () {
-      bindTabGroup({
-        root: '[data-pipeline]',
-        tab: '[data-pipe]',
-        panel: '[data-pipe-panel]',
-        attr: 'data-pipe'
-      });
-    },
-
-    bindDepthSelector: function () {
-      bindTabGroup({
-        root: '[data-depth-selector]',
-        tab: '[data-depth]',
-        panel: '[data-depth-panel]',
-        attr: 'data-depth'
-      });
-    },
-
-    bindAccordions: function () {
-      // Native <details> remain; ensure Escape does not trap focus oddly.
-      $(document).on('keydown', function (event) {
-        if (event.key !== 'Escape' || isTyping(event.target)) {
-          return;
-        }
-        var $open = $('details.hp-details[open]');
-        if ($open.length) {
-          $open.prop('open', false);
-        }
-      });
-    },
-
-    bindHeroFlow: function () {
-      var $items = $('[data-hero-flow] > li').not('.hp-mini-flow-arrow');
-      if (!$items.length || reducedMotion) {
-        $items.addClass('is-active');
-        return;
-      }
-
-      var i = 0;
-      function tick() {
-        $items.removeClass('is-active');
-        $items.eq(i % $items.length).addClass('is-active');
-        i += 1;
-        window.setTimeout(tick, 1600);
-      }
-      tick();
-    },
-
-    bindManifesto: function () {
-      var $root = $('[data-manifesto]');
-      if (!$root.length) {
-        return;
-      }
-
-      var $items = $root.find('[data-manifesto-item]');
-      var index = 0;
-
-      function show(i) {
-        if (i < 0 || i >= $items.length) {
-          return;
-        }
-        index = i;
-        $items.each(function (n) {
-          var on = n === i;
-          $(this).toggleClass('is-active', on).prop('hidden', !on);
-        });
-        $root.find('[data-manifesto-current]').text(String(i + 1));
-        $root.find('[data-manifesto-prev]').prop('disabled', i <= 0);
-        $root.find('[data-manifesto-next]').prop('disabled', i >= $items.length - 1);
-      }
-
-      $root.on('click', '[data-manifesto-prev]', function () {
-        show(index - 1);
-      });
-      $root.on('click', '[data-manifesto-next]', function () {
-        show(index + 1);
-      });
-
-      show(0);
-    },
-
-    bindCompare: function () {
-      bindTabGroup({
-        root: '[data-compare]',
-        tab: '[data-cmp]',
-        panel: '[data-cmp-panel]',
-        attr: 'data-cmp'
-      });
-    },
-
-    bindRelevance: function () {
-      bindTabGroup({
-        root: '[data-relevance]',
-        tab: '[data-rel]',
-        panel: '[data-rel-panel]',
-        attr: 'data-rel'
-      });
-    },
-
-    bindRepoMap: function () {
-      bindTabGroup({
-        root: '[data-repo-map]',
-        tab: '[data-repo]',
-        panel: '[data-repo-panel]',
-        attr: 'data-repo'
-      });
-    },
-
     updateUrlState: function (hash) {
       if (!hash || !window.history || !window.history.replaceState) {
         return;
@@ -312,12 +138,9 @@
       }
       var $target = $('#' + hash.replace(/([\\:])/g, '\\$1'));
       if ($target.length) {
-        // Defer scroll so layout is ready.
         window.setTimeout(function () {
-          if (!reducedMotion && $target[0].scrollIntoView) {
-            $target[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
-          } else if ($target[0].scrollIntoView) {
-            $target[0].scrollIntoView(true);
+          if ($target[0].scrollIntoView) {
+            $target[0].scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
           }
         }, 50);
       }
@@ -327,11 +150,9 @@
       $(document).on('click', 'a[href^="#"]', function () {
         var href = $(this).attr('href') || '';
         var id = href.slice(1);
-        if (!id) {
-          return;
+        if (id) {
+          window.VibeKBHomepage.updateUrlState(id);
         }
-        // Let the browser handle navigation; optionally sync state.
-        window.VibeKBHomepage.updateUrlState(id);
       });
     }
   };
