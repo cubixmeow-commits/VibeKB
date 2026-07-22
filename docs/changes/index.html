@@ -162,6 +162,38 @@ consistent; <code>/docs</code> regenerated from the self-model and re-validated.
                                             <p class="change-card__links"><strong>Affected:</strong>
                             <a class="chip" href="../functionality/start-work-session.html">Start a work session</a> <a class="chip" href="../functionality/detect-drift.html">Detect drift between code and model</a> <a class="chip" href="../functionality/find-affected-functionality.html">Find affected functionality</a> <a class="chip" href="../functionality/load-living-model.html">Load the living model</a> <a class="chip" href="../functionality/generate-static-snapshot.html">Generate the static snapshot</a>                        </p>
                                     </li>
+                            <li class="change-card">
+                    <div class="change-card__head">
+                        <h2>Replace leftover SousMeow homepage tagline with VibeKB self-hosting copy</h2>
+                        <div class="badge-row">
+                            <span class="badge badge--info">implemented</span>                            <span class="badge badge--ok">Verified manually</span>                            <span class="muted">2026-07-22</span>
+                        </div>
+                    </div>
+                    <p>The homepage hero card no longer falls back to an old workflow-platform tagline; it uses VibeKB&#039;s identity one_liner/summary, and adjacent framing now describes VibeKB explaining itself.</p>
+                    <div class="prose reading-column change-card__body"><h3>Before</h3>
+<p>The homepage hero card read <code>identity.meta.one_liner</code> only. VibeKB&#039;s identity had
+a <code>summary</code> but no <code>one_liner</code>, so the card fell back to a hardcoded SousMeow-era
+sentence (&quot;A platform for running step-by-step AI workflows…&quot;). Nearby copy still
+framed the active model as a separate sample application.</p>
+<h3>After</h3>
+<ul>
+<li>Identity carries a VibeKB <code>one_liner</code>.</li>
+<li>The homepage prefers <code>one_liner</code>, then <code>summary</code>, with a VibeKB-accurate</li>
+</ul>
+<p>fallback (same pattern as the guide overview).</p>
+<ul>
+<li>When <code>self_hosted</code> / non-sample, the hero card, functionality carousel, and</li>
+</ul>
+<p>final CTA describe VibeKB explaining itself.</p>
+<ul>
+<li><code>index.php</code> is recorded in important-files so future <code>affected</code> runs map it.</li>
+</ul>
+<h3>Impact</h3>
+<p>Visitors see an accurate product description on the landing page. The guide
+overview also surfaces the new one_liner.</p></div>
+                                            <p class="change-card__links"><strong>Affected:</strong>
+                            <a class="chip" href="../functionality/load-living-model.html">Load the living model</a>                        </p>
+                                    </li>
                     </ol>
     </article>
         </main>
@@ -173,7 +205,7 @@ consistent; <code>/docs</code> regenerated from the self-model and re-validated.
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 05:59 UTC · source commit fc65ae6 (2026-07-22) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 07:15 UTC · source commit fc65ae6 (2026-07-22) · not auto-updating</p>
             </div>
         </footer>
     </div>

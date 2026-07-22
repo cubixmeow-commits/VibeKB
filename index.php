@@ -85,10 +85,16 @@ try {
 
 $manifest = $loaded ? $content->manifest() : [];
 $example = is_array($manifest['example_project'] ?? null) ? $manifest['example_project'] : [];
+$provenance = is_array($manifest['provenance'] ?? null) ? $manifest['provenance'] : [];
 $identity = $loaded ? $content->projectDoc('identity') : null;
+$selfHosted = !empty($manifest['self_hosted']) || (($example['is_sample'] ?? true) === false);
 $sampleName = (string) ($identity['meta']['title'] ?? ($example['name'] ?? 'the example project'));
-$sampleTagline = (string) ($identity['meta']['one_liner'] ?? '');
-$sampleRepo = (string) ($example['source_repository'] ?? '');
+// Prefer a short one_liner; fall back to summary (same pattern as guide overview).
+$sampleTagline = (string) ($identity['meta']['one_liner'] ?? $identity['meta']['summary'] ?? '');
+if ($sampleTagline === '') {
+    $sampleTagline = 'A living software model that explains what your application is currently doing — organized around functionality.';
+}
+$sampleRepo = (string) ($example['source_repository'] ?? $provenance['source_repository'] ?? '');
 $statusCounts = $loaded ? $content->statusCounts() : [];
 
 // Live metrics computed from the actual loaded content (never invented).
@@ -168,10 +174,10 @@ if ($loaded) {
                     </div>
                 </div>
                 <?php if ($loaded): ?>
-                <aside class="hp-example-card" aria-label="Live software example">
-                    <p class="hp-example-label">Live software example</p>
+                <aside class="hp-example-card" aria-label="<?= $selfHosted ? 'Live model of this repository' : 'Live software example' ?>">
+                    <p class="hp-example-label"><?= $selfHosted ? 'Live model of this repository' : 'Live software example' ?></p>
                     <h2 class="hp-example-name"><?= hp_e($sampleName) ?></h2>
-                    <p class="hp-example-desc"><?= hp_e($sampleTagline !== '' ? $sampleTagline : 'A platform for running step-by-step AI workflows using the AI subscriptions people already have.') ?></p>
+                    <p class="hp-example-desc"><?= hp_e($sampleTagline) ?></p>
                     <dl class="hp-example-metrics">
                         <div><dt><?= (int) $funcCount ?></dt><dd>functions modelled</dd></div>
                         <div><dt><?= (int) $groupCount ?></dt><dd>capability groups</dd></div>
@@ -187,7 +193,11 @@ if ($loaded) {
                             <a class="hp-btn hp-btn-ghost" href="<?= hp_e($sampleRepo) ?>" rel="noopener noreferrer">View the repository</a>
                         <?php endif; ?>
                     </div>
-                    <p class="hp-example-note">VibeKB is the product. <?= hp_e($sampleName) ?> is the real application it is explaining.</p>
+                    <p class="hp-example-note"><?php if ($selfHosted): ?>
+                        VibeKB explaining VibeKB — this guide is the product modelling itself.
+                    <?php else: ?>
+                        VibeKB is the product. <?= hp_e($sampleName) ?> is the real application it is explaining.
+                    <?php endif; ?></p>
                 </aside>
                 <?php endif; ?>
             </div>
@@ -294,13 +304,19 @@ if ($loaded) {
         <?php if ($previewItems !== []): ?>
         <section class="hp-section" id="sample" aria-labelledby="sample-title">
             <div class="hp-wrap">
-                <p class="hp-kicker">A real application, explained by VibeKB</p>
+                <p class="hp-kicker"><?= $selfHosted ? 'VibeKB explaining itself' : 'A real application, explained by VibeKB' ?></p>
                 <h2 id="sample-title">Real functionality from <?= hp_e($sampleName) ?>.</h2>
                 <p class="hp-lead">
-                    <?= hp_e($sampleName) ?> is a real PHP application; VibeKB is the product explaining it.
-                    Every slide below is an actual record derived from the <?= hp_e($sampleName) ?> source —
-                    with its honest status and how it was verified — linking to a full explanation of the
-                    flow, files, data, failure cases, and what&#39;s safe to change.
+                    <?php if ($selfHosted): ?>
+                        Every slide below is an actual functionality record from VibeKB&#39;s own living model —
+                        traced from this repository&#39;s source, with its honest status and how it was verified —
+                        linking to a full explanation of the flow, files, data, failure cases, and what&#39;s safe to change.
+                    <?php else: ?>
+                        <?= hp_e($sampleName) ?> is a real application; VibeKB is the product explaining it.
+                        Every slide below is an actual record derived from the <?= hp_e($sampleName) ?> source —
+                        with its honest status and how it was verified — linking to a full explanation of the
+                        flow, files, data, failure cases, and what&#39;s safe to change.
+                    <?php endif; ?>
                 </p>
 
                 <div class="hp-guide-preview" data-guide-preview>
@@ -703,8 +719,13 @@ if ($loaded) {
             <div class="hp-wrap hp-narrow">
                 <h2 id="cta-title">See what <?= hp_e($sampleName) ?> is doing.</h2>
                 <p>
-                    Open the guide and read the live model of <?= hp_e($sampleName) ?>, a real application —
-                    then put VibeKB in your own repo and keep its model current as you build.
+                    <?php if ($selfHosted): ?>
+                        Open the guide and read VibeKB&#39;s own living model — then put VibeKB in your own
+                        repo and keep its model current as you build.
+                    <?php else: ?>
+                        Open the guide and read the live model of <?= hp_e($sampleName) ?>, a real application —
+                        then put VibeKB in your own repo and keep its model current as you build.
+                    <?php endif; ?>
                 </p>
                 <p class="hp-thesis">
                     Understand what your software is doing — the current functionality, how it works,

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap VibeKB on itself with an active self-maintenance lifecycle · VibeKB — VibeKB</title>
+    <title>Replace leftover SousMeow homepage tagline with VibeKB self-hosting copy · VibeKB — VibeKB</title>
     <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -106,59 +106,39 @@
         <p class="breadcrumb"><a href="../../why/index.html">← Decisions &amp; rationale</a></p>
         <header class="page-head reading-column">
             <p class="eyebrow">Changes</p>
-            <h1>Bootstrap VibeKB on itself with an active self-maintenance lifecycle</h1>
-            <p class="lede">Replaced the SousMeow active model with VibeKB&#039;s own model, isolated the examples, and added the `vibekb` CLI (status/check/affected) so the model is maintained through a real agent lifecycle as VibeKB is developed.</p>
+            <h1>Replace leftover SousMeow homepage tagline with VibeKB self-hosting copy</h1>
+            <p class="lede">The homepage hero card no longer falls back to an old workflow-platform tagline; it uses VibeKB&#039;s identity one_liner/summary, and adjacent framing now describes VibeKB explaining itself.</p>
             <div class="badge-row">
                 <span class="badge badge--info">implemented</span>                                                <span class="badge badge--ok">Verified manually</span>            </div>
         </header>
         <div class="detail-grid">
             <div class="detail-main"><div class="prose reading-column"><h3>Before</h3>
-<p>The active <code>.vibekb/</code> model described SousMeow (a separate app). VibeKB had a
-strong renderer, validator, and explainable-diagram system, but no repository-
-resident model of <em>itself</em> and no tooling to help an agent run the maintenance
-lifecycle or detect drift. Maintenance was prose-only (CLAUDE.md / MAINTENANCE.md).</p>
+<p>The homepage hero card read <code>identity.meta.one_liner</code> only. VibeKB&#039;s identity had
+a <code>summary</code> but no <code>one_liner</code>, so the card fell back to a hardcoded SousMeow-era
+sentence (&quot;A platform for running step-by-step AI workflows…&quot;). Nearby copy still
+framed the active model as a separate sample application.</p>
 <h3>After</h3>
 <ul>
-<li>The active root <code>.vibekb/</code> is VibeKB&#039;s own model (this content).</li>
-<li>The SousMeow model and the StopPR field-test audit moved under <code>examples/</code>; a</li>
+<li>Identity carries a VibeKB <code>one_liner</code>.</li>
+<li>The homepage prefers <code>one_liner</code>, then <code>summary</code>, with a VibeKB-accurate</li>
 </ul>
-<p><code>VIBEKB_CONTENT_ROOT</code> override keeps them previewable/validatable.</p>
+<p>fallback (same pattern as the guide overview).</p>
 <ul>
-<li>A new <code>tools/vibekb.php</code> CLI provides <code>status</code> (session start), <code>check</code> (drift +</li>
+<li>When <code>self_hosted</code> / non-sample, the hero card, functionality carousel, and</li>
 </ul>
-<p>validate + snapshot sync), <code>affected</code> (files → functionality), plus <code>validate</code>
-  and <code>generate</code> passthroughs.</p>
+<p>final CTA describe VibeKB explaining itself.</p>
 <ul>
-<li>Agent instructions were unified: <code>CLAUDE.md</code> is canonical; <code>AGENTS.md</code> and</li>
+<li><code>index.php</code> is recorded in important-files so future <code>affected</code> runs map it.</li>
 </ul>
-<p><code>.cursor/rules/vibekb.mdc</code> are thin pointers to the same lifecycle and CLI.</p>
-<ul>
-<li><code>tools/validate.php</code> accepts an optional content-root so examples validate in</li>
-</ul>
-<p>CI; a CI workflow runs syntax, validation, topology, and the drift check.</p>
 <h3>Impact</h3>
-<ul>
-<li>VibeKB now demonstrates itself: the dynamic guide and <code>/docs</code> render VibeKB</li>
-</ul>
-<p>explaining VibeKB.</p>
-<ul>
-<li>A normal code change has a low-friction lifecycle: <code>status</code> → work → implement →</li>
-</ul>
-<p><code>affected</code> → update model → <code>check</code> → <code>generate</code> → handoff.</p>
-<ul>
-<li>Drift between code and model is surfaced mechanically and honestly, without any</li>
-</ul>
-<p>false claim of automatic semantic updates.</p>
-<h3>Verification</h3>
-<p><code>php -l</code> clean across changed PHP; <code>php tools/validate.php</code> (root and example) →
-0 errors; <code>php tools/test-topology.php</code> → OK; <code>php tools/vibekb.php check</code> →
-consistent; <code>/docs</code> regenerated from the self-model and re-validated.</p></div></div>
+<p>Visitors see an accurate product description on the landing page. The guide
+overview also surfaces the new one_liner.</p></div></div>
             <aside class="detail-rail" aria-label="Connections">
                 <div class="rail-card">
                     <h2>Affects functionality</h2>
-                    <p><a class="chip" href="../../functionality/start-work-session.html">Start a work session</a> <a class="chip" href="../../functionality/detect-drift.html">Detect drift between code and model</a> <a class="chip" href="../../functionality/find-affected-functionality.html">Find affected functionality</a> <a class="chip" href="../../functionality/load-living-model.html">Load the living model</a> <a class="chip" href="../../functionality/generate-static-snapshot.html">Generate the static snapshot</a></p>
+                    <p><a class="chip" href="../../functionality/load-living-model.html">Load the living model</a></p>
                 </div>
-                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">tools/vibekb.php</code> <code class="chip chip--file">guide/index.php</code> <code class="chip chip--file">tools/validate.php</code> <code class="chip chip--file">.vibekb/manifest.json</code> <code class="chip chip--file">CLAUDE.md</code> <code class="chip chip--file">AGENTS.md</code></p></div>
+                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">index.php</code> <code class="chip chip--file">.vibekb/project/identity.md</code></p></div>
                             </aside>
         </div>
     </article>

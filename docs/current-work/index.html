@@ -110,49 +110,18 @@
     </header>
 
             <section class="work-summary callout callout--work">
-            <h2>Bootstrap VibeKB on itself and make self-maintenance real</h2>
+            <h2>(none — ready for next task)</h2>
             <div class="badge-row">
-                <span class="badge badge--info">completed</span>                                    <span class="badge badge--ok">Verified manually</span>                            </div>
+                <span class="badge badge--info">idle</span>                                    <span class="badge badge--unknown">Not applicable</span>                            </div>
             <dl class="rail-dl work-meta">
-                <dt>Objective</dt><dd>Replace the SousMeow active model with VibeKB&#039;s own living model, isolate the examples, and add a repository-owned maintenance lifecycle (a `vibekb` CLI plus unified agent instructions) so VibeKB maintains its own model as it is developed.</dd>                                    <dt>Affected functionality</dt><dd><a class="chip" href="../functionality/start-work-session.html">Start a work session</a> <a class="chip" href="../functionality/detect-drift.html">Detect drift between code and model</a> <a class="chip" href="../functionality/find-affected-functionality.html">Find affected functionality</a> <a class="chip" href="../functionality/load-living-model.html">Load the living model</a> <a class="chip" href="../functionality/validate-model.html">Validate the model</a> <a class="chip" href="../functionality/generate-static-snapshot.html">Generate the static snapshot</a> <a class="chip" href="../functionality/render-guide.html">Render the dynamic guide</a></dd>
-                                                    <dt>Expected files</dt><dd><code class="chip chip--file">tools/vibekb.php</code> <code class="chip chip--file">tools/validate.php</code> <code class="chip chip--file">guide/index.php</code> <code class="chip chip--file">.vibekb/ (the whole active self-model)</code> <code class="chip chip--file">examples/sousmeow/.vibekb/</code> <code class="chip chip--file">examples/field-tests/STOPPR_INTEGRATION_AUDIT.md</code> <code class="chip chip--file">CLAUDE.md, AGENTS.md, .cursor/rules/vibekb.mdc</code> <code class="chip chip--file">MAINTENANCE.md, INITIALIZE.md, README.md, .cpanel.yml, DEPLOYMENT.md</code> <code class="chip chip--file">.github/workflows/vibekb.yml</code> <code class="chip chip--file">docs/ (regenerated)</code></dd>
-                                <dt>Data impact</dt><dd>No runtime data. Repository-owned content and product code only. The SousMeow example is unchanged in content, only relocated.</dd>                <dt>Risks</dt><dd>Making the static snapshot the centre of the architecture (kept it a projection). Claiming automatic semantic updates (kept detection and interpretation separate). Letting the example model be mistaken for the active model (isolated under examples/). Over-building tooling into a checklist agents ignore (kept to one discoverable CLI). Verification overreach on the new CLI records (gated on actually testing the CLI).</dd>            </dl>
+                <dt>Objective</dt><dd>No active work. Previous: replace leftover SousMeow homepage tagline with VibeKB copy.</dd>                                                <dt>Data impact</dt><dd>None.</dd>                            </dl>
         </section>
 
         <section class="doc-section content-section">
-            <div class="prose reading-column"><h3>What the user asked for</h3>
-<p>Bootstrap VibeKB inside its own repository and make self-maintenance a real part
-of how the repository operates — an active model of VibeKB itself, examples
-cleanly separated, a repository-owned lifecycle that Claude Code and Cursor
-follow without a giant prompt, mechanical drift detection that is honest about the
-detection-vs-interpretation boundary, and a <code>/docs</code> site that demonstrates VibeKB
-explaining VibeKB.</p>
-<h3>Current behaviour (before)</h3>
-<p>The active <code>.vibekb/</code> modelled SousMeow. VibeKB had the renderer, validator, and
-explainable diagrams, but no self-model and no lifecycle tooling; maintenance was
-prose in CLAUDE.md / MAINTENANCE.md.</p>
-<h3>Proposed behaviour (after)</h3>
-<ul>
-<li>Root <code>.vibekb/</code> is VibeKB&#039;s own model; SousMeow and the StopPR audit move under</li>
-</ul>
-<p><code>examples/</code>, still previewable via <code>VIBEKB_CONTENT_ROOT</code>.</p>
-<ul>
-<li><code>tools/vibekb.php</code> provides <code>status</code>, <code>check</code>, <code>affected</code>, <code>validate</code>,</li>
-</ul>
-<p><code>generate</code>.</p>
-<ul>
-<li><code>CLAUDE.md</code> is the canonical workflow; <code>AGENTS.md</code> and <code>.cursor/rules</code> are thin</li>
-</ul>
-<p>pointers. <code>tools/validate.php</code> takes an optional content root; CI runs the
-  checks.</p>
-<ul>
-<li><code>/docs</code> is regenerated from the self-model.</li>
-</ul>
-<h3>Verification plan</h3>
-<p><code>php -l</code> across changed PHP; <code>php tools/validate.php</code> on the root model and the
-example; <code>php tools/test-topology.php</code>; <code>php tools/vibekb.php status|check|affected</code>
-exercised; <code>/docs</code> regenerated and re-validated; guide views spot-checked in both
-modes.</p></div>
+            <div class="prose reading-column"><h3>Status</h3>
+<p>No active work. The homepage tagline / self-hosting framing fix is complete —
+see <code>.vibekb/work/handoff.md</code> and
+<code>.vibekb/memory/changes/homepage-tagline-self-hosting.md</code>.</p></div>
         </section>
     
     <nav class="cross-links" aria-label="Related views">
@@ -169,7 +138,7 @@ modes.</p></div>
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 05:59 UTC · source commit fc65ae6 (2026-07-22) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 07:15 UTC · source commit fc65ae6 (2026-07-22) · not auto-updating</p>
             </div>
         </footer>
     </div>

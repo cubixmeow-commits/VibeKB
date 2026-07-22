@@ -276,6 +276,24 @@
                                                                             <div><dt>Test after change</dt><dd>Load the overview, a functionality detail, an unknown view (404), and the search JSON endpoint.</dd></div>
                                             </dl>
                 </section>
+                            <section class="file-card" id="index.php">
+                    <div class="file-card__head">
+                        <h2><code>index.php</code></h2>
+                        <div class="file-card__badges">
+                            <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
+                    </div>
+                    <p class="file-card__purpose">The public homepage: product copy plus a live preview card driven by the active .vibekb/ model (identity one_liner/summary, functionality metrics, current work).</p>
+                    <dl class="file-card__meta">
+                                                    <div><dt>Runs when</dt><dd>Every browser request to the site root.</dd></div>
+                                                                            <div><dt>Implements</dt><dd>
+                                                                                                            <a class="chip" href="../functionality/load-living-model.html">Load the living model</a>
+                                                                                                </dd></div>
+                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">guide/lib/Content.php</code> <code class="chip chip--file">guide/lib/helpers.php</code> <code class="chip chip--file">.vibekb/project/identity.md</code></dd></div>
+                                                                            <div><dt>Depended on by</dt><dd>
+                                Public landing / Mode A deployment                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Load the homepage; confirm the hero card tagline matches identity one_liner/summary and self-hosted framing (not leftover sample-app copy).</dd></div>
+                                            </dl>
+                </section>
                             <section class="file-card" id="guide/templates/layout.php">
                     <div class="file-card__head">
                         <h2><code>guide/templates/layout.php</code></h2>
@@ -435,7 +453,7 @@
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 05:59 UTC · source commit fc65ae6 (2026-07-22) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 07:15 UTC · source commit fc65ae6 (2026-07-22) · not auto-updating</p>
             </div>
         </footer>
     </div>

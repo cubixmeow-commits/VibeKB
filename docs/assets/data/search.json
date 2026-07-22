@@ -434,6 +434,13 @@
         "body": "Before The active .vibekb/ model described SousMeow a separate app . VibeKB had a strong renderer, validator, and explainable diagram system, but no repository resident model of itself and no tooling to help an agent run the maintenance lifecycle or detect drift. Maintenance was prose only CLAUDE.md / MAINTENANCE.md . After The active root .vibekb/ is VibeKB's own model this content . The SousMeow model and the StopPR field test audit moved under examples/ ; a VIBEKB CONTENT ROOT override keeps them previewable/validatable. A new tools/vibekb.php CLI provides status session start , check drift + validate + snapshot sync , affected files → functionality , plus validate and generate passthroughs. Agent instructions were unified: CLAUDE.md is canonical; AGENTS.md and .cursor/rules/vibekb.mdc "
     },
     {
+        "title": "Replace leftover SousMeow homepage tagline with VibeKB self-hosting copy",
+        "summary": "The homepage hero card no longer falls back to an old workflow-platform tagline; it uses VibeKB's identity one_liner/summary, and adjacent framing now describes VibeKB explaining itself.",
+        "type": "change",
+        "url": "../why/changes/homepage-tagline-self-hosting.html",
+        "body": "Before The homepage hero card read identity.meta.one liner only. VibeKB's identity had a summary but no one liner , so the card fell back to a hardcoded SousMeow era sentence \"A platform for running step by step AI workflows…\" . Nearby copy still framed the active model as a separate sample application. After Identity carries a VibeKB one liner . The homepage prefers one liner , then summary , with a VibeKB accurate fallback same pattern as the guide overview . When self hosted / non sample, the hero card, functionality carousel, and final CTA describe VibeKB explaining itself. index.php is recorded in important files so future affected runs map it. Impact Visitors see an accurate product description on the landing page. The guide overview also surfaces the new one liner."
+    },
+    {
         "title": "guide/lib/Content.php",
         "summary": "The content loader: reads .vibekb/, parses records, resolves relationships, loads/validates diagram topology, and validates the whole model. The spine everything else renders.",
         "type": "file",
@@ -492,6 +499,13 @@
     {
         "title": "guide/index.php",
         "summary": "The dynamic guide front controller: query-string routing, model load, error posture, live search JSON.",
+        "type": "file",
+        "url": "../files/index.html",
+        "body": ""
+    },
+    {
+        "title": "index.php",
+        "summary": "The public homepage: product copy plus a live preview card driven by the active .vibekb/ model (identity one_liner/summary, functionality metrics, current work).",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
@@ -595,17 +609,17 @@
         "body": "Mode A — the dynamic guide on shared hosting .cpanel.yml rsyncs the runtime paths index.php , assets/ , guide/ , .vibekb/ into a cPanel public folder and excludes development only paths tools/ , prompts/ , docs/ , authoring docs, examples/ . Query string routing means no .htaccess rewrite rules are needed and the app runs in a subfolder. .vibekb/ must deploy — it is the content. Mode B — the static snapshot php tools/generate static.php builds /docs ; publish it via GitHub Pages Settings → Pages → branch → /docs or any static host. Relative links make it work at a web root or under a repository subpath. No PHP, database, CDN, or network required. Deployment is part of the application Whenever repository structure, runtime folders, or deployment requirements change, .cpanel.yml and DEPLOYME"
     },
     {
-        "title": "Bootstrap VibeKB on itself and make self-maintenance real",
-        "summary": "Self-hosting VibeKB — the active `.vibekb/` now describes VibeKB, examples are isolated under `examples/`, and `tools/vibekb.php` gives agents status / check / affected for the lifecycle.",
+        "title": "(none — ready for next task)",
+        "summary": "Idle. See handoff.md for the last completed change and the next recommended action.",
         "type": "current work",
         "url": "../current-work/index.html",
-        "body": "What the user asked for Bootstrap VibeKB inside its own repository and make self maintenance a real part of how the repository operates — an active model of VibeKB itself, examples cleanly separated, a repository owned lifecycle that Claude Code and Cursor follow without a giant prompt, mechanical drift detection that is honest about the detection vs interpretation boundary, and a /docs site that demonstrates VibeKB explaining VibeKB. Current behaviour before The active .vibekb/ modelled SousMeow. VibeKB had the renderer, validator, and explainable diagrams, but no self model and no lifecycle tooling; maintenance was prose in CLAUDE.md / MAINTENANCE.md. Proposed behaviour after Root .vibekb/ is VibeKB's own model; SousMeow and the StopPR audit move under examples/ , still previewable via V"
+        "body": "Status No active work. The homepage tagline / self hosting framing fix is complete — see .vibekb/work/handoff.md and .vibekb/memory/changes/homepage tagline self hosting.md ."
     },
     {
         "title": "Current handoff",
-        "summary": "VibeKB is now self-hosted. The active `.vibekb/` models VibeKB itself; the SousMeow example and StopPR audit are isolated under `examples/`; a new `tools/vibekb.php` CLI (status / check / affected) drives the maintenance lifecycle; agent instructions are unified and repository-owned; `/docs` is regenerated from the self-model. Next: optionally add explainable topology to the one remaining picture-only diagram (self-maintenance-loop), and keep the model reconciled as VibeKB changes.",
+        "summary": "Homepage hero tagline and self-hosting framing now describe VibeKB (not the old workflow-platform sample). Identity has a one_liner; index.php is in important-files. Next: keep the model reconciled as VibeKB changes; optionally author explainable topology for self-maintenance-loop.",
         "type": "handoff",
         "url": "../handoff/index.html",
-        "body": "What the software VibeKB now does VibeKB renders one repository owned model through one template set in two modes dynamic guide, static /docs . As of this change it is self hosted : the active model describes VibeKB's own components — the loader, the guide renderer, the static generator, the validator, the explainable diagram system, and the new self maintenance CLI. Example models of other apps live under examples/ and are not the active model. Completed this change Examples isolated. SousMeow → examples/sousmeow/.vibekb/ ; StopPR audit → examples/field tests/ . guide/index.php gained a VIBEKB CONTENT ROOT override constrained to a .vibekb directory so examples stay previewable/validatable. Self model authored. 17 functionality records across 7 areas, 6 system docs, curated important file"
+        "body": "What the software VibeKB now does VibeKB remains self hosted: the active .vibekb/ models VibeKB itself, rendered through the dynamic guide and static /docs . The public homepage now pulls its hero card description from VibeKB's identity one liner / summary and, when self hosted, frames the preview as VibeKB explaining itself rather than as a separate sample product. Completed this change Added one liner to .vibekb/project/identity.md . Fixed index.php tagline resolution one liner → summary → VibeKB fallback and removed the SousMeow era hardcoded sentence. Adjusted hero card / carousel / CTA copy for the self hosted case. Recorded index.php in important files; added change memory homepage tagline self hosting . Verification completed php l index.php clean. Loaded identity via Content ; conf"
     }
 ]

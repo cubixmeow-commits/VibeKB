@@ -114,57 +114,32 @@
                                     <span class="badge badge--info">Verification: verified manually</span>                                <span class="muted">Updated 2026-07-22</span>
             </div>
             <div class="prose reading-column"><h3>What the software (VibeKB) now does</h3>
-<p>VibeKB renders one repository-owned model through one template set in two modes
-(dynamic guide, static <code>/docs</code>). As of this change it is <strong>self-hosted</strong>: the
-active model describes VibeKB&#039;s own components — the loader, the guide renderer,
-the static generator, the validator, the explainable-diagram system, and the new
-self-maintenance CLI. Example models of other apps live under <code>examples/</code> and are
-not the active model.</p>
+<p>VibeKB remains self-hosted: the active <code>.vibekb/</code> models VibeKB itself, rendered
+through the dynamic guide and static <code>/docs</code>. The public homepage now pulls its
+hero-card description from VibeKB&#039;s identity (<code>one_liner</code> / <code>summary</code>) and, when
+self-hosted, frames the preview as VibeKB explaining itself rather than as a
+separate sample product.</p>
 <h3>Completed this change</h3>
 <ul>
-<li><strong>Examples isolated.</strong> SousMeow → <code>examples/sousmeow/.vibekb/</code>; StopPR audit →</li>
+<li>Added <code>one_liner</code> to <code>.vibekb/project/identity.md</code>.</li>
+<li>Fixed <code>index.php</code> tagline resolution (<code>one_liner</code> → <code>summary</code> → VibeKB</li>
 </ul>
-<p><code>examples/field-tests/</code>. <code>guide/index.php</code> gained a <code>VIBEKB_CONTENT_ROOT</code>
-  override (constrained to a <code>.vibekb</code> directory) so examples stay
-  previewable/validatable.</p>
+<p>fallback) and removed the SousMeow-era hardcoded sentence.</p>
 <ul>
-<li><strong>Self-model authored.</strong> 17 functionality records across 7 areas, 6 system</li>
+<li>Adjusted hero-card / carousel / CTA copy for the self-hosted case.</li>
+<li>Recorded <code>index.php</code> in important-files; added change memory</li>
 </ul>
-<p>docs, curated important-files, memory (decisions/constraints/warnings/
-  assumption/discovery/change), 3 diagrams (2 explainable), work + handoff — all
-  grounded in this repository&#039;s source.</p>
-<ul>
-<li><strong>Self-maintenance CLI.</strong> <code>tools/vibekb.php</code>: <code>status</code> (session start), <code>check</code></li>
-</ul>
-<p>(validate + broken-reference detection + drift since recorded commit + <code>/docs</code>
-  sync), <code>affected</code> (files → functionality), <code>validate</code>, <code>generate</code>. Honest about
-  detected vs interpreted.</p>
-<ul>
-<li><strong>Tooling.</strong> <code>tools/validate.php</code> accepts an optional content root; a CI</li>
-</ul>
-<p>workflow runs syntax, validation, topology, and the drift check.</p>
-<ul>
-<li><strong>Instructions unified.</strong> <code>CLAUDE.md</code> canonical; <code>AGENTS.md</code> and</li>
-</ul>
-<p><code>.cursor/rules/vibekb.mdc</code> are thin pointers. <code>MAINTENANCE.md</code>, <code>INITIALIZE.md</code>,
-  <code>README.md</code>, <code>.cpanel.yml</code>, <code>DEPLOYMENT.md</code> updated for self-hosting.</p>
-<ul>
-<li><strong>/docs regenerated</strong> from the self-model.</li>
-</ul>
+<p><code>homepage-tagline-self-hosting</code>.</p>
 <h3>Verification completed</h3>
 <ul>
-<li><code>php -l</code> clean across changed <code>guide/</code> and <code>tools/</code> files.</li>
-<li><code>php tools/validate.php</code> → 0 errors on the root model; the SousMeow example also</li>
+<li><code>php -l index.php</code> clean.</li>
+<li>Loaded identity via <code>Content</code>; confirmed the rendered tagline is the VibeKB</li>
 </ul>
-<p>validates via the content-root argument.</p>
+<p>one_liner and does not contain the old &quot;AI subscriptions&quot; wording.</p>
 <ul>
-<li><code>php tools/test-topology.php</code> → OK.</li>
-<li><code>php tools/vibekb.php status|check|affected</code> exercised; <code>check</code> reports a</li>
+<li><code>php tools/vibekb.php check</code> and <code>php tools/test-topology.php</code> (run before</li>
 </ul>
-<p>consistent model and an in-sync <code>/docs</code>.</p>
-<ul>
-<li>Dynamic guide spot-checked; <code>/docs</code> regenerated and re-validated.</li>
-</ul>
+<p>finish); <code>/docs</code> regenerated so the overview shows the new one_liner.</p>
 <h3>Active warnings (VibeKB)</h3>
 <ul>
 <li><code>model-can-drift-from-code</code>, <code>docs-is-generated-never-hand-edit</code>,</li>
@@ -172,18 +147,17 @@ not the active model.</p>
 <p><code>verification-must-reflect-evidence</code>.</p>
 <h3>Honest limitations / not verified</h3>
 <ul>
-<li>Cursor discovery is <code>inferred</code> (rules provided, not runtime-observed here).</li>
-<li>The live cPanel host is not exercised in this environment.</li>
-<li><code>initialize-in-a-repository</code> is <code>partial</code> (documented process, no skeleton</li>
+<li>Homepage was verified by loading identity fields and linting PHP, not by a</li>
 </ul>
-<p>generator command yet).</p>
+<p>full browser screenshot in this environment.</p>
+<ul>
+<li>Cursor discovery remains <code>inferred</code>; live cPanel host not exercised here.</li>
+</ul>
 <h3>Exact next recommended action</h3>
-<p>If richer visuals are wanted, author explainable topology for the third diagram
-(<code>self-maintenance-loop</code>) applying the same explainability gate, then re-run
-<code>php tools/vibekb.php check</code> and <code>php tools/generate-static.php</code>. Otherwise, for
-any future change, start with <code>php tools/vibekb.php status</code>, use <code>affected</code> to
-find impacted records, update them, and finish with <code>check</code> + <code>generate</code> before
-committing.</p></div>
+<p>For any future change, start with <code>php tools/vibekb.php status</code>, use <code>affected</code>
+to find impacted records, update them, and finish with <code>check</code> + <code>generate</code>
+before committing. Optionally author explainable topology for
+<code>self-maintenance-loop</code> if richer visuals are wanted.</p></div>
         </section>
     
             <section class="doc-section">
@@ -216,7 +190,7 @@ committing.</p></div>
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 05:59 UTC · source commit fc65ae6 (2026-07-22) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 07:15 UTC · source commit fc65ae6 (2026-07-22) · not auto-updating</p>
             </div>
         </footer>
     </div>
