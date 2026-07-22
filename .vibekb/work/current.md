@@ -1,20 +1,42 @@
 ---
 id: current-work
 type: work
-title: First-class VibeKB installer
-objective: Add install.php, a bootstrap command, a template payload manifest, and a shared starter library so adopting VibeKB is one command; reconcile the self-hosted model and docs.
-summary: Installer + bootstrap + starter library added and reconciled into the model. See handoff.md.
+title: Homepage install fast-start
+objective: Replace the homepage's buried install copy with a three-step fast-start section (clone → install → Cursor prompt) placed directly under the hero, matching the real installer workflow.
+summary: In progress — homepage #install section redesigned and moved beneath the first introductory blocks; copy buttons and disclosure added; model reconciliation pending verification.
 requested_by: cubix.meow@gmail.com
-status: complete
-verification_state: verified-from-source
+status: in-progress
+verification_state: not-verified
 updated: 2026-07-22
-affected_functionality: [install-into-a-repository, bootstrap-workspace, initialize-in-a-repository]
-expected_files: [install.php, tools/lib/Starter.php, tools/vibekb.php, template/manifest.json]
-data_impact: None — the installer reads the target repository and writes only VibeKB's own files (runtime payload + a fresh .vibekb/). It never modifies application code.
-risks: [The template payload can drift from what a target needs if template/manifest.json is not kept in step with repository structure.]
+affected_functionality: [install-into-a-repository, initialize-in-a-repository]
+expected_files: [index.php, assets/css/homepage.css, assets/js/homepage.js]
+data_impact: None — marketing homepage only. Does not change installer behaviour or the living model content of a target install.
+risks: [Homepage commands could drift from install.php / INSTALLER.md if not checked against the real installer; copy must not imply automatic repository understanding.]
 ---
 
-## Status
+## Requested outcome
 
-Complete and reconciled into the model. The installer prepares the workspace; an
-AI agent still builds the model. See `.vibekb/work/handoff.md`.
+Visitors understand how to install VibeKB within a few seconds of reading the
+hero: clone VibeKB, run `php VibeKB/install.php /path/to/your/project`, then ask
+Cursor to build the first model. Preserve the honest boundary — the installer
+prepares the workspace; the coding agent interprets the software.
+
+## Current vs proposed
+
+**Current:** A short install section sits between "What you get" and live proof,
+with a combined command block and a six-step list that mixes upgrades/bootstrap
+into the first experience.
+
+**Proposed:** A compact three-card sequence directly under the hero (Clone →
+Install → Ask Cursor), success strip distinguishing installed vs generated
+paths, an expandable "What does the installer do?" disclosure (with dry-run),
+copy buttons, and CTAs to GitHub + INSTALLER.md.
+
+## Verification plan
+
+- Confirm displayed commands match `install.php` / `INSTALLER.md`.
+- `php -l index.php` and `php -l install.php`.
+- `php tools/vibekb.php check`, `php tools/test-topology.php`,
+  `php tools/vibekb.php generate`.
+- Confirm placement, anchors, no-JS readability, and that `/docs` is labelled
+  as generated after the first model is built.

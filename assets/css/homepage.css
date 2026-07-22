@@ -700,18 +700,129 @@ html.js .hp-journey-panel.is-active {
 .hp-arc li:nth-child(2) { border-left: 3px solid #c47a20; }
 .hp-arc li:nth-child(3) { border-left: 3px solid #b04a3a; }
 
-/* Install section */
+/* Install fast-start (three connected steps) */
+
+.hp-install {
+  padding-top: 2.25rem;
+  padding-bottom: 2.25rem;
+}
+
+.hp-install-lead {
+  max-width: 40rem;
+}
+
+.hp-install-cards {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  counter-reset: none;
+  position: relative;
+}
+
+.hp-install-card {
+  margin: 0;
+  padding: 1.15rem 1.2rem 1.25rem;
+  border-radius: var(--hp-radius);
+  border: 1px solid var(--hp-line);
+  background: rgba(255, 252, 247, 0.95);
+  box-shadow: var(--hp-shadow);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.hp-install-card h3 {
+  margin: 0 0 0.35rem;
+  font-family: var(--hp-display);
+  font-size: 1.12rem;
+  font-weight: 700;
+}
+
+.hp-install-step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin: 0 0 0.65rem;
+  border-radius: 999px;
+  background: var(--hp-accent-soft);
+  color: var(--hp-accent-deep);
+  font-family: var(--hp-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.hp-install-card-copy {
+  margin: 0 0 0.85rem;
+  color: var(--hp-ink-soft);
+  font-size: 0.96rem;
+}
+
+.hp-install-req {
+  margin: -0.35rem 0 0.75rem;
+}
+
+.hp-install-req span {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 0.4rem;
+  background: var(--hp-accent-soft);
+  color: var(--hp-accent-deep);
+  font-size: 0.78rem;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+}
+
+.hp-install-example-label {
+  margin: 0.75rem 0 0.35rem;
+  color: var(--hp-muted);
+  font-size: 0.8rem;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.hp-cmd-block {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
 .hp-cmd {
-  margin: 1.35rem 0 0;
-  padding: 1rem 1.15rem;
+  flex: 1 1 12rem;
+  margin: 0;
+  padding: 0.85rem 1rem;
   border-radius: 0.75rem;
   border: 1px solid var(--hp-accent-deep);
   background: #10201c;
   color: #d7efe8;
-  font-size: 0.9rem;
-  line-height: 1.75;
+  font-size: 0.84rem;
+  line-height: 1.65;
   overflow-x: auto;
+  max-width: 100%;
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.hp-cmd--example {
+  border-color: rgba(12, 124, 108, 0.45);
+  background: #163029;
+  color: #c5e4db;
+  font-size: 0.8rem;
+}
+
+.hp-cmd--prompt {
+  white-space: pre-wrap;
+  min-height: 6.5rem;
 }
 
 .hp-cmd code {
@@ -721,25 +832,221 @@ html.js .hp-journey-panel.is-active {
   padding: 0;
 }
 
-.hp-install-steps {
+.hp-copy-btn {
+  appearance: none;
+  flex: 0 0 auto;
+  align-self: flex-start;
+  min-height: 2.5rem;
+  min-width: 4.5rem;
+  padding: 0.55rem 0.9rem;
+  border-radius: 0.65rem;
+  border: 1px solid var(--hp-accent);
+  background: #fff;
+  color: var(--hp-accent-deep);
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background 160ms var(--hp-ease), color 160ms var(--hp-ease), border-color 160ms var(--hp-ease);
+}
+
+.hp-copy-btn:hover {
+  background: var(--hp-accent-soft);
+}
+
+.hp-copy-btn.is-copied,
+.hp-copy-btn--prompt.is-copied {
+  background: var(--hp-accent);
+  border-color: var(--hp-accent);
+  color: #fff;
+}
+
+.hp-copy-btn--prompt {
+  background: var(--hp-accent);
+  border-color: var(--hp-accent);
+  color: #fff;
+  min-width: 9.5rem;
+}
+
+.hp-copy-btn--prompt:hover {
+  background: var(--hp-accent-deep);
+  border-color: var(--hp-accent-deep);
+  color: #fff;
+}
+
+.hp-install-result {
+  margin-top: 1.5rem;
+  padding: 1.15rem 1.25rem;
+  border-radius: var(--hp-radius);
+  border: 1px solid rgba(12, 124, 108, 0.28);
+  background: linear-gradient(135deg, rgba(213, 235, 229, 0.55), rgba(255, 252, 247, 0.95));
+}
+
+.hp-install-result-title {
+  margin: 0 0 0.75rem;
+  font-family: var(--hp-display);
+  font-weight: 700;
+  font-size: 1.02rem;
+}
+
+.hp-install-result-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.hp-install-result-list li {
+  display: grid;
+  grid-template-columns: minmax(5.5rem, auto) 1fr;
+  gap: 0.15rem 0.85rem;
+  align-items: baseline;
+}
+
+.hp-install-result-list code {
+  font-weight: 650;
+  color: var(--hp-accent-deep);
+}
+
+.hp-install-result-list span {
+  color: var(--hp-ink-soft);
+  font-size: 0.95rem;
+}
+
+.hp-install-result-note {
+  grid-column: 2;
+  color: var(--hp-muted) !important;
+  font-size: 0.8rem !important;
+}
+
+.hp-install-result-gen {
+  margin: 0.9rem 0 0;
+  color: var(--hp-muted);
+  font-size: 0.88rem;
+}
+
+.hp-install-details {
+  margin-top: 1.25rem;
+  border: 1px solid var(--hp-line);
+  border-radius: var(--hp-radius);
+  background: rgba(255, 252, 247, 0.85);
+  padding: 0.15rem 1rem 0.15rem;
+}
+
+.hp-install-details summary {
+  cursor: pointer;
+  font-weight: 650;
+  padding: 0.85rem 0;
+  color: var(--hp-accent-deep);
+  list-style-position: outside;
+}
+
+.hp-install-details-body {
+  padding: 0 0 1rem;
+  color: var(--hp-ink-soft);
+  font-size: 0.96rem;
+}
+
+.hp-install-details-body ol {
+  margin: 0 0 0.85rem;
+  padding-left: 1.2rem;
+}
+
+.hp-install-details-body li {
+  margin: 0.35rem 0;
+}
+
+.hp-install-preview-label {
+  margin: 1rem 0 0.4rem;
+  font-weight: 650;
+  color: var(--hp-ink);
+  font-size: 0.92rem;
+}
+
+.hp-install-boundary {
   margin-top: 1.35rem;
+  margin-bottom: 0;
 }
 
-.hp-install-steps li:nth-child(n) {
-  border-left: 3px solid var(--hp-accent);
+.hp-install-actions {
+  margin-top: 1.1rem;
 }
 
-.hp-install-steps li code {
-  font-size: 0.9em;
-}
+/* Mobile: vertical connectors between install cards */
+@media (max-width: 63.99rem) {
+  .hp-install-cards {
+    gap: 0;
+  }
 
-@media (min-width: 48rem) {
-  .hp-install-steps {
-    grid-template-columns: 1fr 1fr;
+  .hp-install-card {
+    margin-bottom: 0;
+  }
+
+  .hp-install-card:not(:last-child)::after {
+    content: "";
+    display: block;
+    width: 2px;
+    height: 1rem;
+    margin: 0.65rem auto -0.15rem;
+    background: linear-gradient(to bottom, var(--hp-accent), rgba(12, 124, 108, 0.25));
+    border-radius: 2px;
+  }
+
+  .hp-install-card:not(:last-child) {
+    padding-bottom: 0.35rem;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    box-shadow: none;
+  }
+
+  .hp-install-card:not(:first-child) {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top: none;
+  }
+
+  .hp-install-result-list li {
+    grid-template-columns: 1fr;
+    gap: 0.1rem;
+  }
+
+  .hp-install-result-note {
+    grid-column: 1;
   }
 }
 
-/* Four pillars (section 2) */
+/* Desktop: three connected cards in one row */
+@media (min-width: 64rem) {
+  .hp-install-cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+    align-items: stretch;
+  }
+
+  .hp-install-card:not(:last-child)::after {
+    content: "→";
+    position: absolute;
+    right: -1.15rem;
+    top: 2.35rem;
+    z-index: 1;
+    color: var(--hp-accent);
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .hp-cmd-block {
+    flex-direction: column;
+  }
+
+  .hp-copy-btn {
+    width: 100%;
+  }
+}
+
+/* Four pillars (what you get) */
 
 .hp-pillars {
   display: grid;
