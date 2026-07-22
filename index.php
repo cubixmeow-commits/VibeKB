@@ -153,6 +153,19 @@ if ($loaded) {
         <!-- 1. The problem — recognition + promise -->
         <section class="hp-section hp-hero" id="problem" aria-labelledby="hero-title">
             <div class="hp-wrap hp-hero-grid">
+                <figure class="hp-hero-visual">
+                    <picture>
+                        <source
+                            type="image/webp"
+                            srcset="<?= hp_e(hp_asset('assets/images/homepage-developer-journey.webp')) ?>">
+                        <img
+                            src="<?= hp_e(hp_asset('assets/images/homepage-developer-journey.png')) ?>"
+                            alt="Comic journey from shipping fast with AI, losing the plot in a growing codebase, fearing the next change, to clarity with VibeKB"
+                            width="560"
+                            height="449"
+                            decoding="async">
+                    </picture>
+                </figure>
                 <div class="hp-hero-copy">
                     <p class="hp-eyebrow">For vibe coders who ship with AI</p>
                     <h1 id="hero-title">AI helped you build it. VibeKB helps you understand it.</h1>
@@ -183,19 +196,6 @@ if ($loaded) {
                         <a class="hp-btn hp-btn-ghost" href="#understanding">What VibeKB gives you</a>
                     </div>
                 </div>
-                <figure class="hp-hero-visual">
-                    <picture>
-                        <source
-                            type="image/webp"
-                            srcset="<?= hp_e(hp_asset('assets/images/homepage-developer-journey.webp')) ?>">
-                        <img
-                            src="<?= hp_e(hp_asset('assets/images/homepage-developer-journey.png')) ?>"
-                            alt="Comic journey from shipping fast with AI, losing the plot in a growing codebase, fearing the next change, to clarity with VibeKB"
-                            width="560"
-                            height="449"
-                            decoding="async">
-                    </picture>
-                </figure>
                 <?php if ($loaded): ?>
                 <aside class="hp-example-card" aria-label="<?= $selfHosted ? 'Live model of this project' : 'Live software example' ?>">
                     <p class="hp-example-label"><?= $selfHosted ? 'Live model of this project' : 'Live software example' ?></p>
