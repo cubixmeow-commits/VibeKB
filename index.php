@@ -5,8 +5,9 @@ declare(strict_types=1);
 /**
  * VibeKB homepage — three sections: the problem, what you get, live proof + CTA.
  * Copy is distilled from the developer-journey story (ship fast → lose understanding
- * → fear change → VibeKB restores clarity). The guide-preview carousel and hero
- * metrics are driven by real `.vibekb/` records (never invented).
+ * → fear change → VibeKB restores clarity). Section 1 includes an optimized hero comic
+ * beside the copy. The guide-preview carousel and hero metrics are driven by real
+ * `.vibekb/` records (never invented).
  *
  * Interactions: assets/js/homepage.js (guide carousel only). Styling: homepage.css.
  */
@@ -152,35 +153,50 @@ if ($loaded) {
         <!-- 1. The problem — recognition + promise -->
         <section class="hp-section hp-hero" id="problem" aria-labelledby="hero-title">
             <div class="hp-wrap hp-hero-grid">
-                <div class="hp-hero-copy">
-                    <p class="hp-eyebrow">For vibe coders who ship with AI</p>
-                    <h1 id="hero-title">AI helped you build it. VibeKB helps you understand it.</h1>
-                    <p class="hp-hero-support">
-                        Whether you greenfielded your own app or built on open source —
-                        <?= hp_e($codingAgents) ?> let you ship faster than your mental model can keep up.
-                        The demo runs. The feature looks done. Then you realise you are guessing which files
-                        matter and afraid the next edit breaks something three features away.
-                    </p>
+                <div class="hp-hero-lead">
+                    <div class="hp-hero-copy">
+                        <p class="hp-eyebrow">For vibe coders who ship with AI</p>
+                        <h1 id="hero-title">AI helped you build it. VibeKB helps you understand it.</h1>
+                        <p class="hp-hero-support">
+                            Whether you greenfielded your own app or built on open source —
+                            <?= hp_e($codingAgents) ?> let you ship faster than your mental model can keep up.
+                            The demo runs. The feature looks done. Then you realise you are guessing which files
+                            matter and afraid the next edit breaks something three features away.
+                        </p>
 
-                    <ol class="hp-arc" aria-label="The developer journey in three beats">
-                        <li>
-                            <strong>Ship fast.</strong>
-                            Describe it, accept the diffs, iterate in chat — your software exists.
-                        </li>
-                        <li>
-                            <strong>Lose the plot.</strong>
-                            Prompts, starter templates, agent sessions — the codebase outgrew what you can explain.
-                        </li>
-                        <li>
-                            <strong>Fear the next change.</strong>
-                            Not documentation debt. Uncertainty — re-asking the same architecture questions every session.
-                        </li>
-                    </ol>
+                        <ol class="hp-arc" aria-label="The developer journey in three beats">
+                            <li>
+                                <strong>Ship fast.</strong>
+                                Describe it, accept the diffs, iterate in chat — your software exists.
+                            </li>
+                            <li>
+                                <strong>Lose the plot.</strong>
+                                Prompts, starter templates, agent sessions — the codebase outgrew what you can explain.
+                            </li>
+                            <li>
+                                <strong>Fear the next change.</strong>
+                                Not documentation debt. Uncertainty — re-asking the same architecture questions every session.
+                            </li>
+                        </ol>
 
-                    <div class="hp-actions">
-                        <a class="hp-btn hp-btn-primary" href="<?= hp_e($guideUrl) ?>">Open the live guide</a>
-                        <a class="hp-btn hp-btn-ghost" href="#understanding">What VibeKB gives you</a>
+                        <div class="hp-actions">
+                            <a class="hp-btn hp-btn-primary" href="<?= hp_e($guideUrl) ?>">Open the live guide</a>
+                            <a class="hp-btn hp-btn-ghost" href="#understanding">What VibeKB gives you</a>
+                        </div>
                     </div>
+                    <figure class="hp-hero-visual">
+                        <picture>
+                            <source
+                                type="image/webp"
+                                srcset="<?= hp_e(hp_asset('assets/images/homepage-developer-journey.webp')) ?>">
+                            <img
+                                src="<?= hp_e(hp_asset('assets/images/homepage-developer-journey.png')) ?>"
+                                alt="Comic journey from shipping fast with AI, losing the plot in a growing codebase, fearing the next change, to clarity with VibeKB"
+                                width="560"
+                                height="449"
+                                decoding="async">
+                        </picture>
+                    </figure>
                 </div>
                 <?php if ($loaded): ?>
                 <aside class="hp-example-card" aria-label="<?= $selfHosted ? 'Live model of this project' : 'Live software example' ?>">

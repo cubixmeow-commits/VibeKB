@@ -209,9 +209,17 @@ a:hover {
 
 .hp-hero-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
   gap: clamp(1.5rem, 4vw, 3rem);
-  align-items: center;
+  align-items: start;
+}
+
+.hp-hero-lead {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, min(38%, 17.5rem));
+  gap: clamp(1rem, 2.5vw, 1.75rem);
+  align-items: start;
+  min-width: 0;
 }
 
 .hp-hero h1 {
@@ -240,12 +248,20 @@ a:hover {
 
 .hp-hero-visual {
   margin: 0;
-  padding: 1.25rem;
+  padding: 0.55rem;
   border-radius: calc(var(--hp-radius) + 0.15rem);
   background: rgba(255, 252, 247, 0.9);
   border: 1px solid var(--hp-line);
   box-shadow: var(--hp-shadow);
   min-width: 0;
+}
+
+.hp-hero-visual picture,
+.hp-hero-visual img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: calc(var(--hp-radius) - 0.1rem);
 }
 
 .hp-mini-flow {
@@ -1145,6 +1161,15 @@ html:not(.js) .hp-guide-panel {
 @media (max-width: 800px) {
   .hp-hero-grid {
     grid-template-columns: 1fr;
+  }
+
+  .hp-hero-lead {
+    grid-template-columns: 1fr;
+  }
+
+  .hp-hero-visual {
+    max-width: 20rem;
+    margin-inline: auto;
   }
 
   .hp-nav a:not(.hp-nav-cta) {

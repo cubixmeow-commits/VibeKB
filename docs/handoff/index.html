@@ -115,16 +115,13 @@
             </div>
             <div class="prose reading-column"><h3>Completed this change</h3>
 <ul>
-<li>Collapsed eleven homepage sections into three scannable sections (~355 lines vs ~750).</li>
-<li>Section 1: thesis + three-beat arc + live metrics card.</li>
-<li>Section 2: understanding layer + four pillar cards to guide views.</li>
-<li>Section 3: functionality carousel + CTA.</li>
-<li>Trimmed <code>homepage.js</code> to carousel-only progressive enhancement.</li>
+<li>Resized/renamed hero image to <code>assets/images/homepage-developer-journey.webp</code> (+ PNG fallback).</li>
+<li>Placed image next to hero copy via <code>hp-hero-lead</code> grid; metrics card unchanged on the right.</li>
+<li>Responsive stack on narrow screens.</li>
 </ul>
 <h3>Verification completed</h3>
 <ul>
-<li><code>php -l index.php</code>; rendered HTML has exactly three <code>&lt;section&gt;</code> elements.</li>
-<li><code>php tools/vibekb.php check</code> OK; <code>/docs</code> regenerated.</li>
+<li><code>php -l index.php</code>; image assets on disk; <code>php tools/vibekb.php check</code> OK; <code>/docs</code> regenerated.</li>
 </ul>
 <h3>Exact next recommended action</h3>
 <p><code>php tools/vibekb.php status</code> before the next change; <code>affected</code> → update model → <code>check</code> + <code>generate</code> before commit.</p></div>
@@ -160,7 +157,7 @@
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 08:41 UTC · source commit 943da30 (2026-07-22) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 08:44 UTC · source commit b8de993 (2026-07-22) · not auto-updating</p>
             </div>
         </footer>
     </div>
