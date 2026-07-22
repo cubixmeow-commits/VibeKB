@@ -15,6 +15,26 @@ It prints the active model's provenance, the current work record, the handoff's
 next recommended action, and a one-line validation + drift summary. That is your
 orientation — you do not need to read every file first.
 
+## Context economy (keep VibeKB token-positive)
+
+VibeKB only pays for itself when agents read *selectively*. The model exists so
+you can understand this repository for far fewer tokens than re-reading its
+source — don't spend that saving back on indiscriminate loading. See
+[TOKEN_ECONOMICS.md](./TOKEN_ECONOMICS.md) for the measured cost model.
+
+- **Orient cheaply.** Session start is `status` (a ~400-token summary) plus this
+  file — not the whole `project/` or `.vibekb/` tree. Read `project/` and
+  `handoff.md` when the task needs them.
+- **Retrieve by relevance.** Pull functionality/system/memory records for the
+  *affected* scope (`php tools/vibekb.php affected <files>`), not the whole model.
+- **Let scripts do mechanical work.** `status`/`check`/`affected`/`validate`/
+  `generate` detect drift, broken references, and staleness deterministically —
+  they cost no model tokens. Read their compact output; don't re-derive it by hand.
+- **Never load generated or example trees into working context.** `/docs/` is a
+  render of `.vibekb/` (several times its size) and `examples/` is fixtures. Read
+  the source records instead; only open `/docs/` or `examples/` when a task is
+  explicitly about them.
+
 ## The product is locked
 
 > **VibeKB exists so a vibe coder can open a software project at any point in its
