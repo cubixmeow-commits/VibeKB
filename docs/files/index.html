@@ -282,16 +282,50 @@
                         <div class="file-card__badges">
                             <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
                     </div>
-                    <p class="file-card__purpose">The public homepage: product copy plus a live preview card driven by the active .vibekb/ model (identity one_liner/summary, functionality metrics, current work).</p>
+                    <p class="file-card__purpose">The public homepage: story-driven copy (developer journey arc) plus a live preview card and functionality carousel driven by the active .vibekb/ model.</p>
                     <dl class="file-card__meta">
                                                     <div><dt>Runs when</dt><dd>Every browser request to the site root.</dd></div>
                                                                             <div><dt>Implements</dt><dd>
                                                                                                             <a class="chip" href="../functionality/load-living-model.html">Load the living model</a>
                                                                                                 </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">guide/lib/Content.php</code> <code class="chip chip--file">guide/lib/helpers.php</code> <code class="chip chip--file">.vibekb/project/identity.md</code></dd></div>
+                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">guide/lib/Content.php</code> <code class="chip chip--file">guide/lib/helpers.php</code> <code class="chip chip--file">.vibekb/project/identity.md</code> <code class="chip chip--file">assets/css/homepage.css</code> <code class="chip chip--file">assets/js/homepage.js</code></dd></div>
                                                                             <div><dt>Depended on by</dt><dd>
                                 Public landing / Mode A deployment                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Load the homepage; confirm the hero card tagline matches identity one_liner/summary and self-hosted framing (not leftover sample-app copy).</dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Load the homepage; confirm the journey story, thesis line, live metrics card, and carousel render from the active model.</dd></div>
+                                            </dl>
+                </section>
+                            <section class="file-card" id="assets/css/homepage.css">
+                    <div class="file-card__head">
+                        <h2><code>assets/css/homepage.css</code></h2>
+                        <div class="file-card__badges">
+                            <span class="badge badge--ok">Low impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
+                    </div>
+                    <p class="file-card__purpose">Homepage styling: journey mood panels, uncertainty questions, before/after transform, and shared hp-* chrome.</p>
+                    <dl class="file-card__meta">
+                                                    <div><dt>Runs when</dt><dd>Every homepage request.</dd></div>
+                                                                            <div><dt>Implements</dt><dd>
+                                                                                                            <a class="chip" href="../functionality/load-living-model.html">Load the living model</a>
+                                                                                                </dd></div>
+                                                                                                    <div><dt>Depended on by</dt><dd>
+                                index.php                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Load the homepage at mobile and desktop widths; confirm journey and transform layouts.</dd></div>
+                                            </dl>
+                </section>
+                            <section class="file-card" id="assets/js/homepage.js">
+                    <div class="file-card__head">
+                        <h2><code>assets/js/homepage.js</code></h2>
+                        <div class="file-card__badges">
+                            <span class="badge badge--ok">Low impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
+                    </div>
+                    <p class="file-card__purpose">Homepage progressive enhancement: story-journey dots, guide-preview carousel, workflow tabs, repo map — all degrade without JS.</p>
+                    <dl class="file-card__meta">
+                                                    <div><dt>Runs when</dt><dd>Homepage with JavaScript enabled.</dd></div>
+                                                                            <div><dt>Implements</dt><dd>
+                                                                                                            <a class="chip" href="../functionality/load-living-model.html">Load the living model</a>
+                                                                                                </dd></div>
+                                                                                                    <div><dt>Depended on by</dt><dd>
+                                index.php                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Confirm story dots, carousel, and tab widgets work with JS and degrade without it.</dd></div>
                                             </dl>
                 </section>
                             <section class="file-card" id="guide/templates/layout.php">
