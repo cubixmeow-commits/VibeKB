@@ -16,6 +16,8 @@ declare(strict_types=1);
  *                                            the recorded commit, and /docs sync.
  *   php tools/vibekb.php affected <file>...    Map files to the functionality they
  *   php tools/vibekb.php affected --since REF  likely affect (via files[] links).
+ *   php tools/vibekb.php bootstrap [--dry-run] Verify/repair the .vibekb/ workspace
+ *                                            (create missing dirs + starter files).
  *   php tools/vibekb.php validate [path]       Run the headless model validator.
  *   php tools/vibekb.php generate              Regenerate the /docs snapshot.
  *   php tools/vibekb.php help
@@ -36,11 +38,12 @@ $repoRoot = dirname(__DIR__);
 require_once $repoRoot . '/guide/lib/helpers.php';
 require_once $repoRoot . '/guide/lib/Content.php';
 require_once $repoRoot . '/guide/lib/Provenance.php';
+require_once __DIR__ . '/lib/Starter.php';
 
 /** Source areas VibeKB's model describes. A change under one of these is "code";
- * changes to the model (.vibekb/), generated output (docs/), examples/, and VCS
- * plumbing are not code drift. */
-const VIBEKB_DRIFT_EXCLUDE_PREFIXES = ['.vibekb/', 'docs/', 'examples/', '.git/', '.github/', '.cursor/'];
+ * changes to the model (.vibekb/), generated output (docs/), the installable
+ * template payload (template/), examples/, and VCS plumbing are not code drift. */
+const VIBEKB_DRIFT_EXCLUDE_PREFIXES = ['.vibekb/', 'docs/', 'template/', 'examples/', '.git/', '.github/', '.cursor/'];
 
 // ---- small utilities ------------------------------------------------------
 
@@ -548,6 +551,80 @@ function vibekb_cmd_affected(string $repoRoot, array $args): int
     return $anyUnmapped ? 0 : 0;
 }
 
+/**
+ * bootstrap [--dry-run] — "git init for VibeKB".
+ *
+ * Verifies the `.vibekb/` workspace and repairs anything missing: creates the
+ * required directories and writes any missing starter files, without ever
+ * overwriting existing content. It is the deterministic counterpart to the
+ * installer's model step, safe to run against a fresh, partial, or damaged
+ * workspace.
+ *
+ * Honesty boundary: bootstrap NEVER generates functionality, invents diagrams,
+ * inspects the target's source, or writes documentation about the software. It
+ * only lays down valid, empty scaffolding — an agent builds the model.
+ */
+function vibekb_cmd_bootstrap(string $repoRoot, bool $dryRun): int
+{
+    $vibekbRoot = $repoRoot . '/.vibekb';
+    $ctx = ['project_name' => basename(rtrim($repoRoot, '/'))];
+
+    echo "VibeKB bootstrap" . ($dryRun ? ' (dry run)' : '') . "\n" . str_repeat('=', 60) . "\n";
+    echo 'Workspace: ' . $vibekbRoot . "\n";
+
+    $before = vibekb_verify_workspace($vibekbRoot, $ctx);
+    if (!$before['present']) {
+        echo "\n  No .vibekb/ workspace found — creating a fresh one.\n";
+    }
+
+    $report = vibekb_scaffold_workspace($vibekbRoot, $ctx, $dryRun, false);
+
+    echo "\nStructure\n" . str_repeat('-', 60) . "\n";
+    $verb = $dryRun ? 'would create' : 'created';
+    if ($report['created_dirs'] === [] && $report['created_files'] === []) {
+        echo "  Everything is in place — nothing to repair.\n";
+    } else {
+        if ($report['created_dirs'] !== []) {
+            echo '  ' . ucfirst($verb) . ' ' . count($report['created_dirs']) . " director(ies):\n";
+            foreach ($report['created_dirs'] as $d) {
+                echo "      + {$d}\n";
+            }
+        }
+        if ($report['created_files'] !== []) {
+            echo '  ' . ucfirst($verb) . ' ' . count($report['created_files']) . " starter file(s):\n";
+            foreach ($report['created_files'] as $f) {
+                echo "      + {$f}\n";
+            }
+        }
+    }
+    if ($report['kept_files'] !== []) {
+        echo '  Kept ' . count($report['kept_files']) . " existing file(s) untouched.\n";
+    }
+    if ($report['errors'] !== []) {
+        echo "\n  Errors:\n";
+        foreach ($report['errors'] as $e) {
+            echo "  ERROR  {$e}\n";
+        }
+        return 1;
+    }
+
+    echo "\n" . str_repeat('=', 60) . "\n";
+    if ($dryRun) {
+        echo "Dry run complete. No changes were made.\n";
+        return 0;
+    }
+
+    $after = vibekb_verify_workspace($vibekbRoot, $ctx);
+    if ($after['ok']) {
+        echo "RESULT: OK — the workspace is complete and valid.\n";
+        echo "Next: build the model with prompts/INTEGRATE_VIBEKB.md, or run `php tools/vibekb.php status`.\n";
+        return 0;
+    }
+    echo "RESULT: incomplete — still missing "
+        . count($after['missing_dirs']) . " dir(s) and " . count($after['missing_files']) . " file(s).\n";
+    return 1;
+}
+
 // ---- text helpers ---------------------------------------------------------
 
 function vibekb_wrap(string $text, int $indent): string
@@ -610,6 +687,8 @@ VibeKB self-maintenance CLI
                                            since the recorded commit + /docs sync.
   php tools/vibekb.php affected <file>...   Map files to likely functionality.
   php tools/vibekb.php affected --since REF  ...for everything changed since REF.
+  php tools/vibekb.php bootstrap [--dry-run] Verify and repair the .vibekb/
+                                           workspace (git-init for VibeKB).
   php tools/vibekb.php validate [path]      Run the headless model validator.
   php tools/vibekb.php generate             Regenerate the /docs snapshot.
   php tools/vibekb.php help
@@ -636,6 +715,8 @@ switch ($command) {
         exit(vibekb_cmd_check($repoRoot, in_array('--strict', $rest, true)));
     case 'affected':
         exit(vibekb_cmd_affected($repoRoot, $rest));
+    case 'bootstrap':
+        exit(vibekb_cmd_bootstrap($repoRoot, in_array('--dry-run', $rest, true)));
     case 'validate':
         $arg = ($rest[0] ?? '') !== '' ? ' ' . escapeshellarg($rest[0]) : '';
         passthru('php ' . escapeshellarg($repoRoot . '/tools/validate.php') . $arg, $code);

@@ -142,6 +142,7 @@ if ($loaded) {
             <nav class="hp-nav" aria-label="Primary">
                 <a href="#problem">The problem</a>
                 <a href="#understanding">What you get</a>
+                <a href="#install">Install</a>
                 <a href="#proof">See it work</a>
                 <a class="hp-nav-cta" href="<?= hp_e($guideUrl) ?>">Open the guide</a>
             </nav>
@@ -260,6 +261,36 @@ if ($loaded) {
                 <p class="hp-thesis">
                     Open the guide before you edit. Know what you can safely change. Ship without guessing.
                 </p>
+            </div>
+        </section>
+
+        <!-- 2b. Install — one command, then let your agent build the model -->
+        <section class="hp-section" id="install" aria-labelledby="install-title">
+            <div class="hp-wrap">
+                <p class="hp-kicker">Install in under two minutes</p>
+                <h2 id="install-title">One command prepares your repo. Your agent does the rest.</h2>
+                <p class="hp-lead">
+                    VibeKB ships with a real installer. It sets up the workspace without touching or
+                    analysing your code — then hands off to your coding agent to build the model. No
+                    Composer, no build step, no manual copying.
+                </p>
+
+                <pre class="hp-cmd"><code># 1. Clone VibeKB
+git clone https://github.com/cubixmeow-commits/VibeKB.git
+
+# 2. Install it into your repository (prepares the workspace only)
+php VibeKB/install.php /path/to/your/project</code></pre>
+
+                <ol class="hp-arc hp-install-steps" aria-label="How VibeKB installs">
+                    <li><strong>Clone VibeKB.</strong> One repository, plain PHP 8.2 — Windows, macOS, or Linux.</li>
+                    <li><strong>Run <code>install.php</code>.</strong> It copies the runtime and scaffolds a fresh, empty <code>.vibekb/</code> — your app code is never touched.</li>
+                    <li><strong>Open your coding agent.</strong> Claude Code, Cursor, Codex, and others.</li>
+                    <li><strong>Run the integration prompt.</strong> Ask it to build the first model using <code>prompts/INTEGRATE_VIBEKB.md</code>.</li>
+                    <li><strong>Build software normally.</strong> The agent keeps the model in step as it changes the code.</li>
+                    <li><strong>Stay synchronized.</strong> <code>php tools/vibekb.php check</code> before commit; re-run the installer to upgrade; <code>bootstrap</code> to repair.</li>
+                </ol>
+
+                <p class="hp-thesis">The installer sets up the system. The AI interprets the software. That line stays bright.</p>
             </div>
         </section>
 

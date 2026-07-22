@@ -132,6 +132,24 @@
                                             </li>
                                     <li class="why-item">
                         <div class="why-item__head">
+                            <h3><a href="../why/decisions/installer-prepares-agent-interprets.html">The installer prepares the workspace; the agent interprets the software</a></h3>
+                            <div class="badge-row">
+                                                                <span class="badge badge--ok">Verified from source</span>                            </div>
+                        </div>
+                        <p>install.php and bootstrap only scaffold an empty, valid VibeKB workspace and install the runtime — they never analyse, understand, or document the target application. Building the model is left to an AI agent following the integration prompt.</p>
+                                                    <p class="why-item__links"><a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/bootstrap-workspace.html">Bootstrap the VibeKB workspace</a></p>
+                                            </li>
+                                    <li class="why-item">
+                        <div class="why-item__head">
+                            <h3><a href="../why/decisions/installer-template-not-duplicated-tree.html">The template is a manifest plus a generator, not a duplicated file tree</a></h3>
+                            <div class="badge-row">
+                                                                <span class="badge badge--ok">Verified from source</span>                            </div>
+                        </div>
+                        <p>template/ declares the installable payload (manifest.json) and the starter model is produced by tools/lib/Starter.php; the installer copies the runtime from the canonical repository files rather than from a second physical copy under template/, so nothing drifts.</p>
+                                                    <p class="why-item__links"><a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a></p>
+                                            </li>
+                                    <li class="why-item">
+                        <div class="why-item__head">
                             <h3><a href="../why/decisions/repository-owned-workflow.html">The maintenance workflow is repository-owned, not agent-specific</a></h3>
                             <div class="badge-row">
                                                                 <span class="badge badge--ok">Verified from source</span>                            </div>
@@ -247,6 +265,15 @@
                                             </li>
                                     <li class="why-item">
                         <div class="why-item__head">
+                            <h3><a href="../why/changes/first-class-installer.html">Add a first-class installer and bootstrap command</a></h3>
+                            <div class="badge-row">
+                                                                <span class="badge badge--ok">Verified from source</span>                            </div>
+                        </div>
+                        <p>Replaced the manual &quot;copy these files&quot; onboarding with `php install.php`, a bootstrap command, and a shared starter library, so adopting VibeKB into a repository is one command that prepares the workspace and hands off to an agent.</p>
+                                                    <p class="why-item__links"><a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/bootstrap-workspace.html">Bootstrap the VibeKB workspace</a> <a class="chip" href="../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a></p>
+                                            </li>
+                                    <li class="why-item">
+                        <div class="why-item__head">
                             <h3><a href="../why/changes/homepage-developer-journey.html">Rewrite homepage around the developer journey story</a></h3>
                             <div class="badge-row">
                                                                 <span class="badge badge--ok">Verified manually</span>                            </div>
@@ -292,7 +319,7 @@
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 21:26 UTC · source commit 65d7e02 (2026-07-22) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 22:08 UTC · source commit 65d7e02 (2026-07-22) · not auto-updating</p>
             </div>
         </footer>
     </div>

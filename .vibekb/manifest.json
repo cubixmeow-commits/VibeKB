@@ -2,6 +2,7 @@
   "vibekb_version": "1.0",
   "content_model": "functionality-first",
   "updated": "2026-07-22",
+  "installer_version": "1.0.0",
   "self_hosted": true,
   "example_project": {
     "name": "VibeKB",
@@ -15,7 +16,7 @@
     "source_branch": "main",
     "source_commit": "65d7e02 (2026-07-22)",
     "analyzed": "2026-07-22",
-    "verification_scope": "The content loader, dynamic guide, static generator, validator, topology test, and self-maintenance CLI were traced from source in this repository. Diagram topology (architecture, content-load-flow) is verified-from-source. Homepage three-section layout verified by rendering index.php (three sections, arc, pillars, carousel). The interactive functionality map (overview first screen) was verified by rendering the overview in both modes and driving the map in a headless browser (expand, list toggle, double-click-to-docs, mobile fallback). The cPanel host and Cursor discovery are inferred/not-verified as noted per record.",
+    "verification_scope": "The content loader, dynamic guide, static generator, validator, topology test, and self-maintenance CLI were traced from source in this repository. Diagram topology (architecture, content-load-flow) is verified-from-source. Homepage three-section layout verified by rendering index.php (three sections, arc, pillars, carousel). The interactive functionality map (overview first screen) was verified by rendering the overview in both modes and driving the map in a headless browser (expand, list toggle, double-click-to-docs, mobile fallback). The installer (install.php) and bootstrap command were traced from source and exercised end-to-end: dry-run and real install into a scratch repository, an upgrade run preserving .vibekb/, and bootstrap repairing a damaged workspace; the scaffolded starter model validates with 0 errors. The cPanel host and Cursor discovery are inferred/not-verified as noted per record.",
     "last_verified": "2026-07-22",
     "updates_automatically": false,
     "model_maintenance": "agent-maintained",

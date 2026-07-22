@@ -200,13 +200,46 @@
     },
     {
       "path": "tools/vibekb.php",
-      "purpose": "The self-maintenance CLI: status (session start), check (drift + validate + snapshot sync), affected (files → functionality), validate, generate. The agent's entry point to the lifecycle.",
-      "functionality": ["start-work-session", "detect-drift", "find-affected-functionality"],
-      "runs_when": "Session start, before commit, and in CI.",
+      "purpose": "The self-maintenance CLI: status (session start), check (drift + validate + snapshot sync), affected (files → functionality), bootstrap (verify/repair the workspace), validate, generate. The agent's entry point to the lifecycle.",
+      "functionality": ["start-work-session", "detect-drift", "find-affected-functionality", "bootstrap-workspace"],
+      "runs_when": "Session start, before commit, when repairing a workspace, and in CI.",
       "depended_on_by": ["The agent workflow", "CI"],
-      "depends_on": ["guide/lib/Content.php", "tools/validate.php", "tools/generate-static.php"],
+      "depends_on": ["guide/lib/Content.php", "tools/lib/Starter.php", "tools/validate.php", "tools/generate-static.php"],
       "safety": "moderate-impact",
-      "test_after_change": "Run status/check/affected; confirm honest detection-vs-interpretation output and exit codes.",
+      "test_after_change": "Run status/check/affected/bootstrap; confirm honest detection-vs-interpretation output and exit codes.",
+      "provenance": "verified-from-source"
+    },
+    {
+      "path": "install.php",
+      "purpose": "The VibeKB installer: prepares a target repository by copying the VibeKB-owned payload (declared in template/manifest.json) and scaffolding a fresh, empty .vibekb/ workspace, without analysing or modifying the application. Supports dry-run, non-interactive, force, and upgrade.",
+      "functionality": ["install-into-a-repository"],
+      "runs_when": "A developer runs `php install.php [target]` from a VibeKB clone.",
+      "depended_on_by": ["VibeKB adoption / onboarding"],
+      "depends_on": ["template/manifest.json", "tools/lib/Starter.php"],
+      "safety": "moderate-impact",
+      "test_after_change": "Dry-run and real install into a scratch repo; confirm plan, payload copy, fresh model, upgrade preserving .vibekb/, and the target's `vibekb check`.",
+      "provenance": "verified-from-source"
+    },
+    {
+      "path": "tools/lib/Starter.php",
+      "purpose": "The single source of truth for the fresh .vibekb/ starter workspace: the required directories and starter files, plus verify/scaffold/repair helpers shared by install.php and `vibekb bootstrap`. Writes only empty placeholders — never functionality about the target.",
+      "functionality": ["bootstrap-workspace", "install-into-a-repository"],
+      "runs_when": "During install and on `php tools/vibekb.php bootstrap`.",
+      "depended_on_by": ["install.php", "tools/vibekb.php"],
+      "depends_on": [],
+      "safety": "moderate-impact",
+      "test_after_change": "Scaffold a workspace to a temp dir and run `php tools/validate.php <root>`; confirm 0 errors and that existing files are never overwritten.",
+      "provenance": "verified-from-source"
+    },
+    {
+      "path": "template/manifest.json",
+      "purpose": "Declarative definition of a VibeKB installation: the VibeKB-owned payload the installer copies, the project-owned paths it preserves (.vibekb/), the generated paths (docs/), and the deliberately-excluded paths. Keeps 'what belongs in another repository' explicit rather than hard-coded in install.php.",
+      "functionality": ["install-into-a-repository"],
+      "runs_when": "Read by install.php on every install/upgrade.",
+      "depended_on_by": ["install.php"],
+      "depends_on": [],
+      "safety": "moderate-impact",
+      "test_after_change": "Add or remove a payload path and dry-run the installer; confirm the plan reflects it.",
       "provenance": "verified-from-source"
     },
     {

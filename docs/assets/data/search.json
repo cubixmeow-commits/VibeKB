@@ -1,5 +1,12 @@
 [
     {
+        "title": "Bootstrap the VibeKB workspace",
+        "summary": "A deterministic `php tools/vibekb.php bootstrap` command (and the shared `tools/lib/Starter.php` library) that creates or repairs a `.vibekb/` workspace — every required directory and starter file — without inspecting source, inventing functionality, or overwriting content. \"git init\" for VibeKB.",
+        "type": "functionality",
+        "url": "../functionality/bootstrap-workspace.html",
+        "body": "In one sentence bootstrap guarantees a valid, empty .vibekb/ skeleton exists — creating any missing directories and starter files and leaving all existing content untouched — so the workspace is always well formed before an agent builds the model. User experience Running php tools/vibekb.php bootstrap prints what it created versus kept and ends with a clear OK or an explanation of what is still missing. dry run reports the same plan without writing anything. Current behavior vibekb verify workspace reports which required directories and starter files are missing; vibekb scaffold workspace creates the missing ones and writes any missing starter files, never overwriting an existing file so it is safe on a fresh, partial, or damaged workspace . The starter definition — vibekb starter dirs and"
+    },
+    {
         "title": "Deploy and stay portable",
         "summary": "The guide deploys to plain PHP 8.2 shared hosting via `.cpanel.yml` with no build step, no database, and no rewrite rules; query-string routing and relative static links let it run at a web root or in a subfolder, and the deploy config is treated as part of the application.",
         "type": "functionality",
@@ -36,10 +43,17 @@
     },
     {
         "title": "Initialize VibeKB in a repository",
-        "summary": "A documented, project-agnostic process (INITIALIZE.md plus a paste-ready prompt) for an agent to build a fresh, honest `.vibekb/` model of another application read-only, then render it — the same process VibeKB used on itself.",
+        "summary": "A documented, project-agnostic process (INITIALIZE.md plus a paste-ready prompt) for an agent to build a fresh, honest `.vibekb/` model of another application read-only, then render it — the same process VibeKB used on itself, now started from an installed, scaffolded workspace.",
         "type": "functionality",
         "url": "../functionality/initialize-in-a-repository.html",
-        "body": "In one sentence Initialization is a repeatable agent workflow — inventory the target read only, trace functionality from source, record honest verification states, add only source grounded diagrams, validate, and generate — that produces a model of any app without modifying it. Current behavior INITIALIZE.md defines the step by step process and prompts/INTEGRATE VIBEKB.md is a project agnostic prompt that drives it. This is a documented process , not executable code: the quality depends on the agent following it. It is demonstrated by the bundled example models under examples/ the SousMeow model and the StopPR field test audit and, most directly, by this repository — VibeKB's own model was produced by this workflow. Implementation map INITIALIZE.md — the 17 step process. prompts/INTEGRATE "
+        "body": "In one sentence Initialization is a repeatable agent workflow — inventory the target read only, trace functionality from source, record honest verification states, add only source grounded diagrams, validate, and generate — that produces a model of any app without modifying it. Current behavior INITIALIZE.md defines the step by step process and prompts/INTEGRATE VIBEKB.md is a project agnostic prompt that drives it. The workspace it starts from is now prepared by the installer install into a repository rather than a manual copy: php install.php installs the runtime and scaffolds an empty, valid .vibekb/ . The building of the model is still a documented process , not executable code — the quality depends on the agent following it. It is demonstrated by the bundled example models under examp"
+    },
+    {
+        "title": "Install VibeKB into a repository",
+        "summary": "A PHP installer (`install.php`) that copies the VibeKB runtime into a target repository and scaffolds a fresh, empty-but-valid `.vibekb/` workspace — without touching the application's code and without analysing it — so adopting VibeKB is a command, not a manual copy.",
+        "type": "functionality",
+        "url": "../functionality/install-into-a-repository.html",
+        "body": "In one sentence php install.php /path/to/repo prepares any repository for VibeKB — it installs the guide, the tools, the agent instructions, and the VibeKB docs, then lays down a fresh empty model — and then hands off to an AI agent to build the model. User experience The developer runs one command and sees a plan what will be created, replaced, skipped, and that .vibekb/ is a fresh model , confirms, and gets a verified installation with explicit next steps. dry run shows the full plan and changes nothing; yes runs non interactively; force overwrites pre existing files including resetting an existing model ; an existing installation is auto detected and upgraded runtime refreshed, .vibekb/ preserved . Current behavior The installer resolves its own clone as the source and the argument or t"
     },
     {
         "title": "Load the living model",
@@ -371,6 +385,20 @@
         "body": "Context The user wants VibeKB to \"run continuously.\" The dishonest way to satisfy that is to imply a file watcher understands code changes. It does not — understanding a change is analysis work. Decision Provenance uses objective labels only source commit analyzed, analysis generated, verification scope, last verified and always states that the output does not auto update. updates automatically is false unless a real, verified update mechanism exists. The maintenance CLI is explicit about the boundary between detected mechanical: git diff, path existence, render diff and interpreted an agent deciding what a change means . Alternatives considered A single boolean \"up to date\" flag — rejected: it cannot express \"code changed but no one has reconciled the model yet,\" which is the common and i"
     },
     {
+        "title": "The installer prepares the workspace; the agent interprets the software",
+        "summary": "install.php and bootstrap only scaffold an empty, valid VibeKB workspace and install the runtime — they never analyse, understand, or document the target application. Building the model is left to an AI agent following the integration prompt.",
+        "type": "decision",
+        "url": "../why/decisions/installer-prepares-agent-interprets.html",
+        "body": "Context The installer removes the friction of adopting VibeKB. The tempting next step is to have it also inspect the repository and pre fill functionality — but that would fabricate understanding a script cannot honestly have, exactly the drift VibeKB exists to prevent. Decision The installer and bootstrap do only mechanical preparation: copy the runtime, create directories, and write empty starter placeholders. Every starter record is explicitly a placeholder that tells an agent what to write; none claims the software does anything. Provenance is left blank because no commit was analysed. An AI agent builds the model afterwards via prompts/INTEGRATE VIBEKB.md . Alternatives considered Auto analyse the repo during install — rejected: it would produce unverified, fabricated functionality an"
+    },
+    {
+        "title": "The template is a manifest plus a generator, not a duplicated file tree",
+        "summary": "template/ declares the installable payload (manifest.json) and the starter model is produced by tools/lib/Starter.php; the installer copies the runtime from the canonical repository files rather than from a second physical copy under template/, so nothing drifts.",
+        "type": "decision",
+        "url": "../why/decisions/installer-template-not-duplicated-tree.html",
+        "body": "Context VibeKB is self hosted: the active .vibekb/ describes the files at the repository root guide/ , tools/ , … . Physically duplicating those into template/guide/ , template/tools/ , etc. would create a second copy that instantly drifts from the canonical one and that VibeKB's own drift detection would then have to track. Decision template/ contains a declarative manifest.json the payload list, the preserved paths, the generated paths and documentation — not a copy of the runtime. install.php reads the manifest and copies the runtime from the canonical repository files present in the VibeKB clone. The fresh .vibekb/ model is produced programmatically by tools/lib/Starter.php , the single source of truth shared with bootstrap , so there is no second copy of the starter content either. Al"
+    },
+    {
         "title": "The maintenance workflow is repository-owned, not agent-specific",
         "summary": "The canonical lifecycle lives in the repository (CLAUDE.md + the vibekb CLI); agent-specific entry points (AGENTS.md, .cursor/rules) are thin pointers, so the workflow cannot fork per tool.",
         "type": "decision",
@@ -439,6 +467,13 @@
         "type": "change",
         "url": "../why/changes/bootstrap-vibekb-self-hosting.html",
         "body": "Before The active .vibekb/ model described SousMeow a separate app . VibeKB had a strong renderer, validator, and explainable diagram system, but no repository resident model of itself and no tooling to help an agent run the maintenance lifecycle or detect drift. Maintenance was prose only CLAUDE.md / MAINTENANCE.md . After The active root .vibekb/ is VibeKB's own model this content . The SousMeow model and the StopPR field test audit moved under examples/ ; a VIBEKB CONTENT ROOT override keeps them previewable/validatable. A new tools/vibekb.php CLI provides status session start , check drift + validate + snapshot sync , affected files → functionality , plus validate and generate passthroughs. Agent instructions were unified: CLAUDE.md is canonical; AGENTS.md and .cursor/rules/vibekb.mdc "
+    },
+    {
+        "title": "Add a first-class installer and bootstrap command",
+        "summary": "Replaced the manual \"copy these files\" onboarding with `php install.php`, a bootstrap command, and a shared starter library, so adopting VibeKB into a repository is one command that prepares the workspace and hands off to an agent.",
+        "type": "change",
+        "url": "../why/changes/first-class-installer.html",
+        "body": "Before Adopting VibeKB meant manually copying guide/ , tools/ , PRODUCT.md , CLAUDE.md / AGENTS.md , and SCHEMA.md into the target repository and then authoring a .vibekb/ model by hand, following INITIALIZE.md . There was no scaffolding command; the initialize in a repository record explicitly noted the gap. After install.php — a PHP 8.2 installer no Composer, no network, cross platform : detects the target, shows a create/replace/skip/preserve plan, copies the VibeKB owned payload declared in template/manifest.json , scaffolds a fresh empty model, records installer state in .vibekb/.installer.json , and verifies the result including the target's own vibekb check . Supports dry run , yes , force , and auto detected upgrades that preserve .vibekb/ . php tools/vibekb.php bootstrap — verifie"
     },
     {
         "title": "Rewrite homepage around the developer journey story",
@@ -596,7 +631,28 @@
     },
     {
         "title": "tools/vibekb.php",
-        "summary": "The self-maintenance CLI: status (session start), check (drift + validate + snapshot sync), affected (files → functionality), validate, generate. The agent's entry point to the lifecycle.",
+        "summary": "The self-maintenance CLI: status (session start), check (drift + validate + snapshot sync), affected (files → functionality), bootstrap (verify/repair the workspace), validate, generate. The agent's entry point to the lifecycle.",
+        "type": "file",
+        "url": "../files/index.html",
+        "body": ""
+    },
+    {
+        "title": "install.php",
+        "summary": "The VibeKB installer: prepares a target repository by copying the VibeKB-owned payload (declared in template/manifest.json) and scaffolding a fresh, empty .vibekb/ workspace, without analysing or modifying the application. Supports dry-run, non-interactive, force, and upgrade.",
+        "type": "file",
+        "url": "../files/index.html",
+        "body": ""
+    },
+    {
+        "title": "tools/lib/Starter.php",
+        "summary": "The single source of truth for the fresh .vibekb/ starter workspace: the required directories and starter files, plus verify/scaffold/repair helpers shared by install.php and `vibekb bootstrap`. Writes only empty placeholders — never functionality about the target.",
+        "type": "file",
+        "url": "../files/index.html",
+        "body": ""
+    },
+    {
+        "title": "template/manifest.json",
+        "summary": "Declarative definition of a VibeKB installation: the VibeKB-owned payload the installer copies, the project-owned paths it preserves (.vibekb/), the generated paths (docs/), and the deliberately-excluded paths. Keeps 'what belongs in another repository' explicit rather than hard-coded in install.php.",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
@@ -665,17 +721,17 @@
         "body": "Mode A — the dynamic guide on shared hosting .cpanel.yml rsyncs the runtime paths index.php , assets/ , guide/ , .vibekb/ into a cPanel public folder and excludes development only paths tools/ , prompts/ , docs/ , authoring docs, examples/ . Query string routing means no .htaccess rewrite rules are needed and the app runs in a subfolder. .vibekb/ must deploy — it is the content. Mode B — the static snapshot php tools/generate static.php builds /docs ; publish it via GitHub Pages Settings → Pages → branch → /docs or any static host. Relative links make it work at a web root or under a repository subpath. No PHP, database, CDN, or network required. Deployment is part of the application Whenever repository structure, runtime folders, or deployment requirements change, .cpanel.yml and DEPLOYME"
     },
     {
-        "title": "(none — ready for next task)",
-        "summary": "Idle. See handoff.md.",
+        "title": "First-class VibeKB installer",
+        "summary": "Installer + bootstrap + starter library added and reconciled into the model. See handoff.md.",
         "type": "current work",
         "url": "../current-work/index.html",
-        "body": "Status Interactive functionality map complete and reconciled into the model. See .vibekb/work/handoff.md ."
+        "body": "Status Complete and reconciled into the model. The installer prepares the workspace; an AI agent still builds the model. See .vibekb/work/handoff.md ."
     },
     {
         "title": "Current handoff",
-        "summary": "The overview's first screen is now an interactive functionality map (areas → capabilities → docs) built from the existing model; documentation is second, not first. Next: keep the model reconciled as VibeKB changes.",
+        "summary": "VibeKB now has a first-class installer (`php install.php`) plus a `vibekb bootstrap` command and a shared starter library, so adopting VibeKB into another repository is one command that prepares the workspace and hands off to an agent. Next: keep the model reconciled as VibeKB changes.",
         "type": "handoff",
         "url": "../handoff/index.html",
-        "body": "Completed this change New guide/lib/map.php — build functionality map derives the map Level 1 areas, Level 2 capabilities, live statistics, current context signal from the existing Content model. No parallel data structures. New guide/templates/partials/functionality map.php — hero + live statistics + interactive canvas mount + an always present accessible fallback expandable area cards linking straight into the docs + embedded JSON model. guide/templates/overview.php restructured so the map is the centerpiece; the written sections what it does, how to think, warnings/work, next step remain below as progressive Level 3 detail. Removed the old page head/snapshot bar and the redundant \"functional areas\" list the map now covers Level 1/2 nav . guide/assets/js/guide.js — initFunctionalityMap :"
+        "body": "Completed this change New install.php — the VibeKB installer. Detects the target, reads template/manifest.json , shows a create/replace/skip/preserve plan, copies the VibeKB owned payload, scaffolds a fresh empty .vibekb/ , records installer state in .vibekb/.installer.json , and verifies including the target's own vibekb check . Supports dry run , yes , force , and auto detected upgrades that preserve .vibekb/ . Refuses to install into VibeKB's own repo. New tools/lib/Starter.php — the single source of truth for the starter workspace required dirs + starter files + verify/scaffold helpers , shared by the installer and bootstrap. Writes only empty placeholders — never functionality about the target. New bootstrap command in tools/vibekb.php — verifies and repairs a workspace \"git init for "
     }
 ]

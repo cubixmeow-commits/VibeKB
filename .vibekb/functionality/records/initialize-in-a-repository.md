@@ -3,17 +3,17 @@ id: initialize-in-a-repository
 type: functionality
 title: Initialize VibeKB in a repository
 area: integration
-summary: A documented, project-agnostic process (INITIALIZE.md plus a paste-ready prompt) for an agent to build a fresh, honest `.vibekb/` model of another application read-only, then render it — the same process VibeKB used on itself.
+summary: A documented, project-agnostic process (INITIALIZE.md plus a paste-ready prompt) for an agent to build a fresh, honest `.vibekb/` model of another application read-only, then render it — the same process VibeKB used on itself, now started from an installed, scaffolded workspace.
 status: partial
 verification: reported-by-developer
 user_facing: true
-trigger: An operator copies the VibeKB app + docs into a target repo and runs the integration prompt.
+trigger: A developer runs `php install.php` to prepare the repo, then runs the integration prompt in their coding agent.
 updated: 2026-07-22
 tags: [integration, onboarding, process]
 files: [INITIALIZE.md, prompts/INTEGRATE_VIBEKB.md]
 reads: []
 writes: []
-depends_on: [load-living-model, validate-model, generate-static-snapshot]
+depends_on: [install-into-a-repository, load-living-model, validate-model, generate-static-snapshot]
 related_memory: [assumption:agents-follow-session-workflow]
 ---
 
@@ -27,11 +27,15 @@ app without modifying it.
 ## Current behavior
 
 `INITIALIZE.md` defines the step-by-step process and
-`prompts/INTEGRATE_VIBEKB.md` is a project-agnostic prompt that drives it. This is
-a **documented process**, not executable code: the quality depends on the agent
-following it. It is demonstrated by the bundled example models under `examples/`
-(the SousMeow model and the StopPR field-test audit) and, most directly, by this
-repository — VibeKB's own model was produced by this workflow.
+`prompts/INTEGRATE_VIBEKB.md` is a project-agnostic prompt that drives it. The
+workspace it starts from is now prepared by the installer
+(`install-into-a-repository`) rather than a manual copy: `php install.php`
+installs the runtime and scaffolds an empty, valid `.vibekb/`. The *building* of
+the model is still a **documented process**, not executable code — the quality
+depends on the agent following it. It is demonstrated by the bundled example
+models under `examples/` (the SousMeow model and the StopPR field-test audit)
+and, most directly, by this repository — VibeKB's own model was produced by this
+workflow.
 
 ## Implementation map
 
@@ -41,9 +45,10 @@ repository — VibeKB's own model was produced by this workflow.
 
 ## Current state
 
-- **Status:** partial — the process is complete and demonstrated, but there is no
-  scaffolding command that generates an empty `.vibekb/` skeleton yet; the agent
-  authors records directly.
+- **Status:** partial — the workspace scaffolding is now automated by the
+  installer and `bootstrap` (see `install-into-a-repository`,
+  `bootstrap-workspace`), but *building* the model from source remains an
+  agent-run process, not executable code; the agent authors the records directly.
 - **Verification:** reported-by-developer — the process is validated by its
   outputs (the example models validate), not by an automated end-to-end test.
 

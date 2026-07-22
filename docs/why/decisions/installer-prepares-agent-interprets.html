@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>The installer prepares the workspace; the agent interprets the software · VibeKB — VibeKB</title>
+    <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Web fonts are a progressive enhancement only. The stylesheet ships a
+         full system-font fallback stack, so the guide renders correctly with no
+         external CDN — required for offline and locked-down static hosting. -->
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/css/guide.css">
+</head>
+<body data-mode="static">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="app-shell">
+    <header class="site-header">
+        <div class="site-header__inner">
+            <a class="brand" href="../../index.html">
+                <span class="brand__mark">VibeKB</span>
+                <span class="brand__project">VibeKB</span>
+            </a>
+            <form class="site-search" role="search" action="../../search/index.html">
+                <label class="visually-hidden" for="site-search-input">Search guide</label>
+                <input id="site-search-input" name="q" type="search" placeholder="Search guide…" autocomplete="off">
+            </form>
+            <button
+                class="nav-toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="guide-sidebar"
+                hidden
+            >Menu</button>
+        </div>
+    </header>
+
+    <div class="nav-backdrop" id="nav-backdrop" hidden></div>
+
+    <aside class="sidebar" id="guide-sidebar" aria-label="Guide navigation">
+        <nav class="sidebar-nav" aria-label="Guide sections">
+            <p class="sidebar-nav__label" id="nav-primary-label">Primary</p>
+            <ul class="sidebar-nav__list" aria-labelledby="nav-primary-label">
+                                                        <li>
+                        <a href="../../index.html">
+                            Overview                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../../functionality/index.html">
+                            Functionality                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../../how-it-works/index.html">
+                            Architecture                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../../diagrams/index.html">
+                            Diagrams                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../../current-work/index.html">
+                            Current work                        </a>
+                    </li>
+                            </ul>
+
+                            <p class="sidebar-nav__label" id="nav-explore-label">Explore</p>
+                <ul class="sidebar-nav__list sidebar-nav__list--secondary" aria-labelledby="nav-explore-label">
+                                                                    <li>
+                            <a href="../../data/index.html">
+                                Data &amp; storage                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../../files/index.html">
+                                Files that matter                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../../changes/index.html">
+                                Changes                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../../why/index.html" aria-current="page">
+                                Decisions &amp; rationale                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../../handoff/index.html">
+                                AI handoff                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../../reference/index.html">
+                                Reference                            </a>
+                        </li>
+                                    </ul>
+                    </nav>
+    </aside>
+
+    <div class="app-main">
+                    <p class="generated-notice" role="note">
+                Generated output — this is a static snapshot rendered from <code>.vibekb/</code>. The
+                <code>.vibekb/</code> content is the source of truth. See <a href="../../reference/index.html">Reference</a> for provenance.
+            </p>
+                
+        <main id="main" class="wrap">
+                <article class="view view-doc">
+        <p class="breadcrumb"><a href="../../why/index.html">← Decisions &amp; rationale</a></p>
+        <header class="page-head reading-column">
+            <p class="eyebrow">Decisions</p>
+            <h1>The installer prepares the workspace; the agent interprets the software</h1>
+            <p class="lede">install.php and bootstrap only scaffold an empty, valid VibeKB workspace and install the runtime — they never analyse, understand, or document the target application. Building the model is left to an AI agent following the integration prompt.</p>
+            <div class="badge-row">
+                <span class="badge badge--info">accepted</span>                                                <span class="badge badge--ok">Verified from source</span>            </div>
+        </header>
+        <div class="detail-grid">
+            <div class="detail-main"><div class="prose reading-column"><h3>Context</h3>
+<p>The installer removes the friction of adopting VibeKB. The tempting next step is
+to have it also inspect the repository and pre-fill functionality — but that would
+fabricate understanding a script cannot honestly have, exactly the drift VibeKB
+exists to prevent.</p>
+<h3>Decision</h3>
+<p>The installer (and <code>bootstrap</code>) do only mechanical preparation: copy the runtime,
+create directories, and write empty starter placeholders. Every starter record is
+explicitly a placeholder that tells an agent what to write; none claims the
+software does anything. Provenance is left blank because no commit was analysed.
+An AI agent builds the model afterwards via <code>prompts/INTEGRATE_VIBEKB.md</code>.</p>
+<h3>Alternatives considered</h3>
+<ul>
+<li><strong>Auto-analyse the repo during install</strong> — rejected: it would produce</li>
+</ul>
+<p>unverified, fabricated functionality and undermine VibeKB&#039;s honesty guarantees.</p>
+<ul>
+<li><strong>Ship a pre-filled example model</strong> — rejected: it would describe some other</li>
+</ul>
+<p>app, not the target, and invite confusion with the real model.</p>
+<h3>Reason</h3>
+<p>VibeKB&#039;s core promise is an honest explanation of what software actually does.
+A script cannot trace behaviour; only analysis can. Keeping that line bright is
+more valuable than a flashier one-command &quot;model.&quot;</p>
+<h3>Consequences</h3>
+<ul>
+<li>A fresh install has zero functionality records — valid but empty, by design.</li>
+<li>The verification step reports the empty model as OK, not as a failure.</li>
+<li>The hand-off to the agent is explicit in the installer&#039;s final output.</li>
+</ul></div></div>
+            <aside class="detail-rail" aria-label="Connections">
+                <div class="rail-card">
+                    <h2>Affects functionality</h2>
+                    <p><a class="chip" href="../../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../../functionality/bootstrap-workspace.html">Bootstrap the VibeKB workspace</a></p>
+                </div>
+                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">install.php</code> <code class="chip chip--file">tools/lib/Starter.php</code></p></div>
+                            </aside>
+        </div>
+    </article>
+            </main>
+
+        <footer class="site-footer">
+            <div class="wrap site-footer__inner">
+                <p><strong>VibeKB</strong> — Understand what your software is doing.</p>
+                <p class="muted">
+                    A living explanation generated from repository-owned content in <code>.vibekb/</code>.
+                    <a href="../../index.html">About VibeKB</a>
+                </p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 22:08 UTC · source commit 65d7e02 (2026-07-22) · not auto-updating</p>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script src="../../assets/js/guide.js" defer></script>
+</body>
+</html>

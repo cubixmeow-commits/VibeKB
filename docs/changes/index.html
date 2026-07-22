@@ -164,6 +164,48 @@ consistent; <code>/docs</code> regenerated from the self-model and re-validated.
                                     </li>
                             <li class="change-card">
                     <div class="change-card__head">
+                        <h2>Add a first-class installer and bootstrap command</h2>
+                        <div class="badge-row">
+                            <span class="badge badge--info">implemented</span>                            <span class="badge badge--ok">Verified from source</span>                            <span class="muted">2026-07-22</span>
+                        </div>
+                    </div>
+                    <p>Replaced the manual &quot;copy these files&quot; onboarding with `php install.php`, a bootstrap command, and a shared starter library, so adopting VibeKB into a repository is one command that prepares the workspace and hands off to an agent.</p>
+                    <div class="prose reading-column change-card__body"><h3>Before</h3>
+<p>Adopting VibeKB meant manually copying <code>guide/</code>, <code>tools/</code>, <code>PRODUCT.md</code>,
+<code>CLAUDE.md</code>/<code>AGENTS.md</code>, and <code>SCHEMA.md</code> into the target repository and then
+authoring a <code>.vibekb/</code> model by hand, following <code>INITIALIZE.md</code>. There was no
+scaffolding command; the <code>initialize-in-a-repository</code> record explicitly noted the
+gap.</p>
+<h3>After</h3>
+<ul>
+<li><code>install.php</code> — a PHP 8.2 installer (no Composer, no network, cross-platform):</li>
+</ul>
+<p>detects the target, shows a create/replace/skip/preserve plan, copies the
+  VibeKB-owned payload declared in <code>template/manifest.json</code>, scaffolds a fresh
+  empty model, records installer state in <code>.vibekb/.installer.json</code>, and verifies
+  the result (including the target&#039;s own <code>vibekb check</code>). Supports <code>--dry-run</code>,
+  <code>--yes</code>, <code>--force</code>, and auto-detected upgrades that preserve <code>.vibekb/</code>.</p>
+<ul>
+<li><code>php tools/vibekb.php bootstrap</code> — verifies and repairs a workspace (&quot;git init</li>
+</ul>
+<p>for VibeKB&quot;), never overwriting content.</p>
+<ul>
+<li><code>tools/lib/Starter.php</code> — the single definition of the starter directories and</li>
+</ul>
+<p>files, shared by the installer and bootstrap.</p>
+<ul>
+<li><code>template/</code> — a declarative payload manifest (not a duplicated file tree).</li>
+</ul>
+<h3>Impact</h3>
+<p>Onboarding goes from a documented manual copy to one command. The honest boundary
+is preserved: the installer prepares the workspace and an agent still builds the
+model. <code>initialize-in-a-repository</code> was updated to depend on the installer, and
+<code>template/</code> is excluded from VibeKB&#039;s drift detection.</p></div>
+                                            <p class="change-card__links"><strong>Affected:</strong>
+                            <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/bootstrap-workspace.html">Bootstrap the VibeKB workspace</a> <a class="chip" href="../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a>                        </p>
+                                    </li>
+                            <li class="change-card">
+                    <div class="change-card__head">
                         <h2>Rewrite homepage around the developer journey story</h2>
                         <div class="badge-row">
                             <span class="badge badge--info">implemented</span>                            <span class="badge badge--ok">Verified manually</span>                            <span class="muted">2026-07-22</span>
@@ -274,7 +316,7 @@ before/after, workflow timeline, repo map, and separate CTA. Accurate but too lo
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 21:26 UTC · source commit 65d7e02 (2026-07-22) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 22:08 UTC · source commit 65d7e02 (2026-07-22) · not auto-updating</p>
             </div>
         </footer>
     </div>

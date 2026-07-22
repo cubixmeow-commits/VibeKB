@@ -7,10 +7,20 @@ verified behaviour. Followed carefully, it reproduces the quality demonstrated
 by the StopPR field test (see `examples/field-tests/STOPPR_INTEGRATION_AUDIT.md`)
 and by VibeKB's own self-hosted model (the active `.vibekb/` in this repository).
 
-Copy `guide/` (the app + renderer), `tools/` (the static generator + the
-validator), `PRODUCT.md`, `CLAUDE.md`/`AGENTS.md`, and `SCHEMA.md` into the
-target repo, then build a fresh `.vibekb/` following the steps below. A
-project-agnostic prompt that drives this workflow lives at
+First install VibeKB with the installer, which prepares the workspace without
+touching or analysing the application's code:
+
+```bash
+git clone https://github.com/cubixmeow-commits/VibeKB.git
+php VibeKB/install.php /path/to/target
+```
+
+That copies the runtime (`guide/`, `tools/`, `prompts/`, `.cursor/`, and the
+VibeKB docs) and scaffolds a fresh, empty-but-valid `.vibekb/` for you to fill in
+— so you start from valid scaffolding, not a blank directory. (See
+[INSTALLER.md](./INSTALLER.md); a manual copy + `php tools/vibekb.php bootstrap`
+is the appendix alternative.) Then build the `.vibekb/` model following the steps
+below. A project-agnostic prompt that drives this workflow lives at
 [`prompts/INTEGRATE_VIBEKB.md`](./prompts/INTEGRATE_VIBEKB.md).
 
 > **Never modify the target application's code** to initialize VibeKB, unless

@@ -12,6 +12,14 @@ workflow an agent follows in any repository VibeKB is initialized in. The
 The `php tools/vibekb.php` CLI makes each step low-friction. Run
 `php tools/vibekb.php help` to see every command.
 
+> **Getting VibeKB in place.** This lifecycle assumes VibeKB is already installed
+> in the repository. If it is not, run the installer (`php install.php`, see
+> [INSTALLER.md](./INSTALLER.md)); to refresh the VibeKB runtime later, re-run it.
+> If the `.vibekb/` workspace is ever missing or damaged,
+> `php tools/vibekb.php bootstrap` recreates the scaffolding without touching your
+> content. Neither the installer nor bootstrap builds the model — that is the
+> agent work described below.
+
 Worked example used throughout: **adding a `--json` output flag to
 `vibekb status`** (a change to the `start-work-session` functionality).
 

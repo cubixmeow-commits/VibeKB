@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Install VibeKB into a repository · VibeKB — VibeKB</title>
+    <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Web fonts are a progressive enhancement only. The stylesheet ships a
+         full system-font fallback stack, so the guide renders correctly with no
+         external CDN — required for offline and locked-down static hosting. -->
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/guide.css">
+</head>
+<body data-mode="static">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="app-shell">
+    <header class="site-header">
+        <div class="site-header__inner">
+            <a class="brand" href="../index.html">
+                <span class="brand__mark">VibeKB</span>
+                <span class="brand__project">VibeKB</span>
+            </a>
+            <form class="site-search" role="search" action="../search/index.html">
+                <label class="visually-hidden" for="site-search-input">Search guide</label>
+                <input id="site-search-input" name="q" type="search" placeholder="Search guide…" autocomplete="off">
+            </form>
+            <button
+                class="nav-toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="guide-sidebar"
+                hidden
+            >Menu</button>
+        </div>
+    </header>
+
+    <div class="nav-backdrop" id="nav-backdrop" hidden></div>
+
+    <aside class="sidebar" id="guide-sidebar" aria-label="Guide navigation">
+        <nav class="sidebar-nav" aria-label="Guide sections">
+            <p class="sidebar-nav__label" id="nav-primary-label">Primary</p>
+            <ul class="sidebar-nav__list" aria-labelledby="nav-primary-label">
+                                                        <li>
+                        <a href="../index.html">
+                            Overview                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../functionality/index.html" aria-current="page">
+                            Functionality                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../how-it-works/index.html">
+                            Architecture                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../diagrams/index.html">
+                            Diagrams                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../current-work/index.html">
+                            Current work                        </a>
+                    </li>
+                            </ul>
+
+                            <p class="sidebar-nav__label" id="nav-explore-label">Explore</p>
+                <ul class="sidebar-nav__list sidebar-nav__list--secondary" aria-labelledby="nav-explore-label">
+                                                                    <li>
+                            <a href="../data/index.html">
+                                Data &amp; storage                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../files/index.html">
+                                Files that matter                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../changes/index.html">
+                                Changes                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../why/index.html">
+                                Decisions &amp; rationale                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../handoff/index.html">
+                                AI handoff                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../reference/index.html">
+                                Reference                            </a>
+                        </li>
+                                    </ul>
+                    </nav>
+    </aside>
+
+    <div class="app-main">
+                    <p class="generated-notice" role="note">
+                Generated output — this is a static snapshot rendered from <code>.vibekb/</code>. The
+                <code>.vibekb/</code> content is the source of truth. See <a href="../reference/index.html">Reference</a> for provenance.
+            </p>
+                
+        <main id="main" class="wrap">
+            <article class="view view-func-detail">
+    <p class="breadcrumb"><a href="../functionality/index.html">← All functionality</a></p>
+
+    <header class="page-head reading-column">
+        <p class="eyebrow">Integration</p>
+        <h1>Install VibeKB into a repository</h1>
+        <p class="lede">A PHP installer (`install.php`) that copies the VibeKB runtime into a target repository and scaffolds a fresh, empty-but-valid `.vibekb/` workspace — without touching the application&#039;s code and without analysing it — so adopting VibeKB is a command, not a manual copy.</p>
+        <div class="badge-row">
+            <span class="badge badge--ok">Implemented</span>            <span class="badge badge--ok">Verified from source</span>            <span class="badge badge--info">User-facing</span>        </div>
+    </header>
+
+    <div class="detail-grid">
+        <div class="detail-main">
+                            <div class="prose reading-column"><h3>In one sentence</h3>
+<p><code>php install.php /path/to/repo</code> prepares any repository for VibeKB — it installs
+the guide, the tools, the agent instructions, and the VibeKB docs, then lays down
+a fresh empty model — and then hands off to an AI agent to build the model.</p>
+<h3>User experience</h3>
+<p>The developer runs one command and sees a plan (what will be created, replaced,
+skipped, and that <code>.vibekb/</code> is a fresh model), confirms, and gets a verified
+installation with explicit next steps. <code>--dry-run</code> shows the full plan and
+changes nothing; <code>--yes</code> runs non-interactively; <code>--force</code> overwrites
+pre-existing files (including resetting an existing model); an existing
+installation is auto-detected and upgraded (runtime refreshed, <code>.vibekb/</code>
+preserved).</p>
+<h3>Current behavior</h3>
+<p>The installer resolves its own clone as the <strong>source</strong> and the argument (or the
+current directory) as the <strong>target</strong>. It reads <code>template/manifest.json</code> to learn
+the VibeKB-owned payload (<code>guide/</code>, <code>tools/</code>, <code>prompts/</code>, <code>.cursor/</code>, and the
+VibeKB docs), refusing to install into VibeKB&#039;s own repository. It checks the
+target looks like a software project, builds a per-file plan, and — after
+confirmation — copies the payload, creating only missing directories and never
+overwriting pre-existing files on a fresh install unless <code>--force</code> is given. It
+then scaffolds a fresh <code>.vibekb/</code> via <code>tools/lib/Starter.php</code> (see **Bootstrap the
+VibeKB workspace**), records installer state in <code>.vibekb/.installer.json</code>, and
+verifies the result — including running the freshly installed
+<code>php tools/vibekb.php check</code> against the target.</p>
+<h3>Step-by-step flow</h3>
+<ol>
+<li>Resolve source (the VibeKB clone) and target; load <code>template/manifest.json</code>.</li>
+<li>Refuse if the target is VibeKB&#039;s own repository; detect a prior install →</li>
+</ol>
+<p>upgrade mode.</p>
+<ol>
+<li>Confirm the target looks like a project (ask if not).</li>
+<li>Build and render the plan (create / replace / skip / preserve).</li>
+<li>On confirmation, copy the payload; scaffold or preserve <code>.vibekb/</code>.</li>
+<li>Write <code>.vibekb/.installer.json</code>; verify presence and run the target&#039;s <code>check</code>.</li>
+<li>Print the next action: build the model with <code>prompts/INTEGRATE_VIBEKB.md</code>.</li>
+</ol>
+<h3>Implementation map</h3>
+<ul>
+<li><code>install.php</code> — the installer: argument parsing, planning, copying, scaffolding,</li>
+</ul>
+<p>verification, and the console UI.</p>
+<ul>
+<li><code>template/manifest.json</code> — declares the installable payload, the preserved</li>
+</ul>
+<p>project-owned paths, and the generated paths; the installer is manifest-driven,
+  not a hard-coded copy list.</p>
+<ul>
+<li><code>tools/lib/Starter.php</code> — produces the fresh workspace (shared with bootstrap).</li>
+</ul>
+<h3>Data used</h3>
+<ul>
+<li><strong>Reads:</strong> the VibeKB source clone and <code>template/manifest.json</code>.</li>
+<li><strong>Writes:</strong> into the target only — the payload, a fresh <code>.vibekb/</code>, and</li>
+</ul>
+<p><code>.vibekb/.installer.json</code>. It never writes to the source and never modifies the
+  target application&#039;s code.</p>
+<h3>Dependencies</h3>
+<p>Scaffolding the fresh model is delegated to <code>bootstrap-workspace</code>
+(<code>tools/lib/Starter.php</code>); the resulting model is what <code>load-living-model</code> reads.</p>
+<h3>Failure cases</h3>
+<ul>
+<li>Target missing or unwritable → reported, no partial guess.</li>
+<li>Pre-existing files on a fresh install → skipped for safety and reported, unless</li>
+</ul>
+<p><code>--force</code>.</p>
+<ul>
+<li>Target is the VibeKB repo → refused, with a pointer to <code>bootstrap</code>.</li>
+</ul>
+<h3>Safe to change</h3>
+<p>Adding a payload path to <code>template/manifest.json</code> extends what is installed
+without touching the installer code. The console UI is presentation-only.</p>
+<h3>Use caution</h3>
+<p>The installer must never analyse or document the target application, and must
+never overwrite application code or an existing <code>.vibekb/</code> model without an
+explicit <code>--force</code>. Keep the honest boundary: it prepares the workspace; the agent
+interprets the software.</p>
+<h3>Why it works this way</h3>
+<p>Making installation a real command removes the biggest adoption friction (manual
+copying) while a declarative <code>template/manifest.json</code> keeps &quot;what belongs in
+another repository&quot; explicit and upgrade-safe. The fresh model is produced
+programmatically rather than copied from a second template tree, so there is no
+drift-prone duplicate of the starter content.</p></div>
+                    </div>
+
+        <aside class="detail-rail" aria-label="Record metadata">
+            <div class="rail-card metadata-group">
+                <h2>Status</h2>
+                <dl class="rail-dl">
+                    <dt>Status</dt>
+                    <dd><span class="badge badge--ok">Implemented</span></dd>
+                                            <dt>Verification</dt>
+                        <dd><span class="badge badge--ok">Verified from source</span></dd>
+                                        <dt>Updated</dt>
+                    <dd>2026-07-22</dd>
+                    <dt>Facing</dt>
+                    <dd>User-facing</dd>
+                </dl>
+            </div>
+
+                            <div class="rail-card metadata-group">
+                    <h2>Trigger</h2>
+                    <p>A developer clones VibeKB and runs `php install.php [target]` (or `php install.php` in the current directory).</p>
+                </div>
+            
+            <div class="rail-card metadata-group">
+                <h2>Data read or written</h2>
+                <p><strong>Reads:</strong> <code class="chip chip--file">template/manifest.json</code></p>
+                <p><strong>Writes:</strong> <span class="muted">None.</span></p>
+                            </div>
+
+            <div class="rail-card metadata-group">
+                <h2>Files involved</h2>
+                                                        <ul class="rail-list">
+                                                    <li>
+                                <a href="../files/index.html#install.php"><code>install.php</code></a>
+                                <span class="badge badge--info">Moderate impact</span>                            </li>
+                                                    <li>
+                                <a href="../files/index.html#tools%2Flib%2FStarter.php"><code>tools/lib/Starter.php</code></a>
+                                <span class="badge badge--info">Moderate impact</span>                            </li>
+                                                    <li>
+                                <a href="../files/index.html#template%2Fmanifest.json"><code>template/manifest.json</code></a>
+                                <span class="badge badge--info">Moderate impact</span>                            </li>
+                                            </ul>
+                                                </div>
+
+            <div class="rail-card metadata-group">
+                <h2>Dependencies</h2>
+                                    <p><strong>Depends on:</strong> <a class="chip" href="../functionality/bootstrap-workspace.html">Bootstrap the VibeKB workspace</a> <a class="chip" href="../functionality/load-living-model.html">Load the living model</a></p>
+                                                    <p><strong>Depended on by:</strong> <a class="chip" href="../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a></p>
+                            </div>
+
+            
+            <div class="rail-card metadata-group">
+                <h2>Related rationale</h2>
+                                    <p><a class="chip" href="../why/decisions/installer-template-not-duplicated-tree.html">The template is a manifest plus a generator, not a duplicated file tree</a> <a class="chip" href="../why/decisions/installer-prepares-agent-interprets.html">The installer prepares the workspace; the agent interprets the software</a> <a class="chip" href="../why/changes/first-class-installer.html">Add a first-class installer and bootstrap command</a></p>
+                            </div>
+        </aside>
+    </div>
+</article>
+        </main>
+
+        <footer class="site-footer">
+            <div class="wrap site-footer__inner">
+                <p><strong>VibeKB</strong> — Understand what your software is doing.</p>
+                <p class="muted">
+                    A living explanation generated from repository-owned content in <code>.vibekb/</code>.
+                    <a href="../index.html">About VibeKB</a>
+                </p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 22:08 UTC · source commit 65d7e02 (2026-07-22) · not auto-updating</p>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script src="../assets/js/guide.js" defer></script>
+</body>
+</html>
