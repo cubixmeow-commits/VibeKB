@@ -77,6 +77,8 @@ function hp_status_tone(string $status): string
 
 $guideUrl = 'guide/';
 $repoUrl = 'https://github.com/cubixmeow-commits/VibeKB';
+/** Homepage copy — aligned with PRODUCT.md (not an exhaustive list). */
+$codingAgents = 'Cursor, Claude Code, Codex, Copilot, and others';
 
 $content = new Content(__DIR__ . '/.vibekb');
 $loaded = false;
@@ -142,7 +144,7 @@ $storyBeats = [
         'step' => '1',
         'kicker' => 'Building finally feels within reach',
         'title' => 'You have an idea — or you find something brilliant to build on.',
-        'body' => 'Maybe you started a blank repo with a product in your head. Maybe you found open source on GitHub and saw what you could extend. Either way, Cursor and Claude Code make the first version feel possible in a way it never did before.',
+        'body' => 'Maybe you started a blank repo with a product in your head. Maybe you found open source on GitHub and saw what you could extend. Either way, ' . $codingAgents . ' make the first version feel possible in a way it never did before.',
         'aside' => 'I could actually build this.',
     ],
     [
@@ -201,7 +203,7 @@ $uncertaintyQuestions = [
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>VibeKB — AI helped you build it. VibeKB helps you understand it.</title>
-    <meta name="description" content="Whether you built your own app with Cursor or extended something from GitHub — you probably shipped faster than you understood. VibeKB is the missing understanding layer: a living model in your repo that explains what your software is actually doing.">
+    <meta name="description" content="Whether you built your own app with <?= hp_e($codingAgents) ?> or extended something from GitHub — you probably shipped faster than you understood. VibeKB is the missing understanding layer: a living model in your repo that explains what your software is actually doing.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -231,9 +233,10 @@ $uncertaintyQuestions = [
                     <p class="hp-eyebrow">For vibe coders who ship with AI</p>
                     <h1 id="hero-title">AI helped you build it. VibeKB helps you understand it.</h1>
                     <p class="hp-hero-support">
-                        Whether you started from scratch or built on top of open source — Cursor, Claude Code,
-                        and Copilot let you ship your own software faster than your mental model can keep up.
-                        The app runs. Understanding lags behind. That gap is what VibeKB exists to close.
+                        Whether you started from scratch or built on top of open source —
+                        <?= hp_e($codingAgents) ?> let you ship your own software faster than your mental
+                        model can keep up. The app runs. Understanding lags behind. That gap is what VibeKB
+                        exists to close.
                     </p>
                     <div class="hp-actions">
                         <a class="hp-btn hp-btn-primary" href="#story">That&#39;s exactly what happened to me</a>
