@@ -215,15 +215,19 @@ a:hover {
 }
 
 .hp-hero-copy,
+.hp-hero-aside,
 .hp-hero-visual,
 .hp-example-card {
   min-width: 0;
 }
 
+.hp-hero-aside {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+
 .hp-hero-visual {
-  grid-column: 1 / -1;
-  justify-self: center;
-  width: min(100%, 40rem);
   margin: 0;
   padding: 0.55rem;
   border-radius: calc(var(--hp-radius) + 0.15rem);
@@ -233,7 +237,7 @@ a:hover {
 }
 
 .hp-hero-grid:not(:has(.hp-example-card)) {
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
 }
 
 .hp-hero h1 {
@@ -1167,8 +1171,10 @@ html:not(.js) .hp-guide-panel {
     grid-template-columns: 1fr;
   }
 
-  .hp-hero-visual {
-    width: min(100%, 20rem);
+  .hp-hero-aside {
+    max-width: 20rem;
+    margin-inline: auto;
+    width: 100%;
   }
 
   .hp-nav a:not(.hp-nav-cta) {
