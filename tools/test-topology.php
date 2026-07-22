@@ -39,10 +39,12 @@ $copy = static function (string $src, string $dst) use (&$copy): void {
 };
 $copy($repoRoot . '/.vibekb', $tmp);
 
-// Point an existing diagram record at a broken topology file.
-$recordPath = $tmp . '/diagrams/records/storage-map.md';
+// Point an existing picture-only diagram record at a broken topology file. The
+// self-maintenance-loop diagram ships without a topology, so it is the natural
+// carrier for the malformed fixture.
+$recordPath = $tmp . '/diagrams/records/self-maintenance-loop.md';
 $record = (string) file_get_contents($recordPath);
-$record = preg_replace('/^svg:\s*storage-map\.svg$/m', "svg: storage-map.svg\ntopology: broken.json", $record, 1);
+$record = preg_replace('/^svg:\s*self-maintenance-loop\.svg$/m', "svg: self-maintenance-loop.svg\ntopology: broken.json", $record, 1);
 file_put_contents($recordPath, $record);
 
 // A topology that violates as many rules as possible in one file.
@@ -110,12 +112,12 @@ foreach ($expect as $needle) {
 }
 
 // The well-formed topologies in the real model must still resolve here.
-$rf = $content->resolvedTopology('request-flow');
-if ($rf === null || count($rf['nodes']) !== 7 || count($rf['edges']) !== 6) {
-    echo "  FAIL good topology 'request-flow' did not resolve as expected\n";
+$rf = $content->resolvedTopology('content-load-flow');
+if ($rf === null || count($rf['nodes']) !== 6 || count($rf['edges']) !== 5) {
+    echo "  FAIL good topology 'content-load-flow' did not resolve as expected\n";
     $failures++;
 } else {
-    echo "  ok   good topology 'request-flow' resolves (7 nodes, 6 edges)\n";
+    echo "  ok   good topology 'content-load-flow' resolves (6 nodes, 5 edges)\n";
 }
 
 // Clean up.

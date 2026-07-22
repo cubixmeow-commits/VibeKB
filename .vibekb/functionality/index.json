@@ -1,76 +1,58 @@
 {
   "groups": [
     {
-      "id": "explore-discovery",
-      "title": "Explore & discovery",
-      "description": "How visitors find Cookbooks: the marketing home, marketplace search, categories, and curated collections."
+      "id": "living-model",
+      "title": "The living model",
+      "description": "How the repository-owned `.vibekb/` content is loaded, parsed, relationship-resolved, and validated into the model everything else renders."
     },
     {
-      "id": "accounts-auth",
-      "title": "Accounts & authentication",
-      "description": "Registration, email verification, sign-in, account settings, and password recovery."
+      "id": "agent-workflow",
+      "title": "AI coding workflow",
+      "description": "How a coding agent starts a session, finds what a change affects, detects drift, records active work, and hands off — the self-maintenance lifecycle."
     },
     {
-      "id": "projects-progress",
-      "title": "Projects & progress",
-      "description": "The signed-in kitchen, starting a project, and tracking it through to completion."
+      "id": "dynamic-guide",
+      "title": "The dynamic guide (Mode A)",
+      "description": "The live PHP app that renders the model in the browser: routing, provenance, and search."
     },
     {
-      "id": "pantry-inputs",
-      "title": "Pantry & inputs",
-      "description": "Collecting and validating the project facts every prompt is built from."
+      "id": "static-publishing",
+      "title": "The static snapshot (Mode B)",
+      "description": "Rendering the same model through the same templates into a self-contained /docs site for GitHub Pages or any static host."
     },
     {
-      "id": "cookbook-runner",
-      "title": "Cookbook Runner",
-      "description": "The product's core loop: build a prompt, run it in your own AI, and paste the response back."
+      "id": "diagrams",
+      "title": "Explainable diagrams",
+      "description": "Source-grounded diagrams whose repository-owned topology gives every node a purpose, every edge a mechanism, and every file a reason."
     },
     {
-      "id": "artifacts-quality",
-      "title": "Artifacts & quality checks",
-      "description": "Human review, immutable version history, and the approval gate that governs every step."
+      "id": "integration",
+      "title": "Adopting VibeKB elsewhere",
+      "description": "Initializing a VibeKB model inside another repository."
     },
     {
-      "id": "export-kit",
-      "title": "Export (Project Kit)",
-      "description": "Turning an approved project into a downloadable, self-contained deliverable."
-    },
-    {
-      "id": "administration",
-      "title": "Administration & demo",
-      "description": "The admin overview and the portfolio Demo Mode / simulation."
-    },
-    {
-      "id": "system-deployment",
-      "title": "System & deployment",
-      "description": "Request routing and security, database access, and content seeding."
+      "id": "deployment",
+      "title": "Deployment & portability",
+      "description": "How the guide deploys to shared hosting and stays portable with no build step."
     }
   ],
   "order": [
-    "view-marketing-home",
-    "browse-marketplace",
-    "view-cookbook-detail",
-    "browse-categories",
-    "view-collection",
-    "register-account",
-    "sign-in",
-    "verify-email",
-    "reset-password",
-    "manage-account",
-    "view-kitchen",
-    "start-project",
-    "track-project-progress",
-    "fill-pantry",
-    "run-recipe",
-    "build-prompt",
-    "paste-response",
-    "review-quality-checks",
-    "approve-and-version",
-    "export-project-kit",
-    "view-admin-overview",
-    "demo-simulation",
-    "route-and-secure-requests",
-    "access-database",
-    "seed-and-sync-content"
+    "load-living-model",
+    "parse-records",
+    "resolve-relationships",
+    "validate-model",
+    "start-work-session",
+    "detect-drift",
+    "find-affected-functionality",
+    "record-current-work",
+    "hand-off-to-next-agent",
+    "render-guide",
+    "show-provenance",
+    "search-the-model",
+    "generate-static-snapshot",
+    "render-explainable-diagrams",
+    "validate-diagram-topology",
+    "initialize-in-a-repository",
+    "deploy-and-stay-portable"
   ]
 }

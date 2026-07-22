@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Architecture · SousMeow — VibeKB</title>
-    <meta name="description" content="A living explanation of what SousMeow currently does, how it works, what AI is changing, and why.">
+    <title>Architecture · VibeKB — VibeKB</title>
+    <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- Web fonts are a progressive enhancement only. The stylesheet ships a
@@ -21,7 +21,7 @@
         <div class="site-header__inner">
             <a class="brand" href="../index.html">
                 <span class="brand__mark">VibeKB</span>
-                <span class="brand__project">SousMeow</span>
+                <span class="brand__project">VibeKB</span>
             </a>
             <form class="site-search" role="search" action="../search/index.html">
                 <label class="visually-hidden" for="site-search-input">Search guide</label>
@@ -111,159 +111,116 @@
 
                     <section class="doc-section content-section" aria-labelledby="hiw-mental-model">
             <header class="section-intro reading-column">
-                <h2 id="hiw-mental-model">The simplest mental model</h2>
+                <h2 id="hiw-mental-model">Mental model</h2>
             </header>
-            <div class="prose reading-column"><h3>Hold this picture in your head</h3>
-<p>``<code>
-Cookbook (workflow)  →  Recipes (steps)
-      │
-Pantry (your facts)  →  PromptBuilder  →  prompt you copy
-      │                                        │
-      │                          run in YOUR AI (SousMeow never does)
-      ▼                                        ▼
-Artifact versions (immutable)  ←  paste the answer back
-      │
-Quality Checks (human)  →  Approve (all checks)  →  next Recipe
-      │
-   all approved  →  Project Kit (zip: Markdown + kit.html + README)
-</code>``</p>
-<h3>The five nouns</h3>
+            <div class="prose reading-column"><h3>The one-paragraph model</h3>
+<p>VibeKB is a <strong>model</strong> (<code>.vibekb/</code>), a <strong>renderer</strong> (<code>guide/</code>), a set of
+<strong>tools</strong> (<code>tools/</code>), and a <strong>workflow</strong> (the agent lifecycle). The model is the
+source of truth. The loader (<code>guide/lib/Content.php</code>) reads it into memory and
+validates it. The renderer turns it into pages through one template set, in two
+modes — the live PHP guide (Mode A) and the static <code>/docs</code> snapshot (Mode B) —
+so the two can never disagree. The tools validate the model, generate the
+snapshot, and (new) help an agent run the lifecycle and detect drift. The
+workflow is what keeps the model synchronized with the code as agents change it.</p>
+<h3>What is the primary unit</h3>
+<p><strong>Functionality</strong> — the things the software does — not files, decisions, or
+sessions. Files, memory, and diagrams all link back to functionality.</p>
+<h3>The honesty invariants</h3>
 <ul>
-<li><strong>Cookbook</strong> — a proven workflow. <strong>Recipe</strong> — one ordered step in it.</li>
-<li><strong>Pantry</strong> — the facts you enter once; every prompt is built from them.</li>
-<li><strong>Project</strong> — your run of a Cookbook (owns the Pantry values and Artifacts).</li>
-<li><strong>Artifact</strong> — the reviewed output of one Recipe, kept as immutable versions.</li>
-<li><strong>Project Kit</strong> — the exported deliverable.</li>
+<li>Intended, implemented, and verified are different; every record states which.</li>
+<li>Nothing claims to auto-update; <code>updates_automatically</code> is <code>false</code>.</li>
+<li>Detection (mechanical: git diff, path existence, render diff) is never</li>
 </ul>
-<h3>The one rule that explains everything</h3>
-<p><strong>SousMeow never calls an AI.</strong> It builds the prompt, you run it in the AI you
-already pay for, and you paste the answer back. Everything else — versioning,
-human Quality Checks, the approval gate, chaining approved Artifacts into later
-prompts — exists to make that loop trustworthy.</p>
-<h3>What this means for change</h3>
-<p>Change what a Recipe <em>asks for</em> → touch the seed content and maybe the output
-contract. Change how an Artifact is <em>stored or reviewed</em> → touch the Runner,
-<code>Artifact</code>, and the schema together. Change the <em>look</em> → touch a view. Knowing
-which case you are in is most of the work.</p></div>
+<p>presented as interpretation (an agent deciding what a change means).</p>
+<h3>How to read this repository</h3>
+<p>Start at the Overview, then Functionality. <code>guide/</code> is the renderer, <code>tools/</code> is
+the tooling, <code>.vibekb/</code> is the content, <code>examples/</code> is demonstration material,
+<code>/docs</code> is generated output.</p></div>
         </section>
                     <section class="doc-section content-section" aria-labelledby="hiw-components">
             <header class="section-intro reading-column">
-                <h2 id="hiw-components">Major components</h2>
+                <h2 id="hiw-components">Components</h2>
             </header>
-            <div class="prose reading-column"><h3>The parts and their jobs</h3>
-<div class="table-wrap"><table>
-<tr>
-<th>Component</th>
-<th>Responsibility</th>
-</tr>
-<tr>
-<td><code>public/index.php</code></td>
-<td>Front controller: security headers, CSP, CSRF gate, dispatch</td>
-</tr>
-<tr>
-<td><code>app/Core/Router.php</code></td>
-<td>Route table and dispatch (<code>app/routes.php</code> defines routes)</td>
-</tr>
-<tr>
-<td><code>app/Core/</code></td>
-<td>Framework: <code>Auth</code>, <code>Csrf</code>, <code>Database</code>, <code>Config</code>, <code>Env</code>, <code>Session</code>, <code>Flash</code>, <code>RateLimiter</code>, <code>Mailer</code>, <code>View</code></td>
-</tr>
-<tr>
-<td><code>app/Controllers/</code></td>
-<td>One class per area (Marketing, Marketplace, Category, Collection, Auth, Account, Kitchen, Project, Runner, Export, Admin, Legal, Philosophy)</td>
-</tr>
-<tr>
-<td><code>app/Models/</code></td>
-<td>Table access: <code>Cookbook</code>, <code>Recipe</code>, <code>PantryField</code>, <code>Project</code>, <code>Artifact</code>, <code>Category</code>, <code>Collection</code>, <code>Export</code>, <code>User</code>, <code>CookbookStage</code>, <code>PasswordReset</code></td>
-</tr>
-<tr>
-<td><code>app/Services/</code></td>
-<td>Logic: <code>PromptBuilder</code>, <code>ResponseParser</code>, <code>OutputContract</code>, <code>ProjectKit</code>, <code>SafeText</code>, <code>CollectionResolver</code>, <code>SiteStats</code>, <code>Simulation*</code>, <code>Accent</code>, mailers</td>
-</tr>
-<tr>
-<td><code>app/Views/</code></td>
-<td>Server-rendered PHP templates under a shared <code>layout/app.php</code></td>
-</tr>
-<tr>
-<td><code>database/</code>, <code>scripts/seed.php</code></td>
-<td>Two schema dialects, versioned seeds, the CLI seeder</td>
-</tr>
-</table></div>
-<h3>Where behaviour lives</h3>
+            <div class="prose reading-column"><h3>Content model — <code>.vibekb/</code></h3>
+<p>Repository-owned Markdown-plus-front-matter records and small JSON manifests. The
+source of truth. No database.</p>
+<h3>Loader — <code>guide/lib/Content.php</code></h3>
+<p>Reads, parses (<code>FrontMatter.php</code>, <code>Markdown.php</code>), relationship-resolves, and
+validates the model. All filesystem access confined to the content root. Used by
+the guide and every tool, so nothing can disagree about what the model says.</p>
+<h3>Renderer — <code>guide/templates/</code> + <code>guide/lib/</code></h3>
+<p>One template set rendered through <code>layout.php</code>. Shared navigation/routes/titles
+(<code>nav.php</code>), URL strategy (<code>UrlStrategy.php</code>), provenance (<code>Provenance.php</code>),
+search index (<code>search.php</code>), and vocabularies/helpers (<code>helpers.php</code>).</p>
+<h3>Output modes</h3>
 <ul>
-<li><strong>Prompt assembly</strong> is only in <code>PromptBuilder</code>.</li>
-<li><strong>Review parsing</strong> is only in <code>ResponseParser</code> / <code>OutputContract</code>.</li>
-<li><strong>SQL</strong> lives in Models; <strong>the connection</strong> only in <code>Core/Database</code>.</li>
-<li><strong>CSRF</strong> is one gate in the front controller; <strong>auth</strong> is <code>Core/Auth</code>.</li>
-<li><strong>Escaping</strong> of untrusted (pasted) content is <code>Services/SafeText</code>.</li>
+<li><strong>Mode A — dynamic guide</strong> (<code>guide/index.php</code>): live PHP, reads <code>.vibekb/</code> per</li>
 </ul>
-<p>Keeping these boundaries is what keeps the read and write paths aligned; when
-they blur, the <code>read-write-path-coupling</code> warning becomes a real bug.</p></div>
+<p>request.</p>
+<ul>
+<li><strong>Mode B — static snapshot</strong> (<code>tools/generate-static.php</code> → <code>/docs</code>): the same</li>
+</ul>
+<p>templates rendered to disk with relative links.</p>
+<h3>Validation — <code>tools/validate.php</code> + <code>tools/test-topology.php</code></h3>
+<p>Headless model validation (CI gate) and a fixture test proving the
+explainable-diagram contract is enforced.</p>
+<h3>Self-maintenance CLI — <code>tools/vibekb.php</code></h3>
+<p>The agent&#039;s entry point to the lifecycle: <code>status</code>, <code>check</code> (drift + validate +
+snapshot sync), <code>affected</code>, <code>validate</code>, <code>generate</code>.</p>
+<h3>Examples — <code>examples/</code></h3>
+<p>Bundled models of other applications (SousMeow) and field-test material (the
+StopPR audit). Demonstration and fixtures — never the active model.</p></div>
         </section>
                     <section class="doc-section content-section" aria-labelledby="hiw-request-flow">
             <header class="section-intro reading-column">
-                <h2 id="hiw-request-flow">The request lifecycle</h2>
+                <h2 id="hiw-request-flow">Request flow</h2>
             </header>
-            <div class="prose reading-column"><h3>One request, start to finish</h3>
+            <div class="prose reading-column"><h3>The dynamic path (Mode A)</h3>
 <ol>
-<li>Apache (<code>public/.htaccess</code>) or the dev server sends the request to</li>
+<li>The browser requests <code>guide/index.php?view=…</code> (query-string routing; no</li>
 </ol>
-<p><code>public/index.php</code>; real asset files are served directly.</p>
+<p>rewrite rules).</p>
 <ol>
-<li>Security headers and the CSP are sent.</li>
-<li><code>app/bootstrap.php</code> loads config and the autoloader; an exception handler is</li>
+<li>The front controller registers the dynamic URL strategy and loads <code>Content</code></li>
 </ol>
-<p>installed (detailed errors only in development).</p>
+<p>from <code>.vibekb/</code> (or a <code>VIBEKB_CONTENT_ROOT</code> example).</p>
 <ol>
-<li><code>app.base_path</code> is stripped so the app works from a subdirectory.</li>
-<li><strong>Every POST</strong> passes <code>Csrf::verify()</code> before routing.</li>
-<li><code>Router::dispatch()</code> matches the method+path and calls the controller.</li>
-<li>The controller reads input, calls Models/Services, and either renders a</li>
+<li><code>?view=</code> is resolved against the shared route whitelist; <code>functionality</code> is</li>
 </ol>
-<p><code>View</code> or issues a redirect (post/redirect/get for writes).</p>
-<h3>Authentication in the flow</h3>
-<p>Controllers call <code>Auth::requireLogin()</code> / <code>requireVerified()</code> / <code>requireAdmin()</code>
-as needed. Write actions in the Runner and Export require a verified account.
-Ownership is enforced at the data layer (<code>findForUser</code>), and unknown ids return
-404 without revealing other users&#039; data.</p>
-<h3>Errors</h3>
-<ul>
-<li>Failed CSRF → 419. Unknown route → 404. Wrong method → 405.</li>
-<li>Uncaught exceptions are logged; production shows a generic 500 view, dev shows</li>
-</ul>
-<p>the trace.</p></div>
+<p>special-cased for index vs detail by <code>?id</code>; a live search JSON endpoint is
+   handled inline.</p>
+<ol>
+<li>The chosen template is rendered inside <code>layout.php</code> with shared navigation.</li>
+<li>Output is escaped; provenance is stamped; the page returns.</li>
+</ol>
+<h3>The static path (Mode B)</h3>
+<p><code>tools/generate-static.php</code> runs the same templates offline, swapping in the
+static URL strategy, and writes the pages to <code>/docs</code>. There is no live request —
+the snapshot is the dynamic guide, frozen at a commit.</p>
+<h3>Error posture</h3>
+<p>Unknown view or record → <code>not-found</code> (404). Model load failure → 500 with a
+dev/prod-appropriate message. Dev mode (<code>VIBEKB_DEV</code> or localhost) shows full
+errors and a validation banner.</p></div>
         </section>
                     <section class="doc-section content-section" aria-labelledby="hiw-deployment">
             <header class="section-intro reading-column">
                 <h2 id="hiw-deployment">Deployment</h2>
             </header>
-            <div class="prose reading-column"><h3>How it ships</h3>
-<p>SousMeow is plain PHP 8 plus MySQL or SQLite — no Node, no Composer, no
-workers. The <code>projects/sousmeow</code> folder is uploaded and the domain document root
-points at <code>sousmeow/public</code>. <code>app/</code>, <code>config/</code>, <code>database/</code>, <code>scripts/</code>, and
-<code>storage/</code> must sit <strong>above</strong> the document root. <code>public/.htaccess</code> routes clean
-URLs through <code>index.php</code> (mod_rewrite).</p>
-<h3>Configure</h3>
-<p>Copy <code>config/config.example.php</code> to <code>config/config.php</code> (gitignored) and set:
-<code>app.env = &#039;production&#039;</code>, <code>app.base_url</code>, <code>app.base_path</code> (if under a
-subdirectory), <code>session.secure = true</code>, and the DB driver (SQLite file in
-<code>storage/</code>, or MySQL from hPanel). <code>.env</code> can override sensitive values;
-environment variables take precedence.</p>
-<h3>Seed</h3>
-<p><code>php scripts/seed.php --admin-email you@domain</code> applies the schema, syncs the
-catalog (upsert by slug — safe to re-run after deploys), and prints the admin&#039;s
-temporary password once. <code>--status</code> reports catalog health; <code>--fresh</code> wipes all
-data; <code>--reset-password</code> rotates a password. The script is CLI-only (404 over
-HTTP).</p>
-<h3>Subfolder-aware</h3>
-<p>The front controller strips <code>app.base_path</code>, so the app runs at the domain root
-or under a subdirectory (e.g. <code>/iain/projects/sousmeow/public</code>). Email links use
-<code>APP_URL</code> + <code>APP_BASE_PATH</code>; a mismatch causes &quot;page not found&quot; links
-(<code>scripts/print-url-config.php</code> diagnoses it).</p>
-<h3>The constraints behind this</h3>
-<p>Everything here follows from <code>php8-shared-hosting</code>, <code>public-root-subfolder</code>,
-<code>sqlite-and-mysql</code>, and <code>cli-only-admin</code>. Requires PHP 8.1+ with
-<code>pdo_sqlite</code>/<code>pdo_mysql</code>, <code>mbstring</code>, and <code>zip</code>.</p></div>
+            <div class="prose reading-column"><h3>Mode A — the dynamic guide on shared hosting</h3>
+<p><code>.cpanel.yml</code> rsyncs the runtime paths (<code>index.php</code>, <code>assets/</code>, <code>guide/</code>,
+<code>.vibekb/</code>) into a cPanel public folder and excludes development-only paths
+(<code>tools/</code>, <code>prompts/</code>, <code>docs/</code>, authoring docs, <code>examples/</code>). Query-string
+routing means no <code>.htaccess</code> rewrite rules are needed and the app runs in a
+subfolder. <code>.vibekb/</code> <strong>must</strong> deploy — it is the content.</p>
+<h3>Mode B — the static snapshot</h3>
+<p><code>php tools/generate-static.php</code> builds <code>/docs</code>; publish it via GitHub Pages
+(Settings → Pages → branch → <code>/docs</code>) or any static host. Relative links make it
+work at a web root or under a repository subpath. No PHP, database, CDN, or
+network required.</p>
+<h3>Deployment is part of the application</h3>
+<p>Whenever repository structure, runtime folders, or deployment requirements change,
+<code>.cpanel.yml</code> and <code>DEPLOYMENT.md</code> are updated in the same change. Secrets never
+enter the deploy sync.</p></div>
         </section>
     
     <nav class="cross-links" aria-label="Related views">
@@ -280,7 +237,7 @@ or under a subdirectory (e.g. <code>/iain/projects/sousmeow/public</code>). Emai
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-21 · source commit c1617ab (2026-07-16) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 05:59 UTC · source commit fc65ae6 (2026-07-22) · not auto-updating</p>
             </div>
         </footer>
     </div>

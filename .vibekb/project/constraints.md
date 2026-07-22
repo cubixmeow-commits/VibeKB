@@ -1,29 +1,35 @@
 ---
-id: project-constraints
+id: constraints
 type: project
-title: Constraints overview
-summary: PHP 8 on Hostinger shared hosting, public/ document root, MySQL or SQLite, no AI API, no Node/Composer/workers, CLI-only admin.
-updated: 2026-07-16
-verification: verified-from-source
+title: Boundaries VibeKB runs inside
+summary: PHP 8.2 shared hosting, deployable in a subfolder, usable without JavaScript, without a database, without an external/AI API, and without a build step; all file access confined to the content root; output always escaped.
+updated: 2026-07-22
 ---
 
-## The boundaries SousMeow is built inside
+## Runtime boundaries (do not cross)
 
-These shape every implementation choice. Full detail is in the constraint
-records under **Why it works this way**.
+- **PHP 8.2, shared hosting.** No framework, SPA, bundler, or SQL database.
+- **Subfolder-safe.** Query-string routing means no rewrite rules are required;
+  the static snapshot uses relative links so it works under a repository subpath.
+- **Works without JavaScript.** JS only enhances; nothing essential is behind it.
+- **No database, no external/AI API, no embeddings, no vector store, no
+  background workers, no build step.** Any AI analysis is performed by the coding
+  agent already working in the repository — never by a service VibeKB calls.
+- **No network at render or generate time.**
 
-- **PHP 8, plain — no framework, no Composer, no Node, no Docker, no background
-  workers.** (`php8-shared-hosting`) — verified from `docs/DEPLOYMENT.md`,
-  `README.md`.
-- **Only `public/` is web-served; `app/`, `config/`, `database/`, `scripts/`,
-  and `storage/` sit above the document root.** Deployable under a subdirectory
-  via `app.base_path`. (`public-root-subfolder`) — verified from
-  `public/index.php`, `docs/DEPLOYMENT.md`.
-- **One database, two dialects: SQLite (dev) and MySQL (production), same
-  schema.** All access goes through one PDO handle in `app/Core/Database.php`.
-  (`sqlite-and-mysql`) — verified from `app/Core/Database.php`, both schema files.
-- **SousMeow never calls an AI.** No API keys, no token billing.
-  (`never-calls-ai`) — verified from `README.md`, `PromptBuilder.php`.
-- **Admin accounts and password rotation are CLI-only** (`scripts/seed.php`);
-  there is no web installer. (`cli-only-admin`) — verified from `docs/DEPLOYMENT.md`,
-  `AdminController.php`.
+## Safety boundaries
+
+- **Confine file access to the content root.** Record ids are constrained to a
+  safe character set; a crafted `?id=` can never escape `.vibekb/`.
+- **Escape all output.** Untrusted content (record bodies, pasted text) is
+  escaped before any allowlist formatting is applied.
+- **Never fabricate provenance.** `updates_automatically` stays `false` unless a
+  real, verified update mechanism exists. Source links are built only from
+  recorded provenance and never invent line numbers.
+
+## Product boundary
+
+The primary subject is **software functionality**. Repository memory exists to
+protect that explanation. Do not reinterpret VibeKB into a memory product, a
+documentation generator, a code browser, or an AI activity log. See
+[PRODUCT.md](../../PRODUCT.md).

@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Files that matter · SousMeow — VibeKB</title>
-    <meta name="description" content="A living explanation of what SousMeow currently does, how it works, what AI is changing, and why.">
+    <title>Files that matter · VibeKB — VibeKB</title>
+    <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- Web fonts are a progressive enhancement only. The stylesheet ships a
@@ -21,7 +21,7 @@
         <div class="site-header__inner">
             <a class="brand" href="../index.html">
                 <span class="brand__mark">VibeKB</span>
-                <span class="brand__project">SousMeow</span>
+                <span class="brand__project">VibeKB</span>
             </a>
             <form class="site-search" role="search" action="../search/index.html">
                 <label class="visually-hidden" for="site-search-input">Search guide</label>
@@ -110,571 +110,318 @@
     </header>
 
             <div class="file-list">
-                            <section class="file-card" id="public/index.php">
+                            <section class="file-card" id="guide/lib/Content.php">
                     <div class="file-card__head">
-                        <h2><code>public/index.php</code></h2>
+                        <h2><code>guide/lib/Content.php</code></h2>
                         <div class="file-card__badges">
                             <span class="badge badge--danger">High impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
                     </div>
-                    <p class="file-card__purpose">Front controller: security headers, CSP, CSRF gate on every POST, base-path stripping, then routing.</p>
+                    <p class="file-card__purpose">The content loader: reads .vibekb/, parses records, resolves relationships, loads/validates diagram topology, and validates the whole model. The spine everything else renders.</p>
                     <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>Every request not served as a static file.</dd></div>
+                                                    <div><dt>Runs when</dt><dd>Every guide request and every tool run.</dd></div>
                                                                             <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/route-and-secure-requests.html">Route &amp; secure every request</a>
+                                                                                                            <a class="chip" href="../functionality/load-living-model.html">Load the living model</a>
+                                                                                                                                                <a class="chip" href="../functionality/resolve-relationships.html">Resolve relationships between records</a>
+                                                                                                                                                <a class="chip" href="../functionality/validate-model.html">Validate the model</a>
+                                                                                                                                                <a class="chip" href="../functionality/render-explainable-diagrams.html">Render explainable diagrams</a>
+                                                                                                                                                <a class="chip" href="../functionality/validate-diagram-topology.html">Validate diagram topology</a>
                                                                                                 </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">app/bootstrap.php</code> <code class="chip chip--file">app/Core/Router.php</code> <code class="chip chip--file">app/Core/Csrf.php</code> <code class="chip chip--file">app/routes.php</code></dd></div>
+                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">guide/lib/FrontMatter.php</code> <code class="chip chip--file">guide/lib/Markdown.php</code> <code class="chip chip--file">guide/lib/Provenance.php</code> <code class="chip chip--file">guide/lib/helpers.php</code></dd></div>
                                                                             <div><dt>Depended on by</dt><dd>
-                                Every route in the application                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Load a GET page and submit a POST form; confirm CSP headers and that CSRF still gates POSTs.</dd></div>
+                                guide/index.php; tools/generate-static.php; tools/validate.php; tools/vibekb.php                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Run php tools/validate.php and php tools/test-topology.php; load the guide and read the Reference view.</dd></div>
                                             </dl>
                 </section>
-                            <section class="file-card" id="app/routes.php">
+                            <section class="file-card" id="guide/lib/FrontMatter.php">
                     <div class="file-card__head">
-                        <h2><code>app/routes.php</code></h2>
+                        <h2><code>guide/lib/FrontMatter.php</code></h2>
+                        <div class="file-card__badges">
+                            <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
+                    </div>
+                    <p class="file-card__purpose">Parses the leading front-matter block of a record (scalars, quoted strings, booleans, ints, inline/block lists) without a YAML dependency.</p>
+                    <dl class="file-card__meta">
+                                                    <div><dt>Runs when</dt><dd>Loading any .md record.</dd></div>
+                                                                            <div><dt>Implements</dt><dd>
+                                                                                                            <a class="chip" href="../functionality/parse-records.html">Parse records (front matter + Markdown)</a>
+                                                                                                </dd></div>
+                                                                                                    <div><dt>Depended on by</dt><dd>
+                                guide/lib/Content.php                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Load records with each value form; confirm meta parses and the body is intact.</dd></div>
+                                            </dl>
+                </section>
+                            <section class="file-card" id="guide/lib/Markdown.php">
+                    <div class="file-card__head">
+                        <h2><code>guide/lib/Markdown.php</code></h2>
+                        <div class="file-card__badges">
+                            <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
+                    </div>
+                    <p class="file-card__purpose">The pragmatic Markdown subset renderer (headings, lists, tables, code, emphasis, links, blockquotes) that escapes output; not full CommonMark.</p>
+                    <dl class="file-card__meta">
+                                                    <div><dt>Runs when</dt><dd>Rendering any record body.</dd></div>
+                                                                            <div><dt>Implements</dt><dd>
+                                                                                                            <a class="chip" href="../functionality/parse-records.html">Parse records (front matter + Markdown)</a>
+                                                                                                </dd></div>
+                                                                                                    <div><dt>Depended on by</dt><dd>
+                                guide/lib/Content.php                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Render a body using each supported construct; confirm unsupported constructs degrade to text and output is escaped.</dd></div>
+                                            </dl>
+                </section>
+                            <section class="file-card" id="guide/lib/helpers.php">
+                    <div class="file-card__head">
+                        <h2><code>guide/lib/helpers.php</code></h2>
+                        <div class="file-card__badges">
+                            <span class="badge badge--danger">High impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
+                    </div>
+                    <p class="file-card__purpose">Escaping, URL helpers, the controlled vocabularies (status, verification, safety, edge-mechanism, file-role), badges, and the source-link builder — the single source for validation-facing vocabularies.</p>
+                    <dl class="file-card__meta">
+                                                    <div><dt>Runs when</dt><dd>Every render and validation.</dd></div>
+                                                                            <div><dt>Implements</dt><dd>
+                                                                                                            <a class="chip" href="../functionality/render-guide.html">Render the dynamic guide</a>
+                                                                                                                                                <a class="chip" href="../functionality/render-explainable-diagrams.html">Render explainable diagrams</a>
+                                                                                                                                                <a class="chip" href="../functionality/validate-model.html">Validate the model</a>
+                                                                                                </dd></div>
+                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">guide/lib/UrlStrategy.php</code></dd></div>
+                                                                            <div><dt>Depended on by</dt><dd>
+                                Every template; guide/lib/Content.php; tools/validate.php                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Changing a vocabulary changes what validates — run php tools/validate.php and update SCHEMA.md.</dd></div>
+                                            </dl>
+                </section>
+                            <section class="file-card" id="guide/lib/Provenance.php">
+                    <div class="file-card__head">
+                        <h2><code>guide/lib/Provenance.php</code></h2>
+                        <div class="file-card__badges">
+                            <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
+                    </div>
+                    <p class="file-card__purpose">Normalises source + generation provenance and renders the objective provenance panel/stamp; never overstates freshness.</p>
+                    <dl class="file-card__meta">
+                                                    <div><dt>Runs when</dt><dd>Rendering any page&#039;s provenance.</dd></div>
+                                                                            <div><dt>Implements</dt><dd>
+                                                                                                            <a class="chip" href="../functionality/show-provenance.html">Show provenance and freshness</a>
+                                                                                                </dd></div>
+                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">guide/lib/helpers.php</code></dd></div>
+                                                                            <div><dt>Depended on by</dt><dd>
+                                guide/templates/overview.php; guide/templates/layout.php; tools/validate.php                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Confirm the panel omits missing values and updates_automatically reads honestly.</dd></div>
+                                            </dl>
+                </section>
+                            <section class="file-card" id="guide/lib/search.php">
+                    <div class="file-card__head">
+                        <h2><code>guide/lib/search.php</code></h2>
+                        <div class="file-card__badges">
+                            <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
+                    </div>
+                    <p class="file-card__purpose">Builds the one search index (functionality, memory, files, diagrams, explainable node/edge/file entries) shared by both output modes.</p>
+                    <dl class="file-card__meta">
+                                                    <div><dt>Runs when</dt><dd>Live search endpoint and static generation.</dd></div>
+                                                                            <div><dt>Implements</dt><dd>
+                                                                                                            <a class="chip" href="../functionality/search-the-model.html">Search the model</a>
+                                                                                                </dd></div>
+                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">guide/lib/Content.php</code> <code class="chip chip--file">guide/lib/UrlStrategy.php</code></dd></div>
+                                                                            <div><dt>Depended on by</dt><dd>
+                                guide/index.php; tools/generate-static.php; guide/templates/search.php                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Confirm every entry link resolves in both modes; run php tools/validate.php (checks static search entries).</dd></div>
+                                            </dl>
+                </section>
+                            <section class="file-card" id="guide/lib/nav.php">
+                    <div class="file-card__head">
+                        <h2><code>guide/lib/nav.php</code></h2>
                         <div class="file-card__badges">
                             <span class="badge badge--warn">Understand dependencies first</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
                     </div>
-                    <p class="file-card__purpose">The complete route table mapping method+path to a controller action.</p>
+                    <p class="file-card__purpose">The single definition of views, routes, primary/secondary navigation, and page titles, consumed by both output modes.</p>
                     <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>On every request, to build the router.</dd></div>
+                                                    <div><dt>Runs when</dt><dd>Every render in both modes.</dd></div>
                                                                             <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/route-and-secure-requests.html">Route &amp; secure every request</a>
-                                                                                                </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">app/Controllers/*</code></dd></div>
-                                                                            <div><dt>Depended on by</dt><dd>
-                                public/index.php                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Hit the added/changed route and confirm dispatch; check unknown routes still 404.</dd></div>
-                                            </dl>
-                </section>
-                            <section class="file-card" id="app/Core/Database.php">
-                    <div class="file-card__head">
-                        <h2><code>app/Core/Database.php</code></h2>
-                        <div class="file-card__badges">
-                            <span class="badge badge--danger">High impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
-                    </div>
-                    <p class="file-card__purpose">The single PDO access path (SQLite/MySQL); prepared-statement helpers and transactions.</p>
-                    <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>First database access in a request.</dd></div>
-                                                                            <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/access-database.html">Access the database</a>
-                                                                                                </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">app/Core/Config.php</code></dd></div>
-                                                                            <div><dt>Depended on by</dt><dd>
-                                Every Model                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Run a read and a write on both SQLite and MySQL; confirm foreign keys and transactions.</dd></div>
-                                            </dl>
-                </section>
-                            <section class="file-card" id="app/Core/Auth.php">
-                    <div class="file-card__head">
-                        <h2><code>app/Core/Auth.php</code></h2>
-                        <div class="file-card__badges">
-                            <span class="badge badge--danger">High impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
-                    </div>
-                    <p class="file-card__purpose">Session auth: login/logout, requireLogin/requireVerified/requireAdmin, intended-URL redirects.</p>
-                    <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>On protected actions and after login.</dd></div>
-                                                                            <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/sign-in.html">Sign in</a>
-                                                                                                                                                <a class="chip" href="../functionality/verify-email.html">Verify your email</a>
-                                                                                                                                                <a class="chip" href="../functionality/view-admin-overview.html">View the admin overview</a>
-                                                                                                </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">app/Core/Session.php</code> <code class="chip chip--file">app/Models/User.php</code></dd></div>
-                                                                            <div><dt>Depended on by</dt><dd>
-                                Most controllers                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Sign in/out; hit a verified-only and an admin-only route as different roles.</dd></div>
-                                            </dl>
-                </section>
-                            <section class="file-card" id="app/Core/Csrf.php">
-                    <div class="file-card__head">
-                        <h2><code>app/Core/Csrf.php</code></h2>
-                        <div class="file-card__badges">
-                            <span class="badge badge--danger">High impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
-                    </div>
-                    <p class="file-card__purpose">The single CSRF gate verified for every POST in the front controller.</p>
-                    <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>Every POST request.</dd></div>
-                                                                            <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/route-and-secure-requests.html">Route &amp; secure every request</a>
-                                                                                                </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">app/Core/Session.php</code></dd></div>
-                                                                            <div><dt>Depended on by</dt><dd>
-                                public/index.php; every form                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Submit a form with and without a valid token; confirm rejection on failure.</dd></div>
-                                            </dl>
-                </section>
-                            <section class="file-card" id="app/Core/Router.php">
-                    <div class="file-card__head">
-                        <h2><code>app/Core/Router.php</code></h2>
-                        <div class="file-card__badges">
-                            <span class="badge badge--warn">Understand dependencies first</span>                                                            <span class="badge badge--info">Inferred from source</span>                                                    </div>
-                    </div>
-                    <p class="file-card__purpose">Route matching and dispatch, including 404/405 handling.</p>
-                    <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>Every request, after the CSRF gate.</dd></div>
-                                                                            <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/route-and-secure-requests.html">Route &amp; secure every request</a>
+                                                                                                            <a class="chip" href="../functionality/render-guide.html">Render the dynamic guide</a>
+                                                                                                                                                <a class="chip" href="../functionality/generate-static-snapshot.html">Generate the static snapshot</a>
                                                                                                 </dd></div>
                                                                                                     <div><dt>Depended on by</dt><dd>
-                                public/index.php                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Confirm parameterised routes resolve and unknown paths 404.</dd></div>
+                                guide/index.php; tools/generate-static.php                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Add a view here once; confirm it appears in the guide and the generated /docs inventory.</dd></div>
                                             </dl>
                 </section>
-                            <section class="file-card" id="app/Controllers/RunnerController.php">
+                            <section class="file-card" id="guide/lib/UrlStrategy.php">
                     <div class="file-card__head">
-                        <h2><code>app/Controllers/RunnerController.php</code></h2>
-                        <div class="file-card__badges">
-                            <span class="badge badge--danger">High impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
-                    </div>
-                    <p class="file-card__purpose">The core loop: renders gather/review/approved states and every write transition (paste, checks, approve, edit, reopen, restore) with strict step ordering.</p>
-                    <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>Any /projects/{id}/run/{position}* request.</dd></div>
-                                                                            <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a>
-                                                                                                                                                <a class="chip" href="../functionality/paste-response.html">Paste a response</a>
-                                                                                                                                                <a class="chip" href="../functionality/review-quality-checks.html">Review Quality Checks</a>
-                                                                                                                                                <a class="chip" href="../functionality/approve-and-version.html">Approve &amp; version an artifact</a>
-                                                                                                </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">app/Services/PromptBuilder.php</code> <code class="chip chip--file">app/Services/ResponseParser.php</code> <code class="chip chip--file">app/Models/Artifact.php</code> <code class="chip chip--file">app/Models/Recipe.php</code> <code class="chip chip--file">app/Models/Project.php</code></dd></div>
-                                                                            <div><dt>Depended on by</dt><dd>
-                                The whole product experience                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Run a Recipe end to end: paste, confirm checks, approve; verify order-locking and version immutability.</dd></div>
-                                            </dl>
-                </section>
-                            <section class="file-card" id="app/Services/PromptBuilder.php">
-                    <div class="file-card__head">
-                        <h2><code>app/Services/PromptBuilder.php</code></h2>
-                        <div class="file-card__badges">
-                            <span class="badge badge--danger">High impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
-                    </div>
-                    <p class="file-card__purpose">Builds the copyable prompt by substituting Pantry values and approved-Artifact contents, with matching highlighted HTML.</p>
-                    <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>Whenever a Recipe step renders.</dd></div>
-                                                                            <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/build-prompt.html">Build the prompt</a>
-                                                                                                </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">app/Models/PantryField.php</code> <code class="chip chip--file">app/Models/Artifact.php</code> <code class="chip chip--file">app/Models/Project.php</code></dd></div>
-                                                                            <div><dt>Depended on by</dt><dd>
-                                app/Controllers/RunnerController.php                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Render a prompt with filled and missing fields and a chained artifact; confirm text matches highlights.</dd></div>
-                                            </dl>
-                </section>
-                            <section class="file-card" id="app/Services/ResponseParser.php">
-                    <div class="file-card__head">
-                        <h2><code>app/Services/ResponseParser.php</code></h2>
-                        <div class="file-card__badges">
-                            <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--info">Inferred from source</span>                                                    </div>
-                    </div>
-                    <p class="file-card__purpose">Parses a pasted response against a Recipe&#039;s output contract to produce structural evidence for Quality Checks.</p>
-                    <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>Rendering the review state of a Recipe with an output contract.</dd></div>
-                                                                            <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/review-quality-checks.html">Review Quality Checks</a>
-                                                                                                </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">app/Services/OutputContract.php</code></dd></div>
-                                                                            <div><dt>Depended on by</dt><dd>
-                                app/Controllers/RunnerController.php                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Parse responses with present, missing, and duplicate sections; confirm found/missing/manual status.</dd></div>
-                                            </dl>
-                </section>
-                            <section class="file-card" id="app/Services/ProjectKit.php">
-                    <div class="file-card__head">
-                        <h2><code>app/Services/ProjectKit.php</code></h2>
-                        <div class="file-card__badges">
-                            <span class="badge badge--danger">High impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
-                    </div>
-                    <p class="file-card__purpose">Builds the export zip: numbered Markdown files, a self-contained kit.html reader, and a README manifest.</p>
-                    <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>When a user builds an export.</dd></div>
-                                                                            <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a>
-                                                                                                </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">app/Services/SafeText.php</code> <code class="chip chip--file">app/Models/Artifact.php</code> <code class="chip chip--file">app/Models/PantryField.php</code> <code class="chip chip--file">app/Core/Config.php</code></dd></div>
-                                                                            <div><dt>Depended on by</dt><dd>
-                                app/Controllers/ExportController.php                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Export a completed project; open kit.html offline; confirm every approved artifact and the Pantry appear.</dd></div>
-                                            </dl>
-                </section>
-                            <section class="file-card" id="app/Services/SafeText.php">
-                    <div class="file-card__head">
-                        <h2><code>app/Services/SafeText.php</code></h2>
-                        <div class="file-card__badges">
-                            <span class="badge badge--danger">High impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
-                    </div>
-                    <p class="file-card__purpose">Escapes pasted (untrusted) content first, then applies a small Markdown allowlist to the escaped text.</p>
-                    <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>Rendering any pasted AI content.</dd></div>
-                                                                            <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a>
-                                                                                                                                                <a class="chip" href="../functionality/review-quality-checks.html">Review Quality Checks</a>
-                                                                                                </dd></div>
-                                                                                                    <div><dt>Depended on by</dt><dd>
-                                app/Services/ProjectKit.php; runner/review views                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Render content containing HTML/script; confirm it is escaped, then formatted.</dd></div>
-                                            </dl>
-                </section>
-                            <section class="file-card" id="app/Services/CollectionResolver.php">
-                    <div class="file-card__head">
-                        <h2><code>app/Services/CollectionResolver.php</code></h2>
-                        <div class="file-card__badges">
-                            <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
-                    </div>
-                    <p class="file-card__purpose">The single place Collection membership resolves (editorial/dynamic/attribute) and the surfacing gate is applied.</p>
-                    <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>Rendering discovery surfaces.</dd></div>
-                                                                            <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/view-collection.html">View a collection</a>
-                                                                                                                                                <a class="chip" href="../functionality/browse-categories.html">Browse by category</a>
-                                                                                                                                                <a class="chip" href="../functionality/view-marketing-home.html">View the marketing home</a>
-                                                                                                </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">app/Models/Collection.php</code> <code class="chip chip--file">app/Models/Cookbook.php</code></dd></div>
-                                                                            <div><dt>Depended on by</dt><dd>
-                                Category/Collection/Marketing controllers                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Confirm a collection below min_display_count 404s and editorial/dynamic/attribute types resolve.</dd></div>
-                                            </dl>
-                </section>
-                            <section class="file-card" id="app/Services/SiteStats.php">
-                    <div class="file-card__head">
-                        <h2><code>app/Services/SiteStats.php</code></h2>
-                        <div class="file-card__badges">
-                            <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
-                    </div>
-                    <p class="file-card__purpose">Public and admin metrics computed only from simulation rows, plus the activity heatmap.</p>
-                    <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>Rendering the home activity, admin overview, and metrics.</dd></div>
-                                                                            <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/view-admin-overview.html">View the admin overview</a>
-                                                                                                                                                <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
-                                                                                                                                                <a class="chip" href="../functionality/view-marketing-home.html">View the marketing home</a>
-                                                                                                </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">app/Core/Database.php</code> <code class="chip chip--file">app/Services/Simulation.php</code></dd></div>
-                                                                            <div><dt>Depended on by</dt><dd>
-                                MarketingController; AdminController                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Confirm metrics count only simulation=1 rows and never mix in real users.</dd></div>
-                                            </dl>
-                </section>
-                            <section class="file-card" id="app/Controllers/ProjectController.php">
-                    <div class="file-card__head">
-                        <h2><code>app/Controllers/ProjectController.php</code></h2>
-                        <div class="file-card__badges">
-                            <span class="badge badge--danger">High impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
-                    </div>
-                    <p class="file-card__purpose">Start a project (executable gate), the Pantry form and validation, project routing, and deletion.</p>
-                    <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>Project create/show/pantry/delete requests.</dd></div>
-                                                                            <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/start-project.html">Start a project</a>
-                                                                                                                                                <a class="chip" href="../functionality/fill-pantry.html">Fill the Pantry</a>
-                                                                                                                                                <a class="chip" href="../functionality/track-project-progress.html">Track project progress</a>
-                                                                                                </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">app/Models/Project.php</code> <code class="chip chip--file">app/Models/PantryField.php</code> <code class="chip chip--file">app/Models/Cookbook.php</code></dd></div>
-                                                                            <div><dt>Depended on by</dt><dd>
-                                The Runner (requires a saved Pantry)                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Start from an executable and a preview Cookbook; submit valid and invalid Pantry values.</dd></div>
-                                            </dl>
-                </section>
-                            <section class="file-card" id="app/Controllers/ExportController.php">
-                    <div class="file-card__head">
-                        <h2><code>app/Controllers/ExportController.php</code></h2>
-                        <div class="file-card__badges">
-                            <span class="badge badge--danger">High impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
-                    </div>
-                    <p class="file-card__purpose">Export page, build gate (all approved), and owner-scoped zip download from outside the web root.</p>
-                    <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>Export show/create/download requests.</dd></div>
-                                                                            <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a>
-                                                                                                </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">app/Services/ProjectKit.php</code> <code class="chip chip--file">app/Models/Export.php</code></dd></div>
-                                                                            <div><dt>Depended on by</dt><dd>
-                                Project completion flow                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Try to export before all steps are approved (refused); download another user&#039;s export id (404).</dd></div>
-                                            </dl>
-                </section>
-                            <section class="file-card" id="app/Controllers/AuthController.php">
-                    <div class="file-card__head">
-                        <h2><code>app/Controllers/AuthController.php</code></h2>
-                        <div class="file-card__badges">
-                            <span class="badge badge--danger">High impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
-                    </div>
-                    <p class="file-card__purpose">Register, login (rate-limited), email verification, and the forgot/reset-password flow.</p>
-                    <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>Any auth route.</dd></div>
-                                                                            <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/register-account.html">Register an account</a>
-                                                                                                                                                <a class="chip" href="../functionality/sign-in.html">Sign in</a>
-                                                                                                                                                <a class="chip" href="../functionality/verify-email.html">Verify your email</a>
-                                                                                                                                                <a class="chip" href="../functionality/reset-password.html">Reset a password</a>
-                                                                                                </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">app/Models/User.php</code> <code class="chip chip--file">app/Models/PasswordReset.php</code> <code class="chip chip--file">app/Core/RateLimiter.php</code> <code class="chip chip--file">app/Services/AccountMailer.php</code></dd></div>
-                                                                            <div><dt>Depended on by</dt><dd>
-                                Every signed-in feature                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Register, verify, log in, and rate-limit; confirm generic errors avoid user enumeration.</dd></div>
-                                            </dl>
-                </section>
-                            <section class="file-card" id="app/Controllers/AccountController.php">
-                    <div class="file-card__head">
-                        <h2><code>app/Controllers/AccountController.php</code></h2>
-                        <div class="file-card__badges">
-                            <span class="badge badge--warn">Understand dependencies first</span>                                                            <span class="badge badge--info">Inferred from source</span>                                                    </div>
-                    </div>
-                    <p class="file-card__purpose">Account settings: profile, preferences, security (password/email change), data export, onboarding, deletion.</p>
-                    <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>Any /account* route.</dd></div>
-                                                                            <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/manage-account.html">Manage your account</a>
-                                                                                                </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">app/Models/User.php</code> <code class="chip chip--file">app/Services/AccountDataExport.php</code></dd></div>
-                                                                            <div><dt>Depended on by</dt><dd>
-                                Signed-in users                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Change password and email; export data; delete an account and confirm the cascade.</dd></div>
-                                            </dl>
-                </section>
-                            <section class="file-card" id="app/Controllers/MarketplaceController.php">
-                    <div class="file-card__head">
-                        <h2><code>app/Controllers/MarketplaceController.php</code></h2>
-                        <div class="file-card__badges">
-                            <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
-                    </div>
-                    <p class="file-card__purpose">The searchable marketplace listing and the full Cookbook detail page.</p>
-                    <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>/marketplace and /cookbooks/{slug}.</dd></div>
-                                                                            <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/browse-marketplace.html">Browse the marketplace</a>
-                                                                                                                                                <a class="chip" href="../functionality/view-cookbook-detail.html">View a Cookbook detail</a>
-                                                                                                </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">app/Models/Cookbook.php</code> <code class="chip chip--file">app/Models/Recipe.php</code> <code class="chip chip--file">app/Services/CollectionResolver.php</code></dd></div>
-                                                                            <div><dt>Depended on by</dt><dd>
-                                Start a project begins here                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Search the marketplace; open a Cookbook detail with related Cookbooks; open an unknown slug (404).</dd></div>
-                                            </dl>
-                </section>
-                            <section class="file-card" id="app/Controllers/CategoryController.php">
-                    <div class="file-card__head">
-                        <h2><code>app/Controllers/CategoryController.php</code></h2>
-                        <div class="file-card__badges">
-                            <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
-                    </div>
-                    <p class="file-card__purpose">One shared category index and detail route with difficulty and executable/preview filters.</p>
-                    <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>/categories and /categories/{slug}.</dd></div>
-                                                                            <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/browse-categories.html">Browse by category</a>
-                                                                                                </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">app/Models/Category.php</code> <code class="chip chip--file">app/Models/Cookbook.php</code> <code class="chip chip--file">app/Services/CollectionResolver.php</code></dd></div>
-                                                                            <div><dt>Depended on by</dt><dd>
-                                Discovery navigation                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Filter a category by level and executable/preview; open a hidden category (404).</dd></div>
-                                            </dl>
-                </section>
-                            <section class="file-card" id="app/Controllers/AdminController.php">
-                    <div class="file-card__head">
-                        <h2><code>app/Controllers/AdminController.php</code></h2>
-                        <div class="file-card__badges">
-                            <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
-                    </div>
-                    <p class="file-card__purpose">Read-only admin overview gated by requireAdmin.</p>
-                    <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>/admin.</dd></div>
-                                                                            <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/view-admin-overview.html">View the admin overview</a>
-                                                                                                </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">app/Services/SiteStats.php</code> <code class="chip chip--file">app/Core/Auth.php</code></dd></div>
-                                                                            <div><dt>Depended on by</dt><dd>
-                                Operators                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Open /admin as admin and non-admin; confirm the non-admin is refused.</dd></div>
-                                            </dl>
-                </section>
-                            <section class="file-card" id="app/Models/Artifact.php">
-                    <div class="file-card__head">
-                        <h2><code>app/Models/Artifact.php</code></h2>
-                        <div class="file-card__badges">
-                            <span class="badge badge--danger">High impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
-                    </div>
-                    <p class="file-card__purpose">Artifact and version access: addVersion (append-only), approve/reopen, confirmed checks, status-by-recipe.</p>
-                    <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>Every Runner write and read of artifacts.</dd></div>
-                                                                            <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/paste-response.html">Paste a response</a>
-                                                                                                                                                <a class="chip" href="../functionality/review-quality-checks.html">Review Quality Checks</a>
-                                                                                                                                                <a class="chip" href="../functionality/approve-and-version.html">Approve &amp; version an artifact</a>
-                                                                                                                                                <a class="chip" href="../functionality/build-prompt.html">Build the prompt</a>
-                                                                                                </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">app/Core/Database.php</code></dd></div>
-                                                                            <div><dt>Depended on by</dt><dd>
-                                RunnerController; PromptBuilder; ProjectKit                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Paste, edit, restore, and approve; confirm versions are never mutated and history is intact.</dd></div>
-                                            </dl>
-                </section>
-                            <section class="file-card" id="app/Models/Project.php">
-                    <div class="file-card__head">
-                        <h2><code>app/Models/Project.php</code></h2>
-                        <div class="file-card__badges">
-                            <span class="badge badge--danger">High impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
-                    </div>
-                    <p class="file-card__purpose">Project lifecycle: create, ownership lookup, Pantry values, markPantrySaved, markCompleteIfDone, delete.</p>
-                    <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>Project and Pantry actions and the Runner.</dd></div>
-                                                                            <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/start-project.html">Start a project</a>
-                                                                                                                                                <a class="chip" href="../functionality/fill-pantry.html">Fill the Pantry</a>
-                                                                                                                                                <a class="chip" href="../functionality/track-project-progress.html">Track project progress</a>
-                                                                                                </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">app/Core/Database.php</code></dd></div>
-                                                                            <div><dt>Depended on by</dt><dd>
-                                ProjectController; RunnerController; ExportController                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Create, save pantry, complete, and delete a project; confirm ownership scoping (404 for others).</dd></div>
-                                            </dl>
-                </section>
-                            <section class="file-card" id="app/Models/Cookbook.php">
-                    <div class="file-card__head">
-                        <h2><code>app/Models/Cookbook.php</code></h2>
-                        <div class="file-card__badges">
-                            <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--info">Inferred from source</span>                                                    </div>
-                    </div>
-                    <p class="file-card__purpose">Catalog access: marketplace search, findBySlug, featured, inCategory, listing helpers.</p>
-                    <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>Discovery and project start.</dd></div>
-                                                                            <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/browse-marketplace.html">Browse the marketplace</a>
-                                                                                                                                                <a class="chip" href="../functionality/view-cookbook-detail.html">View a Cookbook detail</a>
-                                                                                                                                                <a class="chip" href="../functionality/view-marketing-home.html">View the marketing home</a>
-                                                                                                                                                <a class="chip" href="../functionality/start-project.html">Start a project</a>
-                                                                                                </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">app/Core/Database.php</code></dd></div>
-                                                                            <div><dt>Depended on by</dt><dd>
-                                Marketing/Marketplace/Category controllers                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Search, open by slug, and start from a Cookbook; confirm preview vs executable handling.</dd></div>
-                                            </dl>
-                </section>
-                            <section class="file-card" id="app/Models/Recipe.php">
-                    <div class="file-card__head">
-                        <h2><code>app/Models/Recipe.php</code></h2>
-                        <div class="file-card__badges">
-                            <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
-                    </div>
-                    <p class="file-card__purpose">Recipe access: forCookbook (ordered), checks, evidenceKeys, outputContract.</p>
-                    <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>Rendering a Cookbook or a Recipe step.</dd></div>
-                                                                            <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a>
-                                                                                                                                                <a class="chip" href="../functionality/review-quality-checks.html">Review Quality Checks</a>
-                                                                                                                                                <a class="chip" href="../functionality/view-cookbook-detail.html">View a Cookbook detail</a>
-                                                                                                </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">app/Core/Database.php</code></dd></div>
-                                                                            <div><dt>Depended on by</dt><dd>
-                                RunnerController; MarketplaceController                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Load recipes in order and their checks; confirm contract parsing keys line up.</dd></div>
-                                            </dl>
-                </section>
-                            <section class="file-card" id="app/Models/PantryField.php">
-                    <div class="file-card__head">
-                        <h2><code>app/Models/PantryField.php</code></h2>
-                        <div class="file-card__badges">
-                            <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
-                    </div>
-                    <p class="file-card__purpose">Pantry field definitions per Cookbook and option decoding for select/multiselect.</p>
-                    <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>Pantry render/save and prompt building.</dd></div>
-                                                                            <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/fill-pantry.html">Fill the Pantry</a>
-                                                                                                                                                <a class="chip" href="../functionality/build-prompt.html">Build the prompt</a>
-                                                                                                                                                <a class="chip" href="../functionality/view-cookbook-detail.html">View a Cookbook detail</a>
-                                                                                                </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">app/Core/Database.php</code></dd></div>
-                                                                            <div><dt>Depended on by</dt><dd>
-                                ProjectController; PromptBuilder; ProjectKit                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Render and validate each field type; confirm multiselect JSON round-trips.</dd></div>
-                                            </dl>
-                </section>
-                            <section class="file-card" id="database/schema.sqlite.sql">
-                    <div class="file-card__head">
-                        <h2><code>database/schema.sqlite.sql</code></h2>
-                        <div class="file-card__badges">
-                            <span class="badge badge--danger">High impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
-                    </div>
-                    <p class="file-card__purpose">The SQLite schema, kept in lockstep with the MySQL dialect; the data model of the whole app.</p>
-                    <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>Applied by scripts/seed.php.</dd></div>
-                                                                            <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/access-database.html">Access the database</a>
-                                                                                                                                                <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
-                                                                                                </dd></div>
-                                                                                                    <div><dt>Depended on by</dt><dd>
-                                Every Model                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Change both dialects together; re-seed fresh and confirm foreign keys and indexes.</dd></div>
-                                            </dl>
-                </section>
-                            <section class="file-card" id="database/schema.mysql.sql">
-                    <div class="file-card__head">
-                        <h2><code>database/schema.mysql.sql</code></h2>
-                        <div class="file-card__badges">
-                            <span class="badge badge--danger">High impact</span>                                                            <span class="badge badge--info">Inferred from source</span>                                                    </div>
-                    </div>
-                    <p class="file-card__purpose">The MySQL (production) schema dialect, kept identical in shape to the SQLite one.</p>
-                    <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>Applied by scripts/seed.php on MySQL.</dd></div>
-                                                                            <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/access-database.html">Access the database</a>
-                                                                                                                                                <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
-                                                                                                </dd></div>
-                                                                                                    <div><dt>Depended on by</dt><dd>
-                                Every Model in production                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Keep in lockstep with schema.sqlite.sql; re-seed on MySQL and confirm the FK migrate path.</dd></div>
-                                            </dl>
-                </section>
-                            <section class="file-card" id="scripts/seed.php">
-                    <div class="file-card__head">
-                        <h2><code>scripts/seed.php</code></h2>
-                        <div class="file-card__badges">
-                            <span class="badge badge--danger">High impact</span>                                                            <span class="badge badge--info">Inferred from source</span>                                                    </div>
-                    </div>
-                    <p class="file-card__purpose">CLI seeder: applies schema, upserts the versioned catalog by slug, provisions the admin, resets passwords.</p>
-                    <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>Run by an operator (never over HTTP).</dd></div>
-                                                                            <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
-                                                                                                </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">database/schema.*.sql</code> <code class="chip chip--file">database/seeds/*</code> <code class="chip chip--file">app/Core/Database.php</code></dd></div>
-                                                                            <div><dt>Depended on by</dt><dd>
-                                Every deploy                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Run on a fresh and an existing DB; confirm idempotent upsert and --status health.</dd></div>
-                                            </dl>
-                </section>
-                            <section class="file-card" id="config/config.example.php">
-                    <div class="file-card__head">
-                        <h2><code>config/config.example.php</code></h2>
+                        <h2><code>guide/lib/UrlStrategy.php</code></h2>
                         <div class="file-card__badges">
                             <span class="badge badge--warn">Understand dependencies first</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
                     </div>
-                    <p class="file-card__purpose">Configuration template (env, db driver, session, exports dir, mail); copied to gitignored config.php.</p>
+                    <p class="file-card__purpose">Dynamic vs static URL building — the one difference between the two output modes.</p>
                     <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>Loaded during bootstrap.</dd></div>
+                                                    <div><dt>Runs when</dt><dd>Building any in-app URL.</dd></div>
                                                                             <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/access-database.html">Access the database</a>
-                                                                                                                                                <a class="chip" href="../functionality/route-and-secure-requests.html">Route &amp; secure every request</a>
-                                                                                                                                                <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a>
+                                                                                                            <a class="chip" href="../functionality/render-guide.html">Render the dynamic guide</a>
+                                                                                                                                                <a class="chip" href="../functionality/generate-static-snapshot.html">Generate the static snapshot</a>
                                                                                                 </dd></div>
                                                                                                     <div><dt>Depended on by</dt><dd>
-                                Core/Config, Database, ProjectKit                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Confirm the app runs with defaults (SQLite) and with production overrides.</dd></div>
+                                guide/lib/helpers.php; tools/generate-static.php                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Confirm dynamic links use query strings and static links are relative and subpath-safe.</dd></div>
                                             </dl>
                 </section>
-                            <section class="file-card" id="app/Views/runner/step.php">
+                            <section class="file-card" id="guide/index.php">
                     <div class="file-card__head">
-                        <h2><code>app/Views/runner/step.php</code></h2>
+                        <h2><code>guide/index.php</code></h2>
                         <div class="file-card__badges">
-                            <span class="badge badge--ok">Presentation only</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
+                            <span class="badge badge--danger">High impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
                     </div>
-                    <p class="file-card__purpose">The three-state Runner UI (gather wizard / review / approved) and the copy-prompt and check controls.</p>
+                    <p class="file-card__purpose">The dynamic guide front controller: query-string routing, model load, error posture, live search JSON.</p>
                     <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>Rendering a Recipe step.</dd></div>
+                                                    <div><dt>Runs when</dt><dd>Every browser request to the guide.</dd></div>
                                                                             <div><dt>Implements</dt><dd>
-                                                                                                            <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a>
+                                                                                                            <a class="chip" href="../functionality/render-guide.html">Render the dynamic guide</a>
                                                                                                 </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">public/assets/js/runner.js</code></dd></div>
+                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">guide/lib/Content.php</code> <code class="chip chip--file">guide/lib/nav.php</code> <code class="chip chip--file">guide/lib/helpers.php</code></dd></div>
                                                                             <div><dt>Depended on by</dt><dd>
-                                RunnerController                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Walk the wizard, review, and approved states at a narrow width and with JS off.</dd></div>
+                                Mode A deployment                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Load the overview, a functionality detail, an unknown view (404), and the search JSON endpoint.</dd></div>
+                                            </dl>
+                </section>
+                            <section class="file-card" id="guide/templates/layout.php">
+                    <div class="file-card__head">
+                        <h2><code>guide/templates/layout.php</code></h2>
+                        <div class="file-card__badges">
+                            <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
+                    </div>
+                    <p class="file-card__purpose">The shared page shell (chrome, nav, provenance stamp) both output modes render every page through.</p>
+                    <dl class="file-card__meta">
+                                                    <div><dt>Runs when</dt><dd>Every page render.</dd></div>
+                                                                            <div><dt>Implements</dt><dd>
+                                                                                                            <a class="chip" href="../functionality/render-guide.html">Render the dynamic guide</a>
+                                                                                                                                                <a class="chip" href="../functionality/generate-static-snapshot.html">Generate the static snapshot</a>
+                                                                                                </dd></div>
+                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">guide/lib/nav.php</code> <code class="chip chip--file">guide/lib/Provenance.php</code></dd></div>
+                                                                            <div><dt>Depended on by</dt><dd>
+                                Every view                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Render a page in both modes; confirm identical chrome and escaped output.</dd></div>
+                                            </dl>
+                </section>
+                            <section class="file-card" id="tools/generate-static.php">
+                    <div class="file-card__head">
+                        <h2><code>tools/generate-static.php</code></h2>
+                        <div class="file-card__badges">
+                            <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
+                    </div>
+                    <p class="file-card__purpose">Renders the same templates into /docs with relative links; refuses to build on validation errors; honours VIBEKB_DOCS_OUT and VIBEKB_GENERATED.</p>
+                    <dl class="file-card__meta">
+                                                    <div><dt>Runs when</dt><dd>Refreshing the static snapshot (locally, CI, or the drift check&#039;s temp render).</dd></div>
+                                                                            <div><dt>Implements</dt><dd>
+                                                                                                            <a class="chip" href="../functionality/generate-static-snapshot.html">Generate the static snapshot</a>
+                                                                                                </dd></div>
+                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">guide/lib/Content.php</code> <code class="chip chip--file">guide/lib/nav.php</code> <code class="chip chip--file">guide/lib/search.php</code></dd></div>
+                                                                            <div><dt>Depended on by</dt><dd>
+                                Mode B publishing; tools/vibekb.php (sync check)                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Regenerate /docs; confirm links, assets, diagrams, and search resolve under a subpath.</dd></div>
+                                            </dl>
+                </section>
+                            <section class="file-card" id="tools/validate.php">
+                    <div class="file-card__head">
+                        <h2><code>tools/validate.php</code></h2>
+                        <div class="file-card__badges">
+                            <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
+                    </div>
+                    <p class="file-card__purpose">Headless model validator (CI gate): loader issues plus provenance completeness, totals reconciliation, and static-search resolution. Accepts an optional content-root path so examples can be validated too.</p>
+                    <dl class="file-card__meta">
+                                                    <div><dt>Runs when</dt><dd>Before commit and in CI.</dd></div>
+                                                                            <div><dt>Implements</dt><dd>
+                                                                                                            <a class="chip" href="../functionality/validate-model.html">Validate the model</a>
+                                                                                                </dd></div>
+                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">guide/lib/Content.php</code></dd></div>
+                                                                            <div><dt>Depended on by</dt><dd>
+                                CI; tools/vibekb.php                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Run against the root model and examples/sousmeow/.vibekb; confirm exit codes.</dd></div>
+                                            </dl>
+                </section>
+                            <section class="file-card" id="tools/test-topology.php">
+                    <div class="file-card__head">
+                        <h2><code>tools/test-topology.php</code></h2>
+                        <div class="file-card__badges">
+                            <span class="badge badge--ok">Low impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
+                    </div>
+                    <p class="file-card__purpose">Fixture-driven test proving malformed diagram topology produces useful diagnostics without crashing, and valid topology resolves.</p>
+                    <dl class="file-card__meta">
+                                                    <div><dt>Runs when</dt><dd>In CI and after changing topology loading/validation.</dd></div>
+                                                                            <div><dt>Implements</dt><dd>
+                                                                                                            <a class="chip" href="../functionality/validate-diagram-topology.html">Validate diagram topology</a>
+                                                                                                </dd></div>
+                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">guide/lib/Content.php</code></dd></div>
+                                                                            <div><dt>Depended on by</dt><dd>
+                                CI                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Run php tools/test-topology.php; confirm every expected diagnostic fires and it exits 0.</dd></div>
+                                            </dl>
+                </section>
+                            <section class="file-card" id="tools/vibekb.php">
+                    <div class="file-card__head">
+                        <h2><code>tools/vibekb.php</code></h2>
+                        <div class="file-card__badges">
+                            <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
+                    </div>
+                    <p class="file-card__purpose">The self-maintenance CLI: status (session start), check (drift + validate + snapshot sync), affected (files → functionality), validate, generate. The agent&#039;s entry point to the lifecycle.</p>
+                    <dl class="file-card__meta">
+                                                    <div><dt>Runs when</dt><dd>Session start, before commit, and in CI.</dd></div>
+                                                                            <div><dt>Implements</dt><dd>
+                                                                                                            <a class="chip" href="../functionality/start-work-session.html">Start a work session</a>
+                                                                                                                                                <a class="chip" href="../functionality/detect-drift.html">Detect drift between code and model</a>
+                                                                                                                                                <a class="chip" href="../functionality/find-affected-functionality.html">Find affected functionality</a>
+                                                                                                </dd></div>
+                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">guide/lib/Content.php</code> <code class="chip chip--file">tools/validate.php</code> <code class="chip chip--file">tools/generate-static.php</code></dd></div>
+                                                                            <div><dt>Depended on by</dt><dd>
+                                The agent workflow; CI                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Run status/check/affected; confirm honest detection-vs-interpretation output and exit codes.</dd></div>
+                                            </dl>
+                </section>
+                            <section class="file-card" id=".vibekb/manifest.json">
+                    <div class="file-card__head">
+                        <h2><code>.vibekb/manifest.json</code></h2>
+                        <div class="file-card__badges">
+                            <span class="badge badge--warn">Understand dependencies first</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
+                    </div>
+                    <p class="file-card__purpose">The active model&#039;s provenance and structure metadata: source repository/commit analyzed, verification scope, last verified, and the honest updates_automatically:false.</p>
+                    <dl class="file-card__meta">
+                                                    <div><dt>Runs when</dt><dd>Loaded on every render and by the drift check (recorded commit baseline).</dd></div>
+                                                                            <div><dt>Implements</dt><dd>
+                                                                                                            <a class="chip" href="../functionality/show-provenance.html">Show provenance and freshness</a>
+                                                                                                                                                <a class="chip" href="../functionality/validate-model.html">Validate the model</a>
+                                                                                                                                                <a class="chip" href="../functionality/detect-drift.html">Detect drift between code and model</a>
+                                                                                                </dd></div>
+                                                                                                    <div><dt>Depended on by</dt><dd>
+                                guide/lib/Provenance.php; tools/vibekb.php                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>After re-verifying against source, update source_commit and last_verified; run php tools/vibekb.php check.</dd></div>
+                                            </dl>
+                </section>
+                            <section class="file-card" id=".cpanel.yml">
+                    <div class="file-card__head">
+                        <h2><code>.cpanel.yml</code></h2>
+                        <div class="file-card__badges">
+                            <span class="badge badge--warn">Understand dependencies first</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
+                    </div>
+                    <p class="file-card__purpose">cPanel Git deploy: rsync of runtime paths into the public folder with development-only exclusions. Part of the application.</p>
+                    <dl class="file-card__meta">
+                                                    <div><dt>Runs when</dt><dd>On cPanel Git deploy.</dd></div>
+                                                                            <div><dt>Implements</dt><dd>
+                                                                                                            <a class="chip" href="../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a>
+                                                                                                </dd></div>
+                                                                                                    <div><dt>Depended on by</dt><dd>
+                                Mode A production host                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Confirm .vibekb/ deploys and tools/, prompts/, docs/, examples/ are excluded; keep DEPLOYMENT.md in sync.</dd></div>
+                                            </dl>
+                </section>
+                            <section class="file-card" id="CLAUDE.md">
+                    <div class="file-card__head">
+                        <h2><code>CLAUDE.md</code></h2>
+                        <div class="file-card__badges">
+                            <span class="badge badge--warn">Understand dependencies first</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
+                    </div>
+                    <p class="file-card__purpose">The canonical, repository-owned operating rules and lifecycle for any coding agent working on VibeKB; AGENTS.md and .cursor/rules point here.</p>
+                    <dl class="file-card__meta">
+                                                    <div><dt>Runs when</dt><dd>Read by an agent at session start.</dd></div>
+                                                                            <div><dt>Implements</dt><dd>
+                                                                                                            <a class="chip" href="../functionality/start-work-session.html">Start a work session</a>
+                                                                                                                                                <a class="chip" href="../functionality/hand-off-to-next-agent.html">Hand off to the next agent</a>
+                                                                                                                                                <a class="chip" href="../functionality/record-current-work.html">Record current AI work</a>
+                                                                                                </dd></div>
+                                                                                                    <div><dt>Depended on by</dt><dd>
+                                AGENTS.md; .cursor/rules/vibekb.mdc; The agent workflow                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Confirm the lifecycle and the vibekb.php commands referenced still match the tooling.</dd></div>
                                             </dl>
                 </section>
                     </div>
@@ -688,7 +435,7 @@
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-21 · source commit c1617ab (2026-07-16) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 05:59 UTC · source commit fc65ae6 (2026-07-22) · not auto-updating</p>
             </div>
         </footer>
     </div>

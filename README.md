@@ -59,13 +59,36 @@ purpose, every edge a concrete mechanism, and every file a reason, with external
 source links as the terminal "show me the implementation" — usable without
 JavaScript in both output modes.
 
-The included `.vibekb/` content models a **real** application — **SousMeow**, a
-guided AI-workflow platform — so every view is demonstrated with realistic,
-source-grounded content. SousMeow is the canonical example VibeKB explains; it
-is **not** bundled into VibeKB. The model was derived read-only from the
-[SousMeow source](https://github.com/cubixmeow-commits/dev-portfolio-v2)
-(`projects/sousmeow`) and can go stale — future agents must re-verify against
-that source before changing any functionality claim.
+### VibeKB is self-hosted
+
+The active `.vibekb/` content models **VibeKB itself** — VibeKB explaining VibeKB.
+Every view is demonstrated with VibeKB's own source-grounded functionality (the
+content loader, the guide renderer, the static generator, the validator, the
+explainable-diagram system, and the self-maintenance CLI). Open the guide, or the
+published `/docs`, to see the product explain itself.
+
+Bundled models of **other** applications — the **SousMeow** example and the StopPR
+field-test audit — live under `examples/`. They are demonstrations and fixtures,
+**not** the active model, and never to be confused with the current state of
+VibeKB. Preview or validate one with
+`VIBEKB_CONTENT_ROOT=examples/sousmeow/.vibekb php -S localhost:8080 -t .` or
+`php tools/vibekb.php validate examples/sousmeow/.vibekb`.
+
+### Self-maintenance CLI
+
+`tools/vibekb.php` is the one entry point agents use to keep the model in step
+with the code:
+
+```bash
+php tools/vibekb.php status      # session start: provenance, current work, next action, drift
+php tools/vibekb.php affected --since <ref>   # changed files → likely affected functionality
+php tools/vibekb.php check       # validate + broken references + drift + /docs sync
+php tools/vibekb.php generate    # regenerate /docs
+```
+
+It **detects** changes mechanically (git diff, path existence, a render-and-diff)
+and is explicit that **interpreting** a change into the model is an agent's job —
+VibeKB never claims to auto-update.
 
 ## Run locally
 
@@ -142,18 +165,26 @@ as the software changes — they are not an isolated archive.
 
 ## Current V1 limitations
 
-- The example models the real SousMeow app read-only; SousMeow's source is not
-  shipped in this repo, and the model can drift from it over time.
-- A few SousMeow areas are `inferred-from-source` (e.g. account settings, the
-  seed script, the bulk simulation) pending a direct source trace — see the
-  handoff.
-- Extraction is not automatic — records are written and maintained by you and
-  your coding agent following the workflow in [MAINTENANCE.md](./MAINTENANCE.md).
+- **Not automatic.** VibeKB detects that code changed; it does not understand what
+  a change *means*. Records are written and maintained by you and your coding
+  agent following the workflow in [MAINTENANCE.md](./MAINTENANCE.md). `updates_automatically`
+  is `false` and stays that way.
+- **Affected-functionality discovery is a heuristic** built from the `files[]`
+  back-links in the model — a changed file with no back-link is surfaced as
+  "unmapped," never silently ignored, but the mapping is not assumed perfect.
+- **Cursor discovery** is provided via `.cursor/rules/` and `AGENTS.md`; it is
+  `inferred` that a fresh Cursor session follows it, not runtime-verified here.
+- **The bundled examples** (SousMeow, StopPR) are read-only snapshots of separate
+  apps and can drift from their sources over time.
 - The Markdown renderer supports a pragmatic subset (headings, lists, tables,
   code, emphasis, links, blockquotes) — not full CommonMark.
 
 ## For AI agents
 
-Read [CLAUDE.md](./CLAUDE.md) / [AGENTS.md](./AGENTS.md) before making changes,
-[MAINTENANCE.md](./MAINTENANCE.md) for the change workflow, and
-[INITIALIZE.md](./INITIALIZE.md) to add VibeKB to another repository.
+Start with `php tools/vibekb.php status`. The canonical, repository-owned workflow
+lives in [CLAUDE.md](./CLAUDE.md); [AGENTS.md](./AGENTS.md) and
+`.cursor/rules/vibekb.mdc` are thin pointers to it. Read
+[MAINTENANCE.md](./MAINTENANCE.md) for the detailed change lifecycle and
+[INITIALIZE.md](./INITIALIZE.md) to add VibeKB to another repository. A new agent
+should be able to discover and follow the workflow without being handed a giant
+prompt.

@@ -1,0 +1,170 @@
+{
+  "version": 1,
+  "nodes": [
+    {
+      "id": "content-model",
+      "title": "Content model (.vibekb/)",
+      "purpose": "The single source of truth: functionality records, system docs, files, diagrams, memory, and work — plain Markdown-plus-front-matter and small JSON manifests, versioned with the code.",
+      "location": ".vibekb",
+      "functionality": ["load-living-model"],
+      "files": [
+        { "path": ".vibekb/manifest.json", "role": "configuration", "reason": "Declares provenance (source commit analyzed) and the structure the loader reads." }
+      ],
+      "verification": "verified-from-source",
+      "uncertainty": ""
+    },
+    {
+      "id": "loader",
+      "title": "Loader (Content.php)",
+      "purpose": "Reads the content model, parses records, resolves relationships, loads diagram topology, and validates the whole set. Used by the guide and every tool, so nothing can disagree about what the model says.",
+      "location": "guide/lib",
+      "functionality": ["load-living-model", "validate-model", "resolve-relationships"],
+      "files": [
+        { "path": "guide/lib/Content.php", "role": "primary implementation", "reason": "The one loader that turns files into the in-memory model everything renders." }
+      ],
+      "verification": "verified-from-source",
+      "uncertainty": ""
+    },
+    {
+      "id": "templates",
+      "title": "Shared templates",
+      "purpose": "The one template set both output modes render through — page shell, views, and the shared navigation/route/title definitions.",
+      "location": "guide/templates",
+      "functionality": ["render-guide"],
+      "files": [
+        { "path": "guide/templates/layout.php", "role": "renderer", "reason": "The shared page shell every view renders inside, in both modes." },
+        { "path": "guide/lib/nav.php", "role": "route definition", "reason": "The single definition of views/routes/titles both modes consume." }
+      ],
+      "verification": "verified-from-source",
+      "uncertainty": ""
+    },
+    {
+      "id": "dynamic-guide",
+      "title": "Dynamic guide (Mode A)",
+      "purpose": "The live PHP front controller that routes by query string, loads the model per request, and renders the templates in the browser — no build step, no rewrite rules.",
+      "location": "guide",
+      "functionality": ["render-guide"],
+      "files": [
+        { "path": "guide/index.php", "role": "entry point", "reason": "The front controller every browser request to the guide passes through." }
+      ],
+      "verification": "verified-from-source",
+      "uncertainty": ""
+    },
+    {
+      "id": "static-generator",
+      "title": "Static generator (Mode B → /docs)",
+      "purpose": "Renders the same templates offline into a self-contained /docs site with relative, subpath-safe links; refuses to build on validation errors.",
+      "location": "tools",
+      "functionality": ["generate-static-snapshot"],
+      "files": [
+        { "path": "tools/generate-static.php", "role": "primary implementation", "reason": "Produces the static snapshot by swapping only the URL strategy and writing the rendered pages." }
+      ],
+      "verification": "verified-from-source",
+      "uncertainty": ""
+    },
+    {
+      "id": "maintenance-cli",
+      "title": "Maintenance CLI (vibekb.php)",
+      "purpose": "The agent's entry point to the lifecycle: status, check (validate + drift + snapshot sync), affected, validate, generate. Validates the model and drives reconciliation.",
+      "location": "tools",
+      "functionality": ["start-work-session", "detect-drift", "find-affected-functionality"],
+      "files": [
+        { "path": "tools/vibekb.php", "role": "primary implementation", "reason": "The single CLI that runs the session and drift-detection lifecycle." }
+      ],
+      "verification": "verified-from-source",
+      "uncertainty": ""
+    }
+  ],
+  "edges": [
+    {
+      "id": "loader-reads-content-model",
+      "from": "loader",
+      "to": "content-model",
+      "mechanism": "reads",
+      "label": "reads the model",
+      "explanation": "The loader reads every record and manifest under the content root, confining all filesystem access to that root.",
+      "functionality": ["load-living-model"],
+      "files": [
+        { "path": "guide/lib/Content.php", "role": "caller", "reason": "load() globs and reads the .vibekb files." }
+      ],
+      "verification": "verified-from-source",
+      "basis": "",
+      "uncertainty": ""
+    },
+    {
+      "id": "dynamic-guide-delegates-loader",
+      "from": "dynamic-guide",
+      "to": "loader",
+      "mechanism": "delegates-to",
+      "label": "loads the model via",
+      "explanation": "The front controller constructs Content and delegates loading the model to it before rendering any view.",
+      "functionality": ["render-guide", "load-living-model"],
+      "files": [
+        { "path": "guide/index.php", "role": "caller", "reason": "Instantiates Content and calls load()." }
+      ],
+      "verification": "verified-from-source",
+      "basis": "",
+      "uncertainty": ""
+    },
+    {
+      "id": "static-generator-delegates-loader",
+      "from": "static-generator",
+      "to": "loader",
+      "mechanism": "delegates-to",
+      "label": "loads the model via",
+      "explanation": "The generator loads the model through the same loader, so the snapshot is built from exactly what the guide would render.",
+      "functionality": ["generate-static-snapshot", "load-living-model"],
+      "files": [
+        { "path": "tools/generate-static.php", "role": "caller", "reason": "Constructs Content and calls load() before rendering." }
+      ],
+      "verification": "verified-from-source",
+      "basis": "",
+      "uncertainty": ""
+    },
+    {
+      "id": "dynamic-guide-renders-templates",
+      "from": "dynamic-guide",
+      "to": "templates",
+      "mechanism": "renders",
+      "label": "renders",
+      "explanation": "The front controller renders the requested view through the shared layout and templates.",
+      "functionality": ["render-guide"],
+      "files": [
+        { "path": "guide/templates/layout.php", "role": "renderer", "reason": "The shell the front controller renders each view inside." }
+      ],
+      "verification": "verified-from-source",
+      "basis": "",
+      "uncertainty": ""
+    },
+    {
+      "id": "static-generator-renders-templates",
+      "from": "static-generator",
+      "to": "templates",
+      "mechanism": "renders",
+      "label": "renders",
+      "explanation": "The generator renders the identical templates with the static URL strategy and writes the output to disk.",
+      "functionality": ["generate-static-snapshot"],
+      "files": [
+        { "path": "guide/lib/nav.php", "role": "route definition", "reason": "The shared inventory the generator walks so both modes present the same pages." }
+      ],
+      "verification": "verified-from-source",
+      "basis": "",
+      "uncertainty": ""
+    },
+    {
+      "id": "maintenance-cli-validates-content-model",
+      "from": "maintenance-cli",
+      "to": "content-model",
+      "mechanism": "validates",
+      "label": "validates & checks drift",
+      "explanation": "The CLI validates the model through the loader and checks it for drift against the code and the recorded source commit.",
+      "functionality": ["detect-drift", "validate-model"],
+      "files": [
+        { "path": "tools/vibekb.php", "role": "caller", "reason": "Runs validation and the drift/sync checks over the model." }
+      ],
+      "verification": "verified-from-source",
+      "basis": "",
+      "uncertainty": ""
+    }
+  ]
+}

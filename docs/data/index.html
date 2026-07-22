@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Data &amp; storage · SousMeow — VibeKB</title>
-    <meta name="description" content="A living explanation of what SousMeow currently does, how it works, what AI is changing, and why.">
+    <title>Data &amp; storage · VibeKB — VibeKB</title>
+    <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- Web fonts are a progressive enhancement only. The stylesheet ships a
@@ -21,7 +21,7 @@
         <div class="site-header__inner">
             <a class="brand" href="../index.html">
                 <span class="brand__mark">VibeKB</span>
-                <span class="brand__project">SousMeow</span>
+                <span class="brand__project">VibeKB</span>
             </a>
             <form class="site-search" role="search" action="../search/index.html">
                 <label class="visually-hidden" for="site-search-input">Search guide</label>
@@ -110,131 +110,72 @@
     </header>
 
             <section class="doc-section content-section"><div class="prose reading-column"><h3>What is stored, and where</h3>
-<p>All structured data is in one database — SQLite (<code>storage/sousmeow.sqlite</code>) in
-dev or MySQL in production, same schema. Export zips are files in
-<code>storage/exports/</code> (outside the web root). Sessions use PHP&#039;s session store.
-There is no external storage.</p>
-<h3>The catalog (seeded, read-mostly)</h3>
 <div class="table-wrap"><table>
 <tr>
-<th>Table</th>
-<th>Meaning</th>
-</tr>
-<tr>
-<td><code>cookbooks</code></td>
-<td>Workflows: slug, status, <code>is_executable</code>, difficulty, category</td>
-</tr>
-<tr>
-<td><code>cookbook_stages</code>, <code>recipes</code></td>
-<td>Ordered steps, prompts, output contracts</td>
-</tr>
-<tr>
-<td><code>recipe_checks</code></td>
-<td>Per-recipe Quality Checks (+ evidence keys)</td>
-</tr>
-<tr>
-<td><code>pantry_fields</code></td>
-<td>Typed input definitions per Cookbook</td>
-</tr>
-<tr>
-<td><code>sousmeow_categories</code>, <code>sousmeow_collections</code>, <code>sousmeow_cookbook_collections</code></td>
-<td>Discovery taxonomy (prefixed to avoid collisions on shared hosting)</td>
-</tr>
-</table></div>
-<h3>User work (written during a run)</h3>
-<div class="table-wrap"><table>
-<tr>
-<th>Table</th>
-<th>Meaning</th>
+<th>Store</th>
+<th>What</th>
 <th>Written by</th>
 </tr>
 <tr>
-<td><code>users</code></td>
-<td>Accounts, roles, verification, <code>simulation</code> flag</td>
-<td>Auth/Account</td>
+<td><code>.vibekb/</code></td>
+<td>The living model (records + manifests)</td>
+<td>Humans and AI agents, by hand</td>
 </tr>
 <tr>
-<td><code>projects</code></td>
-<td>A user&#039;s run of a Cookbook</td>
-<td>Start / Pantry / Runner</td>
+<td><code>.vibekb/manifest.json</code></td>
+<td>Provenance and structure metadata</td>
+<td>Agents, on re-verification</td>
 </tr>
 <tr>
-<td><code>pantry_values</code></td>
-<td>The facts entered (unique per project+field)</td>
-<td>Fill the Pantry</td>
+<td><code>/docs/</code></td>
+<td>The static snapshot</td>
+<td><code>tools/generate-static.php</code> (generated)</td>
 </tr>
 <tr>
-<td><code>artifacts</code></td>
-<td>One per project+recipe; status + approved version</td>
-<td>Runner</td>
+<td><code>docs/assets/data/search.json</code></td>
+<td>The static search index</td>
+<td>The generator</td>
 </tr>
 <tr>
-<td><code>artifact_versions</code></td>
-<td>Immutable, append-only (pasted/example/edited/restored)</td>
-<td>Paste / Approve</td>
-</tr>
-<tr>
-<td><code>artifact_checks</code></td>
-<td>A confirmed check against a specific version</td>
-<td>Review</td>
-</tr>
-<tr>
-<td><code>exports</code></td>
-<td>A built kit&#039;s filename, size, count</td>
-<td>Export</td>
-</tr>
-<tr>
-<td><code>simulation_runs</code></td>
-<td>Daily demo-activity log</td>
-<td>Simulation</td>
+<td><code>examples/*/.vibekb/</code></td>
+<td>Bundled example models</td>
+<td>Field tests (rarely changed)</td>
 </tr>
 </table></div>
-<h3>Durability, backup, sensitivity</h3>
-<ul>
-<li>Backup = the SQLite file or a MySQL dump; export zips are copied separately.</li>
-<li>Table names for the taxonomy carry a <code>sousmeow_</code> prefix because the</li>
-</ul>
-<p>production database is shared with other apps on the account.</p>
-<ul>
-<li>Passwords are hashed (<code>password_hash</code>); pasted content is the only untrusted</li>
-</ul>
-<p>bulk data and is sanitised/escaped.</p></div></section>
+<h3>No runtime database</h3>
+<p>VibeKB deliberately has no SQL database, no cache store, no sessions, and no
+network at render time. The model is versioned with the code, which is what makes
+it review-able in a pull request and deployable by copying files.</p>
+<h3>What is generated vs authored</h3>
+<p><code>.vibekb/</code> and <code>examples/</code> are <strong>authored</strong>. <code>/docs/</code> is <strong>generated</strong> — never
+hand-edited; the drift check flags a <code>/docs</code> that differs from a fresh render.</p></div></section>
     
             <section class="doc-section content-section">
             <header class="section-intro reading-column">
-                <h2>How data flows</h2>
+                <h2>Data flow</h2>
             </header>
-            <div class="prose reading-column"><h3>From facts to finished kit</h3>
-<p>``<code>
-Pantry values ─► PromptBuilder ─► prompt (copied) ─► [your AI] ─► pasted text
-                                                                      │
-                                          cleanContent (sanitise) ────┘
-                                                       │
-                                       artifact_versions (immutable, append-only)
-                                                       │
-                            ResponseParser ─► Quality Check evidence ─► artifact_checks
-                                                       │  (all confirmed)
-                                                    approve ─► approved version
-                                                       │
-                     chains into later prompts  ◄──────┤
-                                                       ▼
-                                              ProjectKit ─► export zip
-</code>``</p>
-<h3>What is trusted where</h3>
-<ul>
-<li><strong>Pantry input</strong> is validated per type before storage (<code>savePantry</code>).</li>
-<li><strong>Pasted AI output</strong> is untrusted: sanitised on store (<code>cleanContent</code>) and</li>
-</ul>
-<p>escaped on render (<code>SafeText</code>) end to end.</p>
-<ul>
-<li><strong>SQL parameters</strong> are always bound (one PDO path); never interpolated.</li>
-<li><strong>Ownership</strong> is enforced at the data layer; ids are never leaked.</li>
-</ul>
-<h3>The alignment rule</h3>
-<p>The fields written for the Pantry and Artifacts must match the fields read by
-<code>PromptBuilder</code>, the Runner, and <code>ProjectKit</code>. When they drift, prompts get
-<code>[missing:]</code> values or the export omits content — the failure the
-<code>read-write-path-coupling</code> warning describes.</p></div>
+            <div class="prose reading-column"><h3>Read path (files → pages)</h3>
+<p><code>.vibekb/<em>.md</code> and <code></em>.json</code>
+→ <code>FrontMatter</code>/<code>Markdown</code> parse
+→ <code>Content</code> builds the keyed model and resolves relationships
+→ <code>validate()</code> accumulates issues
+→ templates render pages (Mode A live, Mode B to <code>/docs</code>)
+→ <code>build_search_index()</code> produces the searchable index for both modes.</p>
+<p>Nothing writes back to <code>.vibekb/</code> on this path. The loader is read-only.</p>
+<h3>Maintenance path (code → model)</h3>
+<p>Code changes
+→ <code>vibekb check</code> detects changed files, broken references, and snapshot staleness
+→ <code>vibekb affected</code> maps changed files to likely functionality (via <code>files[]</code>
+back-links)
+→ <strong>an agent interprets</strong> the change and updates the affected records, memory,
+diagrams, provenance, and handoff
+→ <code>vibekb validate</code> / <code>generate</code> reconcile and refresh outputs.</p>
+<p>The detection half is mechanical; the interpretation half requires an agent. That
+boundary is deliberate and stated everywhere it matters.</p>
+<h3>Where data lives</h3>
+<p>There is no runtime database. The model is files in <code>.vibekb/</code>, versioned with the
+code. The static snapshot is generated files in <code>/docs</code>. Provenance metadata lives
+in <code>manifest.json</code>.</p></div>
         </section>
     
     <section class="doc-section content-section wide-section" aria-labelledby="data-use">
@@ -245,254 +186,160 @@ Pantry values ─► PromptBuilder ─► prompt (copied) ─► [your AI] ─�
                 <table>
                     <tr><th>Store</th><th>Written by</th><th>Read by</th></tr>
                                             <tr>
-                            <td><code>artifact_checks</code></td>
+                            <td><code>.vibekb</code></td>
                             <td>
-                                                                    <a class="chip" href="../functionality/review-quality-checks.html">Review Quality Checks</a>
-                                                                                            </td>
+                                                                <span class="muted">—</span>                            </td>
                             <td>
-                                                                    <a class="chip" href="../functionality/approve-and-version.html">Approve &amp; version an artifact</a>
-                                                                    <a class="chip" href="../functionality/review-quality-checks.html">Review Quality Checks</a>
-                                                                    <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a>
-                                                                                            </td>
-                        </tr>
-                                            <tr>
-                            <td><code>artifact_versions</code></td>
-                            <td>
-                                                                    <a class="chip" href="../functionality/approve-and-version.html">Approve &amp; version an artifact</a>
-                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
-                                                                    <a class="chip" href="../functionality/paste-response.html">Paste a response</a>
-                                                                                            </td>
-                            <td>
-                                                                    <a class="chip" href="../functionality/approve-and-version.html">Approve &amp; version an artifact</a>
-                                                                    <a class="chip" href="../functionality/build-prompt.html">Build the prompt</a>
-                                                                    <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a>
-                                                                    <a class="chip" href="../functionality/manage-account.html">Manage your account</a>
-                                                                    <a class="chip" href="../functionality/paste-response.html">Paste a response</a>
-                                                                    <a class="chip" href="../functionality/review-quality-checks.html">Review Quality Checks</a>
-                                                                    <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a>
+                                                                    <a class="chip" href="../functionality/detect-drift.html">Detect drift between code and model</a>
+                                                                    <a class="chip" href="../functionality/generate-static-snapshot.html">Generate the static snapshot</a>
+                                                                    <a class="chip" href="../functionality/render-guide.html">Render the dynamic guide</a>
+                                                                    <a class="chip" href="../functionality/search-the-model.html">Search the model</a>
+                                                                    <a class="chip" href="../functionality/validate-model.html">Validate the model</a>
                                                                                             </td>
                         </tr>
                                             <tr>
-                            <td><code>artifacts</code></td>
+                            <td><code>.vibekb/diagrams</code></td>
                             <td>
-                                                                    <a class="chip" href="../functionality/approve-and-version.html">Approve &amp; version an artifact</a>
-                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
-                                                                    <a class="chip" href="../functionality/paste-response.html">Paste a response</a>
-                                                                                            </td>
+                                                                <span class="muted">—</span>                            </td>
                             <td>
-                                                                    <a class="chip" href="../functionality/approve-and-version.html">Approve &amp; version an artifact</a>
-                                                                    <a class="chip" href="../functionality/build-prompt.html">Build the prompt</a>
-                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
-                                                                    <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a>
-                                                                    <a class="chip" href="../functionality/manage-account.html">Manage your account</a>
-                                                                    <a class="chip" href="../functionality/paste-response.html">Paste a response</a>
-                                                                    <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a>
-                                                                    <a class="chip" href="../functionality/track-project-progress.html">Track project progress</a>
-                                                                    <a class="chip" href="../functionality/view-admin-overview.html">View the admin overview</a>
+                                                                    <a class="chip" href="../functionality/load-living-model.html">Load the living model</a>
+                                                                    <a class="chip" href="../functionality/render-explainable-diagrams.html">Render explainable diagrams</a>
                                                                                             </td>
                         </tr>
                                             <tr>
-                            <td><code>cookbook_stages</code></td>
+                            <td><code>.vibekb/diagrams/topology</code></td>
                             <td>
-                                                                    <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
-                                                                                            </td>
+                                                                <span class="muted">—</span>                            </td>
                             <td>
-                                                                    <a class="chip" href="../functionality/view-cookbook-detail.html">View a Cookbook detail</a>
-                                                                    <a class="chip" href="../functionality/view-marketing-home.html">View the marketing home</a>
-                                                                                            </td>
-                        </tr>
-                                            <tr>
-                            <td><code>cookbooks</code></td>
-                            <td>
-                                                                    <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
-                                                                                            </td>
-                            <td>
-                                                                    <a class="chip" href="../functionality/browse-categories.html">Browse by category</a>
-                                                                    <a class="chip" href="../functionality/browse-marketplace.html">Browse the marketplace</a>
-                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
-                                                                    <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
-                                                                    <a class="chip" href="../functionality/start-project.html">Start a project</a>
-                                                                    <a class="chip" href="../functionality/view-admin-overview.html">View the admin overview</a>
-                                                                    <a class="chip" href="../functionality/view-collection.html">View a collection</a>
-                                                                    <a class="chip" href="../functionality/view-cookbook-detail.html">View a Cookbook detail</a>
-                                                                    <a class="chip" href="../functionality/view-kitchen.html">View My Kitchen</a>
-                                                                    <a class="chip" href="../functionality/view-marketing-home.html">View the marketing home</a>
+                                                                    <a class="chip" href="../functionality/find-affected-functionality.html">Find affected functionality</a>
+                                                                    <a class="chip" href="../functionality/validate-diagram-topology.html">Validate diagram topology</a>
                                                                                             </td>
                         </tr>
                                             <tr>
-                            <td><code>exports</code></td>
+                            <td><code>.vibekb/files/important-files.json</code></td>
                             <td>
-                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
-                                                                    <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a>
-                                                                                            </td>
+                                                                <span class="muted">—</span>                            </td>
                             <td>
-                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
-                                                                    <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a>
-                                                                    <a class="chip" href="../functionality/manage-account.html">Manage your account</a>
-                                                                    <a class="chip" href="../functionality/view-admin-overview.html">View the admin overview</a>
+                                                                    <a class="chip" href="../functionality/find-affected-functionality.html">Find affected functionality</a>
+                                                                    <a class="chip" href="../functionality/load-living-model.html">Load the living model</a>
                                                                                             </td>
                         </tr>
                                             <tr>
-                            <td><code>pantry_fields</code></td>
+                            <td><code>.vibekb/functionality</code></td>
                             <td>
-                                                                    <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
-                                                                                            </td>
+                                                                <span class="muted">—</span>                            </td>
                             <td>
-                                                                    <a class="chip" href="../functionality/build-prompt.html">Build the prompt</a>
-                                                                    <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a>
-                                                                    <a class="chip" href="../functionality/fill-pantry.html">Fill the Pantry</a>
-                                                                    <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a>
-                                                                    <a class="chip" href="../functionality/view-cookbook-detail.html">View a Cookbook detail</a>
+                                                                    <a class="chip" href="../functionality/find-affected-functionality.html">Find affected functionality</a>
+                                                                    <a class="chip" href="../functionality/load-living-model.html">Load the living model</a>
                                                                                             </td>
                         </tr>
                                             <tr>
-                            <td><code>pantry_values</code></td>
+                            <td><code>.vibekb/manifest.json</code></td>
                             <td>
-                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
-                                                                    <a class="chip" href="../functionality/fill-pantry.html">Fill the Pantry</a>
-                                                                                            </td>
+                                                                <span class="muted">—</span>                            </td>
                             <td>
-                                                                    <a class="chip" href="../functionality/build-prompt.html">Build the prompt</a>
-                                                                    <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a>
-                                                                    <a class="chip" href="../functionality/fill-pantry.html">Fill the Pantry</a>
-                                                                    <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a>
+                                                                    <a class="chip" href="../functionality/load-living-model.html">Load the living model</a>
+                                                                    <a class="chip" href="../functionality/show-provenance.html">Show provenance and freshness</a>
+                                                                    <a class="chip" href="../functionality/start-work-session.html">Start a work session</a>
                                                                                             </td>
                         </tr>
                                             <tr>
-                            <td><code>password_reset_tokens</code></td>
+                            <td><code>.vibekb/memory</code></td>
                             <td>
-                                                                    <a class="chip" href="../functionality/reset-password.html">Reset a password</a>
-                                                                                            </td>
+                                                                <span class="muted">—</span>                            </td>
                             <td>
-                                                                    <a class="chip" href="../functionality/reset-password.html">Reset a password</a>
-                                                                                            </td>
-                        </tr>
-                                            <tr>
-                            <td><code>projects</code></td>
-                            <td>
-                                                                    <a class="chip" href="../functionality/approve-and-version.html">Approve &amp; version an artifact</a>
-                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
-                                                                    <a class="chip" href="../functionality/fill-pantry.html">Fill the Pantry</a>
-                                                                    <a class="chip" href="../functionality/start-project.html">Start a project</a>
-                                                                    <a class="chip" href="../functionality/track-project-progress.html">Track project progress</a>
-                                                                                            </td>
-                            <td>
-                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
-                                                                    <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a>
-                                                                    <a class="chip" href="../functionality/fill-pantry.html">Fill the Pantry</a>
-                                                                    <a class="chip" href="../functionality/manage-account.html">Manage your account</a>
-                                                                    <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a>
-                                                                    <a class="chip" href="../functionality/track-project-progress.html">Track project progress</a>
-                                                                    <a class="chip" href="../functionality/view-admin-overview.html">View the admin overview</a>
-                                                                    <a class="chip" href="../functionality/view-kitchen.html">View My Kitchen</a>
+                                                                    <a class="chip" href="../functionality/load-living-model.html">Load the living model</a>
                                                                                             </td>
                         </tr>
                                             <tr>
-                            <td><code>rate_events</code></td>
+                            <td><code>.vibekb/project</code></td>
                             <td>
-                                                                    <a class="chip" href="../functionality/register-account.html">Register an account</a>
-                                                                    <a class="chip" href="../functionality/reset-password.html">Reset a password</a>
-                                                                    <a class="chip" href="../functionality/sign-in.html">Sign in</a>
-                                                                    <a class="chip" href="../functionality/verify-email.html">Verify your email</a>
-                                                                                            </td>
+                                                                <span class="muted">—</span>                            </td>
                             <td>
-                                                                    <a class="chip" href="../functionality/register-account.html">Register an account</a>
-                                                                    <a class="chip" href="../functionality/reset-password.html">Reset a password</a>
-                                                                    <a class="chip" href="../functionality/sign-in.html">Sign in</a>
+                                                                    <a class="chip" href="../functionality/load-living-model.html">Load the living model</a>
                                                                                             </td>
                         </tr>
                                             <tr>
-                            <td><code>recipe_checks</code></td>
+                            <td><code>.vibekb/system</code></td>
                             <td>
-                                                                    <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
-                                                                                            </td>
+                                                                <span class="muted">—</span>                            </td>
                             <td>
-                                                                    <a class="chip" href="../functionality/approve-and-version.html">Approve &amp; version an artifact</a>
-                                                                    <a class="chip" href="../functionality/review-quality-checks.html">Review Quality Checks</a>
-                                                                    <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a>
-                                                                    <a class="chip" href="../functionality/view-cookbook-detail.html">View a Cookbook detail</a>
+                                                                    <a class="chip" href="../functionality/load-living-model.html">Load the living model</a>
                                                                                             </td>
                         </tr>
                                             <tr>
-                            <td><code>recipes</code></td>
+                            <td><code>.vibekb/work</code></td>
                             <td>
-                                                                    <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
-                                                                                            </td>
+                                                                <span class="muted">—</span>                            </td>
                             <td>
-                                                                    <a class="chip" href="../functionality/approve-and-version.html">Approve &amp; version an artifact</a>
-                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
-                                                                    <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a>
-                                                                    <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a>
-                                                                    <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
-                                                                    <a class="chip" href="../functionality/track-project-progress.html">Track project progress</a>
-                                                                    <a class="chip" href="../functionality/view-admin-overview.html">View the admin overview</a>
-                                                                    <a class="chip" href="../functionality/view-cookbook-detail.html">View a Cookbook detail</a>
-                                                                    <a class="chip" href="../functionality/view-marketing-home.html">View the marketing home</a>
+                                                                    <a class="chip" href="../functionality/load-living-model.html">Load the living model</a>
                                                                                             </td>
                         </tr>
                                             <tr>
-                            <td><code>simulation_runs</code></td>
+                            <td><code>.vibekb/work/current.md</code></td>
                             <td>
-                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
-                                                                                            </td>
+                                                                <span class="muted">—</span>                            </td>
                             <td>
-                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
-                                                                    <a class="chip" href="../functionality/view-admin-overview.html">View the admin overview</a>
-                                                                                            </td>
-                        </tr>
-                                            <tr>
-                            <td><code>sousmeow_categories</code></td>
-                            <td>
-                                                                    <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
-                                                                                            </td>
-                            <td>
-                                                                    <a class="chip" href="../functionality/browse-categories.html">Browse by category</a>
-                                                                    <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
-                                                                    <a class="chip" href="../functionality/view-cookbook-detail.html">View a Cookbook detail</a>
+                                                                    <a class="chip" href="../functionality/record-current-work.html">Record current AI work</a>
+                                                                    <a class="chip" href="../functionality/start-work-session.html">Start a work session</a>
                                                                                             </td>
                         </tr>
                                             <tr>
-                            <td><code>sousmeow_collections</code></td>
+                            <td><code>.vibekb/work/handoff.md</code></td>
                             <td>
-                                                                    <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
-                                                                                            </td>
+                                                                <span class="muted">—</span>                            </td>
                             <td>
-                                                                    <a class="chip" href="../functionality/browse-categories.html">Browse by category</a>
-                                                                    <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
-                                                                    <a class="chip" href="../functionality/view-collection.html">View a collection</a>
-                                                                    <a class="chip" href="../functionality/view-cookbook-detail.html">View a Cookbook detail</a>
-                                                                    <a class="chip" href="../functionality/view-marketing-home.html">View the marketing home</a>
+                                                                    <a class="chip" href="../functionality/hand-off-to-next-agent.html">Hand off to the next agent</a>
+                                                                    <a class="chip" href="../functionality/start-work-session.html">Start a work session</a>
                                                                                             </td>
                         </tr>
                                             <tr>
-                            <td><code>sousmeow_cookbook_collections</code></td>
+                            <td><code>docs</code></td>
                             <td>
-                                                                    <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
+                                                                    <a class="chip" href="../functionality/generate-static-snapshot.html">Generate the static snapshot</a>
                                                                                             </td>
                             <td>
-                                                                    <a class="chip" href="../functionality/browse-categories.html">Browse by category</a>
-                                                                    <a class="chip" href="../functionality/view-collection.html">View a collection</a>
+                                                                    <a class="chip" href="../functionality/detect-drift.html">Detect drift between code and model</a>
                                                                                             </td>
                         </tr>
                                             <tr>
-                            <td><code>users</code></td>
+                            <td><code>docs/assets/data/search.json</code></td>
                             <td>
-                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
-                                                                    <a class="chip" href="../functionality/manage-account.html">Manage your account</a>
-                                                                    <a class="chip" href="../functionality/register-account.html">Register an account</a>
-                                                                    <a class="chip" href="../functionality/reset-password.html">Reset a password</a>
-                                                                    <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>
-                                                                    <a class="chip" href="../functionality/sign-in.html">Sign in</a>
-                                                                    <a class="chip" href="../functionality/verify-email.html">Verify your email</a>
+                                                                <span class="muted">—</span>                            </td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/validate-model.html">Validate the model</a>
                                                                                             </td>
+                        </tr>
+                                            <tr>
+                            <td><code>guide</code></td>
                             <td>
-                                                                    <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a>
-                                                                    <a class="chip" href="../functionality/manage-account.html">Manage your account</a>
-                                                                    <a class="chip" href="../functionality/register-account.html">Register an account</a>
-                                                                    <a class="chip" href="../functionality/reset-password.html">Reset a password</a>
-                                                                    <a class="chip" href="../functionality/sign-in.html">Sign in</a>
-                                                                    <a class="chip" href="../functionality/verify-email.html">Verify your email</a>
-                                                                    <a class="chip" href="../functionality/view-admin-overview.html">View the admin overview</a>
+                                                                <span class="muted">—</span>                            </td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/detect-drift.html">Detect drift between code and model</a>
+                                                                                            </td>
+                        </tr>
+                                            <tr>
+                            <td><code>guide/assets</code></td>
+                            <td>
+                                                                <span class="muted">—</span>                            </td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/generate-static-snapshot.html">Generate the static snapshot</a>
+                                                                                            </td>
+                        </tr>
+                                            <tr>
+                            <td><code>guide/templates</code></td>
+                            <td>
+                                                                <span class="muted">—</span>                            </td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/generate-static-snapshot.html">Generate the static snapshot</a>
+                                                                                            </td>
+                        </tr>
+                                            <tr>
+                            <td><code>tools</code></td>
+                            <td>
+                                                                <span class="muted">—</span>                            </td>
+                            <td>
+                                                                    <a class="chip" href="../functionality/detect-drift.html">Detect drift between code and model</a>
                                                                                             </td>
                         </tr>
                                     </table>
@@ -508,7 +355,7 @@ Pantry values ─► PromptBuilder ─► prompt (copied) ─► [your AI] ─�
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-21 · source commit c1617ab (2026-07-16) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 05:59 UTC · source commit fc65ae6 (2026-07-22) · not auto-updating</p>
             </div>
         </footer>
     </div>

@@ -1,46 +1,28 @@
 ---
-id: system-storage
+id: storage
 type: system
 title: Storage
-summary: One relational database (SQLite dev / MySQL prod) holds the catalog and user work; export zips live on disk outside the web root. No other persistence.
-updated: 2026-07-16
-verification: verified-from-source
+summary: There is no runtime database — the model is plain files under `.vibekb/`, generated output is files under `/docs`, and provenance lives in `manifest.json`.
+updated: 2026-07-22
 ---
 
 ## What is stored, and where
 
-All structured data is in one database — SQLite (`storage/sousmeow.sqlite`) in
-dev or MySQL in production, same schema. Export zips are files in
-`storage/exports/` (outside the web root). Sessions use PHP's session store.
-There is no external storage.
+| Store | What | Written by |
+|-------|------|-----------|
+| `.vibekb/` | The living model (records + manifests) | Humans and AI agents, by hand |
+| `.vibekb/manifest.json` | Provenance and structure metadata | Agents, on re-verification |
+| `/docs/` | The static snapshot | `tools/generate-static.php` (generated) |
+| `docs/assets/data/search.json` | The static search index | The generator |
+| `examples/*/.vibekb/` | Bundled example models | Field tests (rarely changed) |
 
-## The catalog (seeded, read-mostly)
+## No runtime database
 
-| Table | Meaning |
-|-------|---------|
-| `cookbooks` | Workflows: slug, status, `is_executable`, difficulty, category |
-| `cookbook_stages`, `recipes` | Ordered steps, prompts, output contracts |
-| `recipe_checks` | Per-recipe Quality Checks (+ evidence keys) |
-| `pantry_fields` | Typed input definitions per Cookbook |
-| `sousmeow_categories`, `sousmeow_collections`, `sousmeow_cookbook_collections` | Discovery taxonomy (prefixed to avoid collisions on shared hosting) |
+VibeKB deliberately has no SQL database, no cache store, no sessions, and no
+network at render time. The model is versioned with the code, which is what makes
+it review-able in a pull request and deployable by copying files.
 
-## User work (written during a run)
+## What is generated vs authored
 
-| Table | Meaning | Written by |
-|-------|---------|------------|
-| `users` | Accounts, roles, verification, `simulation` flag | Auth/Account |
-| `projects` | A user's run of a Cookbook | Start / Pantry / Runner |
-| `pantry_values` | The facts entered (unique per project+field) | Fill the Pantry |
-| `artifacts` | One per project+recipe; status + approved version | Runner |
-| `artifact_versions` | Immutable, append-only (pasted/example/edited/restored) | Paste / Approve |
-| `artifact_checks` | A confirmed check against a specific version | Review |
-| `exports` | A built kit's filename, size, count | Export |
-| `simulation_runs` | Daily demo-activity log | Simulation |
-
-## Durability, backup, sensitivity
-
-- Backup = the SQLite file or a MySQL dump; export zips are copied separately.
-- Table names for the taxonomy carry a `sousmeow_` prefix because the
-  production database is shared with other apps on the account.
-- Passwords are hashed (`password_hash`); pasted content is the only untrusted
-  bulk data and is sanitised/escaped.
+`.vibekb/` and `examples/` are **authored**. `/docs/` is **generated** — never
+hand-edited; the drift check flags a `/docs` that differs from a fresh render.

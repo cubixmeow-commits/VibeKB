@@ -27,7 +27,19 @@ if (!headers_sent()) {
     header('Cache-Control: no-cache, must-revalidate');
 }
 
+// The active model is the repository's own `.vibekb/` by default. An explicit
+// VIBEKB_CONTENT_ROOT lets the same renderer preview a bundled example model
+// (e.g. examples/sousmeow/.vibekb) without a second app. The path is confined
+// to a `.vibekb` directory so the override can never point the guide at
+// arbitrary filesystem locations.
 $contentRoot = dirname(__DIR__) . '/.vibekb';
+$override = getenv('VIBEKB_CONTENT_ROOT');
+if (is_string($override) && $override !== '') {
+    $candidate = rtrim($override, '/');
+    if (basename($candidate) === '.vibekb' && is_dir($candidate)) {
+        $contentRoot = $candidate;
+    }
+}
 
 // Development vs production error posture.
 $devMode = (getenv('VIBEKB_DEV') === '1')

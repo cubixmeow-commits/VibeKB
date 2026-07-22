@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AI handoff · SousMeow — VibeKB</title>
-    <meta name="description" content="A living explanation of what SousMeow currently does, how it works, what AI is changing, and why.">
+    <title>AI handoff · VibeKB — VibeKB</title>
+    <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- Web fonts are a progressive enhancement only. The stylesheet ships a
@@ -21,7 +21,7 @@
         <div class="site-header__inner">
             <a class="brand" href="../index.html">
                 <span class="brand__mark">VibeKB</span>
-                <span class="brand__project">SousMeow</span>
+                <span class="brand__project">VibeKB</span>
             </a>
             <form class="site-search" role="search" action="../search/index.html">
                 <label class="visually-hidden" for="site-search-input">Search guide</label>
@@ -111,114 +111,79 @@
 
             <section class="doc-section callout callout--work">
             <div class="badge-row">
-                                    <span class="badge badge--info">Verification: mixed</span>                                <span class="muted">Updated 2026-07-21</span>
+                                    <span class="badge badge--info">Verification: verified manually</span>                                <span class="muted">Updated 2026-07-22</span>
             </div>
             <div class="prose reading-column"><h3>What the software (VibeKB) now does</h3>
-<p>VibeKB renders one <code>.vibekb/</code> source through one template set in two modes: the
-dynamic PHP guide (Mode A) and a static <code>/docs</code> snapshot (Mode B, via
-<code>tools/generate-static.php</code>). Diagrams are first-class source-grounded records
-and can now be <strong>explainable</strong>: an optional per-diagram topology
-(<code>.vibekb/diagrams/topology/&lt;id&gt;.json</code>) gives every node a plain-language
-purpose, every edge a concrete mechanism from a controlled vocabulary and a
-one-sentence explanation, every displayed file a role and a reason, a compact
-repository location, and a commit-pinned external source link as the terminal
-&quot;show me the implementation&quot;. Every rendering shows objective provenance and
-never implies auto-freshness; counts distinguish areas from records; search and
-filters run client-side with no jQuery and no required CDN.</p>
-<h3>Explainable Diagrams — what was built this pass</h3>
+<p>VibeKB renders one repository-owned model through one template set in two modes
+(dynamic guide, static <code>/docs</code>). As of this change it is <strong>self-hosted</strong>: the
+active model describes VibeKB&#039;s own components — the loader, the guide renderer,
+the static generator, the validator, the explainable-diagram system, and the new
+self-maintenance CLI. Example models of other apps live under <code>examples/</code> and are
+not the active model.</p>
+<h3>Completed this change</h3>
 <ul>
-<li><strong>Schema + vocabulary:</strong> JSON topology (nodes/edges) referenced by a diagram</li>
+<li><strong>Examples isolated.</strong> SousMeow → <code>examples/sousmeow/.vibekb/</code>; StopPR audit →</li>
 </ul>
-<p>record&#039;s <code>topology:</code> field. Single canonical <code>edge_mechanism_vocabulary()</code> and
-  <code>file_role_vocabulary()</code> in <code>guide/lib/helpers.php</code>; two edge states —
-  verified (solid) and inferred (dashed), both stated in text.</p>
+<p><code>examples/field-tests/</code>. <code>guide/index.php</code> gained a <code>VIBEKB_CONTENT_ROOT</code>
+  override (constrained to a <code>.vibekb</code> directory) so examples stay
+  previewable/validatable.</p>
 <ul>
-<li><strong>Loader + resolution:</strong> <code>Content.php</code> loads/normalises topology, resolves</li>
+<li><strong>Self-model authored.</strong> 17 functionality records across 7 areas, 6 system</li>
 </ul>
-<p>node/edge functionality and warnings, reuses <code>important-files.json</code> metadata,
-  and builds immutable GitHub source links from manifest provenance.</p>
+<p>docs, curated important-files, memory (decisions/constraints/warnings/
+  assumption/discovery/change), 3 diagrams (2 explainable), work + handoff — all
+  grounded in this repository&#039;s source.</p>
 <ul>
-<li><strong>Validation:</strong> the loader + <code>tools/validate.php</code> enforce the full contract</li>
+<li><strong>Self-maintenance CLI.</strong> <code>tools/vibekb.php</code>: <code>status</code> (session start), <code>check</code></li>
 </ul>
-<p>(unique ids, resolvable edges, controlled mechanisms, honest verification,
-  files-with-reasons, SVG↔topology marker mapping both ways). New
-  <code>tools/test-topology.php</code> proves malformed topology produces useful
-  diagnostics without crashing.</p>
+<p>(validate + broken-reference detection + drift since recorded commit + <code>/docs</code>
+  sync), <code>affected</code> (files → functionality), <code>validate</code>, <code>generate</code>. Honest about
+  detected vs interpreted.</p>
 <ul>
-<li><strong>Rendering:</strong> semantic no-JS node/edge explanation sections</li>
+<li><strong>Tooling.</strong> <code>tools/validate.php</code> accepts an optional content root; a CI</li>
 </ul>
-<p>(<code>guide/templates/partials/diagram-explain.php</code>) with <code>#node-&lt;id&gt;</code> /
-  <code>#edge-&lt;id&gt;</code> anchors; SVGs mark groups with <code>data-vibekb-node</code> /
-  <code>data-vibekb-edge</code> linking to those anchors. Small vanilla-JS enhancement adds
-  selection, dimming, and focus (<code>initDiagrams</code> in <code>guide/assets/js/guide.js</code>);
-  nothing essential is behind JS.</p>
+<p>workflow runs syntax, validation, topology, and the drift check.</p>
 <ul>
-<li><strong>Search + backlinks:</strong> node titles/purposes, edge labels/explanations, and</li>
+<li><strong>Instructions unified.</strong> <code>CLAUDE.md</code> canonical; <code>AGENTS.md</code> and</li>
 </ul>
-<p>files-with-reasons are searchable and link to the exact anchor; functionality
-  pages deep-link to the node that represents them.</p>
+<p><code>.cursor/rules/vibekb.mdc</code> are thin pointers. <code>MAINTENANCE.md</code>, <code>INITIALIZE.md</code>,
+  <code>README.md</code>, <code>.cpanel.yml</code>, <code>DEPLOYMENT.md</code> updated for self-hosting.</p>
 <ul>
-<li><strong>Examples:</strong> upgraded <strong>request-flow</strong> (verified web path + two inferred,</li>
+<li><strong>/docs regenerated</strong> from the self-model.</li>
 </ul>
-<p>dashed edges: the Router match and the CLI write path) and <strong>run-recipe-flow</strong>
-  (verified user journey with the untrusted-paste and read/write-coupling
-  warnings). The other three diagrams remain valid as picture + narrative.</p>
-<h3>SousMeow functionality state (unchanged this pass)</h3>
-<ul>
-<li><strong>Verified from source:</strong> discovery, auth, the full Runner</li>
-</ul>
-<p>(run-recipe → build-prompt → paste-response → review-quality-checks →
-  approve-and-version), export-project-kit, admin overview, routing/security,
-  database access.</p>
-<ul>
-<li><strong>Partial:</strong> <code>reset-password</code> (SMTP-dependent web flow); <code>demo-simulation</code></li>
-</ul>
-<p>(paste-example verified; bulk inferred).</p>
-<ul>
-<li><strong>Inferred from source:</strong> <code>manage-account</code>, <code>seed-and-sync-content</code>, the</li>
-</ul>
-<p>Router, and some Model queries. No verification state was upgraded for the
-  diagrams — inferred edges are drawn dashed and state their basis.</p>
-<h3>Provenance note (important)</h3>
-<p>The SousMeow model was derived read-only and is not bundled into VibeKB. It can
-go stale — re-verify against the SousMeow source
-(<code>cubixmeow-commits/dev-portfolio-v2</code>, <code>projects/sousmeow</code>, commit <code>c1617ab</code>)
-before changing any functionality claim. Source links are pinned to that commit.</p>
-<h3>Verification completed this pass</h3>
+<h3>Verification completed</h3>
 <ul>
 <li><code>php -l</code> clean across changed <code>guide/</code> and <code>tools/</code> files.</li>
-<li><code>php tools/validate.php</code> → 0 errors (25 records, 9 areas, 5 diagrams, 2</li>
+<li><code>php tools/validate.php</code> → 0 errors on the root model; the SousMeow example also</li>
 </ul>
-<p>explainable topologies, 13 nodes, 11 edges); warnings are only the three
-  not-yet-explainable diagrams.</p>
+<p>validates via the content-root argument.</p>
 <ul>
-<li><code>php tools/test-topology.php</code> → OK (all malformed-topology diagnostics fire;</li>
+<li><code>php tools/test-topology.php</code> → OK.</li>
+<li><code>php tools/vibekb.php status|check|affected</code> exercised; <code>check</code> reports a</li>
 </ul>
-<p>good topology still resolves).</p>
+<p>consistent model and an in-sync <code>/docs</code>.</p>
 <ul>
-<li>Dynamic guide: diagrams + functionality views return 200; source links are</li>
+<li>Dynamic guide spot-checked; <code>/docs</code> regenerated and re-validated.</li>
 </ul>
-<p>commit-pinned; search index exposes node/edge/file entries with correct
-  anchors.</p>
+<h3>Active warnings (VibeKB)</h3>
 <ul>
-<li>Static <code>/docs</code> regenerated: node/edge anchors, relative source links, and</li>
+<li><code>model-can-drift-from-code</code>, <code>docs-is-generated-never-hand-edit</code>,</li>
 </ul>
-<p>functionality backlinks resolve.</p>
-<h3>Active warnings (SousMeow)</h3>
+<p><code>verification-must-reflect-evidence</code>.</p>
+<h3>Honest limitations / not verified</h3>
 <ul>
-<li><code>read-write-path-coupling</code>, <code>pasted-response-is-untrusted</code>,</li>
+<li>Cursor discovery is <code>inferred</code> (rules provided, not runtime-observed here).</li>
+<li>The live cPanel host is not exercised in this environment.</li>
+<li><code>initialize-in-a-repository</code> is <code>partial</code> (documented process, no skeleton</li>
 </ul>
-<p><code>password-reset-depends-on-smtp</code>, <code>legacy-category-column</code>.</p>
+<p>generator command yet).</p>
 <h3>Exact next recommended action</h3>
-<p>Author topology for the remaining three diagrams (<code>app-overview</code>, <code>storage-map</code>,
-<code>risk-uncertainty-map</code>) — each currently renders as picture + narrative and is
-flagged by a non-fatal validator warning — applying the same explainability
-gate. In parallel, trace <code>app/Controllers/AccountController.php</code>,
-<code>scripts/seed.php</code>, and the <code>Simulation*</code> services in the SousMeow source to
-promote the inferred edges/records (Router match, CLI write path,
-<code>manage-account</code>, <code>seed-and-sync-content</code>) to verified where the source
-supports it. Then re-run <code>php tools/validate.php</code>, <code>php tools/test-topology.php</code>,
-and <code>php tools/generate-static.php</code>.</p></div>
+<p>If richer visuals are wanted, author explainable topology for the third diagram
+(<code>self-maintenance-loop</code>) applying the same explainability gate, then re-run
+<code>php tools/vibekb.php check</code> and <code>php tools/generate-static.php</code>. Otherwise, for
+any future change, start with <code>php tools/vibekb.php status</code>, use <code>affected</code> to
+find impacted records, update them, and finish with <code>check</code> + <code>generate</code> before
+committing.</p></div>
         </section>
     
             <section class="doc-section">
@@ -226,13 +191,13 @@ and <code>php tools/generate-static.php</code>.</p></div>
             <ul class="why-list">
                                     <li class="why-item">
                         <div class="why-item__head">
-                            <h3>Migrate the VibeKB example to SousMeow</h3>
+                            <h3>Bootstrap VibeKB self-hosting</h3>
                             <div class="badge-row">
-                                <span class="badge badge--ok">Verified from source</span>                                <span class="muted">2026-07-20</span>
+                                <span class="badge badge--ok">Verified manually</span>                                <span class="muted">2026-07-22</span>
                             </div>
                         </div>
-                        <p>Replaced the fictional SaaS Idea Manager sample with a source-grounded VibeKB model of the real SousMeow application.</p>
-                                                    <p class="why-item__links"><a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a> <a class="chip" href="../functionality/build-prompt.html">Build the prompt</a> <a class="chip" href="../functionality/paste-response.html">Paste a response</a> <a class="chip" href="../functionality/review-quality-checks.html">Review Quality Checks</a> <a class="chip" href="../functionality/approve-and-version.html">Approve &amp; version an artifact</a> <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a></p>
+                        <p></p>
+                                                    <p class="why-item__links"><a class="chip" href="../functionality/start-work-session.html">Start a work session</a> <a class="chip" href="../functionality/detect-drift.html">Detect drift between code and model</a> <a class="chip" href="../functionality/find-affected-functionality.html">Find affected functionality</a> <a class="chip" href="../functionality/load-living-model.html">Load the living model</a> <a class="chip" href="../functionality/generate-static-snapshot.html">Generate the static snapshot</a></p>
                                             </li>
                             </ul>
         </section>
@@ -251,7 +216,7 @@ and <code>php tools/generate-static.php</code>.</p></div>
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-21 · source commit c1617ab (2026-07-16) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 05:59 UTC · source commit fc65ae6 (2026-07-22) · not auto-updating</p>
             </div>
         </footer>
     </div>

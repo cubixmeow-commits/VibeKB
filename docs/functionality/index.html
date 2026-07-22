@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Functionality · SousMeow — VibeKB</title>
-    <meta name="description" content="A living explanation of what SousMeow currently does, how it works, what AI is changing, and why.">
+    <title>Functionality · VibeKB — VibeKB</title>
+    <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- Web fonts are a progressive enhancement only. The stylesheet ships a
@@ -21,7 +21,7 @@
         <div class="site-header__inner">
             <a class="brand" href="../index.html">
                 <span class="brand__mark">VibeKB</span>
-                <span class="brand__project">SousMeow</span>
+                <span class="brand__project">VibeKB</span>
             </a>
             <form class="site-search" role="search" action="../search/index.html">
                 <label class="visually-hidden" for="site-search-input">Search guide</label>
@@ -129,15 +129,13 @@
             <label>Area
                 <select name="area">
                     <option value="">Any</option>
-                                            <option value="explore-discovery">Explore &amp; discovery</option>
-                                            <option value="accounts-auth">Accounts &amp; authentication</option>
-                                            <option value="projects-progress">Projects &amp; progress</option>
-                                            <option value="pantry-inputs">Pantry &amp; inputs</option>
-                                            <option value="cookbook-runner">Cookbook Runner</option>
-                                            <option value="artifacts-quality">Artifacts &amp; quality checks</option>
-                                            <option value="export-kit">Export (Project Kit)</option>
-                                            <option value="administration">Administration &amp; demo</option>
-                                            <option value="system-deployment">System &amp; deployment</option>
+                                            <option value="living-model">The living model</option>
+                                            <option value="agent-workflow">AI coding workflow</option>
+                                            <option value="dynamic-guide">The dynamic guide (Mode A)</option>
+                                            <option value="static-publishing">The static snapshot (Mode B)</option>
+                                            <option value="diagrams">Explainable diagrams</option>
+                                            <option value="integration">Adopting VibeKB elsewhere</option>
+                                            <option value="deployment">Deployment &amp; portability</option>
                                     </select>
             </label>
             <label>Verification
@@ -168,26 +166,26 @@
         </div>
     </form>
 
-                            <section class="group-block wide-section" aria-labelledby="grp-explore-discovery">
+                            <section class="group-block wide-section" aria-labelledby="grp-living-model">
             <header class="section-intro">
-                <h2 id="grp-explore-discovery">Explore &amp; discovery</h2>
-                                    <p class="section-intro__support">How visitors find Cookbooks: the marketing home, marketplace search, categories, and curated collections.</p>
+                <h2 id="grp-living-model">The living model</h2>
+                                    <p class="section-intro__support">How the repository-owned `.vibekb/` content is loaded, parsed, relationship-resolved, and validated into the model everything else renders.</p>
                             </header>
             <ul class="record-list">
                                     <li class="record-card"
                         data-status="implemented"
-                        data-area="explore-discovery"
+                        data-area="living-model"
                         data-verification="verified-from-source"
-                        data-facing="user">
+                        data-facing="system">
                         <div class="record-card__row">
                             <h3 class="record-card__title">
-                                <a class="record-card__link" href="../functionality/view-marketing-home.html">
-                                    View the marketing home                                </a>
+                                <a class="record-card__link" href="../functionality/load-living-model.html">
+                                    Load the living model                                </a>
                             </h3>
                             <div class="record-card__status">
                                 <span class="badge badge--ok">Implemented</span>                            </div>
                         </div>
-                        <p class="record-card__summary">The public landing page that presents the featured Cookbook as a full artifact plus the catalog and a curated money shelf.</p>
+                        <p class="record-card__summary">A single loader reads the repository-owned `.vibekb/` directory into an in-memory model — project, functionality, system, files, diagrams, memory, and work — with all filesystem access confined to the content root.</p>
                         <dl class="record-card__meta">
                                                             <div>
                                     <dt>Verification</dt>
@@ -195,32 +193,32 @@
                                 </div>
                                                                                         <div>
                                     <dt>Trigger</dt>
-                                    <dd>A visitor opens &quot;/&quot;.</dd>
+                                    <dd>The guide (guide/index.php) or a tool constructs `Content` with a content root and calls `load()`.</dd>
                                 </div>
                                                         <div>
                                 <dt>Facing</dt>
-                                <dd>User-facing</dd>
+                                <dd>System</dd>
                             </div>
                             <div>
                                 <dt>Updated</dt>
-                                <dd>2026-07-16</dd>
+                                <dd>2026-07-22</dd>
                             </div>
                         </dl>
                     </li>
                                     <li class="record-card"
                         data-status="implemented"
-                        data-area="explore-discovery"
+                        data-area="living-model"
                         data-verification="verified-from-source"
-                        data-facing="user">
+                        data-facing="system">
                         <div class="record-card__row">
                             <h3 class="record-card__title">
-                                <a class="record-card__link" href="../functionality/browse-marketplace.html">
-                                    Browse the marketplace                                </a>
+                                <a class="record-card__link" href="../functionality/parse-records.html">
+                                    Parse records (front matter + Markdown)                                </a>
                             </h3>
                             <div class="record-card__status">
                                 <span class="badge badge--ok">Implemented</span>                            </div>
                         </div>
-                        <p class="record-card__summary">A single searchable listing of every Cookbook, filtered by a plain-text query.</p>
+                        <p class="record-card__summary">A small front-matter parser and a pragmatic Markdown subset turn each `.vibekb/` file into structured metadata plus rendered HTML, without pulling in a Markdown library or a build step.</p>
                         <dl class="record-card__meta">
                                                             <div>
                                     <dt>Verification</dt>
@@ -228,32 +226,32 @@
                                 </div>
                                                                                         <div>
                                     <dt>Trigger</dt>
-                                    <dd>A visitor opens &quot;/marketplace&quot;, optionally with &quot;?q=&quot;.</dd>
+                                    <dd>The loader reads any `.md` record.</dd>
                                 </div>
                                                         <div>
                                 <dt>Facing</dt>
-                                <dd>User-facing</dd>
+                                <dd>System</dd>
                             </div>
                             <div>
                                 <dt>Updated</dt>
-                                <dd>2026-07-16</dd>
+                                <dd>2026-07-22</dd>
                             </div>
                         </dl>
                     </li>
                                     <li class="record-card"
                         data-status="implemented"
-                        data-area="explore-discovery"
+                        data-area="living-model"
                         data-verification="verified-from-source"
-                        data-facing="user">
+                        data-facing="system">
                         <div class="record-card__row">
                             <h3 class="record-card__title">
-                                <a class="record-card__link" href="../functionality/view-cookbook-detail.html">
-                                    View a Cookbook detail                                </a>
+                                <a class="record-card__link" href="../functionality/resolve-relationships.html">
+                                    Resolve relationships between records                                </a>
                             </h3>
                             <div class="record-card__status">
                                 <span class="badge badge--ok">Implemented</span>                            </div>
                         </div>
-                        <p class="record-card__summary">The full Cookbook page — stages, every Recipe with its Quality Checks and Pantry fields, related Cookbooks, and the start action.</p>
+                        <p class="record-card__summary">The loader turns the flat set of records into a graph — functionality dependencies and derived dependents, memory back-links, file-to-functionality links, and diagram cross-links — so every view can show live, validated connections.</p>
                         <dl class="record-card__meta">
                                                             <div>
                                     <dt>Verification</dt>
@@ -261,32 +259,32 @@
                                 </div>
                                                                                         <div>
                                     <dt>Trigger</dt>
-                                    <dd>A visitor opens &quot;/cookbooks/{slug}&quot;.</dd>
+                                    <dd>Any view or tool asks the loader for a record&#039;s related functionality, files, memory, dependents, or diagrams.</dd>
                                 </div>
                                                         <div>
                                 <dt>Facing</dt>
-                                <dd>User-facing</dd>
+                                <dd>System</dd>
                             </div>
                             <div>
                                 <dt>Updated</dt>
-                                <dd>2026-07-16</dd>
+                                <dd>2026-07-22</dd>
                             </div>
                         </dl>
                     </li>
                                     <li class="record-card"
                         data-status="implemented"
-                        data-area="explore-discovery"
+                        data-area="living-model"
                         data-verification="verified-from-source"
                         data-facing="user">
                         <div class="record-card__row">
                             <h3 class="record-card__title">
-                                <a class="record-card__link" href="../functionality/browse-categories.html">
-                                    Browse by category                                </a>
+                                <a class="record-card__link" href="../functionality/validate-model.html">
+                                    Validate the model                                </a>
                             </h3>
                             <div class="record-card__status">
                                 <span class="badge badge--ok">Implemented</span>                            </div>
                         </div>
-                        <p class="record-card__summary">The stable topic spine — a category index and one shared category page with difficulty and executable/preview filters.</p>
+                        <p class="record-card__summary">The loader and the headless `tools/validate.php` enforce the content contract — required fields, controlled vocabularies, resolvable references, well-formed diagram assets, provenance completeness, and reconciled totals — reporting structural errors that gate generation and CI.</p>
                         <dl class="record-card__meta">
                                                             <div>
                                     <dt>Verification</dt>
@@ -294,7 +292,7 @@
                                 </div>
                                                                                         <div>
                                     <dt>Trigger</dt>
-                                    <dd>A visitor opens &quot;/categories&quot; or &quot;/categories/{slug}&quot;.</dd>
+                                    <dd>The loader validates on every load; `php tools/validate.php` runs the same checks headlessly and exits non-zero on error.</dd>
                                 </div>
                                                         <div>
                                 <dt>Facing</dt>
@@ -302,73 +300,40 @@
                             </div>
                             <div>
                                 <dt>Updated</dt>
-                                <dd>2026-07-16</dd>
-                            </div>
-                        </dl>
-                    </li>
-                                    <li class="record-card"
-                        data-status="implemented"
-                        data-area="explore-discovery"
-                        data-verification="verified-from-source"
-                        data-facing="user">
-                        <div class="record-card__row">
-                            <h3 class="record-card__title">
-                                <a class="record-card__link" href="../functionality/view-collection.html">
-                                    View a collection                                </a>
-                            </h3>
-                            <div class="record-card__status">
-                                <span class="badge badge--ok">Implemented</span>                            </div>
-                        </div>
-                        <p class="record-card__summary">Flexible merchandising views over the catalog — editorial, dynamic, or attribute-based — that appear only once they have enough members.</p>
-                        <dl class="record-card__meta">
-                                                            <div>
-                                    <dt>Verification</dt>
-                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
-                                </div>
-                                                                                        <div>
-                                    <dt>Trigger</dt>
-                                    <dd>A visitor opens &quot;/collections/{slug}&quot;.</dd>
-                                </div>
-                                                        <div>
-                                <dt>Facing</dt>
-                                <dd>User-facing</dd>
-                            </div>
-                            <div>
-                                <dt>Updated</dt>
-                                <dd>2026-07-16</dd>
+                                <dd>2026-07-22</dd>
                             </div>
                         </dl>
                     </li>
                             </ul>
         </section>
-                            <section class="group-block wide-section" aria-labelledby="grp-accounts-auth">
+                            <section class="group-block wide-section" aria-labelledby="grp-agent-workflow">
             <header class="section-intro">
-                <h2 id="grp-accounts-auth">Accounts &amp; authentication</h2>
-                                    <p class="section-intro__support">Registration, email verification, sign-in, account settings, and password recovery.</p>
+                <h2 id="grp-agent-workflow">AI coding workflow</h2>
+                                    <p class="section-intro__support">How a coding agent starts a session, finds what a change affects, detects drift, records active work, and hands off — the self-maintenance lifecycle.</p>
                             </header>
             <ul class="record-list">
                                     <li class="record-card"
                         data-status="implemented"
-                        data-area="accounts-auth"
-                        data-verification="verified-from-source"
+                        data-area="agent-workflow"
+                        data-verification="verified-manually"
                         data-facing="user">
                         <div class="record-card__row">
                             <h3 class="record-card__title">
-                                <a class="record-card__link" href="../functionality/register-account.html">
-                                    Register an account                                </a>
+                                <a class="record-card__link" href="../functionality/start-work-session.html">
+                                    Start a work session                                </a>
                             </h3>
                             <div class="record-card__status">
                                 <span class="badge badge--ok">Implemented</span>                            </div>
                         </div>
-                        <p class="record-card__summary">Creates a user, logs them in, and sends an email verification link (rate-limited, terms required).</p>
+                        <p class="record-card__summary">`php tools/vibekb.php status` prints the one screen an agent needs to begin — the active model&#039;s provenance, the current work record, the handoff&#039;s next recommended action, and a one-line validation and drift summary — so a fresh agent can orient without reading every file.</p>
                         <dl class="record-card__meta">
                                                             <div>
                                     <dt>Verification</dt>
-                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
+                                    <dd><span class="badge badge--ok">Verified manually</span></dd>
                                 </div>
                                                                                         <div>
                                     <dt>Trigger</dt>
-                                    <dd>A visitor submits the registration form at &quot;/register&quot;.</dd>
+                                    <dd>A coding agent runs `php tools/vibekb.php status` (or `php tools/vibekb.php`) at the start of a session.</dd>
                                 </div>
                                                         <div>
                                 <dt>Facing</dt>
@@ -376,32 +341,32 @@
                             </div>
                             <div>
                                 <dt>Updated</dt>
-                                <dd>2026-07-16</dd>
+                                <dd>2026-07-22</dd>
                             </div>
                         </dl>
                     </li>
                                     <li class="record-card"
                         data-status="implemented"
-                        data-area="accounts-auth"
-                        data-verification="verified-from-source"
+                        data-area="agent-workflow"
+                        data-verification="verified-manually"
                         data-facing="user">
                         <div class="record-card__row">
                             <h3 class="record-card__title">
-                                <a class="record-card__link" href="../functionality/sign-in.html">
-                                    Sign in                                </a>
+                                <a class="record-card__link" href="../functionality/detect-drift.html">
+                                    Detect drift between code and model                                </a>
                             </h3>
                             <div class="record-card__status">
                                 <span class="badge badge--ok">Implemented</span>                            </div>
                         </div>
-                        <p class="record-card__summary">Authenticates a user against a hashed password with per-IP and per-email rate limiting and opportunistic hash upgrades.</p>
+                        <p class="record-card__summary">`php tools/vibekb.php check` reports where the model and the repository have diverged — model references to files that no longer exist, source files changed since the recorded commit, functionality those changes likely affect, and whether the /docs snapshot is stale — separating what was detected mechanically from what still needs an agent to interpret.</p>
                         <dl class="record-card__meta">
                                                             <div>
                                     <dt>Verification</dt>
-                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
+                                    <dd><span class="badge badge--ok">Verified manually</span></dd>
                                 </div>
                                                                                         <div>
                                     <dt>Trigger</dt>
-                                    <dd>A visitor submits the login form at &quot;/login&quot;.</dd>
+                                    <dd>A coding agent runs `php tools/vibekb.php check` before committing, or CI runs it.</dd>
                                 </div>
                                                         <div>
                                 <dt>Facing</dt>
@@ -409,32 +374,32 @@
                             </div>
                             <div>
                                 <dt>Updated</dt>
-                                <dd>2026-07-16</dd>
+                                <dd>2026-07-22</dd>
                             </div>
                         </dl>
                     </li>
                                     <li class="record-card"
                         data-status="implemented"
-                        data-area="accounts-auth"
-                        data-verification="verified-from-source"
+                        data-area="agent-workflow"
+                        data-verification="verified-manually"
                         data-facing="user">
                         <div class="record-card__row">
                             <h3 class="record-card__title">
-                                <a class="record-card__link" href="../functionality/verify-email.html">
-                                    Verify your email                                </a>
+                                <a class="record-card__link" href="../functionality/find-affected-functionality.html">
+                                    Find affected functionality                                </a>
                             </h3>
                             <div class="record-card__status">
                                 <span class="badge badge--ok">Implemented</span>                            </div>
                         </div>
-                        <p class="record-card__summary">Confirms ownership of the email via a hashed, expiring token, unlocking the write actions gated by requireVerified.</p>
+                        <p class="record-card__summary">Given a set of changed files, `php tools/vibekb.php affected` lists the functionality records, important-files entries, and diagram topologies that reference them — turning &quot;six files changed&quot; into &quot;here is the knowledge that may now be wrong.&quot;</p>
                         <dl class="record-card__meta">
                                                             <div>
                                     <dt>Verification</dt>
-                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
+                                    <dd><span class="badge badge--ok">Verified manually</span></dd>
                                 </div>
                                                                                         <div>
                                     <dt>Trigger</dt>
-                                    <dd>The user opens the &quot;/verify-email/{token}&quot; link (or resends it).</dd>
+                                    <dd>A coding agent runs `php tools/vibekb.php affected &lt;file&gt;...` or `--since &lt;ref&gt;`.</dd>
                                 </div>
                                                         <div>
                                 <dt>Facing</dt>
@@ -442,32 +407,328 @@
                             </div>
                             <div>
                                 <dt>Updated</dt>
-                                <dd>2026-07-16</dd>
+                                <dd>2026-07-22</dd>
                             </div>
                         </dl>
                     </li>
+                                    <li class="record-card"
+                        data-status="implemented"
+                        data-area="agent-workflow"
+                        data-verification="verified-from-source"
+                        data-facing="user">
+                        <div class="record-card__row">
+                            <h3 class="record-card__title">
+                                <a class="record-card__link" href="../functionality/record-current-work.html">
+                                    Record current AI work                                </a>
+                            </h3>
+                            <div class="record-card__status">
+                                <span class="badge badge--ok">Implemented</span>                            </div>
+                        </div>
+                        <p class="record-card__summary">`.vibekb/work/current.md` holds the active change — requested outcome, current vs proposed behaviour, affected functionality, expected files, data impact, risks, and verification plan — rendered as the Current Work view so the change is visible before, during, and after it happens.</p>
+                        <dl class="record-card__meta">
+                                                            <div>
+                                    <dt>Verification</dt>
+                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
+                                </div>
+                                                                                        <div>
+                                    <dt>Trigger</dt>
+                                    <dd>An agent updates work/current.md before implementing; the guide renders it at ?view=current-work.</dd>
+                                </div>
+                                                        <div>
+                                <dt>Facing</dt>
+                                <dd>User-facing</dd>
+                            </div>
+                            <div>
+                                <dt>Updated</dt>
+                                <dd>2026-07-22</dd>
+                            </div>
+                        </dl>
+                    </li>
+                                    <li class="record-card"
+                        data-status="implemented"
+                        data-area="agent-workflow"
+                        data-verification="verified-from-source"
+                        data-facing="user">
+                        <div class="record-card__row">
+                            <h3 class="record-card__title">
+                                <a class="record-card__link" href="../functionality/hand-off-to-next-agent.html">
+                                    Hand off to the next agent                                </a>
+                            </h3>
+                            <div class="record-card__status">
+                                <span class="badge badge--ok">Implemented</span>                            </div>
+                        </div>
+                        <p class="record-card__summary">`.vibekb/work/handoff.md` records current functionality state, completed work, verification done, unresolved work, active warnings, and the exact next recommended action — the artifact a fresh agent reads (via `status`) to continue without re-deriving context.</p>
+                        <dl class="record-card__meta">
+                                                            <div>
+                                    <dt>Verification</dt>
+                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
+                                </div>
+                                                                                        <div>
+                                    <dt>Trigger</dt>
+                                    <dd>An agent updates work/handoff.md at the end of a session; the guide renders it at ?view=handoff and `status` surfaces its next action.</dd>
+                                </div>
+                                                        <div>
+                                <dt>Facing</dt>
+                                <dd>User-facing</dd>
+                            </div>
+                            <div>
+                                <dt>Updated</dt>
+                                <dd>2026-07-22</dd>
+                            </div>
+                        </dl>
+                    </li>
+                            </ul>
+        </section>
+                            <section class="group-block wide-section" aria-labelledby="grp-dynamic-guide">
+            <header class="section-intro">
+                <h2 id="grp-dynamic-guide">The dynamic guide (Mode A)</h2>
+                                    <p class="section-intro__support">The live PHP app that renders the model in the browser: routing, provenance, and search.</p>
+                            </header>
+            <ul class="record-list">
+                                    <li class="record-card"
+                        data-status="implemented"
+                        data-area="dynamic-guide"
+                        data-verification="verified-from-source"
+                        data-facing="user">
+                        <div class="record-card__row">
+                            <h3 class="record-card__title">
+                                <a class="record-card__link" href="../functionality/render-guide.html">
+                                    Render the dynamic guide                                </a>
+                            </h3>
+                            <div class="record-card__status">
+                                <span class="badge badge--ok">Implemented</span>                            </div>
+                        </div>
+                        <p class="record-card__summary">A single PHP front controller routes by `?view=`, loads the model, and renders one shared template set into the browser — the live guide (Mode A) that reads `.vibekb/` on every request with no build step and no rewrite rules.</p>
+                        <dl class="record-card__meta">
+                                                            <div>
+                                    <dt>Verification</dt>
+                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
+                                </div>
+                                                                                        <div>
+                                    <dt>Trigger</dt>
+                                    <dd>A browser requests guide/index.php (optionally with ?view= and ?id=).</dd>
+                                </div>
+                                                        <div>
+                                <dt>Facing</dt>
+                                <dd>User-facing</dd>
+                            </div>
+                            <div>
+                                <dt>Updated</dt>
+                                <dd>2026-07-22</dd>
+                            </div>
+                        </dl>
+                    </li>
+                                    <li class="record-card"
+                        data-status="implemented"
+                        data-area="dynamic-guide"
+                        data-verification="verified-from-source"
+                        data-facing="user">
+                        <div class="record-card__row">
+                            <h3 class="record-card__title">
+                                <a class="record-card__link" href="../functionality/show-provenance.html">
+                                    Show provenance and freshness                                </a>
+                            </h3>
+                            <div class="record-card__status">
+                                <span class="badge badge--ok">Implemented</span>                            </div>
+                        </div>
+                        <p class="record-card__summary">Every rendering carries an objective provenance panel — source commit analyzed, analysis generated, verification scope, last verified, and an explicit &quot;does not auto-update&quot; — built once and reused by both output modes so no page can imply freshness it does not have.</p>
+                        <dl class="record-card__meta">
+                                                            <div>
+                                    <dt>Verification</dt>
+                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
+                                </div>
+                                                                                        <div>
+                                    <dt>Trigger</dt>
+                                    <dd>Any page renders the provenance panel/stamp; the generator supplies the static generation context.</dd>
+                                </div>
+                                                        <div>
+                                <dt>Facing</dt>
+                                <dd>User-facing</dd>
+                            </div>
+                            <div>
+                                <dt>Updated</dt>
+                                <dd>2026-07-22</dd>
+                            </div>
+                        </dl>
+                    </li>
+                                    <li class="record-card"
+                        data-status="implemented"
+                        data-area="dynamic-guide"
+                        data-verification="verified-from-source"
+                        data-facing="user">
+                        <div class="record-card__row">
+                            <h3 class="record-card__title">
+                                <a class="record-card__link" href="../functionality/search-the-model.html">
+                                    Search the model                                </a>
+                            </h3>
+                            <div class="record-card__status">
+                                <span class="badge badge--ok">Implemented</span>                            </div>
+                        </div>
+                        <p class="record-card__summary">A shared index builder produces one search index covering functionality, memory, files, diagrams, and explainable node/edge/file entries; the dynamic guide serves it as JSON and the static snapshot ships it as a file, with client-side search that needs no server, database, or CDN.</p>
+                        <dl class="record-card__meta">
+                                                            <div>
+                                    <dt>Verification</dt>
+                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
+                                </div>
+                                                                                        <div>
+                                    <dt>Trigger</dt>
+                                    <dd>The Search view loads; the dynamic guide also exposes ?view=search&amp;data=json.</dd>
+                                </div>
+                                                        <div>
+                                <dt>Facing</dt>
+                                <dd>User-facing</dd>
+                            </div>
+                            <div>
+                                <dt>Updated</dt>
+                                <dd>2026-07-22</dd>
+                            </div>
+                        </dl>
+                    </li>
+                            </ul>
+        </section>
+                            <section class="group-block wide-section" aria-labelledby="grp-static-publishing">
+            <header class="section-intro">
+                <h2 id="grp-static-publishing">The static snapshot (Mode B)</h2>
+                                    <p class="section-intro__support">Rendering the same model through the same templates into a self-contained /docs site for GitHub Pages or any static host.</p>
+                            </header>
+            <ul class="record-list">
+                                    <li class="record-card"
+                        data-status="implemented"
+                        data-area="static-publishing"
+                        data-verification="verified-from-source"
+                        data-facing="user">
+                        <div class="record-card__row">
+                            <h3 class="record-card__title">
+                                <a class="record-card__link" href="../functionality/generate-static-snapshot.html">
+                                    Generate the static snapshot                                </a>
+                            </h3>
+                            <div class="record-card__status">
+                                <span class="badge badge--ok">Implemented</span>                            </div>
+                        </div>
+                        <p class="record-card__summary">`php tools/generate-static.php` renders the same templates as the live guide into a self-contained `/docs` site with relative, subpath-safe links — refusing to build if the model has validation errors, and clearly stamped as generated output that does not update itself.</p>
+                        <dl class="record-card__meta">
+                                                            <div>
+                                    <dt>Verification</dt>
+                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
+                                </div>
+                                                                                        <div>
+                                    <dt>Trigger</dt>
+                                    <dd>A developer runs `php tools/generate-static.php` (locally or in CI) to refresh /docs.</dd>
+                                </div>
+                                                        <div>
+                                <dt>Facing</dt>
+                                <dd>User-facing</dd>
+                            </div>
+                            <div>
+                                <dt>Updated</dt>
+                                <dd>2026-07-22</dd>
+                            </div>
+                        </dl>
+                    </li>
+                            </ul>
+        </section>
+                            <section class="group-block wide-section" aria-labelledby="grp-diagrams">
+            <header class="section-intro">
+                <h2 id="grp-diagrams">Explainable diagrams</h2>
+                                    <p class="section-intro__support">Source-grounded diagrams whose repository-owned topology gives every node a purpose, every edge a mechanism, and every file a reason.</p>
+                            </header>
+            <ul class="record-list">
+                                    <li class="record-card"
+                        data-status="implemented"
+                        data-area="diagrams"
+                        data-verification="verified-from-source"
+                        data-facing="user">
+                        <div class="record-card__row">
+                            <h3 class="record-card__title">
+                                <a class="record-card__link" href="../functionality/render-explainable-diagrams.html">
+                                    Render explainable diagrams                                </a>
+                            </h3>
+                            <div class="record-card__status">
+                                <span class="badge badge--ok">Implemented</span>                            </div>
+                        </div>
+                        <p class="record-card__summary">A diagram can carry a repository-owned topology (nodes with purposes, edges with controlled mechanisms, files with reasons, commit-pinned source links); the loader resolves it and the guide renders semantic per-node/per-edge explanations that work without JavaScript, identical in both output modes.</p>
+                        <dl class="record-card__meta">
+                                                            <div>
+                                    <dt>Verification</dt>
+                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
+                                </div>
+                                                                                        <div>
+                                    <dt>Trigger</dt>
+                                    <dd>A diagram record declares a `topology:` file; the Diagrams view renders it.</dd>
+                                </div>
+                                                        <div>
+                                <dt>Facing</dt>
+                                <dd>User-facing</dd>
+                            </div>
+                            <div>
+                                <dt>Updated</dt>
+                                <dd>2026-07-22</dd>
+                            </div>
+                        </dl>
+                    </li>
+                                    <li class="record-card"
+                        data-status="implemented"
+                        data-area="diagrams"
+                        data-verification="verified-by-test"
+                        data-facing="user">
+                        <div class="record-card__row">
+                            <h3 class="record-card__title">
+                                <a class="record-card__link" href="../functionality/validate-diagram-topology.html">
+                                    Validate diagram topology                                </a>
+                            </h3>
+                            <div class="record-card__status">
+                                <span class="badge badge--ok">Implemented</span>                            </div>
+                        </div>
+                        <p class="record-card__summary">The loader and `tools/test-topology.php` enforce the explainability contract — unique ids, resolvable edge endpoints, controlled mechanisms, honest verification, files with reasons, and SVG markers that map to topology ids in both directions — so a diagram can never point at something it cannot explain.</p>
+                        <dl class="record-card__meta">
+                                                            <div>
+                                    <dt>Verification</dt>
+                                    <dd><span class="badge badge--ok">Verified by test</span></dd>
+                                </div>
+                                                                                        <div>
+                                    <dt>Trigger</dt>
+                                    <dd>The loader validates each topology on load; `php tools/test-topology.php` exercises malformed and valid fixtures.</dd>
+                                </div>
+                                                        <div>
+                                <dt>Facing</dt>
+                                <dd>User-facing</dd>
+                            </div>
+                            <div>
+                                <dt>Updated</dt>
+                                <dd>2026-07-22</dd>
+                            </div>
+                        </dl>
+                    </li>
+                            </ul>
+        </section>
+                            <section class="group-block wide-section" aria-labelledby="grp-integration">
+            <header class="section-intro">
+                <h2 id="grp-integration">Adopting VibeKB elsewhere</h2>
+                                    <p class="section-intro__support">Initializing a VibeKB model inside another repository.</p>
+                            </header>
+            <ul class="record-list">
                                     <li class="record-card"
                         data-status="partial"
-                        data-area="accounts-auth"
-                        data-verification="verified-from-source"
+                        data-area="integration"
+                        data-verification="reported-by-developer"
                         data-facing="user">
                         <div class="record-card__row">
                             <h3 class="record-card__title">
-                                <a class="record-card__link" href="../functionality/reset-password.html">
-                                    Reset a password                                </a>
+                                <a class="record-card__link" href="../functionality/initialize-in-a-repository.html">
+                                    Initialize VibeKB in a repository                                </a>
                             </h3>
                             <div class="record-card__status">
                                 <span class="badge badge--warn">Partially implemented</span>                            </div>
                         </div>
-                        <p class="record-card__summary">A web forgot/reset flow exists and is coded correctly, but it depends on email delivery that the default deploy does not configure — so in practice resets happen via the CLI.</p>
+                        <p class="record-card__summary">A documented, project-agnostic process (INITIALIZE.md plus a paste-ready prompt) for an agent to build a fresh, honest `.vibekb/` model of another application read-only, then render it — the same process VibeKB used on itself.</p>
                         <dl class="record-card__meta">
                                                             <div>
                                     <dt>Verification</dt>
-                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
+                                    <dd><span class="badge badge--info">Reported by developer</span></dd>
                                 </div>
                                                                                         <div>
                                     <dt>Trigger</dt>
-                                    <dd>A visitor uses &quot;/forgot-password&quot;, then the emailed &quot;/reset-password/{token}&quot; link.</dd>
+                                    <dd>An operator copies the VibeKB app + docs into a target repo and runs the integration prompt.</dd>
                                 </div>
                                                         <div>
                                 <dt>Facing</dt>
@@ -475,509 +736,32 @@
                             </div>
                             <div>
                                 <dt>Updated</dt>
-                                <dd>2026-07-16</dd>
-                            </div>
-                        </dl>
-                    </li>
-                                    <li class="record-card"
-                        data-status="implemented"
-                        data-area="accounts-auth"
-                        data-verification="inferred-from-source"
-                        data-facing="user">
-                        <div class="record-card__row">
-                            <h3 class="record-card__title">
-                                <a class="record-card__link" href="../functionality/manage-account.html">
-                                    Manage your account                                </a>
-                            </h3>
-                            <div class="record-card__status">
-                                <span class="badge badge--ok">Implemented</span>                            </div>
-                        </div>
-                        <p class="record-card__summary">Account settings — profile, preferences, security (password and email change), a personal data export, first-run onboarding, and account deletion.</p>
-                        <dl class="record-card__meta">
-                                                            <div>
-                                    <dt>Verification</dt>
-                                    <dd><span class="badge badge--info">Inferred from source</span></dd>
-                                </div>
-                                                                                        <div>
-                                    <dt>Trigger</dt>
-                                    <dd>The user opens &quot;/account&quot; (and its sub-pages) while signed in.</dd>
-                                </div>
-                                                        <div>
-                                <dt>Facing</dt>
-                                <dd>User-facing</dd>
-                            </div>
-                            <div>
-                                <dt>Updated</dt>
-                                <dd>2026-07-16</dd>
+                                <dd>2026-07-22</dd>
                             </div>
                         </dl>
                     </li>
                             </ul>
         </section>
-                            <section class="group-block wide-section" aria-labelledby="grp-projects-progress">
+                            <section class="group-block wide-section" aria-labelledby="grp-deployment">
             <header class="section-intro">
-                <h2 id="grp-projects-progress">Projects &amp; progress</h2>
-                                    <p class="section-intro__support">The signed-in kitchen, starting a project, and tracking it through to completion.</p>
+                <h2 id="grp-deployment">Deployment &amp; portability</h2>
+                                    <p class="section-intro__support">How the guide deploys to shared hosting and stays portable with no build step.</p>
                             </header>
             <ul class="record-list">
                                     <li class="record-card"
                         data-status="implemented"
-                        data-area="projects-progress"
-                        data-verification="verified-from-source"
-                        data-facing="user">
-                        <div class="record-card__row">
-                            <h3 class="record-card__title">
-                                <a class="record-card__link" href="../functionality/view-kitchen.html">
-                                    View My Kitchen                                </a>
-                            </h3>
-                            <div class="record-card__status">
-                                <span class="badge badge--ok">Implemented</span>                            </div>
-                        </div>
-                        <p class="record-card__summary">The signed-in home — your projects with a prominent &quot;continue&quot; card for the most recent unfinished one, plus featured Cookbooks.</p>
-                        <dl class="record-card__meta">
-                                                            <div>
-                                    <dt>Verification</dt>
-                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
-                                </div>
-                                                                                        <div>
-                                    <dt>Trigger</dt>
-                                    <dd>A signed-in user opens &quot;/kitchen&quot;.</dd>
-                                </div>
-                                                        <div>
-                                <dt>Facing</dt>
-                                <dd>User-facing</dd>
-                            </div>
-                            <div>
-                                <dt>Updated</dt>
-                                <dd>2026-07-16</dd>
-                            </div>
-                        </dl>
-                    </li>
-                                    <li class="record-card"
-                        data-status="implemented"
-                        data-area="projects-progress"
-                        data-verification="verified-from-source"
-                        data-facing="user">
-                        <div class="record-card__row">
-                            <h3 class="record-card__title">
-                                <a class="record-card__link" href="../functionality/start-project.html">
-                                    Start a project                                </a>
-                            </h3>
-                            <div class="record-card__status">
-                                <span class="badge badge--ok">Implemented</span>                            </div>
-                        </div>
-                        <p class="record-card__summary">Creates a project from an executable Cookbook and sends the user straight to the Pantry — with a server-side gate that preview Cookbooks can never start.</p>
-                        <dl class="record-card__meta">
-                                                            <div>
-                                    <dt>Verification</dt>
-                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
-                                </div>
-                                                                                        <div>
-                                    <dt>Trigger</dt>
-                                    <dd>A verified user posts a Cookbook slug to &quot;/projects&quot;.</dd>
-                                </div>
-                                                        <div>
-                                <dt>Facing</dt>
-                                <dd>User-facing</dd>
-                            </div>
-                            <div>
-                                <dt>Updated</dt>
-                                <dd>2026-07-16</dd>
-                            </div>
-                        </dl>
-                    </li>
-                                    <li class="record-card"
-                        data-status="implemented"
-                        data-area="projects-progress"
-                        data-verification="verified-from-source"
-                        data-facing="user">
-                        <div class="record-card__row">
-                            <h3 class="record-card__title">
-                                <a class="record-card__link" href="../functionality/track-project-progress.html">
-                                    Track project progress                                </a>
-                            </h3>
-                            <div class="record-card__status">
-                                <span class="badge badge--ok">Implemented</span>                            </div>
-                        </div>
-                        <p class="record-card__summary">Routes a project to wherever it actually is — Pantry, the next unfinished Recipe, or export — and handles deletion.</p>
-                        <dl class="record-card__meta">
-                                                            <div>
-                                    <dt>Verification</dt>
-                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
-                                </div>
-                                                                                        <div>
-                                    <dt>Trigger</dt>
-                                    <dd>A user opens &quot;/projects/{id}&quot; or deletes a project.</dd>
-                                </div>
-                                                        <div>
-                                <dt>Facing</dt>
-                                <dd>User-facing</dd>
-                            </div>
-                            <div>
-                                <dt>Updated</dt>
-                                <dd>2026-07-16</dd>
-                            </div>
-                        </dl>
-                    </li>
-                            </ul>
-        </section>
-                            <section class="group-block wide-section" aria-labelledby="grp-pantry-inputs">
-            <header class="section-intro">
-                <h2 id="grp-pantry-inputs">Pantry &amp; inputs</h2>
-                                    <p class="section-intro__support">Collecting and validating the project facts every prompt is built from.</p>
-                            </header>
-            <ul class="record-list">
-                                    <li class="record-card"
-                        data-status="implemented"
-                        data-area="pantry-inputs"
-                        data-verification="verified-from-source"
-                        data-facing="user">
-                        <div class="record-card__row">
-                            <h3 class="record-card__title">
-                                <a class="record-card__link" href="../functionality/fill-pantry.html">
-                                    Fill the Pantry                                </a>
-                            </h3>
-                            <div class="record-card__status">
-                                <span class="badge badge--ok">Implemented</span>                            </div>
-                        </div>
-                        <p class="record-card__summary">Collects and validates the project facts every prompt is built from, with per-type validation, a one-click sample fill, and a value-driven project rename.</p>
-                        <dl class="record-card__meta">
-                                                            <div>
-                                    <dt>Verification</dt>
-                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
-                                </div>
-                                                                                        <div>
-                                    <dt>Trigger</dt>
-                                    <dd>A user opens or submits &quot;/projects/{id}/pantry&quot;.</dd>
-                                </div>
-                                                        <div>
-                                <dt>Facing</dt>
-                                <dd>User-facing</dd>
-                            </div>
-                            <div>
-                                <dt>Updated</dt>
-                                <dd>2026-07-16</dd>
-                            </div>
-                        </dl>
-                    </li>
-                            </ul>
-        </section>
-                            <section class="group-block wide-section" aria-labelledby="grp-cookbook-runner">
-            <header class="section-intro">
-                <h2 id="grp-cookbook-runner">Cookbook Runner</h2>
-                                    <p class="section-intro__support">The product&#039;s core loop: build a prompt, run it in your own AI, and paste the response back.</p>
-                            </header>
-            <ul class="record-list">
-                                    <li class="record-card"
-                        data-status="implemented"
-                        data-area="cookbook-runner"
-                        data-verification="verified-from-source"
-                        data-facing="user">
-                        <div class="record-card__row">
-                            <h3 class="record-card__title">
-                                <a class="record-card__link" href="../functionality/run-recipe.html">
-                                    Run a Recipe                                </a>
-                            </h3>
-                            <div class="record-card__status">
-                                <span class="badge badge--ok">Implemented</span>                            </div>
-                        </div>
-                        <p class="record-card__summary">The product&#039;s core loop — one Recipe step rendered as one of three durable states (gather, review, approved), with strict server-side step ordering.</p>
-                        <dl class="record-card__meta">
-                                                            <div>
-                                    <dt>Verification</dt>
-                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
-                                </div>
-                                                                                        <div>
-                                    <dt>Trigger</dt>
-                                    <dd>A user opens &quot;/projects/{id}/run/{position}&quot;.</dd>
-                                </div>
-                                                        <div>
-                                <dt>Facing</dt>
-                                <dd>User-facing</dd>
-                            </div>
-                            <div>
-                                <dt>Updated</dt>
-                                <dd>2026-07-16</dd>
-                            </div>
-                        </dl>
-                    </li>
-                                    <li class="record-card"
-                        data-status="implemented"
-                        data-area="cookbook-runner"
-                        data-verification="verified-from-source"
-                        data-facing="user">
-                        <div class="record-card__row">
-                            <h3 class="record-card__title">
-                                <a class="record-card__link" href="../functionality/build-prompt.html">
-                                    Build the prompt                                </a>
-                            </h3>
-                            <div class="record-card__status">
-                                <span class="badge badge--ok">Implemented</span>                            </div>
-                        </div>
-                        <p class="record-card__summary">Turns a Recipe template into a ready-to-copy prompt by substituting Pantry values and earlier approved Artifacts, with every substitution highlighted.</p>
-                        <dl class="record-card__meta">
-                                                            <div>
-                                    <dt>Verification</dt>
-                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
-                                </div>
-                                                                                        <div>
-                                    <dt>Trigger</dt>
-                                    <dd>Rendered whenever a Recipe step is shown.</dd>
-                                </div>
-                                                        <div>
-                                <dt>Facing</dt>
-                                <dd>User-facing</dd>
-                            </div>
-                            <div>
-                                <dt>Updated</dt>
-                                <dd>2026-07-16</dd>
-                            </div>
-                        </dl>
-                    </li>
-                                    <li class="record-card"
-                        data-status="implemented"
-                        data-area="cookbook-runner"
-                        data-verification="verified-from-source"
-                        data-facing="user">
-                        <div class="record-card__row">
-                            <h3 class="record-card__title">
-                                <a class="record-card__link" href="../functionality/paste-response.html">
-                                    Paste a response                                </a>
-                            </h3>
-                            <div class="record-card__status">
-                                <span class="badge badge--ok">Implemented</span>                            </div>
-                        </div>
-                        <p class="record-card__summary">Stores a pasted AI response (or the seeded example) as a new immutable artifact version after sanitising untrusted input.</p>
-                        <dl class="record-card__meta">
-                                                            <div>
-                                    <dt>Verification</dt>
-                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
-                                </div>
-                                                                                        <div>
-                                    <dt>Trigger</dt>
-                                    <dd>A user posts to &quot;.../paste&quot; or &quot;.../example&quot; on a Recipe step.</dd>
-                                </div>
-                                                        <div>
-                                <dt>Facing</dt>
-                                <dd>User-facing</dd>
-                            </div>
-                            <div>
-                                <dt>Updated</dt>
-                                <dd>2026-07-16</dd>
-                            </div>
-                        </dl>
-                    </li>
-                            </ul>
-        </section>
-                            <section class="group-block wide-section" aria-labelledby="grp-artifacts-quality">
-            <header class="section-intro">
-                <h2 id="grp-artifacts-quality">Artifacts &amp; quality checks</h2>
-                                    <p class="section-intro__support">Human review, immutable version history, and the approval gate that governs every step.</p>
-                            </header>
-            <ul class="record-list">
-                                    <li class="record-card"
-                        data-status="implemented"
-                        data-area="artifacts-quality"
-                        data-verification="verified-from-source"
-                        data-facing="user">
-                        <div class="record-card__row">
-                            <h3 class="record-card__title">
-                                <a class="record-card__link" href="../functionality/review-quality-checks.html">
-                                    Review Quality Checks                                </a>
-                            </h3>
-                            <div class="record-card__status">
-                                <span class="badge badge--ok">Implemented</span>                            </div>
-                        </div>
-                        <p class="record-card__summary">The human review step — confirm each Quality Check against the exact version, aided by structural evidence parsed from the response but never graded automatically.</p>
-                        <dl class="record-card__meta">
-                                                            <div>
-                                    <dt>Verification</dt>
-                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
-                                </div>
-                                                                                        <div>
-                                    <dt>Trigger</dt>
-                                    <dd>A user toggles a check on &quot;.../checks&quot; for a Recipe step.</dd>
-                                </div>
-                                                        <div>
-                                <dt>Facing</dt>
-                                <dd>User-facing</dd>
-                            </div>
-                            <div>
-                                <dt>Updated</dt>
-                                <dd>2026-07-16</dd>
-                            </div>
-                        </dl>
-                    </li>
-                                    <li class="record-card"
-                        data-status="implemented"
-                        data-area="artifacts-quality"
-                        data-verification="verified-from-source"
-                        data-facing="user">
-                        <div class="record-card__row">
-                            <h3 class="record-card__title">
-                                <a class="record-card__link" href="../functionality/approve-and-version.html">
-                                    Approve &amp; version an artifact                                </a>
-                            </h3>
-                            <div class="record-card__status">
-                                <span class="badge badge--ok">Implemented</span>                            </div>
-                        </div>
-                        <p class="record-card__summary">The approval gate (every check confirmed) plus the full immutable version toolkit — edit, reopen, restore — that keeps history intact.</p>
-                        <dl class="record-card__meta">
-                                                            <div>
-                                    <dt>Verification</dt>
-                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
-                                </div>
-                                                                                        <div>
-                                    <dt>Trigger</dt>
-                                    <dd>A user posts to &quot;.../approve&quot;, &quot;.../reopen&quot;, &quot;.../edit&quot;, or &quot;.../restore&quot;.</dd>
-                                </div>
-                                                        <div>
-                                <dt>Facing</dt>
-                                <dd>User-facing</dd>
-                            </div>
-                            <div>
-                                <dt>Updated</dt>
-                                <dd>2026-07-16</dd>
-                            </div>
-                        </dl>
-                    </li>
-                            </ul>
-        </section>
-                            <section class="group-block wide-section" aria-labelledby="grp-export-kit">
-            <header class="section-intro">
-                <h2 id="grp-export-kit">Export (Project Kit)</h2>
-                                    <p class="section-intro__support">Turning an approved project into a downloadable, self-contained deliverable.</p>
-                            </header>
-            <ul class="record-list">
-                                    <li class="record-card"
-                        data-status="implemented"
-                        data-area="export-kit"
-                        data-verification="verified-from-source"
-                        data-facing="user">
-                        <div class="record-card__row">
-                            <h3 class="record-card__title">
-                                <a class="record-card__link" href="../functionality/export-project-kit.html">
-                                    Export the Project Kit                                </a>
-                            </h3>
-                            <div class="record-card__status">
-                                <span class="badge badge--ok">Implemented</span>                            </div>
-                        </div>
-                        <p class="record-card__summary">Builds a downloadable zip of every approved Artifact — numbered Markdown files, a self-contained HTML reader, and a provenance manifest — served only to the owner.</p>
-                        <dl class="record-card__meta">
-                                                            <div>
-                                    <dt>Verification</dt>
-                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
-                                </div>
-                                                                                        <div>
-                                    <dt>Trigger</dt>
-                                    <dd>A user posts to &quot;/projects/{id}/export&quot; and downloads via &quot;/exports/{id}/download&quot;.</dd>
-                                </div>
-                                                        <div>
-                                <dt>Facing</dt>
-                                <dd>User-facing</dd>
-                            </div>
-                            <div>
-                                <dt>Updated</dt>
-                                <dd>2026-07-16</dd>
-                            </div>
-                        </dl>
-                    </li>
-                            </ul>
-        </section>
-                            <section class="group-block wide-section" aria-labelledby="grp-administration">
-            <header class="section-intro">
-                <h2 id="grp-administration">Administration &amp; demo</h2>
-                                    <p class="section-intro__support">The admin overview and the portfolio Demo Mode / simulation.</p>
-                            </header>
-            <ul class="record-list">
-                                    <li class="record-card"
-                        data-status="implemented"
-                        data-area="administration"
-                        data-verification="verified-from-source"
-                        data-facing="user">
-                        <div class="record-card__row">
-                            <h3 class="record-card__title">
-                                <a class="record-card__link" href="../functionality/view-admin-overview.html">
-                                    View the admin overview                                </a>
-                            </h3>
-                            <div class="record-card__status">
-                                <span class="badge badge--ok">Implemented</span>                            </div>
-                        </div>
-                        <p class="record-card__summary">A read-only operations dashboard — totals, recent users and projects, and simulation status — gated by a server-side admin role.</p>
-                        <dl class="record-card__meta">
-                                                            <div>
-                                    <dt>Verification</dt>
-                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
-                                </div>
-                                                                                        <div>
-                                    <dt>Trigger</dt>
-                                    <dd>An admin opens &quot;/admin&quot;.</dd>
-                                </div>
-                                                        <div>
-                                <dt>Facing</dt>
-                                <dd>User-facing</dd>
-                            </div>
-                            <div>
-                                <dt>Updated</dt>
-                                <dd>2026-07-16</dd>
-                            </div>
-                        </dl>
-                    </li>
-                                    <li class="record-card"
-                        data-status="partial"
-                        data-area="administration"
-                        data-verification="inferred-from-source"
-                        data-facing="user">
-                        <div class="record-card__row">
-                            <h3 class="record-card__title">
-                                <a class="record-card__link" href="../functionality/demo-simulation.html">
-                                    Demo Mode &amp; simulation                                </a>
-                            </h3>
-                            <div class="record-card__status">
-                                <span class="badge badge--warn">Partially implemented</span>                            </div>
-                        </div>
-                        <p class="record-card__summary">Two related things — the Runner&#039;s per-recipe &quot;paste example&quot; for a no-AI walkthrough, and a portfolio simulation that populates hundreds of labelled demo creators and a public activity dashboard.</p>
-                        <dl class="record-card__meta">
-                                                            <div>
-                                    <dt>Verification</dt>
-                                    <dd><span class="badge badge--info">Inferred from source</span></dd>
-                                </div>
-                                                                                        <div>
-                                    <dt>Trigger</dt>
-                                    <dd>A user clicks &quot;Paste example response&quot;; or an operator runs the simulation scripts.</dd>
-                                </div>
-                                                        <div>
-                                <dt>Facing</dt>
-                                <dd>User-facing</dd>
-                            </div>
-                            <div>
-                                <dt>Updated</dt>
-                                <dd>2026-07-16</dd>
-                            </div>
-                        </dl>
-                    </li>
-                            </ul>
-        </section>
-                            <section class="group-block wide-section" aria-labelledby="grp-system-deployment">
-            <header class="section-intro">
-                <h2 id="grp-system-deployment">System &amp; deployment</h2>
-                                    <p class="section-intro__support">Request routing and security, database access, and content seeding.</p>
-                            </header>
-            <ul class="record-list">
-                                    <li class="record-card"
-                        data-status="implemented"
-                        data-area="system-deployment"
+                        data-area="deployment"
                         data-verification="verified-from-source"
                         data-facing="system">
                         <div class="record-card__row">
                             <h3 class="record-card__title">
-                                <a class="record-card__link" href="../functionality/route-and-secure-requests.html">
-                                    Route &amp; secure every request                                </a>
+                                <a class="record-card__link" href="../functionality/deploy-and-stay-portable.html">
+                                    Deploy and stay portable                                </a>
                             </h3>
                             <div class="record-card__status">
                                 <span class="badge badge--ok">Implemented</span>                            </div>
                         </div>
-                        <p class="record-card__summary">The front controller — security headers and CSP, then bootstrap, then one CSRF gate for all POSTs, then routing, with a subfolder-aware base path.</p>
+                        <p class="record-card__summary">The guide deploys to plain PHP 8.2 shared hosting via `.cpanel.yml` with no build step, no database, and no rewrite rules; query-string routing and relative static links let it run at a web root or in a subfolder, and the deploy config is treated as part of the application.</p>
                         <dl class="record-card__meta">
                                                             <div>
                                     <dt>Verification</dt>
@@ -985,7 +769,7 @@
                                 </div>
                                                                                         <div>
                                     <dt>Trigger</dt>
-                                    <dd>Every request that is not a real file under public/.</dd>
+                                    <dd>A cPanel Git deploy runs the rsync task in .cpanel.yml; or a static host serves /docs.</dd>
                                 </div>
                                                         <div>
                                 <dt>Facing</dt>
@@ -993,73 +777,7 @@
                             </div>
                             <div>
                                 <dt>Updated</dt>
-                                <dd>2026-07-16</dd>
-                            </div>
-                        </dl>
-                    </li>
-                                    <li class="record-card"
-                        data-status="implemented"
-                        data-area="system-deployment"
-                        data-verification="verified-from-source"
-                        data-facing="system">
-                        <div class="record-card__row">
-                            <h3 class="record-card__title">
-                                <a class="record-card__link" href="../functionality/access-database.html">
-                                    Access the database                                </a>
-                            </h3>
-                            <div class="record-card__status">
-                                <span class="badge badge--ok">Implemented</span>                            </div>
-                        </div>
-                        <p class="record-card__summary">A single shared PDO handle — SQLite for dev, MySQL for production — is the only database access path; every query is a prepared statement.</p>
-                        <dl class="record-card__meta">
-                                                            <div>
-                                    <dt>Verification</dt>
-                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
-                                </div>
-                                                                                        <div>
-                                    <dt>Trigger</dt>
-                                    <dd>The first database access in a request.</dd>
-                                </div>
-                                                        <div>
-                                <dt>Facing</dt>
-                                <dd>System</dd>
-                            </div>
-                            <div>
-                                <dt>Updated</dt>
-                                <dd>2026-07-16</dd>
-                            </div>
-                        </dl>
-                    </li>
-                                    <li class="record-card"
-                        data-status="implemented"
-                        data-area="system-deployment"
-                        data-verification="inferred-from-source"
-                        data-facing="system">
-                        <div class="record-card__row">
-                            <h3 class="record-card__title">
-                                <a class="record-card__link" href="../functionality/seed-and-sync-content.html">
-                                    Seed &amp; sync content                                </a>
-                            </h3>
-                            <div class="record-card__status">
-                                <span class="badge badge--ok">Implemented</span>                            </div>
-                        </div>
-                        <p class="record-card__summary">A CLI script applies the schema, upserts the versioned Cookbook/category/collection catalog by slug, and provisions the admin — safe to re-run after every deploy.</p>
-                        <dl class="record-card__meta">
-                                                            <div>
-                                    <dt>Verification</dt>
-                                    <dd><span class="badge badge--info">Inferred from source</span></dd>
-                                </div>
-                                                                                        <div>
-                                    <dt>Trigger</dt>
-                                    <dd>An operator runs &quot;php scripts/seed.php&quot; (never over HTTP).</dd>
-                                </div>
-                                                        <div>
-                                <dt>Facing</dt>
-                                <dd>System</dd>
-                            </div>
-                            <div>
-                                <dt>Updated</dt>
-                                <dd>2026-07-16</dd>
+                                <dd>2026-07-22</dd>
                             </div>
                         </dl>
                     </li>
@@ -1077,7 +795,7 @@
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-21 · source commit c1617ab (2026-07-16) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 05:59 UTC · source commit fc65ae6 (2026-07-22) · not auto-updating</p>
             </div>
         </footer>
     </div>
