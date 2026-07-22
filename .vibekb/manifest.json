@@ -13,7 +13,7 @@
     "source_repository": "https://github.com/cubixmeow-commits/VibeKB",
     "source_subpath": "",
     "source_branch": "main",
-    "source_commit": "dbd9c08 (2026-07-21)",
+    "source_commit": "fc65ae6 (2026-07-22)",
     "analyzed": "2026-07-22",
     "verification_scope": "The content loader, dynamic guide, static generator, validator, topology test, and self-maintenance CLI were traced from source in this repository. Diagram topology (architecture, content-load-flow) is verified-from-source. The cPanel host and Cursor discovery are inferred/not-verified as noted per record.",
     "last_verified": "2026-07-22",
