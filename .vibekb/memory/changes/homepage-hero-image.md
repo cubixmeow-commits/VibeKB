@@ -10,8 +10,8 @@ verification_state: verified-manually
 ## What changed
 
 - Source asset `assets/7E1D04F9-6324-4E51-AF19-65328ABA0308.png` (~1.4 MB on main) was resized and renamed to `assets/images/homepage-developer-journey.webp` (~19 KB) with a PNG fallback (~52 KB).
-- `index.php` section 1 uses a flat three-column hero grid: copy, comic, live metrics card.
-- `homepage.css` uses equal `1fr` columns on desktop; stacks on narrow viewports.
+- `index.php` section 1: hero comic spans full width above a two-column row (copy | metrics).
+- `homepage.css`: two-column grid on desktop; image centered above; stacks on narrow viewports.
 
 ## Verification
 
