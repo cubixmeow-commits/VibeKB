@@ -222,6 +222,42 @@
                                                                             <div><dt>Test after change</dt><dd>Confirm every entry link resolves in both modes; run php tools/validate.php (checks static search entries).</dd></div>
                                             </dl>
                 </section>
+                            <section class="file-card" id="guide/lib/map.php">
+                    <div class="file-card__head">
+                        <h2><code>guide/lib/map.php</code></h2>
+                        <div class="file-card__badges">
+                            <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
+                    </div>
+                    <p class="file-card__purpose">Builds the interactive functionality map&#039;s data (Level 1 areas, Level 2 capabilities, live statistics, current-context signal) from the existing model — no parallel data structures. Shared by both output modes.</p>
+                    <dl class="file-card__meta">
+                                                    <div><dt>Runs when</dt><dd>Rendering the overview (the guide&#039;s first screen) in either mode.</dd></div>
+                                                                            <div><dt>Implements</dt><dd>
+                                                                                                            <a class="chip" href="../functionality/render-functionality-map.html">Render the interactive functionality map</a>
+                                                                                                </dd></div>
+                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">guide/lib/Content.php</code> <code class="chip chip--file">guide/lib/helpers.php</code> <code class="chip chip--file">guide/lib/UrlStrategy.php</code></dd></div>
+                                                                            <div><dt>Depended on by</dt><dd>
+                                guide/index.php; tools/generate-static.php; guide/templates/partials/functionality-map.php                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Load the overview in both modes; confirm areas/capabilities/stats match the model and every link resolves.</dd></div>
+                                            </dl>
+                </section>
+                            <section class="file-card" id="guide/templates/partials/functionality-map.php">
+                    <div class="file-card__head">
+                        <h2><code>guide/templates/partials/functionality-map.php</code></h2>
+                        <div class="file-card__badges">
+                            <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
+                    </div>
+                    <p class="file-card__purpose">Renders the functionality map: hero, live statistics, the interactive canvas mount, and the always-present accessible fallback (expandable area cards linking into the docs), plus the embedded JSON model for the client.</p>
+                    <dl class="file-card__meta">
+                                                    <div><dt>Runs when</dt><dd>Included by the overview template on every overview render.</dd></div>
+                                                                            <div><dt>Implements</dt><dd>
+                                                                                                            <a class="chip" href="../functionality/render-functionality-map.html">Render the interactive functionality map</a>
+                                                                                                </dd></div>
+                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">guide/lib/map.php</code> <code class="chip chip--file">guide/lib/helpers.php</code></dd></div>
+                                                                            <div><dt>Depended on by</dt><dd>
+                                guide/templates/overview.php                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Confirm the no-JavaScript fallback lists every area and capability with working documentation links, and that output is escaped.</dd></div>
+                                            </dl>
+                </section>
                             <section class="file-card" id="guide/lib/nav.php">
                     <div class="file-card__head">
                         <h2><code>guide/lib/nav.php</code></h2>
@@ -487,7 +523,7 @@
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 08:55 UTC · source commit b8de993 (2026-07-22) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 21:26 UTC · source commit 65d7e02 (2026-07-22) · not auto-updating</p>
             </div>
         </footer>
     </div>

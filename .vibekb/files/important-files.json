@@ -67,6 +67,28 @@
       "provenance": "verified-from-source"
     },
     {
+      "path": "guide/lib/map.php",
+      "purpose": "Builds the interactive functionality map's data (Level 1 areas, Level 2 capabilities, live statistics, current-context signal) from the existing model — no parallel data structures. Shared by both output modes.",
+      "functionality": ["render-functionality-map"],
+      "runs_when": "Rendering the overview (the guide's first screen) in either mode.",
+      "depended_on_by": ["guide/index.php", "tools/generate-static.php", "guide/templates/partials/functionality-map.php"],
+      "depends_on": ["guide/lib/Content.php", "guide/lib/helpers.php", "guide/lib/UrlStrategy.php"],
+      "safety": "moderate-impact",
+      "test_after_change": "Load the overview in both modes; confirm areas/capabilities/stats match the model and every link resolves.",
+      "provenance": "verified-from-source"
+    },
+    {
+      "path": "guide/templates/partials/functionality-map.php",
+      "purpose": "Renders the functionality map: hero, live statistics, the interactive canvas mount, and the always-present accessible fallback (expandable area cards linking into the docs), plus the embedded JSON model for the client.",
+      "functionality": ["render-functionality-map"],
+      "runs_when": "Included by the overview template on every overview render.",
+      "depended_on_by": ["guide/templates/overview.php"],
+      "depends_on": ["guide/lib/map.php", "guide/lib/helpers.php"],
+      "safety": "moderate-impact",
+      "test_after_change": "Confirm the no-JavaScript fallback lists every area and capability with working documentation links, and that output is escaped.",
+      "provenance": "verified-from-source"
+    },
+    {
       "path": "guide/lib/nav.php",
       "purpose": "The single definition of views, routes, primary/secondary navigation, and page titles, consumed by both output modes.",
       "functionality": ["render-guide", "generate-static-snapshot"],
