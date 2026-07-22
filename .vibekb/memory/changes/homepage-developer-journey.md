@@ -20,7 +20,7 @@ they shipped faster than they understood.
 ## After
 
 - Hero and CTA centre on: AI helped you build it. VibeKB helps you understand it.
-- Six-beat developer journey section with comic-inspired emotional pacing.
+- Six-beat developer journey section with comic-inspired emotional pacing — balanced for vibe coders building their own software and developers extending open source.
 - Uncertainty section names fear/guessing, not "documentation."
 - VibeKB introduced only after the problem lands, as the missing understanding layer.
 - Before/after transformation section; live proof carousel retained.
