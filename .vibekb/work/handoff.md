@@ -2,56 +2,51 @@
 id: handoff
 type: handoff
 title: Current handoff
-summary: The overview's first screen is now an interactive functionality map (areas → capabilities → docs) built from the existing model; documentation is second, not first. Next: keep the model reconciled as VibeKB changes.
+summary: VibeKB now has a first-class installer (`php install.php`) plus a `vibekb bootstrap` command and a shared starter library, so adopting VibeKB into another repository is one command that prepares the workspace and hands off to an agent. Next: keep the model reconciled as VibeKB changes.
 updated: 2026-07-22
-verification_state: verified-manually
+verification_state: verified-from-source
 ---
 
 ## Completed this change
 
-- New `guide/lib/map.php` — `build_functionality_map()` derives the map (Level 1
-  areas, Level 2 capabilities, live statistics, current-context signal) from the
-  existing `Content` model. No parallel data structures.
-- New `guide/templates/partials/functionality-map.php` — hero + live statistics +
-  interactive canvas mount + an always-present accessible fallback (expandable
-  area cards linking straight into the docs) + embedded JSON model.
-- `guide/templates/overview.php` restructured so the map is the centerpiece; the
-  written sections (what it does, how to think, warnings/work, next step) remain
-  below as progressive Level-3 detail. Removed the old page-head/snapshot-bar and
-  the redundant "functional areas" list (the map now covers Level 1/2 nav).
-- `guide/assets/js/guide.js` — `initFunctionalityMap()`: pan/zoom (wheel, drag,
-  pinch), lazy expand/collapse, hover tooltip, current-context glow/dim,
-  list-mode toggle, and a mobile path that keeps the accessible cards.
-- `guide/assets/css/guide.css` — the `.fmap*` styles (premium, theme-consistent).
-- `guide/lib/Content.php` — added `systemDocs()` so the "Systems" statistic is
-  counted, not hard-coded.
-- Model reconciled: new `render-functionality-map` functionality record (+ index
-  order), `render-guide` updated, two new important-files entries, manifest
-  provenance updated (source_commit + verification scope), `/docs` regenerated.
-- `guide/index.php` and `tools/generate-static.php` now require `lib/map.php`.
+- New `install.php` — the VibeKB installer. Detects the target, reads
+  `template/manifest.json`, shows a create/replace/skip/preserve plan, copies the
+  VibeKB-owned payload, scaffolds a fresh empty `.vibekb/`, records installer
+  state in `.vibekb/.installer.json`, and verifies (including the target's own
+  `vibekb check`). Supports `--dry-run`, `--yes`, `--force`, and auto-detected
+  upgrades that preserve `.vibekb/`. Refuses to install into VibeKB's own repo.
+- New `tools/lib/Starter.php` — the single source of truth for the starter
+  workspace (required dirs + starter files + verify/scaffold helpers), shared by
+  the installer and bootstrap. Writes only empty placeholders — never
+  functionality about the target.
+- New `bootstrap` command in `tools/vibekb.php` — verifies and repairs a
+  workspace ("git init for VibeKB"), never overwriting content. `template/` added
+  to the drift-exclusion set.
+- New `template/manifest.json` — declarative payload definition (not a duplicated
+  file tree).
+- Model reconciled: two new functionality records (`install-into-a-repository`,
+  `bootstrap-workspace`) + index order; `initialize-in-a-repository` updated to
+  depend on the installer; three memory records (two decisions, one change);
+  three new important-files entries and the `tools/vibekb.php` entry updated;
+  manifest provenance/scope updated.
+- Docs: new `INSTALLER.md`; `README.md`, `INITIALIZE.md`, `MAINTENANCE.md`, and
+  the homepage updated to lead with the installer; `.cpanel.yml` + `DEPLOYMENT.md`
+  updated to exclude `install.php`, `template/`, and `tools/lib/`.
 
 ## Verification completed
 
-- `php -l` on every changed PHP file; `node --check guide/assets/js/guide.js`.
-- Rendered the overview in Mode A (PHP built-in server) and Mode B (static): the
-  embedded JSON parses (7 areas, 6 stats), area/capability links resolve, and the
-  static links are relative/subpath-safe.
-- Headless Chromium: desktop canvas builds (app + 7 area nodes), single-click
-  expands an area's capabilities, double-click opens the capability's doc page,
-  the List control swaps to the fallback and back, and at 390px width the canvas
-  is hidden and the accessible cards are the experience.
-- `php tools/vibekb.php check` — 0 errors (1 pre-existing warning:
-  self-maintenance-loop has no topology yet); no broken references; `/docs` in
-  sync after `generate`. `php tools/test-topology.php` OK.
-
-## Current-context feature
-
-The map highlights the functionality an agent is actively working on. It reads
-`work/current.md`'s `affected_functionality` today and is architected so
-`php tools/vibekb.php context` can feed the same shape later with no template or
-JS change.
+- `php -l` on `install.php`, `tools/lib/Starter.php`, `tools/vibekb.php`.
+- End-to-end: `install.php --dry-run` and a real `--yes` install into a scratch
+  git repo (42 runtime files + 19 dirs + 17 starter files); the target's
+  `php tools/vibekb.php check` reports OK. An upgrade run refreshed the runtime
+  and preserved a hand-edited `.vibekb/`. `bootstrap` recreated deleted dirs and
+  files and kept existing content. The scaffolded model passes
+  `php tools/validate.php <root>` with 0 errors.
+- `php tools/vibekb.php check` — 0 errors; `php tools/test-topology.php` OK;
+  `/docs` regenerated.
 
 ## Exact next recommended action
 
 `php tools/vibekb.php status` before the next change; `affected` → update model →
-`check` + `generate` before commit.
+`check` + `generate` before commit. If the installer payload changes, update
+`template/manifest.json` and `INSTALLER.md` together.

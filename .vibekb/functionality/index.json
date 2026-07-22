@@ -53,6 +53,8 @@
     "generate-static-snapshot",
     "render-explainable-diagrams",
     "validate-diagram-topology",
+    "install-into-a-repository",
+    "bootstrap-workspace",
     "initialize-in-a-repository",
     "deploy-and-stay-portable"
   ]

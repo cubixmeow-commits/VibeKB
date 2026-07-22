@@ -443,18 +443,72 @@
                         <div class="file-card__badges">
                             <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
                     </div>
-                    <p class="file-card__purpose">The self-maintenance CLI: status (session start), check (drift + validate + snapshot sync), affected (files → functionality), validate, generate. The agent&#039;s entry point to the lifecycle.</p>
+                    <p class="file-card__purpose">The self-maintenance CLI: status (session start), check (drift + validate + snapshot sync), affected (files → functionality), bootstrap (verify/repair the workspace), validate, generate. The agent&#039;s entry point to the lifecycle.</p>
                     <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>Session start, before commit, and in CI.</dd></div>
+                                                    <div><dt>Runs when</dt><dd>Session start, before commit, when repairing a workspace, and in CI.</dd></div>
                                                                             <div><dt>Implements</dt><dd>
                                                                                                             <a class="chip" href="../functionality/start-work-session.html">Start a work session</a>
                                                                                                                                                 <a class="chip" href="../functionality/detect-drift.html">Detect drift between code and model</a>
                                                                                                                                                 <a class="chip" href="../functionality/find-affected-functionality.html">Find affected functionality</a>
+                                                                                                                                                <a class="chip" href="../functionality/bootstrap-workspace.html">Bootstrap the VibeKB workspace</a>
                                                                                                 </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">guide/lib/Content.php</code> <code class="chip chip--file">tools/validate.php</code> <code class="chip chip--file">tools/generate-static.php</code></dd></div>
+                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">guide/lib/Content.php</code> <code class="chip chip--file">tools/lib/Starter.php</code> <code class="chip chip--file">tools/validate.php</code> <code class="chip chip--file">tools/generate-static.php</code></dd></div>
                                                                             <div><dt>Depended on by</dt><dd>
                                 The agent workflow; CI                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Run status/check/affected; confirm honest detection-vs-interpretation output and exit codes.</dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Run status/check/affected/bootstrap; confirm honest detection-vs-interpretation output and exit codes.</dd></div>
+                                            </dl>
+                </section>
+                            <section class="file-card" id="install.php">
+                    <div class="file-card__head">
+                        <h2><code>install.php</code></h2>
+                        <div class="file-card__badges">
+                            <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
+                    </div>
+                    <p class="file-card__purpose">The VibeKB installer: prepares a target repository by copying the VibeKB-owned payload (declared in template/manifest.json) and scaffolding a fresh, empty .vibekb/ workspace, without analysing or modifying the application. Supports dry-run, non-interactive, force, and upgrade.</p>
+                    <dl class="file-card__meta">
+                                                    <div><dt>Runs when</dt><dd>A developer runs `php install.php [target]` from a VibeKB clone.</dd></div>
+                                                                            <div><dt>Implements</dt><dd>
+                                                                                                            <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a>
+                                                                                                </dd></div>
+                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">template/manifest.json</code> <code class="chip chip--file">tools/lib/Starter.php</code></dd></div>
+                                                                            <div><dt>Depended on by</dt><dd>
+                                VibeKB adoption / onboarding                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Dry-run and real install into a scratch repo; confirm plan, payload copy, fresh model, upgrade preserving .vibekb/, and the target&#039;s `vibekb check`.</dd></div>
+                                            </dl>
+                </section>
+                            <section class="file-card" id="tools/lib/Starter.php">
+                    <div class="file-card__head">
+                        <h2><code>tools/lib/Starter.php</code></h2>
+                        <div class="file-card__badges">
+                            <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
+                    </div>
+                    <p class="file-card__purpose">The single source of truth for the fresh .vibekb/ starter workspace: the required directories and starter files, plus verify/scaffold/repair helpers shared by install.php and `vibekb bootstrap`. Writes only empty placeholders — never functionality about the target.</p>
+                    <dl class="file-card__meta">
+                                                    <div><dt>Runs when</dt><dd>During install and on `php tools/vibekb.php bootstrap`.</dd></div>
+                                                                            <div><dt>Implements</dt><dd>
+                                                                                                            <a class="chip" href="../functionality/bootstrap-workspace.html">Bootstrap the VibeKB workspace</a>
+                                                                                                                                                <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a>
+                                                                                                </dd></div>
+                                                                                                    <div><dt>Depended on by</dt><dd>
+                                install.php; tools/vibekb.php                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Scaffold a workspace to a temp dir and run `php tools/validate.php &lt;root&gt;`; confirm 0 errors and that existing files are never overwritten.</dd></div>
+                                            </dl>
+                </section>
+                            <section class="file-card" id="template/manifest.json">
+                    <div class="file-card__head">
+                        <h2><code>template/manifest.json</code></h2>
+                        <div class="file-card__badges">
+                            <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
+                    </div>
+                    <p class="file-card__purpose">Declarative definition of a VibeKB installation: the VibeKB-owned payload the installer copies, the project-owned paths it preserves (.vibekb/), the generated paths (docs/), and the deliberately-excluded paths. Keeps &#039;what belongs in another repository&#039; explicit rather than hard-coded in install.php.</p>
+                    <dl class="file-card__meta">
+                                                    <div><dt>Runs when</dt><dd>Read by install.php on every install/upgrade.</dd></div>
+                                                                            <div><dt>Implements</dt><dd>
+                                                                                                            <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a>
+                                                                                                </dd></div>
+                                                                                                    <div><dt>Depended on by</dt><dd>
+                                install.php                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Add or remove a payload path and dry-run the installer; confirm the plan reflects it.</dd></div>
                                             </dl>
                 </section>
                             <section class="file-card" id=".vibekb/manifest.json">
@@ -523,7 +577,7 @@
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 21:26 UTC · source commit 65d7e02 (2026-07-22) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 22:10 UTC · source commit 3651d1e (2026-07-22) · not auto-updating</p>
             </div>
         </footer>
     </div>

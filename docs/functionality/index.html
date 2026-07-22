@@ -741,6 +741,72 @@
                             </header>
             <ul class="record-list">
                                     <li class="record-card"
+                        data-status="implemented"
+                        data-area="integration"
+                        data-verification="verified-from-source"
+                        data-facing="user">
+                        <div class="record-card__row">
+                            <h3 class="record-card__title">
+                                <a class="record-card__link" href="../functionality/install-into-a-repository.html">
+                                    Install VibeKB into a repository                                </a>
+                            </h3>
+                            <div class="record-card__status">
+                                <span class="badge badge--ok">Implemented</span>                            </div>
+                        </div>
+                        <p class="record-card__summary">A PHP installer (`install.php`) that copies the VibeKB runtime into a target repository and scaffolds a fresh, empty-but-valid `.vibekb/` workspace — without touching the application&#039;s code and without analysing it — so adopting VibeKB is a command, not a manual copy.</p>
+                        <dl class="record-card__meta">
+                                                            <div>
+                                    <dt>Verification</dt>
+                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
+                                </div>
+                                                                                        <div>
+                                    <dt>Trigger</dt>
+                                    <dd>A developer clones VibeKB and runs `php install.php [target]` (or `php install.php` in the current directory).</dd>
+                                </div>
+                                                        <div>
+                                <dt>Facing</dt>
+                                <dd>User-facing</dd>
+                            </div>
+                            <div>
+                                <dt>Updated</dt>
+                                <dd>2026-07-22</dd>
+                            </div>
+                        </dl>
+                    </li>
+                                    <li class="record-card"
+                        data-status="implemented"
+                        data-area="integration"
+                        data-verification="verified-from-source"
+                        data-facing="user">
+                        <div class="record-card__row">
+                            <h3 class="record-card__title">
+                                <a class="record-card__link" href="../functionality/bootstrap-workspace.html">
+                                    Bootstrap the VibeKB workspace                                </a>
+                            </h3>
+                            <div class="record-card__status">
+                                <span class="badge badge--ok">Implemented</span>                            </div>
+                        </div>
+                        <p class="record-card__summary">A deterministic `php tools/vibekb.php bootstrap` command (and the shared `tools/lib/Starter.php` library) that creates or repairs a `.vibekb/` workspace — every required directory and starter file — without inspecting source, inventing functionality, or overwriting content. &quot;git init&quot; for VibeKB.</p>
+                        <dl class="record-card__meta">
+                                                            <div>
+                                    <dt>Verification</dt>
+                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
+                                </div>
+                                                                                        <div>
+                                    <dt>Trigger</dt>
+                                    <dd>A developer runs `php tools/vibekb.php bootstrap` (or the installer calls the same library) against a repository.</dd>
+                                </div>
+                                                        <div>
+                                <dt>Facing</dt>
+                                <dd>User-facing</dd>
+                            </div>
+                            <div>
+                                <dt>Updated</dt>
+                                <dd>2026-07-22</dd>
+                            </div>
+                        </dl>
+                    </li>
+                                    <li class="record-card"
                         data-status="partial"
                         data-area="integration"
                         data-verification="reported-by-developer"
@@ -753,7 +819,7 @@
                             <div class="record-card__status">
                                 <span class="badge badge--warn">Partially implemented</span>                            </div>
                         </div>
-                        <p class="record-card__summary">A documented, project-agnostic process (INITIALIZE.md plus a paste-ready prompt) for an agent to build a fresh, honest `.vibekb/` model of another application read-only, then render it — the same process VibeKB used on itself.</p>
+                        <p class="record-card__summary">A documented, project-agnostic process (INITIALIZE.md plus a paste-ready prompt) for an agent to build a fresh, honest `.vibekb/` model of another application read-only, then render it — the same process VibeKB used on itself, now started from an installed, scaffolded workspace.</p>
                         <dl class="record-card__meta">
                                                             <div>
                                     <dt>Verification</dt>
@@ -761,7 +827,7 @@
                                 </div>
                                                                                         <div>
                                     <dt>Trigger</dt>
-                                    <dd>An operator copies the VibeKB app + docs into a target repo and runs the integration prompt.</dd>
+                                    <dd>A developer runs `php install.php` to prepare the repo, then runs the integration prompt in their coding agent.</dd>
                                 </div>
                                                         <div>
                                 <dt>Facing</dt>
@@ -828,7 +894,7 @@
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 21:26 UTC · source commit 65d7e02 (2026-07-22) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 22:10 UTC · source commit 3651d1e (2026-07-22) · not auto-updating</p>
             </div>
         </footer>
     </div>

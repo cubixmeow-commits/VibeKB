@@ -104,9 +104,11 @@ on `npm install` / `npm run build` inside `.cpanel.yml` on this shared host.
 Development, tooling, secrets, and meta files are excluded, including VCS/IDE
 dirs, `.cpanel.yml`, `.env*`, dependency dirs, tests, the authoring docs listed
 above, logs/temp, OS junk, tooling manifests, and host metadata. Also excluded:
-`tools/` (the static generator, validator, and the `vibekb` self-maintenance CLI
-are build/CI tooling), `prompts/` (authoring), `examples/` (bundled example
-models — not the active app), `.cursor/` (agent rules), and `docs/` (the Mode B
+`tools/` (the static generator, validator, the `vibekb` self-maintenance CLI, and
+`tools/lib/` incl. the installer's `Starter.php` are build/CI/installer tooling),
+`prompts/` (authoring), `examples/` (bundled example models — not the active app),
+`install.php` and `template/` (the installer and its payload definition are
+adoption tooling, not runtime), `.cursor/` (agent rules), and `docs/` (the Mode B
 static snapshot is published via GitHub Pages, not this PHP host). Only the active
 `.vibekb/` is the runtime model. See `.cpanel.yml` for the authoritative exclude
 list.

@@ -110,17 +110,19 @@
     </header>
 
             <section class="work-summary callout callout--work">
-            <h2>(none — ready for next task)</h2>
+            <h2>First-class VibeKB installer</h2>
             <div class="badge-row">
-                <span class="badge badge--info">idle</span>                                    <span class="badge badge--unknown">Not applicable</span>                            </div>
+                <span class="badge badge--info">complete</span>                                    <span class="badge badge--ok">Verified from source</span>                            </div>
             <dl class="rail-dl work-meta">
-                <dt>Objective</dt><dd>No active work. Previous: interactive functionality map as the guide&#039;s first screen.</dd>                                                <dt>Data impact</dt><dd>None.</dd>                            </dl>
+                <dt>Objective</dt><dd>Add install.php, a bootstrap command, a template payload manifest, and a shared starter library so adopting VibeKB is one command; reconcile the self-hosted model and docs.</dd>                                    <dt>Affected functionality</dt><dd><a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/bootstrap-workspace.html">Bootstrap the VibeKB workspace</a> <a class="chip" href="../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a></dd>
+                                                    <dt>Expected files</dt><dd><code class="chip chip--file">install.php</code> <code class="chip chip--file">tools/lib/Starter.php</code> <code class="chip chip--file">tools/vibekb.php</code> <code class="chip chip--file">template/manifest.json</code></dd>
+                                <dt>Data impact</dt><dd>None — the installer reads the target repository and writes only VibeKB&#039;s own files (runtime payload + a fresh .vibekb/). It never modifies application code.</dd>                <dt>Risks</dt><dd>The template payload can drift from what a target needs if template/manifest.json is not kept in step with repository structure.</dd>            </dl>
         </section>
 
         <section class="doc-section content-section">
             <div class="prose reading-column"><h3>Status</h3>
-<p>Interactive functionality map complete and reconciled into the model. See
-<code>.vibekb/work/handoff.md</code>.</p></div>
+<p>Complete and reconciled into the model. The installer prepares the workspace; an
+AI agent still builds the model. See <code>.vibekb/work/handoff.md</code>.</p></div>
         </section>
     
     <nav class="cross-links" aria-label="Related views">
@@ -137,7 +139,7 @@
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 21:26 UTC · source commit 65d7e02 (2026-07-22) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 22:10 UTC · source commit 3651d1e (2026-07-22) · not auto-updating</p>
             </div>
         </footer>
     </div>

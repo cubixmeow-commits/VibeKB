@@ -17,6 +17,30 @@ Copilot, Gemini CLI). AI can change six files faster than you can rebuild your
 mental model. VibeKB keeps that mental model accurate — organized around
 **functionality**, the things your software actually does.
 
+## Add VibeKB to your repository
+
+VibeKB installs with one command. It prepares the workspace; your coding agent
+builds the model.
+
+```bash
+git clone https://github.com/cubixmeow-commits/VibeKB.git
+php VibeKB/install.php /path/to/your/project
+```
+
+The installer copies the VibeKB runtime (`guide/`, `tools/`, `prompts/`,
+`.cursor/`, and the VibeKB docs) into your repository, scaffolds a fresh,
+empty-but-valid `.vibekb/` workspace, and verifies the result — **without
+touching your application's code and without analysing it.** Then open your
+project in a coding agent (Claude Code, Cursor, Codex, …) and ask it to *build the
+first VibeKB model using `prompts/INTEGRATE_VIBEKB.md`*.
+
+- Preview the plan first: `php VibeKB/install.php --dry-run /path/to/your/project`
+- Upgrade later (refresh runtime, keep your model): re-run the installer.
+- Repair a workspace any time: `php tools/vibekb.php bootstrap`.
+
+PHP 8.2+, no Composer, no network, cross-platform. See [INSTALLER.md](./INSTALLER.md)
+for the full flow, upgrades, repairs, and the template structure.
+
 ## How V1 works
 
 - **Content** lives in `.vibekb/` as Markdown + small JSON manifests — readable
@@ -82,6 +106,7 @@ with the code:
 ```bash
 php tools/vibekb.php status      # session start: provenance, current work, next action, drift
 php tools/vibekb.php affected --since <ref>   # changed files → likely affected functionality
+php tools/vibekb.php bootstrap   # verify/repair the .vibekb/ workspace (git-init for VibeKB)
 php tools/vibekb.php check       # validate + broken references + drift + /docs sync
 php tools/vibekb.php generate    # regenerate /docs
 ```
@@ -184,7 +209,8 @@ as the software changes — they are not an isolated archive.
 Start with `php tools/vibekb.php status`. The canonical, repository-owned workflow
 lives in [CLAUDE.md](./CLAUDE.md); [AGENTS.md](./AGENTS.md) and
 `.cursor/rules/vibekb.mdc` are thin pointers to it. Read
-[MAINTENANCE.md](./MAINTENANCE.md) for the detailed change lifecycle and
-[INITIALIZE.md](./INITIALIZE.md) to add VibeKB to another repository. A new agent
-should be able to discover and follow the workflow without being handed a giant
-prompt.
+[MAINTENANCE.md](./MAINTENANCE.md) for the detailed change lifecycle,
+[INSTALLER.md](./INSTALLER.md) to install/upgrade VibeKB, and
+[INITIALIZE.md](./INITIALIZE.md) to build the model in a freshly installed
+repository. A new agent should be able to discover and follow the workflow
+without being handed a giant prompt.

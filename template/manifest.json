@@ -1,0 +1,59 @@
+{
+  "template_version": "1.0.0",
+  "vibekb_content_model": "functionality-first",
+  "description": "Definition of a VibeKB installation: the VibeKB-owned runtime payload copied into a target repository, the project-owned paths the installer must never overwrite, and where the fresh starter model comes from. install.php reads this file so the set of installed files is declared here, not hard-coded in the installer.",
+  "payload": {
+    "note": "Repository-root-relative paths that belong to VibeKB. Copied on install and refreshed on upgrade. Directories are copied recursively. These are safe to overwrite when upgrading because they are VibeKB's runtime, not your application's code.",
+    "runtime": [
+      "guide",
+      "tools"
+    ],
+    "agent": [
+      "prompts",
+      ".cursor"
+    ],
+    "docs": [
+      "CLAUDE.md",
+      "AGENTS.md",
+      "PRODUCT.md",
+      "SCHEMA.md",
+      "INITIALIZE.md",
+      "MAINTENANCE.md",
+      "INSTALLER.md"
+    ]
+  },
+  "preserve": {
+    "note": "Project-owned knowledge. The installer creates it once (fresh) and NEVER overwrites it on upgrade unless explicitly forced.",
+    "paths": [
+      ".vibekb"
+    ]
+  },
+  "generated": {
+    "note": "Produced by `php tools/vibekb.php generate`, not by the installer. Not part of the payload.",
+    "paths": [
+      "docs"
+    ]
+  },
+  "not_installed": {
+    "note": "Deliberately excluded from a target repository. The marketing homepage (index.php, assets/) would collide with the target application's own root; VibeKB's own model, examples, generated docs, and host-specific deploy config are VibeKB-repo-only.",
+    "paths": [
+      "index.php",
+      "assets",
+      ".vibekb",
+      "examples",
+      "docs",
+      ".cpanel.yml",
+      "DEPLOYMENT.md",
+      "TOKEN_ECONOMICS.md",
+      "BUILD_REPORT.md",
+      ".github",
+      "install.php",
+      "template"
+    ]
+  },
+  "starter_model": {
+    "note": "The fresh .vibekb/ workspace is produced programmatically by tools/lib/Starter.php (the single source of truth), so it is never a second, drift-prone copy. `php tools/vibekb.php bootstrap` repairs it from the same definition. See INSTALLER.md.",
+    "root": ".vibekb",
+    "generator": "tools/lib/Starter.php"
+  }
+}
