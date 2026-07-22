@@ -253,6 +253,40 @@ to touch — not as a documentation generator.</p></div>
                                     </li>
                             <li class="change-card">
                     <div class="change-card__head">
+                        <h2>Homepage install fast-start under the hero</h2>
+                        <div class="badge-row">
+                            <span class="badge badge--info">implemented</span>                            <span class="badge badge--ok">Verified from source</span>                            <span class="muted">2026-07-22</span>
+                        </div>
+                    </div>
+                    <p>The homepage now places a three-step install section (clone → install.php → Cursor prompt) directly under the hero, with copy buttons, a result strip that labels docs/ as generated later, and an expandable installer disclosure — without implying automatic repository understanding.</p>
+                    <div class="prose reading-column change-card__body"><h3>Before</h3>
+<p>A short install block sat between &quot;What you get&quot; and live proof. It mixed a
+combined command block with a six-step list that mentioned upgrades and
+<code>bootstrap</code>, burying the real public workflow.</p>
+<h3>After</h3>
+<p>Page flow is: hero/problem → <strong>Add VibeKB to your repository</strong> → what you get →
+live proof. The install section shows exactly three primary steps matching
+<code>INSTALLER.md</code> / <code>install.php</code>:</p>
+<ol>
+<li><code>git clone https://github.com/cubixmeow-commits/VibeKB.git</code></li>
+<li><code>php VibeKB/install.php /path/to/your/project</code> (plus example path; PHP 8.2+)</li>
+<li>A copyable Cursor prompt pointing at <code>prompts/INTEGRATE_VIBEKB.md</code></li>
+</ol>
+<p>Copy buttons live in <code>homepage.js</code>. The result strip distinguishes installed
+runtime (<code>.vibekb/</code>, <code>guide/</code>, <code>tools/</code>) from <code>docs/</code> (generated later via
+<code>php tools/vibekb.php generate</code>). A disclosure covers what the installer does,
+the <code>template/manifest.json</code> payload, and optional <code>--dry-run</code>.</p>
+<h3>Honesty preserved</h3>
+<p>The section states that the installer prepares VibeKB and Cursor understands the
+application. It does not claim automatic analysis, completed functionality
+records, or self-updating models.</p>
+<h3>Verification note</h3>
+<p>Commands and rendered section order were checked against source and a PHP render of <code>index.php</code>. Copy-button clicks were not exercised in a browser in this environment.</p></div>
+                                            <p class="change-card__links"><strong>Affected:</strong>
+                            <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../functionality/load-living-model.html">Load the living model</a>                        </p>
+                                    </li>
+                            <li class="change-card">
+                    <div class="change-card__head">
                         <h2>Replace leftover SousMeow homepage tagline with VibeKB self-hosting copy</h2>
                         <div class="badge-row">
                             <span class="badge badge--info">implemented</span>                            <span class="badge badge--ok">Verified manually</span>                            <span class="muted">2026-07-22</span>
@@ -316,7 +350,7 @@ before/after, workflow timeline, repo map, and separate CTA. Accurate but too lo
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 22:10 UTC · source commit 3651d1e (2026-07-22) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 23:38 UTC · source commit 3c8d1f8 (2026-07-22) · not auto-updating</p>
             </div>
         </footer>
     </div>

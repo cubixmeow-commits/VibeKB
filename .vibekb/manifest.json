@@ -7,28 +7,28 @@
   "example_project": {
     "name": "VibeKB",
     "is_sample": false,
-    "note": "This is VibeKB's own living software model — VibeKB explaining VibeKB. The source it describes is THIS repository (cubixmeow-commits/VibeKB). Bundled example models of other applications live under examples/ (see examples/sousmeow/.vibekb) and are NOT the active model; do not confuse them with the current state of VibeKB."
+    "note": "This is VibeKB's own living software model \u2014 VibeKB explaining VibeKB. The source it describes is THIS repository (cubixmeow-commits/VibeKB). Bundled example models of other applications live under examples/ (see examples/sousmeow/.vibekb) and are NOT the active model; do not confuse them with the current state of VibeKB."
   },
   "provenance": {
     "name": "VibeKB",
     "source_repository": "https://github.com/cubixmeow-commits/VibeKB",
     "source_subpath": "",
     "source_branch": "main",
-    "source_commit": "3651d1e (2026-07-22)",
+    "source_commit": "3c8d1f8 (2026-07-22)",
     "analyzed": "2026-07-22",
-    "verification_scope": "The content loader, dynamic guide, static generator, validator, topology test, and self-maintenance CLI were traced from source in this repository. Diagram topology (architecture, content-load-flow) is verified-from-source. Homepage three-section layout verified by rendering index.php (three sections, arc, pillars, carousel). The interactive functionality map (overview first screen) was verified by rendering the overview in both modes and driving the map in a headless browser (expand, list toggle, double-click-to-docs, mobile fallback). The installer (install.php) and bootstrap command were traced from source and exercised end-to-end: dry-run and real install into a scratch repository, an upgrade run preserving .vibekb/, and bootstrap repairing a damaged workspace; the scaffolded starter model validates with 0 errors. The cPanel host and Cursor discovery are inferred/not-verified as noted per record.",
+    "verification_scope": "The content loader, dynamic guide, static generator, validator, topology test, and self-maintenance CLI were traced from source in this repository. Diagram topology (architecture, content-load-flow) is verified-from-source. Homepage layout verified by rendering index.php (section order problem \u2192 install \u2192 understanding \u2192 proof; install commands checked against install.php / INSTALLER.md / template/manifest.json; docs/ labelled as generated, not installed). Homepage copy-button click behaviour is inferred-from-source (Clipboard path reviewed; not clicked in a browser here). The interactive functionality map (overview first screen) was verified by rendering the overview in both modes and driving the map in a headless browser (expand, list toggle, double-click-to-docs, mobile fallback). The installer (install.php) and bootstrap command were traced from source and exercised end-to-end: dry-run and real install into a scratch repository, an upgrade run preserving .vibekb/, and bootstrap repairing a damaged workspace; the scaffolded starter model validates with 0 errors. The cPanel host and Cursor discovery are inferred/not-verified as noted per record.",
     "last_verified": "2026-07-22",
     "updates_automatically": false,
     "model_maintenance": "agent-maintained",
-    "freshness_note": "VibeKB does not update this model on its own. An AI agent keeps it synchronized while developing VibeKB, following the workflow in CLAUDE.md. `source_commit` records the commit the model was last reconciled against; run `php tools/vibekb.php check` to see what has changed since — drift is detected mechanically, but interpreting a change into the model still requires an agent."
+    "freshness_note": "VibeKB does not update this model on its own. An AI agent keeps it synchronized while developing VibeKB, following the workflow in CLAUDE.md. `source_commit` records the commit the model was last reconciled against; run `php tools/vibekb.php check` to see what has changed since \u2014 drift is detected mechanically, but interpreting a change into the model still requires an agent."
   },
   "structure": {
-    "project": "project/ — identity, intent, current state, constraints",
-    "functionality": "functionality/ — index.json + records/ (the primary unit)",
-    "system": "system/ — mental model, components, flows, storage, deployment",
-    "files": "files/important-files.json — curated important files",
-    "diagrams": "diagrams/ — index.json + records/ + assets/ (SVGs) + topology/ (explainable)",
-    "memory": "memory/ — decisions, constraints, assumptions, warnings, discoveries, changes",
-    "work": "work/ — current AI work, handoff, sessions"
+    "project": "project/ \u2014 identity, intent, current state, constraints",
+    "functionality": "functionality/ \u2014 index.json + records/ (the primary unit)",
+    "system": "system/ \u2014 mental model, components, flows, storage, deployment",
+    "files": "files/important-files.json \u2014 curated important files",
+    "diagrams": "diagrams/ \u2014 index.json + records/ + assets/ (SVGs) + topology/ (explainable)",
+    "memory": "memory/ \u2014 decisions, constraints, assumptions, warnings, discoveries, changes",
+    "work": "work/ \u2014 current AI work, handoff, sessions"
   }
 }

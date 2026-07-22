@@ -120,6 +120,10 @@
 the guide, the tools, the agent instructions, and the VibeKB docs, then lays down
 a fresh empty model — and then hands off to an AI agent to build the model.</p>
 <h3>User experience</h3>
+<p>The public homepage surfaces the intended first-run path in three steps under
+<code>#install</code>: clone VibeKB, run <code>php VibeKB/install.php /path/to/your/project</code>,
+then ask Cursor to build the model with <code>prompts/INTEGRATE_VIBEKB.md</code>. That page
+is marketing copy only — the installer itself is unchanged.</p>
 <p>The developer runs one command and sees a plan (what will be created, replaced,
 skipped, and that <code>.vibekb/</code> is a fresh model), confirms, and gets a verified
 installation with explicit next steps. <code>--dry-run</code> shows the full plan and
@@ -230,6 +234,15 @@ drift-prone duplicate of the starter content.</p></div>
                 <h2>Files involved</h2>
                                                         <ul class="rail-list">
                                                     <li>
+                                <a href="../files/index.html#index.php"><code>index.php</code></a>
+                                <span class="badge badge--info">Moderate impact</span>                            </li>
+                                                    <li>
+                                <a href="../files/index.html#assets%2Fcss%2Fhomepage.css"><code>assets/css/homepage.css</code></a>
+                                <span class="badge badge--ok">Low impact</span>                            </li>
+                                                    <li>
+                                <a href="../files/index.html#assets%2Fjs%2Fhomepage.js"><code>assets/js/homepage.js</code></a>
+                                <span class="badge badge--ok">Low impact</span>                            </li>
+                                                    <li>
                                 <a href="../files/index.html#install.php"><code>install.php</code></a>
                                 <span class="badge badge--info">Moderate impact</span>                            </li>
                                                     <li>
@@ -250,7 +263,7 @@ drift-prone duplicate of the starter content.</p></div>
             
             <div class="rail-card metadata-group">
                 <h2>Related rationale</h2>
-                                    <p><a class="chip" href="../why/decisions/installer-template-not-duplicated-tree.html">The template is a manifest plus a generator, not a duplicated file tree</a> <a class="chip" href="../why/decisions/installer-prepares-agent-interprets.html">The installer prepares the workspace; the agent interprets the software</a> <a class="chip" href="../why/changes/first-class-installer.html">Add a first-class installer and bootstrap command</a></p>
+                                    <p><a class="chip" href="../why/decisions/installer-template-not-duplicated-tree.html">The template is a manifest plus a generator, not a duplicated file tree</a> <a class="chip" href="../why/decisions/installer-prepares-agent-interprets.html">The installer prepares the workspace; the agent interprets the software</a> <a class="chip" href="../why/changes/first-class-installer.html">Add a first-class installer and bootstrap command</a> <a class="chip" href="../why/changes/homepage-install-fast-start.html">Homepage install fast-start under the hero</a></p>
                             </div>
         </aside>
     </div>
@@ -264,7 +277,7 @@ drift-prone duplicate of the starter content.</p></div>
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 22:10 UTC · source commit 3651d1e (2026-07-22) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 23:38 UTC · source commit 3c8d1f8 (2026-07-22) · not auto-updating</p>
             </div>
         </footer>
     </div>

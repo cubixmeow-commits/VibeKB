@@ -1,5 +1,6 @@
 /**
- * VibeKB homepage — guide carousel only. Progressive enhancement.
+ * VibeKB homepage — guide carousel + copyable install commands.
+ * Progressive enhancement: commands remain readable without JavaScript.
  */
 (function (window, document, $) {
   'use strict';
@@ -84,10 +85,93 @@
     return { activate: activate, count: $tabs.length };
   }
 
+  function resolveCopyText($btn) {
+    var target = $btn.attr('data-copy-target');
+    if (target) {
+      var $el = $(target);
+      if ($el.length) {
+        return $.trim($el.text());
+      }
+    }
+    return $.trim($btn.attr('data-copy') || '');
+  }
+
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.setAttribute('aria-hidden', 'true');
+    ta.style.position = 'fixed';
+    ta.style.top = '0';
+    ta.style.left = '0';
+    ta.style.width = '1px';
+    ta.style.height = '1px';
+    ta.style.padding = '0';
+    ta.style.border = 'none';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    ta.setSelectionRange(0, text.length);
+    var ok = false;
+    try {
+      ok = document.execCommand('copy');
+    } catch (err) {
+      ok = false;
+    }
+    document.body.removeChild(ta);
+    return ok;
+  }
+
+  function selectTargetText(selector) {
+    try {
+      var node = document.querySelector(selector);
+      if (!node) {
+        return;
+      }
+      var range = document.createRange();
+      range.selectNodeContents(node);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    } catch (err) {
+      // Commands remain visible for manual copy.
+    }
+  }
+
+  function flashCopied($btn) {
+    var original = $btn.data('copy-label') || $btn.text();
+    $btn.data('copy-label', original);
+    $btn.addClass('is-copied').attr('aria-live', 'polite').text('Copied');
+    window.setTimeout(function () {
+      $btn.removeClass('is-copied').text(original);
+    }, 1600);
+  }
+
+  function copyText(text, onSuccess, onFail) {
+    var clip = window.navigator && window.navigator.clipboard;
+    if (clip && typeof clip.writeText === 'function') {
+      clip.writeText(text).then(onSuccess).catch(function () {
+        if (fallbackCopy(text)) {
+          onSuccess();
+        } else {
+          onFail();
+        }
+      });
+      return;
+    }
+    if (fallbackCopy(text)) {
+      onSuccess();
+    } else {
+      onFail();
+    }
+  }
+
   window.VibeKBHomepage = {
     init: function () {
       document.documentElement.classList.add('js');
       this.bindGuidePreview();
+      this.bindCopyButtons();
       this.restoreState();
       this.bindHashNav();
     },
@@ -120,6 +204,23 @@
       $preview.on('click', '[data-guide-next]', function () {
         var current = parseInt($preview.find('[data-guide-chapter][aria-selected="true"]').attr('data-guide-chapter'), 10) || 0;
         group.activate(current + 1, true);
+      });
+    },
+
+    bindCopyButtons: function () {
+      $(document).on('click', '[data-copy-target], [data-copy]', function (event) {
+        event.preventDefault();
+        var $btn = $(this);
+        var text = resolveCopyText($btn);
+        if (!text) {
+          return;
+        }
+
+        copyText(text, function () {
+          flashCopied($btn);
+        }, function () {
+          selectTargetText($btn.attr('data-copy-target') || '');
+        });
       });
     },
 

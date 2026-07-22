@@ -115,58 +115,45 @@
             </div>
             <div class="prose reading-column"><h3>Completed this change</h3>
 <ul>
-<li>New <code>install.php</code> — the VibeKB installer. Detects the target, reads</li>
+<li>Homepage <code>#install</code> moved directly under the hero (before “What you get”).</li>
+<li>Three primary steps with working copy buttons: clone command, install command</li>
 </ul>
-<p><code>template/manifest.json</code>, shows a create/replace/skip/preserve plan, copies the
-  VibeKB-owned payload, scaffolds a fresh empty <code>.vibekb/</code>, records installer
-  state in <code>.vibekb/.installer.json</code>, and verifies (including the target&#039;s own
-  <code>vibekb check</code>). Supports <code>--dry-run</code>, <code>--yes</code>, <code>--force</code>, and auto-detected
-  upgrades that preserve <code>.vibekb/</code>. Refuses to install into VibeKB&#039;s own repo.</p>
+<p>(+ example), and a Cursor prompt pointing at <code>prompts/INTEGRATE_VIBEKB.md</code>.</p>
 <ul>
-<li>New <code>tools/lib/Starter.php</code> — the single source of truth for the starter</li>
+<li>Result strip distinguishes installed runtime from <code>docs/</code> (generated later).</li>
+<li>Expandable “What does the installer do?” disclosure with payload list and</li>
 </ul>
-<p>workspace (required dirs + starter files + verify/scaffold helpers), shared by
-  the installer and bootstrap. Writes only empty placeholders — never
-  functionality about the target.</p>
+<p>optional <code>--dry-run</code>.</p>
 <ul>
-<li>New <code>bootstrap</code> command in <code>tools/vibekb.php</code> — verifies and repairs a</li>
+<li>Nav order: The problem → Install → What you get → See it work.</li>
+<li>Model reconciled: important-files for homepage assets, new change record</li>
 </ul>
-<p>workspace (&quot;git init for VibeKB&quot;), never overwriting content. <code>template/</code> added
-  to the drift-exclusion set.</p>
-<ul>
-<li>New <code>template/manifest.json</code> — declarative payload definition (not a duplicated</li>
-</ul>
-<p>file tree).</p>
-<ul>
-<li>Model reconciled: two new functionality records (<code>install-into-a-repository</code>,</li>
-</ul>
-<p><code>bootstrap-workspace</code>) + index order; <code>initialize-in-a-repository</code> updated to
-  depend on the installer; three memory records (two decisions, one change);
-  three new important-files entries and the <code>tools/vibekb.php</code> entry updated;
-  manifest provenance/scope updated.</p>
-<ul>
-<li>Docs: new <code>INSTALLER.md</code>; <code>README.md</code>, <code>INITIALIZE.md</code>, <code>MAINTENANCE.md</code>, and</li>
-</ul>
-<p>the homepage updated to lead with the installer; <code>.cpanel.yml</code> + <code>DEPLOYMENT.md</code>
-  updated to exclude <code>install.php</code>, <code>template/</code>, and <code>tools/lib/</code>.</p>
+<p><code>homepage-install-fast-start</code>, installer/initialize records linked, provenance
+  and work records updated.</p>
 <h3>Verification completed</h3>
 <ul>
-<li><code>php -l</code> on <code>install.php</code>, <code>tools/lib/Starter.php</code>, <code>tools/vibekb.php</code>.</li>
-<li>End-to-end: <code>install.php --dry-run</code> and a real <code>--yes</code> install into a scratch</li>
+<li>Displayed commands checked against <code>install.php</code> / <code>INSTALLER.md</code> /</li>
 </ul>
-<p>git repo (42 runtime files + 19 dirs + 17 starter files); the target&#039;s
-  <code>php tools/vibekb.php check</code> reports OK. An upgrade run refreshed the runtime
-  and preserved a hand-edited <code>.vibekb/</code>. <code>bootstrap</code> recreated deleted dirs and
-  files and kept existing content. The scaffolded model passes
-  <code>php tools/validate.php &lt;root&gt;</code> with 0 errors.</p>
+<p><code>template/manifest.json</code> (no fabricated commands).</p>
 <ul>
-<li><code>php tools/vibekb.php check</code> — 0 errors; <code>php tools/test-topology.php</code> OK;</li>
+<li><code>php -l index.php</code>, <code>php -l install.php</code>.</li>
+<li>Rendered <code>index.php</code>: section order problem → install → understanding → proof;</li>
 </ul>
-<p><code>/docs</code> regenerated.</p>
+<p>GitHub + INSTALLER.md links present; honesty phrases present; no auto-understand
+  claims.</p>
+<ul>
+<li><code>php tools/vibekb.php check</code>, <code>php tools/test-topology.php</code>,</li>
+</ul>
+<p><code>php tools/vibekb.php generate</code> (run before commit).</p>
+<h3>Unresolved / active warnings</h3>
+<p>None introduced by this change. Homepage copy-button click behaviour was not
+exercised in a real browser in this environment (Clipboard API) — the JS path
+and no-JS readability were reviewed from source; treat interactive copy as
+<code>inferred-from-source</code> until manually clicked.</p>
 <h3>Exact next recommended action</h3>
-<p><code>php tools/vibekb.php status</code> before the next change; <code>affected</code> → update model →
-<code>check</code> + <code>generate</code> before commit. If the installer payload changes, update
-<code>template/manifest.json</code> and <code>INSTALLER.md</code> together.</p></div>
+<p><code>php tools/vibekb.php status</code> before the next change. If install commands or the
+integration prompt change, update the homepage <code>#install</code> section in the same
+commit as <code>INSTALLER.md</code> / <code>install.php</code> / <code>prompts/INTEGRATE_VIBEKB.md</code>.</p></div>
         </section>
     
             <section class="doc-section">
@@ -199,7 +186,7 @@
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 22:10 UTC · source commit 3651d1e (2026-07-22) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 23:38 UTC · source commit 3c8d1f8 (2026-07-22) · not auto-updating</p>
             </div>
         </footer>
     </div>

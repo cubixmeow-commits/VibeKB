@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>All content file access is confined to the content root · VibeKB — VibeKB</title>
+    <title>Homepage install fast-start under the hero · VibeKB — VibeKB</title>
     <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -105,36 +105,42 @@
                 <article class="view view-doc">
         <p class="breadcrumb"><a href="../../why/index.html">← Decisions &amp; rationale</a></p>
         <header class="page-head reading-column">
-            <p class="eyebrow">Constraints</p>
-            <h1>All content file access is confined to the content root</h1>
-            <p class="lede">The loader refuses any path that escapes the configured `.vibekb/` root, and record ids are constrained to a safe character set, so a crafted request can never read arbitrary files.</p>
+            <p class="eyebrow">Changes</p>
+            <h1>Homepage install fast-start under the hero</h1>
+            <p class="lede">The homepage now places a three-step install section (clone → install.php → Cursor prompt) directly under the hero, with copy buttons, a result strip that labels docs/ as generated later, and an expandable installer disclosure — without implying automatic repository understanding.</p>
             <div class="badge-row">
-                <span class="badge badge--info">active</span>                                                <span class="badge badge--ok">Verified from source</span>            </div>
+                <span class="badge badge--info">implemented</span>                                                <span class="badge badge--ok">Verified from source</span>            </div>
         </header>
         <div class="detail-grid">
-            <div class="detail-main"><div class="prose reading-column"><h3>The constraint</h3>
-<p>Every filesystem read the loader performs is checked by <code>isInsideRoot()</code>; any
-path containing <code>../</code> or a null byte, or that does not sit under the content
-root, is refused. Record ids in URLs are sanitised to a safe character set before
-they are used to look up a record, and diagram SVG/topology filenames are
-<code>basename</code>-d and pattern-checked.</p>
-<h3>Why it matters</h3>
-<p>The guide serves user-controllable <code>?view=</code> and <code>?id=</code> values and reads files
-from disk. Without confinement, a crafted <code>?id=../../etc/passwd</code>-style value could
-escape the content directory.</p>
-<h3>What not to do</h3>
-<p>Do not add a file read that trusts a caller-supplied path, and do not relax the
-id sanitisation or the <code>VIBEKB_CONTENT_ROOT</code> check (which requires the override to
-end in <code>.vibekb</code>).</p>
-<h3>Verification</h3>
-<p>Traced from source: <code>isInsideRoot()</code>, the <code>?id</code> sanitisation in <code>guide/index.php</code>,
-and the SVG/topology filename checks in <code>Content.php</code>.</p></div></div>
+            <div class="detail-main"><div class="prose reading-column"><h3>Before</h3>
+<p>A short install block sat between &quot;What you get&quot; and live proof. It mixed a
+combined command block with a six-step list that mentioned upgrades and
+<code>bootstrap</code>, burying the real public workflow.</p>
+<h3>After</h3>
+<p>Page flow is: hero/problem → <strong>Add VibeKB to your repository</strong> → what you get →
+live proof. The install section shows exactly three primary steps matching
+<code>INSTALLER.md</code> / <code>install.php</code>:</p>
+<ol>
+<li><code>git clone https://github.com/cubixmeow-commits/VibeKB.git</code></li>
+<li><code>php VibeKB/install.php /path/to/your/project</code> (plus example path; PHP 8.2+)</li>
+<li>A copyable Cursor prompt pointing at <code>prompts/INTEGRATE_VIBEKB.md</code></li>
+</ol>
+<p>Copy buttons live in <code>homepage.js</code>. The result strip distinguishes installed
+runtime (<code>.vibekb/</code>, <code>guide/</code>, <code>tools/</code>) from <code>docs/</code> (generated later via
+<code>php tools/vibekb.php generate</code>). A disclosure covers what the installer does,
+the <code>template/manifest.json</code> payload, and optional <code>--dry-run</code>.</p>
+<h3>Honesty preserved</h3>
+<p>The section states that the installer prepares VibeKB and Cursor understands the
+application. It does not claim automatic analysis, completed functionality
+records, or self-updating models.</p>
+<h3>Verification note</h3>
+<p>Commands and rendered section order were checked against source and a PHP render of <code>index.php</code>. Copy-button clicks were not exercised in a browser in this environment.</p></div></div>
             <aside class="detail-rail" aria-label="Connections">
                 <div class="rail-card">
                     <h2>Affects functionality</h2>
-                    <p><a class="chip" href="../../functionality/load-living-model.html">Load the living model</a> <a class="chip" href="../../functionality/render-guide.html">Render the dynamic guide</a></p>
+                    <p><a class="chip" href="../../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../../functionality/load-living-model.html">Load the living model</a></p>
                 </div>
-                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">guide/lib/Content.php</code> <code class="chip chip--file">guide/index.php</code></p></div>
+                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">index.php</code> <code class="chip chip--file">assets/css/homepage.css</code> <code class="chip chip--file">assets/js/homepage.js</code></p></div>
                             </aside>
         </div>
     </article>

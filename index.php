@@ -3,13 +3,14 @@
 declare(strict_types=1);
 
 /**
- * VibeKB homepage — three sections: the problem, what you get, live proof + CTA.
+ * VibeKB homepage — hero/problem, install fast-start, what you get, live proof + CTA.
  * Copy is distilled from the developer-journey story (ship fast → lose understanding
  * → fear change → VibeKB restores clarity). Section 1 includes an optimized hero comic
- * beside the copy. The guide-preview carousel and hero metrics are driven by real
- * `.vibekb/` records (never invented).
+ * beside the copy. The install section mirrors the real installer workflow (clone →
+ * install.php → Cursor builds the model). The guide-preview carousel and hero metrics
+ * are driven by real `.vibekb/` records (never invented).
  *
- * Interactions: assets/js/homepage.js (guide carousel only). Styling: homepage.css.
+ * Interactions: assets/js/homepage.js (guide carousel + copy buttons). Styling: homepage.css.
  */
 
 require_once __DIR__ . '/guide/lib/helpers.php';
@@ -67,7 +68,16 @@ function hp_status_tone(string $status): string
 
 $guideUrl = 'guide/';
 $repoUrl = 'https://github.com/cubixmeow-commits/VibeKB';
+$installerGuideUrl = $repoUrl . '/blob/main/INSTALLER.md';
 $codingAgents = 'Cursor, Claude Code, Codex, Copilot, and others';
+$cloneCmd = 'git clone https://github.com/cubixmeow-commits/VibeKB.git';
+$installCmd = 'php VibeKB/install.php /path/to/your/project';
+$installExampleCmd = 'php VibeKB/install.php ~/Projects/my-app';
+$dryRunCmd = 'php VibeKB/install.php --dry-run /path/to/your/project';
+$cursorPrompt = "Build the first VibeKB model for this repository using prompts/INTEGRATE_VIBEKB.md.\n"
+    . "Inspect the real source code, do not modify the application while initializing VibeKB, "
+    . "distinguish implemented behaviour from inferred or unverified behaviour, run all VibeKB checks, "
+    . "and generate the guide when complete.";
 
 $content = new Content(__DIR__ . '/.vibekb');
 $loaded = false;
@@ -141,8 +151,8 @@ if ($loaded) {
             <a class="hp-wordmark" href="./">VibeKB</a>
             <nav class="hp-nav" aria-label="Primary">
                 <a href="#problem">The problem</a>
-                <a href="#understanding">What you get</a>
                 <a href="#install">Install</a>
+                <a href="#understanding">What you get</a>
                 <a href="#proof">See it work</a>
                 <a class="hp-nav-cta" href="<?= hp_e($guideUrl) ?>">Open the guide</a>
             </nav>
@@ -223,7 +233,121 @@ if ($loaded) {
             </div>
         </section>
 
-        <!-- 2. What you get — the answer, distilled -->
+        <!-- 2. Install — three-step fast-start (clone → install → Cursor) -->
+        <section class="hp-section hp-install" id="install" aria-labelledby="install-title">
+            <div class="hp-wrap">
+                <p class="hp-kicker">Install VibeKB in three steps</p>
+                <h2 id="install-title">Add VibeKB to your repository</h2>
+                <p class="hp-lead hp-install-lead">
+                    Install the understanding layer, let Cursor build the first model from your source code,
+                    then keep it updated as you build.
+                </p>
+
+                <ol class="hp-install-cards" aria-label="Install VibeKB in three steps">
+                    <li class="hp-install-card">
+                        <p class="hp-install-step-num" aria-hidden="true">1</p>
+                        <h3>Clone VibeKB</h3>
+                        <p class="hp-install-card-copy">Download the installer and VibeKB runtime.</p>
+                        <div class="hp-cmd-block">
+                            <pre class="hp-cmd" id="cmd-clone"><code><?= hp_e($cloneCmd) ?></code></pre>
+                            <button type="button" class="hp-copy-btn" data-copy-target="#cmd-clone">Copy</button>
+                        </div>
+                    </li>
+                    <li class="hp-install-card">
+                        <p class="hp-install-step-num" aria-hidden="true">2</p>
+                        <h3>Install it into your project</h3>
+                        <p class="hp-install-card-copy">Replace the path with the repository you want VibeKB to understand.</p>
+                        <p class="hp-install-req"><span>Requires PHP 8.2+</span></p>
+                        <div class="hp-cmd-block">
+                            <pre class="hp-cmd" id="cmd-install"><code><?= hp_e($installCmd) ?></code></pre>
+                            <button type="button" class="hp-copy-btn" data-copy-target="#cmd-install">Copy</button>
+                        </div>
+                        <p class="hp-install-example-label">Example</p>
+                        <div class="hp-cmd-block">
+                            <pre class="hp-cmd hp-cmd--example" id="cmd-install-example"><code><?= hp_e($installExampleCmd) ?></code></pre>
+                            <button type="button" class="hp-copy-btn" data-copy-target="#cmd-install-example">Copy</button>
+                        </div>
+                    </li>
+                    <li class="hp-install-card">
+                        <p class="hp-install-step-num" aria-hidden="true">3</p>
+                        <h3>Open the project in Cursor</h3>
+                        <p class="hp-install-card-copy">The installer prepares the workspace. Cursor examines the source and builds the first understanding model.</p>
+                        <div class="hp-cmd-block">
+                            <pre class="hp-cmd hp-cmd--prompt" id="cmd-cursor-prompt"><code><?= hp_e($cursorPrompt) ?></code></pre>
+                            <button type="button" class="hp-copy-btn hp-copy-btn--prompt" data-copy-target="#cmd-cursor-prompt">Copy Cursor prompt</button>
+                        </div>
+                    </li>
+                </ol>
+
+                <div class="hp-install-result" aria-label="What your project contains after install">
+                    <p class="hp-install-result-title">Your project now contains:</p>
+                    <ul class="hp-install-result-list">
+                        <li>
+                            <code>.vibekb/</code>
+                            <span>Living understanding of your application</span>
+                            <span class="hp-install-result-note">Fresh empty-but-valid workspace from the installer</span>
+                        </li>
+                        <li>
+                            <code>guide/</code>
+                            <span>Dynamic software guide</span>
+                            <span class="hp-install-result-note">Installed runtime</span>
+                        </li>
+                        <li>
+                            <code>tools/</code>
+                            <span>Validation, drift detection, and generation</span>
+                            <span class="hp-install-result-note">Installed runtime</span>
+                        </li>
+                        <li>
+                            <code>docs/</code>
+                            <span>Static guide generated after analysis</span>
+                            <span class="hp-install-result-note">Generated after the first model is built</span>
+                        </li>
+                    </ul>
+                    <p class="hp-install-result-gen">
+                        <code>docs/</code> is created later with
+                        <code>php tools/vibekb.php generate</code> — not by the installer.
+                    </p>
+                </div>
+
+                <details class="hp-install-details">
+                    <summary>What does the installer do?</summary>
+                    <div class="hp-install-details-body">
+                        <ol>
+                            <li>Copies the VibeKB runtime and agent instructions into the target repository.</li>
+                            <li>Creates a fresh <code>.vibekb/</code> workspace without inventing functionality.</li>
+                            <li>Preserves application code and does not analyze or modify it.</li>
+                            <li>Verifies the installation and points Cursor to the integration prompt.</li>
+                        </ol>
+                        <p>
+                            The installer-owned payload is declared by <code>template/manifest.json</code> and
+                            currently includes <code>guide/</code>, <code>tools/</code>, <code>prompts/</code>,
+                            <code>.cursor/</code>, <code>CLAUDE.md</code>, <code>AGENTS.md</code>,
+                            <code>PRODUCT.md</code>, <code>SCHEMA.md</code>, <code>INITIALIZE.md</code>,
+                            <code>MAINTENANCE.md</code>, and <code>INSTALLER.md</code>.
+                        </p>
+                        <p class="hp-install-preview-label">Preview first (optional)</p>
+                        <div class="hp-cmd-block">
+                            <pre class="hp-cmd" id="cmd-dry-run"><code><?= hp_e($dryRunCmd) ?></code></pre>
+                            <button type="button" class="hp-copy-btn" data-copy-target="#cmd-dry-run">Copy</button>
+                        </div>
+                        <p class="hp-install-card-copy">
+                            Preview every file the installer will create, replace, or skip without changing anything.
+                        </p>
+                    </div>
+                </details>
+
+                <p class="hp-thesis hp-install-boundary">
+                    The installer prepares VibeKB. Cursor understands the application.
+                </p>
+
+                <div class="hp-actions hp-install-actions">
+                    <a class="hp-btn hp-btn-primary" href="<?= hp_e($repoUrl) ?>" rel="noopener noreferrer">View on GitHub</a>
+                    <a class="hp-btn hp-btn-ghost" href="<?= hp_e($installerGuideUrl) ?>" rel="noopener noreferrer">Read the full installer guide</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. What you get — the answer, distilled -->
         <section class="hp-section hp-surface" id="understanding" aria-labelledby="understanding-title">
             <div class="hp-wrap">
                 <p class="hp-kicker">What VibeKB is</p>
@@ -264,37 +388,7 @@ if ($loaded) {
             </div>
         </section>
 
-        <!-- 2b. Install — one command, then let your agent build the model -->
-        <section class="hp-section" id="install" aria-labelledby="install-title">
-            <div class="hp-wrap">
-                <p class="hp-kicker">Install in under two minutes</p>
-                <h2 id="install-title">One command prepares your repo. Your agent does the rest.</h2>
-                <p class="hp-lead">
-                    VibeKB ships with a real installer. It sets up the workspace without touching or
-                    analysing your code — then hands off to your coding agent to build the model. No
-                    Composer, no build step, no manual copying.
-                </p>
-
-                <pre class="hp-cmd"><code># 1. Clone VibeKB
-git clone https://github.com/cubixmeow-commits/VibeKB.git
-
-# 2. Install it into your repository (prepares the workspace only)
-php VibeKB/install.php /path/to/your/project</code></pre>
-
-                <ol class="hp-arc hp-install-steps" aria-label="How VibeKB installs">
-                    <li><strong>Clone VibeKB.</strong> One repository, plain PHP 8.2 — Windows, macOS, or Linux.</li>
-                    <li><strong>Run <code>install.php</code>.</strong> It copies the runtime and scaffolds a fresh, empty <code>.vibekb/</code> — your app code is never touched.</li>
-                    <li><strong>Open your coding agent.</strong> Claude Code, Cursor, Codex, and others.</li>
-                    <li><strong>Run the integration prompt.</strong> Ask it to build the first model using <code>prompts/INTEGRATE_VIBEKB.md</code>.</li>
-                    <li><strong>Build software normally.</strong> The agent keeps the model in step as it changes the code.</li>
-                    <li><strong>Stay synchronized.</strong> <code>php tools/vibekb.php check</code> before commit; re-run the installer to upgrade; <code>bootstrap</code> to repair.</li>
-                </ol>
-
-                <p class="hp-thesis">The installer sets up the system. The AI interprets the software. That line stays bright.</p>
-            </div>
-        </section>
-
-        <!-- 3. Live proof + CTA -->
+        <!-- 4. Live proof + CTA -->
         <?php if ($previewItems !== []): ?>
         <section class="hp-section" id="proof" aria-labelledby="proof-title">
             <div class="hp-wrap">
