@@ -114,32 +114,55 @@
                                     <span class="badge badge--info">Verification: verified manually</span>                                <span class="muted">Updated 2026-07-22</span>
             </div>
             <div class="prose reading-column"><h3>What the software (VibeKB) now does</h3>
-<p>VibeKB remains self-hosted: the active <code>.vibekb/</code> models VibeKB itself, rendered
-through the dynamic guide and static <code>/docs</code>. The public homepage now pulls its
-hero-card description from VibeKB&#039;s identity (<code>one_liner</code> / <code>summary</code>) and, when
-self-hosted, frames the preview as VibeKB explaining itself rather than as a
-separate sample product.</p>
+<p>VibeKB remains self-hosted and its runtime behaviour is unchanged — this was a
+copy / information-architecture pass on the landing page only. The homepage now
+leads with the category (&quot;Understand the software AI helped you build&quot;), is
+organized around one spine (&quot;AI can change six files faster than you can rebuild
+your mental model&quot;), and presents one four-part model: current functionality, how
+it works, active AI work, and repository memory. The hero example card and the
+functionality carousel still render from the live <code>.vibekb/</code> model.</p>
 <h3>Completed this change</h3>
 <ul>
-<li>Added <code>one_liner</code> to <code>.vibekb/project/identity.md</code>.</li>
-<li>Fixed <code>index.php</code> tagline resolution (<code>one_liner</code> → <code>summary</code> → VibeKB</li>
+<li>Rewrote <code>index.php</code>: seven sections (hero · problem · what it adds · live proof ·</li>
 </ul>
-<p>fallback) and removed the SousMeow-era hardcoded sentence.</p>
+<p>workflow · why repository-owned · CTA), new <code>&lt;title&gt;</code>/meta description, updated
+  nav and footer.</p>
 <ul>
-<li>Adjusted hero-card / carousel / CTA copy for the self-hosted case.</li>
-<li>Recorded <code>index.php</code> in important-files; added change memory</li>
+<li>Removed the PHP-as-product-category framing; relabelled the hero card to</li>
 </ul>
-<p><code>homepage-tagline-self-hosting</code>.</p>
+<p>&quot;VibeKB analyzing its own repository&quot;; moved all PHP/runtime details into a
+  collapsed &quot;How this reference implementation runs&quot; note.</p>
+<ul>
+<li>Consolidated the repeated &quot;what it does / how / what AI is changing&quot; blocks and</li>
+</ul>
+<p>reduced the seven-principle manifesto to three trust principles.</p>
+<ul>
+<li>Retained the interactive tabs, carousel, workflow timeline, and repo map;</li>
+</ul>
+<p>removed the redundant stepper, depth, relevance, compare, and manifesto widgets.
+  <code>assets/js/homepage.js</code> and <code>assets/css/homepage.css</code> were left unchanged (removed
+  widgets&#039; binds early-return safely; reused existing CSS classes only).</p>
+<ul>
+<li>Added <code>docs/HOMEPAGE_COPY_AUDIT.md</code> and <code>docs/HOMEPAGE_REWRITE_REPORT.md</code></li>
+</ul>
+<p>(process artifacts; the static generator preserves <code>docs/*.md</code>).</p>
 <h3>Verification completed</h3>
 <ul>
 <li><code>php -l index.php</code> clean.</li>
-<li>Loaded identity via <code>Content</code>; confirmed the rendered tagline is the VibeKB</li>
+<li>Rendered <code>index.php</code> against loaded <code>.vibekb/</code>: hero + carousel + all seven</li>
 </ul>
-<p>one_liner and does not contain the old &quot;AI subscriptions&quot; wording.</p>
+<p>sections present; hero shows 17 functions modelled (matches 17 records); no
+  PHP-as-category language in the body.</p>
 <ul>
-<li><code>php tools/vibekb.php check</code> and <code>php tools/test-topology.php</code> (run before</li>
+<li>Degraded paths exercised: missing <code>manifest.json</code> renders normally; missing</li>
 </ul>
-<p>finish); <code>/docs</code> regenerated so the overview shows the new one_liner.</p>
+<p><code>.vibekb/</code> renders without a fatal error (carousel omitted; hero card degrades
+  to zeroed metrics).</p>
+<ul>
+<li>All guide links relative (<code>guide/?view=…</code>) — subfolder-safe; no absolute hrefs.</li>
+<li><code>php tools/vibekb.php check</code> and <code>php tools/test-topology.php</code> run before finish;</li>
+</ul>
+<p><code>/docs</code> regenerated.</p>
 <h3>Active warnings (VibeKB)</h3>
 <ul>
 <li><code>model-can-drift-from-code</code>, <code>docs-is-generated-never-hand-edit</code>,</li>
@@ -147,9 +170,10 @@ separate sample product.</p>
 <p><code>verification-must-reflect-evidence</code>.</p>
 <h3>Honest limitations / not verified</h3>
 <ul>
-<li>Homepage was verified by loading identity fields and linting PHP, not by a</li>
+<li>Homepage verified by rendering the PHP against loaded content and reading the</li>
 </ul>
-<p>full browser screenshot in this environment.</p>
+<p>markup, not by a full browser screenshot or a mobile-device render in this
+  environment (CSS was unchanged and uses the existing responsive rules).</p>
 <ul>
 <li>Cursor discovery remains <code>inferred</code>; live cPanel host not exercised here.</li>
 </ul>
@@ -190,7 +214,7 @@ before committing. Optionally author explainable topology for
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 07:16 UTC · source commit 73c5ea4 (2026-07-22) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 07:29 UTC · source commit 73c5ea4 (2026-07-22) · not auto-updating</p>
             </div>
         </footer>
     </div>

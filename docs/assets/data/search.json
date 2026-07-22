@@ -613,13 +613,13 @@
         "summary": "Idle. See handoff.md for the last completed change and the next recommended action.",
         "type": "current work",
         "url": "../current-work/index.html",
-        "body": "Status No active work. The homepage tagline / self hosting framing fix is complete — see .vibekb/work/handoff.md and .vibekb/memory/changes/homepage tagline self hosting.md ."
+        "body": "Status No active work. The homepage copy / information architecture rewrite is complete — see .vibekb/work/handoff.md , docs/HOMEPAGE COPY AUDIT.md , and docs/HOMEPAGE REWRITE REPORT.md ."
     },
     {
         "title": "Current handoff",
-        "summary": "Homepage hero tagline and self-hosting framing now describe VibeKB (not the old workflow-platform sample). Identity has a one_liner; index.php is in important-files. Next: keep the model reconciled as VibeKB changes; optionally author explainable topology for self-maintenance-loop.",
+        "summary": "The public homepage (index.php) was restructured from eleven sections to seven and re-positioned as \"repository understanding for AI-assisted development.\" PHP-as-product-category framing removed; the self-demo is now framed as VibeKB analyzing its own repository. Dynamic metrics and the functionality carousel still come from real .vibekb/ records. Next: keep the model reconciled as VibeKB changes; optionally author explainable topology for self-maintenance-loop.",
         "type": "handoff",
         "url": "../handoff/index.html",
-        "body": "What the software VibeKB now does VibeKB remains self hosted: the active .vibekb/ models VibeKB itself, rendered through the dynamic guide and static /docs . The public homepage now pulls its hero card description from VibeKB's identity one liner / summary and, when self hosted, frames the preview as VibeKB explaining itself rather than as a separate sample product. Completed this change Added one liner to .vibekb/project/identity.md . Fixed index.php tagline resolution one liner → summary → VibeKB fallback and removed the SousMeow era hardcoded sentence. Adjusted hero card / carousel / CTA copy for the self hosted case. Recorded index.php in important files; added change memory homepage tagline self hosting . Verification completed php l index.php clean. Loaded identity via Content ; conf"
+        "body": "What the software VibeKB now does VibeKB remains self hosted and its runtime behaviour is unchanged — this was a copy / information architecture pass on the landing page only. The homepage now leads with the category \"Understand the software AI helped you build\" , is organized around one spine \"AI can change six files faster than you can rebuild your mental model\" , and presents one four part model: current functionality, how it works, active AI work, and repository memory. The hero example card and the functionality carousel still render from the live .vibekb/ model. Completed this change Rewrote index.php : seven sections hero · problem · what it adds · live proof · workflow · why repository owned · CTA , new <title /meta description, updated nav and footer. Removed the PHP as product ca"
     }
 ]
