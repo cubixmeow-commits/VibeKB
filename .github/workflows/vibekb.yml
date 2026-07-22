@@ -1,0 +1,46 @@
+name: VibeKB model checks
+
+# Runs the same checks an agent runs locally, so the model, the tooling, and the
+# published snapshot cannot silently drift on the default branch or in a PR.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  vibekb:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history so the drift check can reach the recorded source commit.
+          fetch-depth: 0
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: dom, mbstring
+          coverage: none
+
+      - name: PHP syntax check (guide + tools)
+        run: find guide tools -name '*.php' -print0 | xargs -0 -n1 -P4 php -l
+
+      - name: Validate the active model
+        run: php tools/validate.php
+
+      - name: Validate bundled example models
+        run: |
+          for m in examples/*/.vibekb; do
+            if [ -d "$m" ]; then echo "== $m =="; php tools/validate.php "$m"; fi
+          done
+
+      - name: Explainable-diagram topology test
+        run: php tools/test-topology.php
+
+      - name: Consistency check (validation + drift + /docs sync)
+        # --strict fails the build if /docs is out of sync with a fresh render,
+        # so a published snapshot can never lag the model on the default branch.
+        run: php tools/vibekb.php check --strict

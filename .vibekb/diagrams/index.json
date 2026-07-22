@@ -3,29 +3,22 @@
     {
       "id": "whole-app",
       "title": "Understand the whole app",
-      "description": "The fastest visual entry points before reading records."
+      "description": "The fastest visual entry point: how VibeKB's parts fit together."
     },
     {
-      "id": "product-flows",
-      "title": "Understand the main product flow",
-      "description": "How the core user-facing loop and requests move through the system."
+      "id": "internals",
+      "title": "How the model is loaded",
+      "description": "The read path from repository files to rendered pages and validation."
     },
     {
-      "id": "technical-system",
-      "title": "Understand the technical system",
-      "description": "Where data lives and how it is shaped."
-    },
-    {
-      "id": "uncertainty",
-      "title": "Understand uncertainty",
-      "description": "Where to be careful and what is not yet verified."
+      "id": "workflow",
+      "title": "How VibeKB maintains itself",
+      "description": "The agent lifecycle that keeps the model synchronized with the code."
     }
   ],
   "order": [
-    "app-overview",
-    "run-recipe-flow",
-    "request-flow",
-    "storage-map",
-    "risk-uncertainty-map"
+    "vibekb-architecture",
+    "content-load-flow",
+    "self-maintenance-loop"
   ]
 }

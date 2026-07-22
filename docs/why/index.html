@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Decisions &amp; rationale · SousMeow — VibeKB</title>
-    <meta name="description" content="A living explanation of what SousMeow currently does, how it works, what AI is changing, and why.">
+    <title>Decisions &amp; rationale · VibeKB — VibeKB</title>
+    <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- Web fonts are a progressive enhancement only. The stylesheet ships a
@@ -21,7 +21,7 @@
         <div class="site-header__inner">
             <a class="brand" href="../index.html">
                 <span class="brand__mark">VibeKB</span>
-                <span class="brand__project">SousMeow</span>
+                <span class="brand__project">VibeKB</span>
             </a>
             <form class="site-search" role="search" action="../search/index.html">
                 <label class="visually-hidden" for="site-search-input">Search guide</label>
@@ -114,48 +114,39 @@
             <ul class="why-list">
                                     <li class="why-item">
                         <div class="why-item__head">
-                            <h3><a href="../why/decisions/categories-collections-taxonomy.html">Categories are the stable spine; Collections are flexible views</a></h3>
+                            <h3><a href="../why/decisions/functionality-first-not-files.html">Functionality is the primary unit, not files</a></h3>
                             <div class="badge-row">
                                                                 <span class="badge badge--ok">Verified from source</span>                            </div>
                         </div>
-                        <p>Each Cookbook has exactly one primary category (the URL spine) and belongs to many collections (merchandising), resolved in one place with an honesty gate.</p>
-                                                    <p class="why-item__links"><a class="chip" href="../functionality/browse-categories.html">Browse by category</a> <a class="chip" href="../functionality/view-collection.html">View a collection</a> <a class="chip" href="../functionality/view-cookbook-detail.html">View a Cookbook detail</a> <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a></p>
+                        <p>VibeKB organizes understanding around what the software does (behaviours), with files, memory, and diagrams linking back to functionality — never the reverse.</p>
+                                                    <p class="why-item__links"><a class="chip" href="../functionality/load-living-model.html">Load the living model</a> <a class="chip" href="../functionality/resolve-relationships.html">Resolve relationships between records</a> <a class="chip" href="../functionality/find-affected-functionality.html">Find affected functionality</a> <a class="chip" href="../functionality/render-explainable-diagrams.html">Render explainable diagrams</a></p>
                                             </li>
                                     <li class="why-item">
                         <div class="why-item__head">
-                            <h3><a href="../why/decisions/front-controller-csrf-gate.html">One CSRF gate in the front controller</a></h3>
+                            <h3><a href="../why/decisions/honest-provenance-no-auto-update.html">Provenance is objective and VibeKB never claims to auto-update</a></h3>
                             <div class="badge-row">
                                                                 <span class="badge badge--ok">Verified from source</span>                            </div>
                         </div>
-                        <p>Every POST is verified once in public/index.php before routing, rather than per-controller, alongside a strict same-origin CSP.</p>
-                                                    <p class="why-item__links"><a class="chip" href="../functionality/route-and-secure-requests.html">Route &amp; secure every request</a></p>
+                        <p>Every rendering states the source commit analyzed, when it was generated, and that it does not update itself; detection is separated from interpretation, and `updates_automatically` stays false.</p>
+                                                    <p class="why-item__links"><a class="chip" href="../functionality/show-provenance.html">Show provenance and freshness</a> <a class="chip" href="../functionality/validate-model.html">Validate the model</a> <a class="chip" href="../functionality/detect-drift.html">Detect drift between code and model</a></p>
                                             </li>
                                     <li class="why-item">
                         <div class="why-item__head">
-                            <h3><a href="../why/decisions/immutable-artifact-versions.html">Artifacts are immutable, append-only versions</a></h3>
+                            <h3><a href="../why/decisions/repository-owned-workflow.html">The maintenance workflow is repository-owned, not agent-specific</a></h3>
                             <div class="badge-row">
                                                                 <span class="badge badge--ok">Verified from source</span>                            </div>
                         </div>
-                        <p>Every paste, example, edit, and restore creates a new version; nothing is ever overwritten, and Quality Check confirmations bind to a specific version.</p>
-                                                    <p class="why-item__links"><a class="chip" href="../functionality/paste-response.html">Paste a response</a> <a class="chip" href="../functionality/approve-and-version.html">Approve &amp; version an artifact</a> <a class="chip" href="../functionality/review-quality-checks.html">Review Quality Checks</a> <a class="chip" href="../functionality/build-prompt.html">Build the prompt</a></p>
+                        <p>The canonical lifecycle lives in the repository (CLAUDE.md + the vibekb CLI); agent-specific entry points (AGENTS.md, .cursor/rules) are thin pointers, so the workflow cannot fork per tool.</p>
+                                                    <p class="why-item__links"><a class="chip" href="../functionality/start-work-session.html">Start a work session</a> <a class="chip" href="../functionality/hand-off-to-next-agent.html">Hand off to the next agent</a></p>
                                             </li>
                                     <li class="why-item">
                         <div class="why-item__head">
-                            <h3><a href="../why/decisions/never-calls-ai.html">SousMeow never calls an AI itself</a></h3>
+                            <h3><a href="../why/decisions/two-modes-one-source.html">Two output modes over one source and one template set</a></h3>
                             <div class="badge-row">
                                                                 <span class="badge badge--ok">Verified from source</span>                            </div>
                         </div>
-                        <p>The product builds prompts and reviews output, but the user runs the prompt in their own AI — no API keys, no token billing, no black box.</p>
-                                                    <p class="why-item__links"><a class="chip" href="../functionality/build-prompt.html">Build the prompt</a> <a class="chip" href="../functionality/paste-response.html">Paste a response</a> <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a> <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a></p>
-                                            </li>
-                                    <li class="why-item">
-                        <div class="why-item__head">
-                            <h3><a href="../why/decisions/single-pdo-path.html">One PDO connection, prepared statements only</a></h3>
-                            <div class="badge-row">
-                                                                <span class="badge badge--ok">Verified from source</span>                            </div>
-                        </div>
-                        <p>All database access goes through a single shared PDO handle in Core/Database with prepared statements; there is no other access path.</p>
-                                                    <p class="why-item__links"><a class="chip" href="../functionality/access-database.html">Access the database</a></p>
+                        <p>The dynamic guide (Mode A) and the static snapshot (Mode B) render the same `.vibekb/` through the same templates; the only difference is the URL strategy.</p>
+                                                    <p class="why-item__links"><a class="chip" href="../functionality/render-guide.html">Render the dynamic guide</a> <a class="chip" href="../functionality/generate-static-snapshot.html">Generate the static snapshot</a> <a class="chip" href="../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a> <a class="chip" href="../functionality/search-the-model.html">Search the model</a></p>
                                             </li>
                             </ul>
         </section>
@@ -164,48 +155,21 @@
             <ul class="why-list">
                                     <li class="why-item">
                         <div class="why-item__head">
-                            <h3><a href="../why/constraints/cli-only-admin.html">Admin and password rotation are CLI-only</a></h3>
+                            <h3><a href="../why/constraints/confine-file-access-to-content-root.html">All content file access is confined to the content root</a></h3>
                             <div class="badge-row">
                                                                 <span class="badge badge--ok">Verified from source</span>                            </div>
                         </div>
-                        <p>Admin accounts exist only via scripts/seed.php, which prints a one-time password; there is no web installer and the admin surface is read-only.</p>
-                                                    <p class="why-item__links"><a class="chip" href="../functionality/view-admin-overview.html">View the admin overview</a> <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a> <a class="chip" href="../functionality/reset-password.html">Reset a password</a></p>
+                        <p>The loader refuses any path that escapes the configured `.vibekb/` root, and record ids are constrained to a safe character set, so a crafted request can never read arbitrary files.</p>
+                                                    <p class="why-item__links"><a class="chip" href="../functionality/load-living-model.html">Load the living model</a> <a class="chip" href="../functionality/render-guide.html">Render the dynamic guide</a></p>
                                             </li>
                                     <li class="why-item">
                         <div class="why-item__head">
-                            <h3><a href="../why/constraints/no-checkout-v1.html">No payment or checkout in v1</a></h3>
+                            <h3><a href="../why/constraints/no-build-step-portable.html">Runs on PHP 8.2 shared hosting with no build step</a></h3>
                             <div class="badge-row">
                                                                 <span class="badge badge--ok">Verified from source</span>                            </div>
                         </div>
-                        <p>Marketplace previews show honest &quot;coming soon&quot; states with no checkout; there is no payment SDK, and only executable Cookbooks can start.</p>
-                                                    <p class="why-item__links"><a class="chip" href="../functionality/start-project.html">Start a project</a> <a class="chip" href="../functionality/view-cookbook-detail.html">View a Cookbook detail</a> <a class="chip" href="../functionality/browse-marketplace.html">Browse the marketplace</a></p>
-                                            </li>
-                                    <li class="why-item">
-                        <div class="why-item__head">
-                            <h3><a href="../why/constraints/php8-shared-hosting.html">Plain PHP 8 on shared hosting — no Node, Composer, or workers</a></h3>
-                            <div class="badge-row">
-                                                                <span class="badge badge--ok">Verified from source</span>                            </div>
-                        </div>
-                        <p>SousMeow must run on Hostinger shared hosting with PHP 8 and no build step, no dependency manager, no Docker, and no background workers.</p>
-                                                    <p class="why-item__links"><a class="chip" href="../functionality/route-and-secure-requests.html">Route &amp; secure every request</a> <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a></p>
-                                            </li>
-                                    <li class="why-item">
-                        <div class="why-item__head">
-                            <h3><a href="../why/constraints/public-root-subfolder.html">Only public/ is web-served; deployable under a subfolder</a></h3>
-                            <div class="badge-row">
-                                                                <span class="badge badge--ok">Verified from source</span>                            </div>
-                        </div>
-                        <p>The document root points at public/; app, config, database, scripts, and storage sit above it, and the app must run under a subdirectory via app.base_path.</p>
-                                                    <p class="why-item__links"><a class="chip" href="../functionality/route-and-secure-requests.html">Route &amp; secure every request</a> <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a></p>
-                                            </li>
-                                    <li class="why-item">
-                        <div class="why-item__head">
-                            <h3><a href="../why/constraints/sqlite-and-mysql.html">Two database dialects kept in lockstep</a></h3>
-                            <div class="badge-row">
-                                                                <span class="badge badge--ok">Verified from source</span>                            </div>
-                        </div>
-                        <p>The same schema must work as SQLite (zero-setup dev) and MySQL (production); both dialect files change together.</p>
-                                                    <p class="why-item__links"><a class="chip" href="../functionality/access-database.html">Access the database</a> <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a></p>
+                        <p>No framework, SPA, bundler, database, external/AI API, or JavaScript build; the guide must run by copying files and work in a subfolder without JavaScript.</p>
+                                                    <p class="why-item__links"><a class="chip" href="../functionality/parse-records.html">Parse records (front matter + Markdown)</a> <a class="chip" href="../functionality/render-guide.html">Render the dynamic guide</a> <a class="chip" href="../functionality/search-the-model.html">Search the model</a> <a class="chip" href="../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a></p>
                                             </li>
                             </ul>
         </section>
@@ -214,21 +178,12 @@
             <ul class="why-list">
                                     <li class="why-item">
                         <div class="why-item__head">
-                            <h3><a href="../why/assumptions/ai-output-is-markdownish.html">Pasted AI output is Markdown-ish</a></h3>
+                            <h3><a href="../why/assumptions/agents-follow-session-workflow.html">Coding agents will follow the session workflow if it is discoverable and cheap</a></h3>
                             <div class="badge-row">
-                                                                <span class="badge badge--info">Inferred from source</span>                            </div>
+                                                                <span class="badge badge--info">Reported by developer</span>                            </div>
                         </div>
-                        <p>Quality-check evidence parsing and the export reader assume responses use Markdown-like headings and structure; free-form prose falls back to manual review.</p>
-                                                    <p class="why-item__links"><a class="chip" href="../functionality/review-quality-checks.html">Review Quality Checks</a> <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a></p>
-                                            </li>
-                                    <li class="why-item">
-                        <div class="why-item__head">
-                            <h3><a href="../why/assumptions/single-writer-per-project.html">One writer per project at a time</a></h3>
-                            <div class="badge-row">
-                                                                <span class="badge badge--ok">Verified from source</span>                            </div>
-                        </div>
-                        <p>A project is owned and edited by one user in one place; there is no concurrent-editing model, and SQLite WAL/busy-timeout cover the low contention.</p>
-                                                    <p class="why-item__links"><a class="chip" href="../functionality/fill-pantry.html">Fill the Pantry</a> <a class="chip" href="../functionality/paste-response.html">Paste a response</a> <a class="chip" href="../functionality/approve-and-version.html">Approve &amp; version an artifact</a></p>
+                        <p>We assume a capable agent reads CLAUDE.md / AGENTS.md / .cursor rules and runs `vibekb status` at session start, rather than needing the giant bootstrap prompt each time.</p>
+                                                    <p class="why-item__links"><a class="chip" href="../functionality/start-work-session.html">Start a work session</a> <a class="chip" href="../functionality/record-current-work.html">Record current AI work</a> <a class="chip" href="../functionality/hand-off-to-next-agent.html">Hand off to the next agent</a> <a class="chip" href="../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a></p>
                                             </li>
                             </ul>
         </section>
@@ -237,39 +192,30 @@
             <ul class="why-list">
                                     <li class="why-item">
                         <div class="why-item__head">
-                            <h3><a href="../why/warnings/legacy-category-column.html">cookbooks.category is legacy — written but never read</a></h3>
-                            <div class="badge-row">
-                                <span class="badge badge--info">low</span>                                <span class="badge badge--ok">Verified from source</span>                            </div>
-                        </div>
-                        <p>The old free-text category string is kept one release for rollback safety; every read goes through primary_category_id. Do not reintroduce reads of it.</p>
-                                                    <p class="why-item__links"><a class="chip" href="../functionality/browse-categories.html">Browse by category</a> <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a> <a class="chip" href="../functionality/view-cookbook-detail.html">View a Cookbook detail</a></p>
-                                            </li>
-                                    <li class="why-item">
-                        <div class="why-item__head">
-                            <h3><a href="../why/warnings/password-reset-depends-on-smtp.html">Web password reset silently no-ops without SMTP</a></h3>
+                            <h3><a href="../why/warnings/docs-is-generated-never-hand-edit.html">/docs is generated output — never hand-edit it</a></h3>
                             <div class="badge-row">
                                 <span class="badge badge--warn">medium</span>                                <span class="badge badge--ok">Verified from source</span>                            </div>
                         </div>
-                        <p>The forgot/reset flow is coded correctly but only useful when a real mail driver is configured; the default &#039;log&#039; driver sends nothing, so the CLI is the reliable path.</p>
-                                                    <p class="why-item__links"><a class="chip" href="../functionality/reset-password.html">Reset a password</a> <a class="chip" href="../functionality/register-account.html">Register an account</a> <a class="chip" href="../functionality/verify-email.html">Verify your email</a></p>
+                        <p>The static site under `/docs` is produced by `tools/generate-static.php`; editing it directly is lost on the next build and makes the snapshot lie about the model.</p>
+                                                    <p class="why-item__links"><a class="chip" href="../functionality/generate-static-snapshot.html">Generate the static snapshot</a> <a class="chip" href="../functionality/detect-drift.html">Detect drift between code and model</a></p>
                                             </li>
                                     <li class="why-item">
                         <div class="why-item__head">
-                            <h3><a href="../why/warnings/pasted-response-is-untrusted.html">Pasted AI responses are untrusted input end to end</a></h3>
+                            <h3><a href="../why/warnings/model-can-drift-from-code.html">The model drifts from the code unless an agent reconciles it</a></h3>
                             <div class="badge-row">
                                 <span class="badge badge--danger">high</span>                                <span class="badge badge--ok">Verified from source</span>                            </div>
                         </div>
-                        <p>Response content is sanitised on store and escaped-before-formatting on render; relaxing either — especially in the export reader — reintroduces stored XSS.</p>
-                                                    <p class="why-item__links"><a class="chip" href="../functionality/paste-response.html">Paste a response</a> <a class="chip" href="../functionality/review-quality-checks.html">Review Quality Checks</a> <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a></p>
+                        <p>VibeKB detects that files changed but cannot interpret what a change means; if an agent edits code without updating the affected records, the model silently goes stale.</p>
+                                                    <p class="why-item__links"><a class="chip" href="../functionality/detect-drift.html">Detect drift between code and model</a> <a class="chip" href="../functionality/find-affected-functionality.html">Find affected functionality</a></p>
                                             </li>
                                     <li class="why-item">
                         <div class="why-item__head">
-                            <h3><a href="../why/warnings/read-write-path-coupling.html">Pantry and Artifact read/write paths must change together</a></h3>
+                            <h3><a href="../why/warnings/verification-must-reflect-evidence.html">A verification state must reflect real evidence</a></h3>
                             <div class="badge-row">
                                 <span class="badge badge--danger">high</span>                                <span class="badge badge--ok">Verified from source</span>                            </div>
                         </div>
-                        <p>A field key, type, or schema change must update the Pantry save, the prompt substitution, the Runner, and the export together, or prompts and kits silently lose data.</p>
-                                                    <p class="why-item__links"><a class="chip" href="../functionality/fill-pantry.html">Fill the Pantry</a> <a class="chip" href="../functionality/build-prompt.html">Build the prompt</a> <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a> <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a></p>
+                        <p>A record is not &quot;verified&quot; because an AI edited it or a file exists; only claim `verified-*` for behaviour you traced, tested, or exercised, and mark the rest honestly.</p>
+                                                    <p class="why-item__links"><a class="chip" href="../functionality/validate-model.html">Validate the model</a> <a class="chip" href="../functionality/show-provenance.html">Show provenance and freshness</a> <a class="chip" href="../functionality/validate-diagram-topology.html">Validate diagram topology</a></p>
                                             </li>
                             </ul>
         </section>
@@ -278,30 +224,12 @@
             <ul class="why-list">
                                     <li class="why-item">
                         <div class="why-item__head">
-                            <h3><a href="../why/discoveries/cookbook-count-drift.html">The README&#039;s Cookbook count is stale</a></h3>
+                            <h3><a href="../why/discoveries/self-hosting-needs-example-isolation.html">Self-hosting forced a clean split between the active model and examples</a></h3>
                             <div class="badge-row">
                                                                 <span class="badge badge--ok">Verified from source</span>                            </div>
                         </div>
-                        <p>README says &quot;Twenty-two executable Cookbooks&quot;; the seed source actually contains 31 executable + 2 preview (33 total).</p>
-                                                    <p class="why-item__links"><a class="chip" href="../functionality/browse-marketplace.html">Browse the marketplace</a> <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a></p>
-                                            </li>
-                                    <li class="why-item">
-                        <div class="why-item__head">
-                            <h3><a href="../why/discoveries/demo-mode-labeling.html">Sample data is labelled everywhere it appears</a></h3>
-                            <div class="badge-row">
-                                                                <span class="badge badge--ok">Verified from source</span>                            </div>
-                        </div>
-                        <p>A pasted &quot;example response&quot; carries source=&#039;example&#039; from the version through the review UI, the export manifest, and kit.html — sample data is never presented as real.</p>
-                                                    <p class="why-item__links"><a class="chip" href="../functionality/paste-response.html">Paste a response</a> <a class="chip" href="../functionality/export-project-kit.html">Export the Project Kit</a> <a class="chip" href="../functionality/demo-simulation.html">Demo Mode &amp; simulation</a></p>
-                                            </li>
-                                    <li class="why-item">
-                        <div class="why-item__head">
-                            <h3><a href="../why/discoveries/password-reset-cli-vs-web.html">Two password-reset paths exist, and they can disagree</a></h3>
-                            <div class="badge-row">
-                                                                <span class="badge badge--ok">Verified from source</span>                            </div>
-                        </div>
-                        <p>The code has a full web forgot/reset flow, while the docs present resets as an admin CLI action — reconciled by the fact that the web path needs SMTP the default deploy lacks.</p>
-                                                    <p class="why-item__links"><a class="chip" href="../functionality/reset-password.html">Reset a password</a></p>
+                        <p>Dogfooding VibeKB on itself surfaced that the loader keys records by id and loads whatever `.vibekb/` it is pointed at, so an example model and the active model cannot coexist in one root — they must be separate roots.</p>
+                                                    <p class="why-item__links"><a class="chip" href="../functionality/load-living-model.html">Load the living model</a> <a class="chip" href="../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a></p>
                                             </li>
                             </ul>
         </section>
@@ -310,30 +238,12 @@
             <ul class="why-list">
                                     <li class="why-item">
                         <div class="why-item__head">
-                            <h3><a href="../why/changes/add-diagrams-and-provenance.html">Added a source-grounded diagram set and provenance to the SousMeow model</a></h3>
+                            <h3><a href="../why/changes/bootstrap-vibekb-self-hosting.html">Bootstrap VibeKB on itself with an active self-maintenance lifecycle</a></h3>
                             <div class="badge-row">
-                                                                                            </div>
+                                                                <span class="badge badge--ok">Verified by test</span>                            </div>
                         </div>
-                        <p>The SousMeow model gained five source-grounded diagrams and an explicit provenance block; no functionality claim was upgraded.</p>
-                                                    <p class="why-item__links"><a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a> <a class="chip" href="../functionality/access-database.html">Access the database</a> <a class="chip" href="../functionality/route-and-secure-requests.html">Route &amp; secure every request</a></p>
-                                            </li>
-                                    <li class="why-item">
-                        <div class="why-item__head">
-                            <h3><a href="../why/changes/add-explainable-diagrams.html">Made diagrams explainable — nodes, edges, mechanisms, files-with-reasons</a></h3>
-                            <div class="badge-row">
-                                                                                            </div>
-                        </div>
-                        <p>Two SousMeow diagrams gained a repository-owned topology so every node states what it is, every edge states a concrete mechanism, every file states why it matters, and external source links reach the implementation — without upgrading any verification claim.</p>
-                                                    <p class="why-item__links"><a class="chip" href="../functionality/route-and-secure-requests.html">Route &amp; secure every request</a> <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a> <a class="chip" href="../functionality/access-database.html">Access the database</a></p>
-                                            </li>
-                                    <li class="why-item">
-                        <div class="why-item__head">
-                            <h3><a href="../why/changes/taxonomy-categories-collections.html">Introduced the categories + collections taxonomy</a></h3>
-                            <div class="badge-row">
-                                                                <span class="badge badge--ok">Verified from source</span>                            </div>
-                        </div>
-                        <p>Discovery moved from a single free-text category string to a stable one-category spine plus flexible many-to-many collections, resolved in one service with an honesty gate.</p>
-                                                    <p class="why-item__links"><a class="chip" href="../functionality/browse-categories.html">Browse by category</a> <a class="chip" href="../functionality/view-collection.html">View a collection</a> <a class="chip" href="../functionality/view-cookbook-detail.html">View a Cookbook detail</a> <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a></p>
+                        <p>Replaced the SousMeow active model with VibeKB&#039;s own model, isolated the examples, and added the `vibekb` CLI (status/check/affected) so the model is maintained through a real agent lifecycle as VibeKB is developed.</p>
+                                                    <p class="why-item__links"><a class="chip" href="../functionality/start-work-session.html">Start a work session</a> <a class="chip" href="../functionality/detect-drift.html">Detect drift between code and model</a> <a class="chip" href="../functionality/find-affected-functionality.html">Find affected functionality</a> <a class="chip" href="../functionality/load-living-model.html">Load the living model</a> <a class="chip" href="../functionality/generate-static-snapshot.html">Generate the static snapshot</a></p>
                                             </li>
                             </ul>
         </section>
@@ -347,7 +257,7 @@
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-21 · source commit c1617ab (2026-07-16) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 05:50 UTC · source commit dbd9c08 (2026-07-21) · not auto-updating</p>
             </div>
         </footer>
     </div>

@@ -1,863 +1,611 @@
 [
     {
-        "title": "Access the database",
-        "summary": "A single shared PDO handle — SQLite for dev, MySQL for production — is the only database access path; every query is a prepared statement.",
+        "title": "Deploy and stay portable",
+        "summary": "The guide deploys to plain PHP 8.2 shared hosting via `.cpanel.yml` with no build step, no database, and no rewrite rules; query-string routing and relative static links let it run at a web root or in a subfolder, and the deploy config is treated as part of the application.",
         "type": "functionality",
-        "url": "../functionality/access-database.html",
-        "body": "In one sentence Every query in the app runs through one PDO handle with prepared statements — SQLite locally, MySQL in production — and nothing else touches the database. Current behavior Database::pdo lazily builds one connection: MySQL when db.driver is mysql emulated prepares off , otherwise SQLite creating the file/dir, enabling foreign keys , busy timeout , and WAL . run/fetch/fetchAll/ fetchValue/lastInsertId wrap prepared statements; transaction runs a closure in a transaction, reusing an outer one if present. Errors throw ERRMODE EXCEPTION . Step by step flow 1. Code calls Database::run / fetch / etc. 2. pdo returns the shared handle built once . 3. The SQL is prepared and executed with bound params. 4. Results return as associative arrays. Implementation map app/Core/Database.php "
+        "url": "../functionality/deploy-and-stay-portable.html",
+        "body": "In one sentence VibeKB ships as ordinary PHP plus generated static files, so it deploys by copying files — the deployment configuration is maintained alongside the code it deploys. Current behavior .cpanel.yml rsyncs the runtime paths index.php , assets/ , guide/ , .vibekb/ into a cPanel public folder, excluding development only paths tools/ , prompts/ , docs/ , authoring docs, examples . Query string routing means no rewrite rules are required and the guide works in a subfolder; StaticUrlStrategy emits relative links so /docs works at a web root or under a repository subpath GitHub Pages . .vibekb/ is the content and must deploy; examples/ and tooling need not. Implementation map .cpanel.yml — the deploy sync and exclusions. DEPLOYMENT.md — the deploy contract and persistent path rules. g"
     },
     {
-        "title": "Approve & version an artifact",
-        "summary": "The approval gate (every check confirmed) plus the full immutable version toolkit — edit, reopen, restore — that keeps history intact.",
+        "title": "Detect drift between code and model",
+        "summary": "`php tools/vibekb.php check` reports where the model and the repository have diverged — model references to files that no longer exist, source files changed since the recorded commit, functionality those changes likely affect, and whether the /docs snapshot is stale — separating what was detected mechanically from what still needs an agent to interpret.",
         "type": "functionality",
-        "url": "../functionality/approve-and-version.html",
-        "body": "In one sentence Approve locks the current version — but only once every Quality Check is confirmed — and you can always edit, restore an older version, or reopen without losing history. Current behavior approve refuses unless the count of confirmed checks equals the number of checks, then approves the latest version and, if every Recipe is now approved, marks the project complete and sends the user to export otherwise to the next Recipe . reopen withdraws an approval. saveEdit stores an edited copy as a new version edited , never touching the original, and no ops if the text is unchanged. restore brings an older version back as a new version restored . Every version is immutable; history is never destroyed. Step by step flow approve 1. User posts to /projects/{id}/run/{position}/approve . "
+        "url": "../functionality/detect-drift.html",
+        "body": "In one sentence check is the consistency gate: it runs full validation, verifies every file the model points at still exists, lists source changes since the model's recorded commit and the functionality they likely touch, and confirms /docs still matches a fresh render. Current behavior check produces four sections: 1. Model validation — the same errors/warnings as validate definite structural problems are errors . 2. Broken file references detected — any path in a functionality files , important files.json , or a diagram topology that does not exist on disk. This is a definite error: the model claims code that is gone. 3. Source changes since the recorded commit detected → needs interpretation — files changed under the modelled source areas guide/ , tools/ , index.php , deployment config "
     },
     {
-        "title": "Browse by category",
-        "summary": "The stable topic spine — a category index and one shared category page with difficulty and executable/preview filters.",
+        "title": "Find affected functionality",
+        "summary": "Given a set of changed files, `php tools/vibekb.php affected` lists the functionality records, important-files entries, and diagram topologies that reference them — turning \"six files changed\" into \"here is the knowledge that may now be wrong.\"",
         "type": "functionality",
-        "url": "../functionality/browse-categories.html",
-        "body": "In one sentence Every Cookbook has exactly one category; this is the browsable topic spine, with filters for difficulty and whether a Cookbook is runnable. Current behavior CategoryController::index renders visible categories with counts plus the surfaced collections pulling start here into its own section . CategoryController::show $slug 404s a hidden/unknown category, then lists the category's Cookbooks with optional ?level= difficulty and ?show= executable/preview filters computed from the unfiltered set. Step by step flow 1. Visitor opens /categories → index of categories + surfaced collections. 2. Or /categories/{slug} → Category::findBySlug ; 404 if hidden/unknown. 3. Cookbook::inCategory loads all, then again with any filters. 4. Real difficulty levels and executable/preview presenc"
+        "url": "../functionality/find-affected-functionality.html",
+        "body": "In one sentence It reverses the files back links the model already carries: for each changed path, which functionality claims to be implemented there, which important file entry describes it, and which diagram nodes/edges point at it. User experience php tools/vibekb.php affected app/x.php guide/lib/Content.php prints, per file, the functionality records that list it, the important files entry, and any diagram topology file references — or \"no record references this file may need a new or updated record \" when nothing matches. With since <ref it derives the file list from git instead of arguments. Implementation map tools/vibekb.php — the affected subcommand. guide/lib/Content.php — the files back links this reads. Failure cases A file no record references is reported as unmapped, not drop"
     },
     {
-        "title": "Browse the marketplace",
-        "summary": "A single searchable listing of every Cookbook, filtered by a plain-text query.",
+        "title": "Generate the static snapshot",
+        "summary": "`php tools/generate-static.php` renders the same templates as the live guide into a self-contained `/docs` site with relative, subpath-safe links — refusing to build if the model has validation errors, and clearly stamped as generated output that does not update itself.",
         "type": "functionality",
-        "url": "../functionality/browse-marketplace.html",
-        "body": "In one sentence Type a query and see the matching Cookbooks; leave it blank to see them all. Current behavior MarketplaceController::index trims ?q= and passes it to Cookbook::marketplace $query , then renders marketplace/index . There is no pagination; the catalog is small and fully listed. Step by step flow 1. Visitor opens /marketplace optionally ?q=cover+letter . 2. MarketplaceController::index reads and trims the query. 3. Cookbook::marketplace $query returns matching Cookbooks. 4. marketplace/index renders the results. Implementation map app/Controllers/MarketplaceController.php — index . app/Models/Cookbook.php — marketplace query. app/Views/marketplace/index.php — the listing. Data used Reads: cookbooks . Writes: none. Dependencies Seeded catalog content. Dependents Feeds View a Co"
+        "url": "../functionality/generate-static-snapshot.html",
+        "body": "In one sentence The generator swaps only the URL strategy to emit relative, subpath safe links and writes the rendered HTML to disk — there is no second template system, so the snapshot is the live guide, frozen. Current behavior It loads the model, refuses to build if there are any validation errors, records the generation event mode static , generated time, generator commit/branch , then renders every view — overview, each functionality record, the section pages, each memory record — into the output directory, copies CSS/JS and diagram SVGs, writes the search index built for the static location, and drops a .nojekyll . It cleans only the generated site, leaving other files in /docs alone. The output directory defaults to /docs but honours VIBEKB DOCS OUT used by the drift check to render"
     },
     {
-        "title": "Build the prompt",
-        "summary": "Turns a Recipe template into a ready-to-copy prompt by substituting Pantry values and earlier approved Artifacts, with every substitution highlighted.",
+        "title": "Hand off to the next agent",
+        "summary": "`.vibekb/work/handoff.md` records current functionality state, completed work, verification done, unresolved work, active warnings, and the exact next recommended action — the artifact a fresh agent reads (via `status`) to continue without re-deriving context.",
         "type": "functionality",
-        "url": "../functionality/build-prompt.html",
-        "body": "In one sentence {{field key}} becomes your Pantry value and {{artifact:recipe slug}} becomes an earlier approved Artifact — so what you see highlighted is exactly what gets copied. Current behavior PromptBuilder::build returns {text, html, missing} . It walks one substitution map — Pantry field keys plus artifact:slug for every approved Artifact — replacing placeholders. text is the plain prompt to copy; html is the escaped rendering with each substituted value wrapped in a .prompt ingredient span; missing lists any unfilled placeholders rendered as missing: key . Multiselect Pantry values join into a readable list. Step by step flow 1. The Runner calls PromptBuilder::build $recipe, $project . 2. substitutions gathers Pantry values and approved Artifact contents. 3. Each {{...}} placeholde"
+        "url": "../functionality/hand-off-to-next-agent.html",
+        "body": "In one sentence The handoff is the session's terminal state: what is true now, what was verified, what remains, and the single most useful next action — written for whoever human or AI arrives next. Current behavior handoff.md carries a verification state and a summary in front matter and a structured body what the software does now, completed work, verification, unresolved work, active warnings, exact next recommended action . Content exposes it and handoff.php renders it; the status command reads its summary and next action so orientation does not require opening the file. Implementation map guide/templates/handoff.php — the view. tools/vibekb.php — status surfaces the summary and next action. Use caution The handoff must reflect the repository state at hand off time. A stale handoff is "
     },
     {
-        "title": "Demo Mode & simulation",
-        "summary": "Two related things — the Runner's per-recipe \"paste example\" for a no-AI walkthrough, and a portfolio simulation that populates hundreds of labelled demo creators and a public activity dashboard.",
+        "title": "Initialize VibeKB in a repository",
+        "summary": "A documented, project-agnostic process (INITIALIZE.md plus a paste-ready prompt) for an agent to build a fresh, honest `.vibekb/` model of another application read-only, then render it — the same process VibeKB used on itself.",
         "type": "functionality",
-        "url": "../functionality/demo-simulation.html",
-        "body": "In one sentence Try the whole loop with no AI by pasting seeded examples, and — for the portfolio — populate hundreds of clearly labelled simulated creators with daily activity. Current behavior Demo Mode verified : on each Recipe, pasteExample stores the recipe's seeded example response as a version marked sample data, so the full create to export loop works without any AI. Sample data is always labelled in the UI, manifest, and kit. Simulation inferred : scripts/simulate users.php and simulate day.php run daily via cron create simulation = 1 users and daily Pacific time activity; SiteStats reads only these simulation rows to render public metrics and a GitHub style activity heatmap; simulation runs records each day. Demo login credentials are documented in README.md / docs/SIMULATION.md "
+        "url": "../functionality/initialize-in-a-repository.html",
+        "body": "In one sentence Initialization is a repeatable agent workflow — inventory the target read only, trace functionality from source, record honest verification states, add only source grounded diagrams, validate, and generate — that produces a model of any app without modifying it. Current behavior INITIALIZE.md defines the step by step process and prompts/INTEGRATE VIBEKB.md is a project agnostic prompt that drives it. This is a documented process , not executable code: the quality depends on the agent following it. It is demonstrated by the bundled example models under examples/ the SousMeow model and the StopPR field test audit and, most directly, by this repository — VibeKB's own model was produced by this workflow. Implementation map INITIALIZE.md — the 17 step process. prompts/INTEGRATE "
     },
     {
-        "title": "Export the Project Kit",
-        "summary": "Builds a downloadable zip of every approved Artifact — numbered Markdown files, a self-contained HTML reader, and a provenance manifest — served only to the owner.",
+        "title": "Load the living model",
+        "summary": "A single loader reads the repository-owned `.vibekb/` directory into an in-memory model — project, functionality, system, files, diagrams, memory, and work — with all filesystem access confined to the content root.",
         "type": "functionality",
-        "url": "../functionality/export-project-kit.html",
-        "body": "In one sentence Once every step is approved, export a self contained kit — Markdown files, an offline HTML reader, and a manifest — that only you can download. User experience The export page shows readiness all steps approved and past exports. Building produces a zip; the download streams as an attachment. kit.html opens in any browser and works offline. Current behavior ExportController::create requires verification and re checks that every Recipe has an approved Artifact server side gate , then ProjectKit::build writes the zip to exports.dir outside the web root : one NN recipe slug.md per approved Artifact, a kit.html reader content rendered through SafeText , and a README.md manifest listing files and the Pantry. Export::record logs it. download re scopes the export to the owner Expor"
+        "url": "../functionality/load-living-model.html",
+        "body": "In one sentence Content::load turns a directory of Markdown plus front matter records and small JSON manifests into a single, queryable software model — no database, no network, no build step. Current behavior Content is constructed with a content root by default the repository's own .vibekb/ ; an explicit VIBEKB CONTENT ROOT pointing at a .vibekb directory lets the same code preview a bundled example . load reads, in order: the manifest and its provenance; the four project documents; the functionality index and every functionality/records/ .md ; the system documents; the important files list; the diagrams index, records, and any explainable topology; every memory type; and the current work, handoff, and sessions. Records are keyed by id, with duplicate ids reported as issues rather than s"
     },
     {
-        "title": "Fill the Pantry",
-        "summary": "Collects and validates the project facts every prompt is built from, with per-type validation, a one-click sample fill, and a value-driven project rename.",
+        "title": "Parse records (front matter + Markdown)",
+        "summary": "A small front-matter parser and a pragmatic Markdown subset turn each `.vibekb/` file into structured metadata plus rendered HTML, without pulling in a Markdown library or a build step.",
         "type": "functionality",
-        "url": "../functionality/fill-pantry.html",
-        "body": "In one sentence Fill in the Cookbook's ingredients once; those values feed every Recipe's prompt for the whole project. User experience A form of typed fields text, textarea, select, multiselect, number, url with help text. \"Fill with a sample Pantry\" pre fills the seeded sample values nothing saved until you submit , clearly marked as sample. Current behavior pantry renders the form with any stored values decoding multiselect JSON ; ?sample=1 pre fills seeded samples without saving. savePantry validates each field by type length caps, option membership, numeric range, URL scheme , stores values multiselect as JSON , marks pantry saved at , and — if the Cookbook has a product name field — renames the project to that value. First save routes to Recipe 1; later saves route to the next unfini"
+        "url": "../functionality/parse-records.html",
+        "body": "In one sentence Each record file is split into a fenced front matter block scalars, quoted strings, booleans, ints, inline and block lists and a Markdown body that is rendered by a deliberately small, dependency free renderer. Current behavior FrontMatter::parse reads the leading fenced block and returns 'meta' = ..., 'body' = ... . Markdown::toHtml supports the subset the guide actually needs — headings, lists, tables, fenced code, emphasis, links, and blockquotes — and escapes output. Anything outside the subset is rendered as plain text rather than executed. Implementation map guide/lib/FrontMatter.php — the value form parser no YAML dependency . guide/lib/Markdown.php — the Markdown subset renderer. Failure cases A record with no front matter block still parses empty meta, full body . "
     },
     {
-        "title": "Manage your account",
-        "summary": "Account settings — profile, preferences, security (password and email change), a personal data export, first-run onboarding, and account deletion.",
+        "title": "Record current AI work",
+        "summary": "`.vibekb/work/current.md` holds the active change — requested outcome, current vs proposed behaviour, affected functionality, expected files, data impact, risks, and verification plan — rendered as the Current Work view so the change is visible before, during, and after it happens.",
         "type": "functionality",
-        "url": "../functionality/manage-account.html",
-        "body": "In one sentence One place to edit profile and preferences, change password or email, export your data, complete onboarding, and delete the account. Current behavior The routes app/routes.php map AccountController to: index , profile +update , preferences +update , security + updatePassword , requestEmailChange , confirmEmailChange/{token} , data + exportData , deleteAccount , and onboarding showOnboarding , completeOnboarding . The data export is built by Services/AccountDataExport . Email change is confirmed via a token, mirroring email verification. Step by step flow 1. Signed in user opens /account . 2. Sub pages GET a form; POSTs update the users row or issue a token . 3. Email change is confirmed via /account/email/confirm/{token} . 4. Data export assembles the user's records for down"
+        "url": "../functionality/record-current-work.html",
+        "body": "In one sentence The active work record is the coordination artifact that makes an in flight change legible — what is being attempted, what it touches, and how it will be verified — not a log written after the fact. Current behavior current.md front matter carries objective , status , verification state , affected functionality , expected files , data impact , and risks ; the body carries the narrative what was asked, current behaviour, proposed behaviour, verification plan . Content loads it and current work.php renders it as the Current Work view in both output modes. Implementation map guide/templates/current work.php — the view. guide/lib/Content.php — currentWork . Safe to change The body prose and which fields are emphasised are safe to adjust. Use caution Keep status / verification s"
     },
     {
-        "title": "Paste a response",
-        "summary": "Stores a pasted AI response (or the seeded example) as a new immutable artifact version after sanitising untrusted input.",
+        "title": "Render explainable diagrams",
+        "summary": "A diagram can carry a repository-owned topology (nodes with purposes, edges with controlled mechanisms, files with reasons, commit-pinned source links); the loader resolves it and the guide renders semantic per-node/per-edge explanations that work without JavaScript, identical in both output modes.",
         "type": "functionality",
-        "url": "../functionality/paste-response.html",
-        "body": "In one sentence Paste your AI's answer and it is saved as a new, immutable version — or, in Demo Mode, paste the recipe's seeded example instead. Current behavior paste requires verification, cleans the content cleanContent : normalises newlines, strips control characters except newline/tab, trims, and requires 20–200,000 chars , and stores it as a new version with source pasted . pasteExample does the same with the recipe's seeded example response , source example , and a message that marks it as sample data. Both touch the project's updated at . Step by step flow 1. User posts their response to /projects/{id}/run/{position}/paste . 2. cleanContent sanitises it; empty/too short/too long → error redirect. 3. Artifact::addVersion ..., 'pasted' appends an immutable version. 4. Project::touch"
+        "url": "../functionality/render-explainable-diagrams.html",
+        "body": "In one sentence An explainable diagram is a visual projection of the model: every node states what it is, every edge states the concrete mechanism connecting its endpoints, and every displayed file states why it matters, with an external source link as the terminal \"show me the implementation.\" Current behavior Content loads a diagram's topology JSON, normalises it, resolves each node/edge's functionality and warnings, enriches files with canonical metadata from important files.json , and builds commit pinned GitHub source links from provenance. diagrams.php and the diagram explain partial render semantic sections with stable node <id / edge <id anchors; the SVG marks each group with data vibekb node / data vibekb edge linking to those anchors, so a no JavaScript reader can follow any elem"
     },
     {
-        "title": "Register an account",
-        "summary": "Creates a user, logs them in, and sends an email verification link (rate-limited, terms required).",
+        "title": "Render the dynamic guide",
+        "summary": "A single PHP front controller routes by `?view=`, loads the model, and renders one shared template set into the browser — the live guide (Mode A) that reads `.vibekb/` on every request with no build step and no rewrite rules.",
         "type": "functionality",
-        "url": "../functionality/register-account.html",
-        "body": "In one sentence Name, email, and a password of at least 8 characters create an account, log the user in, and trigger a verification email. Current behavior AuthController::register validates name, email, password length, match, and terms acceptance; rate limits new accounts per IP; rejects duplicate emails; creates the user User::create , logs in, issues a verification token, and sends it via AccountMailer . On mail failure it still proceeds and shows a resend path. Redirects to /verify email/pending . Step by step flow 1. Visitor submits /register . 2. AuthController::register validates all fields 422 + re render on error . 3. Rate limit per IP is checked; duplicate email is rejected. 4. User::create writes the user; Auth::login starts the session. 5. A verification token is issued and em"
+        "url": "../functionality/render-guide.html",
+        "body": "In one sentence guide/index.php is a whitelist router: it maps ?view= to a template, loads the model once, and renders the shared layout — the same templates the static generator uses, so the two modes cannot drift. Current behavior The front controller sets the dynamic URL strategy, loads Content from the repository's .vibekb/ , or a VIBEKB CONTENT ROOT example , and routes: an unknown view or missing record renders not found with the right HTTP status; functionality is special cased for index vs detail by ?id ; a dev flag VIBEKB DEV , or localhost enables full errors and the validation banner. Navigation, routes, and page titles come from guide/lib/nav.php so both modes present the identical inventory. Step by step flow 1. Register the dynamic URL strategy and generation context. 2. Load"
     },
     {
-        "title": "Reset a password",
-        "summary": "A web forgot/reset flow exists and is coded correctly, but it depends on email delivery that the default deploy does not configure — so in practice resets happen via the CLI.",
+        "title": "Resolve relationships between records",
+        "summary": "The loader turns the flat set of records into a graph — functionality dependencies and derived dependents, memory back-links, file-to-functionality links, and diagram cross-links — so every view can show live, validated connections.",
         "type": "functionality",
-        "url": "../functionality/reset-password.html",
-        "body": "In one sentence Request a reset link and set a new password — but only if email delivery is configured; otherwise the documented path is the admin CLI. Current behavior forgotPassword validates and rate limits, then issues a token and emails it only for real non simulation, non admin users, always showing the same \"sent\" screen to avoid enumeration. resetPassword $token validates the token and the new password, consumes the token, updates the hash, invalidates other tokens, and logs the user out. The default mail.driver is log , so no email actually leaves the server unless SMTP is set. docs/DEPLOYMENT.md documents php scripts/seed.php reset password you@example.com as the operational path. Step by step flow 1. Visitor submits /forgot password . 2. Validated + rate limited; a token is issu"
+        "url": "../functionality/resolve-relationships.html",
+        "body": "In one sentence Records declare forward links depends on , related memory , functionality , files ; the loader resolves them and derives the reverse links dependents, \"memory for this functionality\", \"files for this functionality\" so authors only state a relationship once. Current behavior resolveFunctionality / resolveMemory / resolveDiagrams turn id references into linkable summaries, flagging any id that does not resolve so templates can render a broken chip warning. dependentsOf computes reverse dependencies from every record's depends on . filesForFunctionality , memoryForFunctionality , diagramsForFunctionality , and diagramNodesForFunctionality gather the records and diagram nodes that point back at a functionality id. Implementation map guide/lib/Content.php — all resolve , For , a"
     },
     {
-        "title": "Review Quality Checks",
-        "summary": "The human review step — confirm each Quality Check against the exact version, aided by structural evidence parsed from the response but never graded automatically.",
+        "title": "Search the model",
+        "summary": "A shared index builder produces one search index covering functionality, memory, files, diagrams, and explainable node/edge/file entries; the dynamic guide serves it as JSON and the static snapshot ships it as a file, with client-side search that needs no server, database, or CDN.",
         "type": "functionality",
-        "url": "../functionality/review-quality-checks.html",
-        "body": "In one sentence You confirm each Quality Check against the exact text you are looking at; SousMeow shows structural evidence but never decides for you. User experience Each check is a card. When the Recipe has an output contract, the card shows whether the expected section is present found / missing / manual with the parsed evidence — but confirming is always your explicit judgement. Current behavior toggleCheck requires verification and always targets the latest version checking a box means \"I read THIS text\" . It accepts either a single check id + confirmed toggle answered as JSON for fetch or a plain checks form answered by redirect . Confirmations are stored in artifact checks keyed by version, so a new version starts unconfirmed by construction. Evidence comes from ResponseParser::par"
+        "url": "../functionality/search-the-model.html",
+        "body": "In one sentence build search index walks the loaded model once to produce link resolved entries — including deep links to individual diagram nodes and edges — that a small vanilla JS search filters entirely in the browser. Current behavior The same index builder is used by both modes: the dynamic guide serves it live at ?view=search&data=json , and the generator writes it to docs/assets/data/search.json with links built for the static location. The Search view and guide/assets/js/guide.js filter it client side; there is no jQuery and no required CDN. Implementation map guide/lib/search.php — build search index shared by both modes . guide/templates/search.php — the search UI. guide/assets/js/guide.js — client side filtering. Failure cases With JavaScript off, the Search view degrades to a "
     },
     {
-        "title": "Route & secure every request",
-        "summary": "The front controller — security headers and CSP, then bootstrap, then one CSRF gate for all POSTs, then routing, with a subfolder-aware base path.",
+        "title": "Show provenance and freshness",
+        "summary": "Every rendering carries an objective provenance panel — source commit analyzed, analysis generated, verification scope, last verified, and an explicit \"does not auto-update\" — built once and reused by both output modes so no page can imply freshness it does not have.",
         "type": "functionality",
-        "url": "../functionality/route-and-secure-requests.html",
-        "body": "In one sentence One entry point sets security headers, verifies CSRF on every POST, and dispatches to a route — and it works from a subfolder. Current behavior public/index.php sends X Content Type Options , X Frame Options , Referrer Policy , and a CSP script src 'self' ; inline styles allowed for server computed geometry . It bootstraps, installs an exception handler full detail only in development , strips app.base path from the path, calls Csrf::verify for every POST before routing, then dispatches through the Router . On Apache, public/.htaccess routes clean URLs here; the built in dev server hands back real files. Step by step flow 1. Request hits public/index.php real files are served directly . 2. Security headers + CSP are sent. 3. bootstrap.php loads config and the autoloader. 4."
+        "url": "../functionality/show-provenance.html",
+        "body": "In one sentence Provenance separates two facts that must never be conflated — the source the model explains repo, commit, verification and the generation event that produced this output mode, time, generator commit — and states plainly that neither implies auto update. Current behavior provenance data normalises the manifest provenance block plus a render time generation context dynamic vs static . provenance panel renders objective labelled rows; provenance stamp renders the compact footer notice. Missing values are omitted, never invented. updates automatically renders as \"No — regenerate to refresh\" unless a real update mechanism sets it true. Implementation map guide/lib/Provenance.php — normalisation, panel, stamp, disclaimer. guide/templates/overview.php — the Overview provenance pan"
     },
     {
-        "title": "Run a Recipe",
-        "summary": "The product's core loop — one Recipe step rendered as one of three durable states (gather, review, approved), with strict server-side step ordering.",
+        "title": "Start a work session",
+        "summary": "`php tools/vibekb.php status` prints the one screen an agent needs to begin — the active model's provenance, the current work record, the handoff's next recommended action, and a one-line validation and drift summary — so a fresh agent can orient without reading every file.",
         "type": "functionality",
-        "url": "../functionality/run-recipe.html",
-        "body": "In one sentence Each step of the Cookbook shows exactly one durable state — gather a response, review it, or done — and steps unlock strictly in order. User experience The step page presents a three screen wizard while gathering understand → prompt → paste : read what the step does, copy the built prompt with your ingredients highlighted , run it in your own AI, and paste the answer. Once a response exists, the page becomes a review screen; once approved, it locks. Current behavior RunnerController::step loads the project owner scoped , the recipe, and the artifact. The durable state is derived from data, not the URL: approved if the artifact is approved, review if a latest version exists, else gather . A ?stage= query drives the gather wizard but is clamped server side and never stored, s"
+        "url": "../functionality/start-work-session.html",
+        "body": "In one sentence One command answers \"where am I, what is in flight, what should I do next, and is the model still trustworthy?\" — the session start entry point of the VibeKB lifecycle. User experience An agent or human runs php tools/vibekb.php status . It prints: the source commit the model was reconciled against and when it was last verified; the active work/current.md objective and status; the handoff summary and its exact next recommended action; the validation error/warning counts; and a one line drift verdict in sync / N files changed since the recorded commit . It never modifies anything. Step by step flow 1. Load the model through Content the same loader the guide uses . 2. Read provenance from the manifest. 3. Read the current.md and handoff.md front matter and summaries. 4. Run t"
     },
     {
-        "title": "Seed & sync content",
-        "summary": "A CLI script applies the schema, upserts the versioned Cookbook/category/collection catalog by slug, and provisions the admin — safe to re-run after every deploy.",
+        "title": "Validate diagram topology",
+        "summary": "The loader and `tools/test-topology.php` enforce the explainability contract — unique ids, resolvable edge endpoints, controlled mechanisms, honest verification, files with reasons, and SVG markers that map to topology ids in both directions — so a diagram can never point at something it cannot explain.",
         "type": "functionality",
-        "url": "../functionality/seed-and-sync-content.html",
-        "body": "In one sentence One CLI command sets up and updates the whole catalog from versioned seed files, upserting by slug so it is safe to re run after any deploy. Current behavior php scripts/seed.php applies the dialect appropriate schema, then syncs the catalog: Cookbooks, categories, and collections are versioned, slug keyed seed files upserted and pruned. Unknown category slugs, unknown/non editorial collection slugs, and off allowlist accents abort the seed loudly before any write. It prints a one time admin password. fresh wipes all data; status prints catalog health; reset password rotates a password. The script is CLI only — requesting it over HTTP returns 404 because it lives outside public/ . Step by step flow 1. Operator runs php scripts/seed.php from the sousmeow directory. 2. The sc"
+        "url": "../functionality/validate-diagram-topology.html",
+        "body": "In one sentence validateTopology proves each explainable diagram keeps its promises; the topology test proves that malformed topology produces useful diagnostics instead of crashing the guide. Current behavior The loader checks node purposes, edge mechanisms against the controlled vocabulary , one sentence explanations, verification states, resolvable functionality/warning references, safe repository relative file paths each with a non empty reason, and that the SVG's data vibekb node / data vibekb edge markers map to the topology ids in both directions. tools/test topology.php feeds deliberately broken fixtures and asserts each expected diagnostic fires, then confirms a good topology still resolves — exiting non zero if any expectation is unmet. Implementation map guide/lib/Content.php — "
     },
     {
-        "title": "Sign in",
-        "summary": "Authenticates a user against a hashed password with per-IP and per-email rate limiting and opportunistic hash upgrades.",
+        "title": "Validate the model",
+        "summary": "The loader and the headless `tools/validate.php` enforce the content contract — required fields, controlled vocabularies, resolvable references, well-formed diagram assets, provenance completeness, and reconciled totals — reporting structural errors that gate generation and CI.",
         "type": "functionality",
-        "url": "../functionality/sign-in.html",
-        "body": "In one sentence Email plus password signs you in, throttled to defeat guessing, with the session rotated on login. Current behavior AuthController::login validates the fields, checks two rate limit windows 20/15min per IP, 8/15min per email , verifies the password with password verify , logs in via Auth::login , and rehashes the password if password needs rehash says so. Errors return a generic \"email and password do not match\" no user enumeration . Step by step flow 1. Visitor submits /login . 2. Fields validated; rate limit windows checked both IP and email . 3. User::findByEmail + password verify . 4. On success Auth::login rotates the session and stores the user. 5. Password is transparently rehashed if the algorithm advanced. 6. Redirect to the intended page or /kitchen . Implementati"
+        "url": "../functionality/validate-model.html",
+        "body": "In one sentence Definite structural problems unknown status, unresolved dependency, missing diagram asset, contradictory totals become errors; likely but not certain problems an unresolved memory back link, a diagram without topology become warnings — and errors stop a snapshot from shipping. Current behavior Content::validate checks functionality required fields and vocabularies, depends on targets, memory and file back links, diagram fields, SVG well formedness and accessibility, and — when a diagram has a topology — the full explainability contract. tools/validate.php loads the model through the same loader and adds publish time checks: provenance completeness, that area/record/status totals reconcile, and that a generated /docs search index only points at pages that exist. It prints a "
     },
     {
-        "title": "Start a project",
-        "summary": "Creates a project from an executable Cookbook and sends the user straight to the Pantry — with a server-side gate that preview Cookbooks can never start.",
-        "type": "functionality",
-        "url": "../functionality/start-project.html",
-        "body": "In one sentence Pick an executable Cookbook and a new project is created, dropping you at its Pantry. Current behavior ProjectController::create requires a verified account, resolves the posted cookbook slug, and re checks is executable server side — a preview Cookbook is refused even if a client forged the request. It creates the project Project::create and redirects to the Pantry. Step by step flow 1. Verified user posts a Cookbook slug to /projects from the detail page . 2. Cookbook::findBySlug resolves it missing → back to marketplace . 3. is executable !== 1 → refused with a notice server side gate . 4. Project::create writes the project. 5. Redirect to /projects/{id}/pantry . Implementation map app/Controllers/ProjectController.php — create . app/Models/Project.php — create . Data us"
-    },
-    {
-        "title": "Track project progress",
-        "summary": "Routes a project to wherever it actually is — Pantry, the next unfinished Recipe, or export — and handles deletion.",
-        "type": "functionality",
-        "url": "../functionality/track-project-progress.html",
-        "body": "In one sentence Opening a project always lands you on the right screen for its current state; deleting one removes it its old export files stay on disk but become undownloadable . Current behavior ProjectController::show scopes the project to the owner 404 otherwise , then redirects: to the Pantry if pantry saved at is null, to export if completed at is set, otherwise to the first Recipe without an approved artifact nextPosition . delete removes the project; Project::markCompleteIfDone called from the Runner sets completed at when every Recipe is approved. Step by step flow 1. User opens /projects/{id} . 2. Ownership is enforced 404 if not theirs . 3. No pantry → Pantry; completed → export; else → next unfinished Recipe. 4. delete removes the project after ownership check. Implementation m"
-    },
-    {
-        "title": "Verify your email",
-        "summary": "Confirms ownership of the email via a hashed, expiring token, unlocking the write actions gated by requireVerified.",
-        "type": "functionality",
-        "url": "../functionality/verify-email.html",
-        "body": "In one sentence Clicking the emailed link marks the account verified, which is what Auth::requireVerified checks before any write. Current behavior verifyEmail $token looks up the user by token invalid/expired → message , marks the email verified, refreshes the session, and routes to onboarding for non simulation, not yet onboarded users or the kitchen. resendVerification re issues a token behind its own rate limits. Step by step flow 1. User opens /verify email/{token} . 2. User::findByVerificationToken resolves it, or an error redirect fires. 3. User::markEmailVerified sets the timestamp. 4. The current session refreshes so requireVerified now passes. 5. Redirect to onboarding or the kitchen. Implementation map app/Controllers/AuthController.php — verifyEmail , resendVerification , showV"
-    },
-    {
-        "title": "View the admin overview",
-        "summary": "A read-only operations dashboard — totals, recent users and projects, and simulation status — gated by a server-side admin role.",
-        "type": "functionality",
-        "url": "../functionality/view-admin-overview.html",
-        "body": "In one sentence A read only snapshot of the whole site — counts, recent activity, and demo simulation status — that only an admin can open. Current behavior AdminController::index calls Auth::requireAdmin server side role check on every request , then loads totals users, projects, completed, approved, exports , the 12 most recently updated projects with approved/recipe counts, the SiteStats::adminBundle simulation figures, and recent users. It only reads. Step by step flow 1. Admin opens /admin . 2. Auth::requireAdmin enforces the role non admins are refused . 3. Totals and recent activity are queried read only . 4. admin/index renders the dashboard. Implementation map app/Controllers/AdminController.php — index . app/Services/SiteStats.php — adminBundle and metrics. app/Core/Auth.php — re"
-    },
-    {
-        "title": "View a collection",
-        "summary": "Flexible merchandising views over the catalog — editorial, dynamic, or attribute-based — that appear only once they have enough members.",
-        "type": "functionality",
-        "url": "../functionality/view-collection.html",
-        "body": "In one sentence A curated or computed shelf of Cookbooks that surfaces only when it clears its minimum member count. Current behavior CollectionController::show $slug loads the collection and returns the shared 404 unless CollectionResolver::isSurfaced passes visible and at/over min display count . Membership resolves in CollectionResolver by collection type : editorial explicit rows , dynamic computed, e.g. recently added , or attribute derived, e.g. recipe count ≥ 6, or est minutes ≤ 30 . Step by step flow 1. Visitor opens /collections/{slug} . 2. Collection::findBySlug loads it. 3. CollectionResolver::isSurfaced gates visibility → 404 if not surfaced. 4. CollectionResolver::cookbooksFor resolves members by type. 5. collections/show renders the shelf. Implementation map app/Controllers/C"
-    },
-    {
-        "title": "View a Cookbook detail",
-        "summary": "The full Cookbook page — stages, every Recipe with its Quality Checks and Pantry fields, related Cookbooks, and the start action.",
-        "type": "functionality",
-        "url": "../functionality/view-cookbook-detail.html",
-        "body": "In one sentence Everything about one Cookbook — its stages, Recipes, Quality Checks, Pantry fields, category, collections, and related Cookbooks — with the button to start. Current behavior MarketplaceController::show $slug loads the Cookbook by slug 404 if absent , its recipes and their checks, the surfaced Collections it belongs to, its Pantry fields, and a set of related Cookbooks. Related selection is special cased for the money and career collections via helper files and otherwise falls back to same category peers. The start action posts to /projects . Step by step flow 1. Visitor opens /cookbooks/{slug} . 2. Cookbook::findBySlug loads it, or a 404 view renders. 3. Recipes, per recipe checks, stages, and Pantry fields load. 4. Surfaced collections and related Cookbooks are computed. 5"
-    },
-    {
-        "title": "View My Kitchen",
-        "summary": "The signed-in home — your projects with a prominent \"continue\" card for the most recent unfinished one, plus featured Cookbooks.",
-        "type": "functionality",
-        "url": "../functionality/view-kitchen.html",
-        "body": "In one sentence Your projects in one place, with the most recent unfinished project surfaced as a big \"continue\" card. Current behavior KitchenController::index requires login, lists the user's projects Project::listForUser , picks the first not yet completed project as the continue card, and includes featured Cookbooks for starting something new. Step by step flow 1. Signed in user opens /kitchen . 2. Project::listForUser returns their projects recently touched first . 3. The first project with completed at === null becomes the continue card. 4. kitchen/index renders projects + featured Cookbooks. Implementation map app/Controllers/KitchenController.php — index . app/Models/Project.php — listForUser . app/Models/Cookbook.php — featured . Data used Reads: projects , cookbooks . Writes: non"
-    },
-    {
-        "title": "View the marketing home",
-        "summary": "The public landing page that presents the featured Cookbook as a full artifact plus the catalog and a curated money shelf.",
-        "type": "functionality",
-        "url": "../functionality/view-marketing-home.html",
-        "body": "In one sentence The front door: the featured Cookbook shown in full, the catalog, and a curated \"money decisions\" shelf, all without signing in. Current behavior MarketingController::home loads the marketplace catalog Cookbook::marketplace , the featured Cookbook with its stages and recipes, and — when it clears its min display count — the money major decisions collection resolved via CollectionResolver::cookbooksFor . It renders marketing/home . Step by step flow 1. Visitor opens / . 2. MarketingController::home runs no auth required . 3. The featured Cookbook, its stages, and its recipes are loaded. 4. The money collection is included only if it has enough qualifying Cookbooks. 5. marketing/home renders with the catalog and shelves. Implementation map app/Controllers/MarketingController."
-    },
-    {
-        "title": "Explore & discovery",
-        "summary": "How visitors find Cookbooks: the marketing home, marketplace search, categories, and curated collections.",
+        "title": "The living model",
+        "summary": "How the repository-owned `.vibekb/` content is loaded, parsed, relationship-resolved, and validated into the model everything else renders.",
         "type": "functional area",
-        "url": "../functionality/index.html#grp-explore-discovery",
+        "url": "../functionality/index.html#grp-living-model",
         "body": ""
     },
     {
-        "title": "Accounts & authentication",
-        "summary": "Registration, email verification, sign-in, account settings, and password recovery.",
+        "title": "AI coding workflow",
+        "summary": "How a coding agent starts a session, finds what a change affects, detects drift, records active work, and hands off — the self-maintenance lifecycle.",
         "type": "functional area",
-        "url": "../functionality/index.html#grp-accounts-auth",
+        "url": "../functionality/index.html#grp-agent-workflow",
         "body": ""
     },
     {
-        "title": "Projects & progress",
-        "summary": "The signed-in kitchen, starting a project, and tracking it through to completion.",
+        "title": "The dynamic guide (Mode A)",
+        "summary": "The live PHP app that renders the model in the browser: routing, provenance, and search.",
         "type": "functional area",
-        "url": "../functionality/index.html#grp-projects-progress",
+        "url": "../functionality/index.html#grp-dynamic-guide",
         "body": ""
     },
     {
-        "title": "Pantry & inputs",
-        "summary": "Collecting and validating the project facts every prompt is built from.",
+        "title": "The static snapshot (Mode B)",
+        "summary": "Rendering the same model through the same templates into a self-contained /docs site for GitHub Pages or any static host.",
         "type": "functional area",
-        "url": "../functionality/index.html#grp-pantry-inputs",
+        "url": "../functionality/index.html#grp-static-publishing",
         "body": ""
     },
     {
-        "title": "Cookbook Runner",
-        "summary": "The product's core loop: build a prompt, run it in your own AI, and paste the response back.",
+        "title": "Explainable diagrams",
+        "summary": "Source-grounded diagrams whose repository-owned topology gives every node a purpose, every edge a mechanism, and every file a reason.",
         "type": "functional area",
-        "url": "../functionality/index.html#grp-cookbook-runner",
+        "url": "../functionality/index.html#grp-diagrams",
         "body": ""
     },
     {
-        "title": "Artifacts & quality checks",
-        "summary": "Human review, immutable version history, and the approval gate that governs every step.",
+        "title": "Adopting VibeKB elsewhere",
+        "summary": "Initializing a VibeKB model inside another repository.",
         "type": "functional area",
-        "url": "../functionality/index.html#grp-artifacts-quality",
+        "url": "../functionality/index.html#grp-integration",
         "body": ""
     },
     {
-        "title": "Export (Project Kit)",
-        "summary": "Turning an approved project into a downloadable, self-contained deliverable.",
+        "title": "Deployment & portability",
+        "summary": "How the guide deploys to shared hosting and stays portable with no build step.",
         "type": "functional area",
-        "url": "../functionality/index.html#grp-export-kit",
+        "url": "../functionality/index.html#grp-deployment",
         "body": ""
     },
     {
-        "title": "Administration & demo",
-        "summary": "The admin overview and the portfolio Demo Mode / simulation.",
-        "type": "functional area",
-        "url": "../functionality/index.html#grp-administration",
-        "body": ""
-    },
-    {
-        "title": "System & deployment",
-        "summary": "Request routing and security, database access, and content seeding.",
-        "type": "functional area",
-        "url": "../functionality/index.html#grp-system-deployment",
-        "body": ""
-    },
-    {
-        "title": "SousMeow at a glance",
-        "summary": "The whole system on one page — browser, PHP front controller, the auth/CSRF gate, controllers, the single PDO data path, and the deliberate absence of any AI call.",
+        "title": "How the model is loaded and validated",
+        "summary": "The read path from repository files through the loader into the in-memory model, and how validation feeds the Reference view and CI.",
         "type": "diagram",
-        "url": "../diagrams/index.html#app-overview",
-        "body": "What am I looking at? A one screen mental model of SousMeow. A user's browser sends requests to a single PHP front controller public/index.php , which routes them through an authentication and CSRF gate to the controllers discovery, the Runner, export, and CLI only admin . Everything persists through one PDO data path that targets SQLite in development and MySQL in production. The dashed red box is a non goal made explicit : SousMeow never contacts an AI provider. Users run prompts in their own AI and paste results back. Why it matters This is the fastest way to orient before opening any functionality record — it shows how the pieces fit without reading the whole codebase. What is uncertain Only the high level shape is shown here. The Router internals and some model queries are still infer"
+        "url": "../diagrams/index.html#content-load-flow",
+        "body": "What am I looking at? The one way read path. An entry point the guide or a tool delegates to the loader , which reads the repository's content files, creates the resolved in memory model , and calls validation . Validation emits the issues shown in the Reference view and used by CI. Nothing on this path writes back to .vibekb/ . Why it matters It shows why \"it validates locally\" and \"it passes CI\" cannot diverge: the guide, the generator, and the validator all run this exact pipeline. It is also where the security invariant lives — every file read is confined to the content root. What is uncertain None material — load and validate are traced end to end in guide/lib/Content.php , so every edge is verified."
     },
     {
-        "title": "Request flow through the front controller",
-        "summary": "How a request travels from the browser through the router, the auth and CSRF gate, a controller, the PDO data path, and back out as an escaped view — with CLI-only admin shown as a separate path.",
+        "title": "Entry point",
+        "summary": "The guide front controller or a tool (generator, validator, CLI) that needs the model and asks the loader for it.",
+        "type": "diagram node",
+        "url": "../diagrams/index.html#node-entry-point",
+        "body": "guide/index.php The representative caller — every guide request constructs Content and calls load()."
+    },
+    {
+        "title": "Content files (.vibekb/)",
+        "summary": "The record and manifest files on disk — Markdown with front matter, and small JSON — parsed into structured metadata plus rendered HTML.",
+        "type": "diagram node",
+        "url": "../diagrams/index.html#node-content-files",
+        "body": "guide/lib/FrontMatter.php Parses each record's front-matter block without a YAML dependency. · guide/lib/Markdown.php Renders the record body with a pragmatic, escaping Markdown subset."
+    },
+    {
+        "title": "Loader (Content::load)",
+        "summary": "Reads the files, parses them, resolves relationships (dependents, memory and file back-links), and assembles the keyed in-memory model — confining all filesystem access to the content root.",
+        "type": "diagram node",
+        "url": "../diagrams/index.html#node-loader",
+        "body": "guide/lib/Content.php load() is the pipeline; isInsideRoot() enforces the content-root confinement."
+    },
+    {
+        "title": "In-memory model",
+        "summary": "The resolved, queryable model: functionality keyed by id, resolved relationships, normalised diagram topology, and provenance — read by the templates and the search index.",
+        "type": "diagram node",
+        "url": "../diagrams/index.html#node-model",
+        "body": "guide/lib/Content.php Holds the loaded records and exposes the accessors templates use."
+    },
+    {
+        "title": "Validation (validate())",
+        "summary": "Checks required fields, controlled vocabularies, resolvable references, diagram assets, and the explainable-diagram contract, accumulating errors and warnings.",
+        "type": "diagram node",
+        "url": "../diagrams/index.html#node-validation",
+        "body": "guide/lib/Content.php validate() and validateTopology() produce the issue list."
+    },
+    {
+        "title": "Reference view & CI",
+        "summary": "Where the issue list surfaces — the guide's Reference view for humans and `tools/validate.php` for CI, which exits non-zero on any error.",
+        "type": "diagram node",
+        "url": "../diagrams/index.html#node-reference-view",
+        "body": "guide/templates/reference.php Renders the same issues the CI validator reports."
+    },
+    {
+        "title": "Entry point → Loader (Content::load) (delegates loading to)",
+        "summary": "The entry point constructs Content and delegates reading and assembling the model to load().",
+        "type": "diagram connection",
+        "url": "../diagrams/index.html#edge-entry-point-delegates-loader",
+        "body": "guide/index.php Calls Content::load() before rendering."
+    },
+    {
+        "title": "Loader (Content::load) → Content files (.vibekb/) (reads & parses)",
+        "summary": "The loader reads each record and manifest and parses it via the front-matter and Markdown utilities, refusing any path outside the content root.",
+        "type": "diagram connection",
+        "url": "../diagrams/index.html#edge-loader-reads-content-files",
+        "body": "guide/lib/FrontMatter.php Parses the front matter of each file read."
+    },
+    {
+        "title": "Loader (Content::load) → In-memory model (creates)",
+        "summary": "The loader assembles the parsed records into the keyed, relationship-resolved in-memory model.",
+        "type": "diagram connection",
+        "url": "../diagrams/index.html#edge-loader-creates-model",
+        "body": "guide/lib/Content.php Builds the model arrays and resolves reverse links."
+    },
+    {
+        "title": "Loader (Content::load) → Validation (validate()) (calls)",
+        "summary": "After assembling the model, load() calls validate() so problems are found at load time, not at render time.",
+        "type": "diagram connection",
+        "url": "../diagrams/index.html#edge-loader-calls-validation",
+        "body": "guide/lib/Content.php load() invokes validate() as its final step."
+    },
+    {
+        "title": "Validation (validate()) → Reference view & CI (emits issues to)",
+        "summary": "Validation emits an error/warning list consumed by the guide's Reference view and by the CI validator.",
+        "type": "diagram connection",
+        "url": "../diagrams/index.html#edge-validation-emits-reference",
+        "body": "guide/templates/reference.php Displays the emitted issues in the guide."
+    },
+    {
+        "title": "The self-maintenance lifecycle",
+        "summary": "The loop an agent follows so the model stays synchronized with the code — from `vibekb status` at session start to an honest handoff.",
         "type": "diagram",
-        "url": "../diagrams/index.html#request-flow",
-        "body": "What am I looking at? Every web request enters public/index.php . The router matches it, an auth check runs, and unsafe methods pass a CSRF gate before reaching a controller. Controllers read and write through the single PDO data path and render an escaped HTML view. Admin actions seeding, management are CLI only and bypass the web routes entirely — shown dashed. Why it matters It shows the exact chokepoint where security is enforced. Anything that adds a route or a state changing action must go through this gate. What is uncertain The Router matching step is inferred from source — the gate and escaping are verified, but the Router class was not line traced. Verify before relying on routing edge cases."
+        "url": "../diagrams/index.html#self-maintenance-loop",
+        "body": "What am I looking at? The maintenance loop, left to right. A session starts with php tools/vibekb.php status . The agent understands the affected functionality and risks, records the work in current.md , implements the code change, uses affected to find impacted records, updates the model records, memory, diagrams, provenance , runs check validate + drift + snapshot sync , generates /docs , and writes the handoff the next session reads. Why it matters It makes the product's core claim concrete: VibeKB is used at the beginning, middle, and end of a coding session — not bolted on afterwards. The two CLI touch points status , check / affected are what keep the loop low friction. What is uncertain This is a process diagram: its arrows are workflow transitions, not code mechanisms, so it delibe"
     },
     {
-        "title": "Browser",
-        "summary": "The visitor's browser issues GET and POST requests and receives the rendered HTML response. It is the only client; SousMeow ships no separate front-end app.",
-        "type": "diagram node",
-        "url": "../diagrams/index.html#node-browser",
-        "body": ""
-    },
-    {
-        "title": "Front controller",
-        "summary": "Every request that is not a static file enters one PHP entry point, which sets the security headers and Content-Security-Policy, strips the base path, and hands the request to routing.",
-        "type": "diagram node",
-        "url": "../diagrams/index.html#node-front-controller",
-        "body": "public/index.php The single front controller every dynamic request passes through before anything else runs."
-    },
-    {
-        "title": "Auth & CSRF gate",
-        "summary": "Authenticates the session and verifies a CSRF token on every unsafe (state-changing) request. This is the one chokepoint where request security is enforced.",
-        "type": "diagram node",
-        "url": "../diagrams/index.html#node-security-gate",
-        "body": "app/Core/Csrf.php The single CSRF gate the front controller verifies on every POST. · app/Core/Auth.php Provides requireLogin / requireVerified / requireAdmin used to authorise protected actions."
-    },
-    {
-        "title": "Controller",
-        "summary": "The matched controller handles the request — coordinating models and services and choosing what to render. The Runner is the busiest example.",
-        "type": "diagram node",
-        "url": "../diagrams/index.html#node-controller",
-        "body": "app/Controllers/RunnerController.php The core-loop controller; shown here as the representative request handler. · app/routes.php The complete route table mapping method+path to the controller action that handles it."
-    },
-    {
-        "title": "PDO data path",
-        "summary": "The single database-access path used for every read and write. It targets SQLite in development and MySQL in production behind one interface.",
-        "type": "diagram node",
-        "url": "../diagrams/index.html#node-pdo-data-path",
-        "body": "app/Core/Database.php The one PDO wrapper; prepared-statement helpers and transactions live here and nowhere else."
-    },
-    {
-        "title": "Escaped view",
-        "summary": "Renders the HTML response with all dynamic output escaped before it leaves the application, so pasted or stored content can never inject markup.",
-        "type": "diagram node",
-        "url": "../diagrams/index.html#node-escaped-view",
-        "body": "app/Services/SafeText.php Escapes untrusted content first, then applies a small Markdown allowlist to the escaped text."
-    },
-    {
-        "title": "Admin (CLI only)",
-        "summary": "Seeding and content management run from the command line, never over HTTP. This path deliberately bypasses the web routes and the CSRF gate.",
-        "type": "diagram node",
-        "url": "../diagrams/index.html#node-admin-cli",
-        "body": "scripts/seed.php The CLI seeder that applies the schema and upserts the catalog; the only admin write path."
-    },
-    {
-        "title": "Browser → Front controller (sends request)",
-        "summary": "The browser sends every dynamic HTTP request to the single front controller.",
-        "type": "diagram connection",
-        "url": "../diagrams/index.html#edge-browser-to-front-controller",
-        "body": "public/index.php Receives the request and begins security + routing."
-    },
-    {
-        "title": "Front controller → Auth & CSRF gate (validates request)",
-        "summary": "The front controller authenticates the session and validates the CSRF token on every unsafe method before the request may proceed.",
-        "type": "diagram connection",
-        "url": "../diagrams/index.html#edge-front-controller-to-security-gate",
-        "body": "public/index.php Invokes the CSRF verification on every POST. · app/Core/Csrf.php Performs the token check that gates state-changing requests."
-    },
-    {
-        "title": "Auth & CSRF gate → Controller (routes to controller)",
-        "summary": "Once the gate passes, the router matches the path against the route table and dispatches to the matching controller action.",
-        "type": "diagram connection",
-        "url": "../diagrams/index.html#edge-security-gate-to-controller",
-        "body": "The route table (app/routes.php) is verified from source, but the Router class matching itself was not line-traced. app/routes.php The verified table that determines which controller a path reaches. · app/Core/Router.php Performs the actual match and dispatch — the step that is still inferred."
-    },
-    {
-        "title": "Controller → PDO data path (reads & writes via PDO)",
-        "summary": "The controller performs every database read and write through the single PDO data path, never issuing SQL directly.",
-        "type": "diagram connection",
-        "url": "../diagrams/index.html#edge-controller-to-pdo-data-path",
-        "body": "app/Controllers/RunnerController.php Reads and writes artifacts and projects during the core loop. · app/Core/Database.php The only persistence path every model is built on."
-    },
-    {
-        "title": "Controller → Escaped view (renders escaped HTML)",
-        "summary": "The controller renders an HTML view with all dynamic output escaped before the response is returned to the browser.",
-        "type": "diagram connection",
-        "url": "../diagrams/index.html#edge-controller-to-escaped-view",
-        "body": "app/Services/SafeText.php Escapes any stored or pasted content the view includes."
-    },
-    {
-        "title": "Admin (CLI only) → PDO data path (writes directly (CLI))",
-        "summary": "Admin seeding and management run from the CLI and write through the same PDO path directly, bypassing every web route and the CSRF gate.",
-        "type": "diagram connection",
-        "url": "../diagrams/index.html#edge-admin-cli-to-pdo-data-path",
-        "body": "scripts/seed.php is inferred-from-source; the CLI write path is declared but its execution was not fully traced. scripts/seed.php Applies the schema and upserts the catalog straight through the database layer."
-    },
-    {
-        "title": "Risk and uncertainty map",
-        "summary": "A single view of the active warnings and the still-inferred areas of the SousMeow model, so an agent sees the landmines before changing code.",
+        "title": "VibeKB architecture — one source, one loader, two modes",
+        "summary": "How the repository-owned model, the loader, the shared templates, the two output modes, and the self-maintenance CLI fit together.",
         "type": "diagram",
-        "url": "../diagrams/index.html#risk-uncertainty-map",
-        "body": "What am I looking at? Where to be careful in the SousMeow model, in one place: Active warnings red = defect risk, amber = configuration/deployment risk : pasted responses are untrusted and must stay escaped; Pantry and Artifact read/write paths are coupled; password reset silently no ops without SMTP; the legacy category column must never be read. Inferred from source grey, dashed : manage account , seed and sync content , and bulk demo simulation are not line traced yet — trace before trusting. Why it matters An agent should read this before editing SousMeow behaviour. It converts the handoff's caveats and the warning records into a single visual checklist. What is uncertain By construction this diagram is the uncertainty view. It is only as accurate as the warnings and verification state"
+        "url": "../diagrams/index.html#vibekb-architecture",
+        "body": "What am I looking at? The whole system on one screen. The content model .vibekb/ is the single source of truth. One loader reads it. Both output modes — the dynamic guide Mode A and the static generator Mode B — use that loader and the same templates , so they cannot disagree. The maintenance CLI validates the model and drives the lifecycle. Why it matters It shows the load bearing invariant: there is one source and one template set. Anything that would give a mode its own renderer or its own model breaks the product's honesty guarantee that the public site is the live guide, frozen. What is uncertain Nothing material — every node and edge is traced to code in this repository, so all edges render solid verified ."
     },
     {
-        "title": "Run a Cookbook — the core loop",
-        "summary": "The verified flagship flow from building a prompt through running it in the user's own AI, pasting the response, confirming quality checks, approving an immutable version, and exporting a project kit.",
-        "type": "diagram",
-        "url": "../diagrams/index.html#run-recipe-flow",
-        "body": "What am I looking at? The end to end \"Run a Cookbook\" loop — the reason SousMeow exists. Teal steps happen inside SousMeow; amber steps happen in the user's own AI, outside the app: 1. Build prompt from a recipe plus the project's pantry. 2. Run in AI — the user pastes the prompt into their own tool. 3. Paste response back into SousMeow stored escaped . 4. Quality checks — the human confirms each check. 5. Approve + version — the result becomes an immutable artifact version. 6. Export kit — the approved work is exported as a project kit. Why it matters This is the most verified path in the model. If you change any step, this shows the neighbours you must keep consistent. What is uncertain Nothing in the loop itself is inferred; the two linked warnings mark the places where a careless edit "
-    },
-    {
-        "title": "Build prompt",
-        "summary": "Assembles the copyable prompt for a recipe step by substituting the project's Pantry values and any approved upstream artifacts. This is what the user runs in their own AI.",
+        "title": "Content model (.vibekb/)",
+        "summary": "The single source of truth: functionality records, system docs, files, diagrams, memory, and work — plain Markdown-plus-front-matter and small JSON manifests, versioned with the code.",
         "type": "diagram node",
-        "url": "../diagrams/index.html#node-build-prompt",
-        "body": "app/Services/PromptBuilder.php Builds the prompt text and the matching highlighted HTML from the recipe, Pantry, and artifacts. · app/Models/PantryField.php Supplies the Pantry field values substituted into the prompt."
+        "url": "../diagrams/index.html#node-content-model",
+        "body": ".vibekb/manifest.json Declares provenance (source commit analyzed) and the structure the loader reads."
     },
     {
-        "title": "Run in the user's AI",
-        "summary": "The user pastes the prompt into their own AI tool and runs it. SousMeow performs no AI call itself — this step is deliberately outside the application, which is why no code implements it.",
+        "title": "Loader (Content.php)",
+        "summary": "Reads the content model, parses records, resolves relationships, loads diagram topology, and validates the whole set. Used by the guide and every tool, so nothing can disagree about what the model says.",
         "type": "diagram node",
-        "url": "../diagrams/index.html#node-run-in-ai",
-        "body": ""
+        "url": "../diagrams/index.html#node-loader",
+        "body": "guide/lib/Content.php The one loader that turns files into the in-memory model everything renders."
     },
     {
-        "title": "Paste response",
-        "summary": "The user pastes the AI's output back into SousMeow, where it is escaped and stored as a new artifact version. Pasted content is always treated as untrusted.",
+        "title": "Shared templates",
+        "summary": "The one template set both output modes render through — page shell, views, and the shared navigation/route/title definitions.",
         "type": "diagram node",
-        "url": "../diagrams/index.html#node-paste-response",
-        "body": "app/Controllers/RunnerController.php Handles the paste write transition and records the response as an artifact version. · app/Services/SafeText.php Escapes the pasted (untrusted) content before it is stored or ever re-displayed."
+        "url": "../diagrams/index.html#node-templates",
+        "body": "guide/templates/layout.php The shared page shell every view renders inside, in both modes. · guide/lib/nav.php The single definition of views/routes/titles both modes consume."
     },
     {
-        "title": "Quality checks",
-        "summary": "The human confirms each of the recipe's quality checks against the pasted response. Structural evidence is offered, but a person makes the call.",
+        "title": "Dynamic guide (Mode A)",
+        "summary": "The live PHP front controller that routes by query string, loads the model per request, and renders the templates in the browser — no build step, no rewrite rules.",
         "type": "diagram node",
-        "url": "../diagrams/index.html#node-quality-checks",
-        "body": "app/Services/ResponseParser.php Parses the pasted response against the recipe's output contract to produce found/missing evidence. · app/Models/Artifact.php Records which checks the user has confirmed."
+        "url": "../diagrams/index.html#node-dynamic-guide",
+        "body": "guide/index.php The front controller every browser request to the guide passes through."
     },
     {
-        "title": "Approve + version",
-        "summary": "Approving the step writes an immutable artifact version. Versions are append-only, so the approved result is preserved exactly.",
+        "title": "Static generator (Mode B → /docs)",
+        "summary": "Renders the same templates offline into a self-contained /docs site with relative, subpath-safe links; refuses to build on validation errors.",
         "type": "diagram node",
-        "url": "../diagrams/index.html#node-approve-version",
-        "body": "app/Models/Artifact.php addVersion is append-only; approve/reopen and confirmed checks are enforced here."
+        "url": "../diagrams/index.html#node-static-generator",
+        "body": "tools/generate-static.php Produces the static snapshot by swapping only the URL strategy and writing the rendered pages."
     },
     {
-        "title": "Export kit",
-        "summary": "Once every step is approved, the project can be exported as a self-contained kit: numbered Markdown files plus an offline kit.html reader.",
+        "title": "Maintenance CLI (vibekb.php)",
+        "summary": "The agent's entry point to the lifecycle: status, check (validate + drift + snapshot sync), affected, validate, generate. Validates the model and drives reconciliation.",
         "type": "diagram node",
-        "url": "../diagrams/index.html#node-export-kit",
-        "body": "app/Services/ProjectKit.php Builds the export zip from the approved artifacts and the Pantry. · app/Controllers/ExportController.php The export page and build gate that requires all steps approved before a kit can be produced."
+        "url": "../diagrams/index.html#node-maintenance-cli",
+        "body": "tools/vibekb.php The single CLI that runs the session and drift-detection lifecycle."
     },
     {
-        "title": "Build prompt → Run in the user's AI (emits copyable prompt)",
-        "summary": "Build-prompt emits a fully substituted, copyable prompt; the user runs it in their own AI tool, because SousMeow never calls an AI itself.",
+        "title": "Loader (Content.php) → Content model (.vibekb/) (reads the model)",
+        "summary": "The loader reads every record and manifest under the content root, confining all filesystem access to that root.",
         "type": "diagram connection",
-        "url": "../diagrams/index.html#edge-build-prompt-to-run-in-ai",
-        "body": "app/Services/PromptBuilder.php Produces the exact prompt text the user copies out."
+        "url": "../diagrams/index.html#edge-loader-reads-content-model",
+        "body": "guide/lib/Content.php load() globs and reads the .vibekb files."
     },
     {
-        "title": "Run in the user's AI → Paste response (receives pasted output)",
-        "summary": "Paste-response receives the AI's output back from the user and stores it, escaped, as a new artifact version.",
+        "title": "Dynamic guide (Mode A) → Loader (Content.php) (loads the model via)",
+        "summary": "The front controller constructs Content and delegates loading the model to it before rendering any view.",
         "type": "diagram connection",
-        "url": "../diagrams/index.html#edge-run-in-ai-to-paste-response",
-        "body": "app/Controllers/RunnerController.php Accepts the pasted text and writes it as an artifact version. · app/Services/SafeText.php Escapes the untrusted paste on the way in."
+        "url": "../diagrams/index.html#edge-dynamic-guide-delegates-loader",
+        "body": "guide/index.php Instantiates Content and calls load()."
     },
     {
-        "title": "Paste response → Quality checks (advances to review)",
-        "summary": "After a response is stored, the Runner advances the step to its review state where the quality checks are confirmed.",
+        "title": "Static generator (Mode B → /docs) → Loader (Content.php) (loads the model via)",
+        "summary": "The generator loads the model through the same loader, so the snapshot is built from exactly what the guide would render.",
         "type": "diagram connection",
-        "url": "../diagrams/index.html#edge-paste-response-to-quality-checks",
-        "body": "app/Controllers/RunnerController.php Enforces strict step ordering: review becomes available only after a paste exists."
+        "url": "../diagrams/index.html#edge-static-generator-delegates-loader",
+        "body": "tools/generate-static.php Constructs Content and calls load() before rendering."
     },
     {
-        "title": "Quality checks → Approve + version (unlocks approval)",
-        "summary": "When every quality check is confirmed, the Runner allows approval, which writes the immutable artifact version.",
+        "title": "Dynamic guide (Mode A) → Shared templates (renders)",
+        "summary": "The front controller renders the requested view through the shared layout and templates.",
         "type": "diagram connection",
-        "url": "../diagrams/index.html#edge-quality-checks-to-approve-version",
-        "body": "app/Controllers/RunnerController.php Blocks approval until the checks for the step are confirmed. · app/Models/Artifact.php Writes the append-only approved version."
+        "url": "../diagrams/index.html#edge-dynamic-guide-renders-templates",
+        "body": "guide/templates/layout.php The shell the front controller renders each view inside."
     },
     {
-        "title": "Approve + version → Export kit (enables export)",
-        "summary": "Once all steps are approved, the export gate opens and the kit is built from the approved artifact versions.",
+        "title": "Static generator (Mode B → /docs) → Shared templates (renders)",
+        "summary": "The generator renders the identical templates with the static URL strategy and writes the output to disk.",
         "type": "diagram connection",
-        "url": "../diagrams/index.html#edge-approve-version-to-export-kit",
-        "body": "app/Controllers/ExportController.php The build gate that refuses to export until every step is approved. · app/Services/ProjectKit.php Reads the approved artifacts to assemble the export."
+        "url": "../diagrams/index.html#edge-static-generator-renders-templates",
+        "body": "guide/lib/nav.php The shared inventory the generator walks so both modes present the same pages."
     },
     {
-        "title": "Storage map — one PDO path, two dialects",
-        "summary": "The tables SousMeow uses and the single PDO path that targets SQLite in development and MySQL in production, including the legacy category column that must never be read.",
-        "type": "diagram",
-        "url": "../diagrams/index.html#storage-map",
-        "body": "What am I looking at? One PDO data path, chosen by environment SQLite for development, MySQL for production , with the schema kept compatible across both dialects. The main tables are cookbooks/recipes, quality checks, pantry entries, artifacts and their immutable versions, projects, and users. The dashed red box is the legacy cookbooks.category column — it still exists but must never be read; it was superseded by the categories/collections taxonomy, and reading it reintroduces a resolved bug. Why it matters It shows that there is exactly one data path not per dialect branches and that artifact versions are immutable — approving creates a new version rather than editing in place. What is uncertain Table set and relationships are verified; exact per column definitions are summarised here an"
+        "title": "Maintenance CLI (vibekb.php) → Content model (.vibekb/) (validates & checks drift)",
+        "summary": "The CLI validates the model through the loader and checks it for drift against the code and the recorded source commit.",
+        "type": "diagram connection",
+        "url": "../diagrams/index.html#edge-maintenance-cli-validates-content-model",
+        "body": "tools/vibekb.php Runs validation and the drift/sync checks over the model."
     },
     {
-        "title": "Categories are the stable spine; Collections are flexible views",
-        "summary": "Each Cookbook has exactly one primary category (the URL spine) and belongs to many collections (merchandising), resolved in one place with an honesty gate.",
+        "title": "Functionality is the primary unit, not files",
+        "summary": "VibeKB organizes understanding around what the software does (behaviours), with files, memory, and diagrams linking back to functionality — never the reverse.",
         "type": "decision",
-        "url": "../why/decisions/categories-collections-taxonomy.html",
-        "body": "Context Discovery needs both a stable structure URLs, breadcrumbs, admin sort and flexible merchandising themed shelves . Decision Categories : one per publicly visible Cookbook primary category id , ON DELETE SET NULL ; a fixed vocabulary owning the /categories/{slug} spine. Collections : many to many /collections/{slug} resolved by CollectionResolver via collection type editorial , dynamic , attribute . min display count gates surfacing so a thin shelf 404s. Alternatives considered Many to many top level categories — rejected: no stable URL spine, breadcrumb, or sort; \"where does this live?\" becomes a per Cookbook judgement. A view tracking/analytics table — deferred: no counting policy and no surface needs it yet. Consequences The legacy cookbooks.category string is kept one release for"
+        "url": "../why/decisions/functionality-first-not-files.html",
+        "body": "Context The obvious way to explain a codebase is a file tree or a call graph. But a file tree tells you where code is, not what the software does , and it goes stale as files move. Vibe coders ask \"what does my app do and does it still work?\", not \"what is in app/Services ?\". Decision Functionality — the behaviours the software performs — is VibeKB's primary record type. Files important files.json , memory, and diagram nodes all carry functionality back links; the loader derives the reverse relationships. Alternatives considered File first / directory mirroring model — rejected: it becomes a code browser and drifts with every refactor. Decision log / ADR first model — rejected: that is repository memory, which exists to protect the functionality explanation, not replace it. Reason A functi"
     },
     {
-        "title": "One CSRF gate in the front controller",
-        "summary": "Every POST is verified once in public/index.php before routing, rather than per-controller, alongside a strict same-origin CSP.",
+        "title": "Provenance is objective and VibeKB never claims to auto-update",
+        "summary": "Every rendering states the source commit analyzed, when it was generated, and that it does not update itself; detection is separated from interpretation, and `updates_automatically` stays false.",
         "type": "decision",
-        "url": "../why/decisions/front-controller-csrf-gate.html",
-        "body": "Context CSRF protection is easy to forget when it is a per handler responsibility. Decision public/index.php calls Csrf::verify for every POST before the router runs, and sends a CSP with script src 'self' inline styles allowed only for server computed geometry . Auth endpoints are additionally rate limited. Reason A single choke point cannot be forgotten on a new route. Same origin scripts blunt XSS even if some other escape were missed. Consequences Any POST must go through the front controller; a route that bypasses it loses CSRF protection. The CSP forbids third party scripts assets are self hosted . Current status Active. Do not add a POST path outside the front controller."
+        "url": "../why/decisions/honest-provenance-no-auto-update.html",
+        "body": "Context The user wants VibeKB to \"run continuously.\" The dishonest way to satisfy that is to imply a file watcher understands code changes. It does not — understanding a change is analysis work. Decision Provenance uses objective labels only source commit analyzed, analysis generated, verification scope, last verified and always states that the output does not auto update. updates automatically is false unless a real, verified update mechanism exists. The maintenance CLI is explicit about the boundary between detected mechanical: git diff, path existence, render diff and interpreted an agent deciding what a change means . Alternatives considered A single boolean \"up to date\" flag — rejected: it cannot express \"code changed but no one has reconciled the model yet,\" which is the common and i"
     },
     {
-        "title": "Artifacts are immutable, append-only versions",
-        "summary": "Every paste, example, edit, and restore creates a new version; nothing is ever overwritten, and Quality Check confirmations bind to a specific version.",
+        "title": "The maintenance workflow is repository-owned, not agent-specific",
+        "summary": "The canonical lifecycle lives in the repository (CLAUDE.md + the vibekb CLI); agent-specific entry points (AGENTS.md, .cursor/rules) are thin pointers, so the workflow cannot fork per tool.",
         "type": "decision",
-        "url": "../why/decisions/immutable-artifact-versions.html",
-        "body": "Context The product's promise is trustworthy, reviewed output. That requires a reliable history and a guarantee that \"I reviewed this\" refers to an exact text. Decision artifact versions is append only with a source pasted / example / edited / restored . Edits and restores add versions; they never mutate. artifact checks records a confirmed check against a specific version id , so a new version starts unconfirmed by construction, and approval targets the latest version. Reason A new version can never inherit an old version's confirmations, so unreviewed text can never appear approved. Only the immutable approved version chains into later prompts and the export, so the workflow is reproducible. Consequences History accumulates small text rows ; this is intentional. Approval requires re conf"
+        "url": "../why/decisions/repository-owned-workflow.html",
+        "body": "Context VibeKB must work with Claude Code, Cursor, Codex, and others. If each agent gets its own full copy of the instructions, the copies drift and the \"workflow\" becomes whichever file the current agent happened to read. Decision There is one canonical, repository owned operating document CLAUDE.md and one canonical toolchain entry point php tools/vibekb.php . Agent specific files — AGENTS.md , .cursor/rules/vibekb.mdc — are short and point at the canonical source rather than duplicating it. The lifecycle is executable the CLI , not just prose. Alternatives considered A large per agent instruction file each — rejected: guaranteed drift and duplicated maintenance. Prose only workflow, no tooling — rejected: prose alone gets skipped; the CLI makes the lifecycle low friction and discoverabl"
     },
     {
-        "title": "SousMeow never calls an AI itself",
-        "summary": "The product builds prompts and reviews output, but the user runs the prompt in their own AI — no API keys, no token billing, no black box.",
+        "title": "Two output modes over one source and one template set",
+        "summary": "The dynamic guide (Mode A) and the static snapshot (Mode B) render the same `.vibekb/` through the same templates; the only difference is the URL strategy.",
         "type": "decision",
-        "url": "../why/decisions/never-calls-ai.html",
-        "body": "Context Most \"AI products\" wrap a model API. That brings API keys, per token cost and markup, provider lock in, and output the user never really reviews. Decision SousMeow never makes an AI call. It builds a precise prompt, the user runs it in the AI they already pay for, and the user pastes the answer back for structured human review. Alternatives considered Call a model API — rejected: it adds keys, billing, and a black box, the exact things the product exists to avoid. Reason The value proposition is structure, review discipline, versioning, and a finished deliverable — not model access. It also keeps the app cheap to run on shared hosting with no secrets to leak. Consequences Every \"example\" in Demo Mode is seeded content, never generated demo mode labeling . The whole loop works with "
+        "url": "../why/decisions/two-modes-one-source.html",
+        "body": "Context VibeKB needs a live, always current view for people working in the repo, and a publishable static site GitHub Pages that needs no PHP. The naive approach — two renderers — guarantees they drift. Decision One loader, one template set, one shared navigation/route/title definition nav.php . The static generator swaps only the URL strategy relative, subpath safe links and writes the rendered pages to disk. There is no second template system. Alternatives considered A separate static site generator / different templates — rejected: two renderers drift, and the public site would stop being a true demonstration of the model. Reason If the public /docs site is literally the live guide frozen at a commit, it is honest proof of the product, and \"it works in the guide\" implies \"it works in /d"
     },
     {
-        "title": "One PDO connection, prepared statements only",
-        "summary": "All database access goes through a single shared PDO handle in Core/Database with prepared statements; there is no other access path.",
-        "type": "decision",
-        "url": "../why/decisions/single-pdo-path.html",
-        "body": "Context A small app on shared hosting needs a security posture that is easy to reason about, across two database dialects. Decision app/Core/Database.php owns the only connection and exposes run/fetch/fetchAll/fetchValue/lastInsertId/transaction , all using prepared statements. Every Model uses it; nothing else opens a connection. Reason One access path makes \"is every query parameterised?\" answerable by reading one file. Swapping SQLite dev for MySQL production is a config change, not a code change. Consequences Both schema dialects must be maintained in lockstep. No raw string built SQL anywhere; values are always bound. Current status Active and foundational to the security posture."
-    },
-    {
-        "title": "Admin and password rotation are CLI-only",
-        "summary": "Admin accounts exist only via scripts/seed.php, which prints a one-time password; there is no web installer and the admin surface is read-only.",
+        "title": "All content file access is confined to the content root",
+        "summary": "The loader refuses any path that escapes the configured `.vibekb/` root, and record ids are constrained to a safe character set, so a crafted request can never read arbitrary files.",
         "type": "constraint",
-        "url": "../why/constraints/cli-only-admin.html",
-        "body": "Constraint There is no web based installer or admin creation. Admin accounts are provisioned by php scripts/seed.php CLI only; 404 over HTTP , which prints a temporary password once. The web /admin surface is read only. Password rotation is available via scripts/seed.php reset password . Source docs/DEPLOYMENT.md , AdminController.php read only . Affected functionality Admin overview, seeding, and operationally password reset. Consequences No privileged web surface to attack for account takeover. Operators need shell access to provision admin or rotate passwords — which is also why the web password reset flow is a secondary path see the password reset depends on smtp warning . Still active? Yes."
+        "url": "../why/constraints/confine-file-access-to-content-root.html",
+        "body": "The constraint Every filesystem read the loader performs is checked by isInsideRoot ; any path containing ../ or a null byte, or that does not sit under the content root, is refused. Record ids in URLs are sanitised to a safe character set before they are used to look up a record, and diagram SVG/topology filenames are basename d and pattern checked. Why it matters The guide serves user controllable ?view= and ?id= values and reads files from disk. Without confinement, a crafted ?id=../../etc/passwd style value could escape the content directory. What not to do Do not add a file read that trusts a caller supplied path, and do not relax the id sanitisation or the VIBEKB CONTENT ROOT check which requires the override to end in .vibekb . Verification Traced from source: isInsideRoot , the ?id"
     },
     {
-        "title": "No payment or checkout in v1",
-        "summary": "Marketplace previews show honest \"coming soon\" states with no checkout; there is no payment SDK, and only executable Cookbooks can start.",
+        "title": "Runs on PHP 8.2 shared hosting with no build step",
+        "summary": "No framework, SPA, bundler, database, external/AI API, or JavaScript build; the guide must run by copying files and work in a subfolder without JavaScript.",
         "type": "constraint",
-        "url": "../why/constraints/no-checkout-v1.html",
-        "body": "Constraint v1 has no checkout and no payment SDK. Two Cookbooks are marketplace previews with status = coming soon and is executable = 0 . Only executable Cookbooks can start a project, enforced server side. Source README.md deliberate limits , ProjectController::create executable gate . Affected functionality Starting a project preview Cookbooks are refused , and the marketplace/detail \"coming soon\" states. Consequences price cents exists on cookbooks but no purchase path consumes it. The executable gate is the real boundary; do not move it to the view. Still active? Yes in v1."
+        "url": "../why/constraints/no-build-step-portable.html",
+        "body": "The constraint The dynamic guide must run on ordinary PHP 8.2 shared hosting: no Composer install, no Node/bundler, no SQL database, no external or AI API, no network at render time, and no rewrite rules. It must work without JavaScript JS only enhances and deploy into a subfolder. Where it bites The Markdown renderer is a hand written subset, not a library, so there is no composer install . Routing is query string based, so no .htaccess rewrites are required. The static snapshot uses relative links so it works under a repository subpath. Search runs client side against a static JSON index — no server, no CDN. What not to do Do not introduce a framework, SPA, bundler, SQL database, external/AI API, or a required build step. Any AI analysis is performed by the coding agent already in the re"
     },
     {
-        "title": "Plain PHP 8 on shared hosting — no Node, Composer, or workers",
-        "summary": "SousMeow must run on Hostinger shared hosting with PHP 8 and no build step, no dependency manager, no Docker, and no background workers.",
-        "type": "constraint",
-        "url": "../why/constraints/php8-shared-hosting.html",
-        "body": "Constraint Runs on PHP 8.1+ on ordinary Hostinger shared hosting. No Node, no Composer, no Docker, no background workers. Requires pdo sqlite / pdo mysql , mbstring , and zip extensions. Source The deployment target docs/DEPLOYMENT.md , README.md . Affected functionality Every feature. There is no build step; what is uploaded is what runs. Scheduled work the daily simulation is a cron invoked CLI script, not a resident worker. Consequences All front end enhancement is progressive; the app works without JavaScript. No autoloader from Composer — the app ships its own bootstrap. Still active? Yes. This shapes every implementation choice."
-    },
-    {
-        "title": "Only public/ is web-served; deployable under a subfolder",
-        "summary": "The document root points at public/; app, config, database, scripts, and storage sit above it, and the app must run under a subdirectory via app.base_path.",
-        "type": "constraint",
-        "url": "../why/constraints/public-root-subfolder.html",
-        "body": "Constraint Web serve public/ only. app/ , config/ , database/ , scripts/ , and storage/ must sit above the document root. The app must also run under a subdirectory e.g. /iain/projects/sousmeow/public via app.base path . Source docs/DEPLOYMENT.md , public/index.php base path stripping . Affected functionality Routing app.base path is stripped before dispatch , export storage zips in storage/exports/ , outside the web root , the SQLite file in storage/ , and email links APP URL + APP BASE PATH . Consequences Secrets and data cannot be fetched over HTTP because they live above the root. Email links break if the base path is misconfigured scripts/print url config.php diagnoses it . Still active? Yes."
-    },
-    {
-        "title": "Two database dialects kept in lockstep",
-        "summary": "The same schema must work as SQLite (zero-setup dev) and MySQL (production); both dialect files change together.",
-        "type": "constraint",
-        "url": "../why/constraints/sqlite-and-mysql.html",
-        "body": "Constraint SousMeow supports SQLite local, default and MySQL Hostinger . The two schema files must stay identical in shape; scripts/seed.php picks the file for the configured driver. Source app/Core/Database.php , both database/schema. .sql . Affected functionality All data access, and seeding/migrations. A schema change must edit both files. Consequences Some migrate path differences are unavoidable: SQLite cannot ALTER add a foreign key, so an upgraded SQLite dev DB may lack an FK that MySQL has see docs/ARCHITECTURE.md ; fresh rebuilds it. Timestamps are UTC YYYY MM DD HH:MM:SS strings in both. Still active? Yes, as long as SQLite is the dev dialect and MySQL is production."
-    },
-    {
-        "title": "Pasted AI output is Markdown-ish",
-        "summary": "Quality-check evidence parsing and the export reader assume responses use Markdown-like headings and structure; free-form prose falls back to manual review.",
+        "title": "Coding agents will follow the session workflow if it is discoverable and cheap",
+        "summary": "We assume a capable agent reads CLAUDE.md / AGENTS.md / .cursor rules and runs `vibekb status` at session start, rather than needing the giant bootstrap prompt each time.",
         "type": "assumption",
-        "url": "../why/assumptions/ai-output-is-markdownish.html",
-        "body": "Claim ResponseParser and SafeText assume responses are Markdown ish headings and sections , so the output contract can locate evidence and the kit reader can format the text. Confidence Medium — the prompts request structured output and each runnable Recipe ships a realistic example response , but the parser internals were read only at the call boundary in this pass. Affected functionality review quality checks evidence and export project kit kit.html rendering . Both degrade gracefully: no contract → manual review; unparsed text still renders. What would invalidate it Widespread use of non structured output where contract parsing never finds sections. Next verification action Trace ResponseParser / OutputContract and diff against a few seeded example response values."
+        "url": "../why/assumptions/agents-follow-session-workflow.html",
+        "body": "The assumption A new coding agent session Claude Code, Cursor, or similar will discover the workflow from the repository — the canonical CLAUDE.md , the thin AGENTS.md , and .cursor/rules/vibekb.mdc — and will run php tools/vibekb.php status to orient, then follow the lifecycle through to a handoff, without the user pasting a long prompt. Why we believe it partial evidence The instructions are short, canonical, and point to one executable entry point. This change itself was produced by following the lifecycle dogfooding . Why it is only an assumption We have not observed a fresh Cursor session follow it end to end in this environment; Cursor discovery is inferred . Agents vary; some may still need a nudge. If invalidated Strengthen the nudges: e.g. a SessionStart hook that prints the statu"
     },
     {
-        "title": "One writer per project at a time",
-        "summary": "A project is owned and edited by one user in one place; there is no concurrent-editing model, and SQLite WAL/busy-timeout cover the low contention.",
-        "type": "assumption",
-        "url": "../why/assumptions/single-writer-per-project.html",
-        "body": "Claim Each project belongs to one user projects.user id , ownership enforced at the data layer and is worked on by that one person. There is no locking or last write wins conflict handling because concurrent writers are not a design goal. Confidence High — ownership scoping is source verified, and SQLite is configured with WAL and a busy timeout for the light contention that a single user creates. Affected functionality Pantry saves, artifact versioning, and approval all assume a single writer. What would invalidate it Collaborative editing, or moving to a workload with many concurrent writers per project. Next verification action None unless collaboration is added."
-    },
-    {
-        "title": "cookbooks.category is legacy — written but never read",
-        "summary": "The old free-text category string is kept one release for rollback safety; every read goes through primary_category_id. Do not reintroduce reads of it.",
+        "title": "/docs is generated output — never hand-edit it",
+        "summary": "The static site under `/docs` is produced by `tools/generate-static.php`; editing it directly is lost on the next build and makes the snapshot lie about the model.",
         "type": "warning",
-        "url": "../why/warnings/legacy-category-column.html",
-        "body": "Affected functionality Category discovery and seeding. What can go wrong Before the taxonomy change, each Cookbook had a single free text category string used for display and search. It is kept for one transitional release populated by the sync from the resolved category name purely for rollback safety. Reading it again would bypass the categories / primary category id relation and reintroduce the inconsistency the taxonomy replaced. Cause A deliberate, temporary rollback hedge documented in docs/ARCHITECTURE.md . What not to do Do not add any application query or search that reads cookbooks.category . Safe procedure The planned follow up: confirm no query references it, drop the column in both dialects guarded DROP COLUMN in the seed migrate path , and remove the derived name write in syn"
+        "url": "../why/warnings/docs-is-generated-never-hand-edit.html",
+        "body": "What can go wrong Someone fixes a typo or tweaks wording directly in a /docs/ .html file. The next generate static.php run overwrites it, and until then the published site shows content that does not exist in .vibekb/ — the snapshot no longer reflects the model. Cause /docs is a projection, not a source. The generator cleans and rewrites the generated site on every run. What not to do Do not edit files under /docs . Change .vibekb/ and, if needed, the templates in guide/ and regenerate. Detection php tools/vibekb.php check regenerates into a temporary directory and compares against /docs ignoring the volatile generation timestamp ; a difference means /docs is stale or was hand edited. Under strict this fails. Safe procedure 1. Edit .vibekb/ or the shared templates . 2. Run php tools/valida"
     },
     {
-        "title": "Web password reset silently no-ops without SMTP",
-        "summary": "The forgot/reset flow is coded correctly but only useful when a real mail driver is configured; the default 'log' driver sends nothing, so the CLI is the reliable path.",
+        "title": "The model drifts from the code unless an agent reconciles it",
+        "summary": "VibeKB detects that files changed but cannot interpret what a change means; if an agent edits code without updating the affected records, the model silently goes stale.",
         "type": "warning",
-        "url": "../why/warnings/password-reset-depends-on-smtp.html",
-        "body": "Affected functionality Password reset, and by the same mailer, registration verification emails. What can go wrong forgotPassword always shows the neutral \"check your email\" screen correct, to avoid enumeration , but with the default mail.driver = log no email is actually sent — it is written to storage/mail/ as an .eml file. A user waiting on the email is stuck, and verification emails have the same dependency. Cause Email delivery is optional in v1; the README frames resets as an admin CLI action php scripts/seed.php reset password . What not to do Do not assume the web reset/verification works end to end without confirming SMTP is configured. Safe procedure Configure .env SMTP and set MAIL DRIVER=smtp for real delivery, or Use php scripts/seed.php reset password you@example.com for rese"
+        "url": "../why/warnings/model-can-drift-from-code.html",
+        "body": "What can go wrong An agent changes guide/lib/Content.php behaviour but leaves load living model and validate model describing the old behaviour. The model now claims something the code no longer does — the exact failure VibeKB exists to prevent. Cause Reconciling a code change into the model is interpretation work; it cannot be fully automated. The tooling can detect that a file changed and which records reference it, but not what the change means . What not to do Do not treat a green vibekb check as proof the model is correct — it proves nothing is mechanically inconsistent no missing files, valid structure , not that the prose still matches behaviour. Do not skip step 5 of the lifecycle update the affected records because the code \"already works.\" Safe procedure 1. Run php tools/vibekb.p"
     },
     {
-        "title": "Pasted AI responses are untrusted input end to end",
-        "summary": "Response content is sanitised on store and escaped-before-formatting on render; relaxing either — especially in the export reader — reintroduces stored XSS.",
+        "title": "A verification state must reflect real evidence",
+        "summary": "A record is not \"verified\" because an AI edited it or a file exists; only claim `verified-*` for behaviour you traced, tested, or exercised, and mark the rest honestly.",
         "type": "warning",
-        "url": "../why/warnings/pasted-response-is-untrusted.html",
-        "body": "Affected functionality Anywhere pasted content is stored or rendered: the Runner review, and the exported kit.html. What can go wrong Pasted content can contain HTML/script. If it were rendered without escaping — in the review UI or, easily overlooked, in the self contained kit.html reader — it becomes stored XSS. Cause The content originates outside the app the user's AI and is displayed as rich text. What not to do Do not render pasted content with raw output. Do not \"improve\" SafeText by formatting before escaping. Safe procedure On store: cleanContent normalises newlines, strips control characters, and bounds length. On render: SafeText::render escapes first, then applies a small Markdown allowlist to the escaped text. ProjectKit uses the same path for kit.html. Keep the CSP script src"
+        "url": "../why/warnings/verification-must-reflect-evidence.html",
+        "body": "What can go wrong An agent regenerates a record and, because it \"looks right,\" sets verified from source without actually tracing the code. The model now overstates its own confidence — and the guide presents that as fact. Cause Editing a record is easy; verifying behaviour is work. The verification vocabulary exists precisely to keep those separate: verified by test , verified manually , verified from source , inferred from source , reported by developer , not verified . What not to do Do not upgrade a verification state you did not confirm. Do not mark an inferred diagram edge verified to make the line solid. Do not claim manual/test verification you did not perform. Safe procedure Trace or exercise the behaviour, then set the state that matches the evidence you actually have. When in do"
     },
     {
-        "title": "Pantry and Artifact read/write paths must change together",
-        "summary": "A field key, type, or schema change must update the Pantry save, the prompt substitution, the Runner, and the export together, or prompts and kits silently lose data.",
-        "type": "warning",
-        "url": "../why/warnings/read-write-path-coupling.html",
-        "body": "Affected functionality Pantry saves, prompt building, the Runner, and export. What can go wrong A Pantry field key is renamed in the form/schema but not in the prompt template, so PromptBuilder renders missing: key . Or a value stored for one type is read as another multiselect JSON read as plain text . The prompt or export silently loses the value. Cause The same field flows through several places: pantry fields definition, savePantry validation/storage, PromptBuilder substitution, the Runner's \"ingredients used\" panel, and ProjectKit 's manifest. Changing one without the others breaks alignment. What not to do Do not rename a field key, change its type, or alter storage encoding in only one place. Safe procedure 1. Update the field definition/seed and both schema dialects. 2. Update save"
-    },
-    {
-        "title": "The README's Cookbook count is stale",
-        "summary": "README says \"Twenty-two executable Cookbooks\"; the seed source actually contains 31 executable + 2 preview (33 total).",
+        "title": "Self-hosting forced a clean split between the active model and examples",
+        "summary": "Dogfooding VibeKB on itself surfaced that the loader keys records by id and loads whatever `.vibekb/` it is pointed at, so an example model and the active model cannot coexist in one root — they must be separate roots.",
         "type": "discovery",
-        "url": "../why/discoveries/cookbook-count-drift.html",
-        "body": "Discovery README.md states \"Twenty two executable Cookbooks and two marketplace previews,\" but the actual seed files tell a different story. Evidence Counting is executable in database/seeds/cookbooks/ .php at source commit c1617ab : 31 files with is executable = true and 2 with false 33 total . A docs/COOKBOOK EXPANSION ANALYSIS.md file also exists, consistent with the library having grown past the README's number. Affected functionality browse marketplace what's listed and seed and sync content what's seeded . The counts on any VibeKB or product surface should come from the seed source, not the README prose. Consequence This VibeKB model reports 31 executable + 2 preview , and notes the README as stale. Action taken Recorded here; project/current state.md uses the source derived counts. "
+        "url": "../why/discoveries/self-hosting-needs-example-isolation.html",
+        "body": "What we found While bootstrapping VibeKB on itself, it became clear the loader loads exactly one content root and keys records by id. Keeping the SousMeow example in the root .vibekb/ alongside VibeKB's own records would have merged two unrelated models and made \"what is VibeKB currently doing?\" un answerable. Evidence Content takes a single root and globs functionality/records/ .md etc. from it; there is no notion of multiple models in one root. The guide hard defaulted to the repository's .vibekb/ . What changed in the model / product The SousMeow example moved to examples/sousmeow/.vibekb/ ; the field test audit moved to examples/field tests/ . A VIBEKB CONTENT ROOT override constrained to a .vibekb directory lets the same guide and validator preview or check an example without a second"
     },
     {
-        "title": "Sample data is labelled everywhere it appears",
-        "summary": "A pasted \"example response\" carries source='example' from the version through the review UI, the export manifest, and kit.html — sample data is never presented as real.",
-        "type": "discovery",
-        "url": "../why/discoveries/demo-mode-labeling.html",
-        "body": "Discovery Demo Mode's \"paste example response\" does not shortcut review — the example is stored as an ordinary artifact version, but its provenance is carried through the whole system so it is always visibly sample data. Evidence pasteExample stores the version with source = 'example' and a message marking it sample data. ProjectKit propagates that: the per artifact Markdown header adds \" sample data from Demo Mode \", the kit.html meta line adds \"sample data\", and the manifest notes \"sample data\" per file. Affected functionality paste response , export project kit , and demo simulation . Consequence A user or a portfolio viewer can always tell reviewed real output from seeded examples, even inside an exported kit. This is consistent with the product's \"never a black box\" intent. Did it cha"
-    },
-    {
-        "title": "Two password-reset paths exist, and they can disagree",
-        "summary": "The code has a full web forgot/reset flow, while the docs present resets as an admin CLI action — reconciled by the fact that the web path needs SMTP the default deploy lacks.",
-        "type": "discovery",
-        "url": "../why/discoveries/password-reset-cli-vs-web.html",
-        "body": "Discovery At first read the source and the docs seemed to contradict: AuthController implements a complete web forgot/reset flow, but README.md and docs/DEPLOYMENT.md say password resets are an admin CLI action. Evidence AuthController::forgotPassword/resetPassword are fully implemented and source verified. The default mail.driver is log writes .eml , sends nothing , and the README lists \"no SMTP\" among the deliberate v1 limits. scripts/seed.php reset password is documented as the operational path. Reconciliation Both are true. The web flow is real and correct but only useful once SMTP is configured; in a default deploy the reliable path is the CLI. This is why reset password is classified partial , not broken. Affected functionality reset password . Did it change the software model? Yes —"
-    },
-    {
-        "title": "Added a source-grounded diagram set and provenance to the SousMeow model",
-        "summary": "The SousMeow model gained five source-grounded diagrams and an explicit provenance block; no functionality claim was upgraded.",
+        "title": "Bootstrap VibeKB on itself with an active self-maintenance lifecycle",
+        "summary": "Replaced the SousMeow active model with VibeKB's own model, isolated the examples, and added the `vibekb` CLI (status/check/affected) so the model is maintained through a real agent lifecycle as VibeKB is developed.",
         "type": "change",
-        "url": "../why/changes/add-diagrams-and-provenance.html",
-        "body": "Before The SousMeow model had no diagrams and no explicit provenance block. The overview relied on an undefined \"Last meaningful update\" label and counted functionality records as \"areas\". After Added .vibekb/diagrams/ with five diagrams: app overview, the Run a Cookbook loop, request flow, storage map, and a risk & uncertainty map. Each has an accessible SVG and links to related functionality and warnings. Added a provenance block to manifest.json source commit analysed, verification scope, last verified, updates automatically: false . Counts now read \"N functionality records across M functional areas\". Impact Documentation only — SousMeow itself was not touched and no verification state was upgraded for presentation. The diagrams reflect existing verified records; inferred areas request "
+        "url": "../why/changes/bootstrap-vibekb-self-hosting.html",
+        "body": "Before The active .vibekb/ model described SousMeow a separate app . VibeKB had a strong renderer, validator, and explainable diagram system, but no repository resident model of itself and no tooling to help an agent run the maintenance lifecycle or detect drift. Maintenance was prose only CLAUDE.md / MAINTENANCE.md . After The active root .vibekb/ is VibeKB's own model this content . The SousMeow model and the StopPR field test audit moved under examples/ ; a VIBEKB CONTENT ROOT override keeps them previewable/validatable. A new tools/vibekb.php CLI provides status session start , check drift + validate + snapshot sync , affected files → functionality , plus validate and generate passthroughs. Agent instructions were unified: CLAUDE.md is canonical; AGENTS.md and .cursor/rules/vibekb.mdc "
     },
     {
-        "title": "Made diagrams explainable — nodes, edges, mechanisms, files-with-reasons",
-        "summary": "Two SousMeow diagrams gained a repository-owned topology so every node states what it is, every edge states a concrete mechanism, every file states why it matters, and external source links reach the implementation — without upgrading any verification claim.",
-        "type": "change",
-        "url": "../why/changes/add-explainable-diagrams.html",
-        "body": "Before Diagrams were a picture plus prose. There was no way to select a box or arrow and learn what it is, why it connects to its neighbour, which files implement it, or where to open the code. Relationships had no stated mechanism. After Added an optional per diagram topology .vibekb/diagrams/topology/<id .json with nodes title + plain language purpose , edges a controlled mechanism and a one sentence explanation , per node/edge files with roles and reasons, repository locations, and honest verified/inferred states. Upgraded two representative diagrams: Request flow verified web path with two inferred, dashed edges — the Router match and the CLI write path and Run a Cookbook — the core loop a verified user journey with the pasted response and read/write coupling warnings attached . Marked"
-    },
-    {
-        "title": "Introduced the categories + collections taxonomy",
-        "summary": "Discovery moved from a single free-text category string to a stable one-category spine plus flexible many-to-many collections, resolved in one service with an honesty gate.",
-        "type": "change",
-        "url": "../why/changes/taxonomy-categories-collections.html",
-        "body": "Before Each Cookbook stored one free text category string, used directly for display and category based search. There was no stable URL spine and no way to build themed, cross cutting shelves. After sousmeow categories : a fixed vocabulary; every visible Cookbook has one primary category id . Categories own /categories/{slug} . sousmeow collections + sousmeow cookbook collections : many to many merchandising, resolved in CollectionResolver by collection type editorial / dynamic / attribute , gated by min display count . What caused the change The need for both a stable structure URLs, breadcrumbs, admin sort and flexible discovery shelves — see the categories collections taxonomy decision. Data impact New taxonomy tables prefixed sousmeow to avoid collisions on the shared production databa"
-    },
-    {
-        "title": "public/index.php",
-        "summary": "Front controller: security headers, CSP, CSRF gate on every POST, base-path stripping, then routing.",
+        "title": "guide/lib/Content.php",
+        "summary": "The content loader: reads .vibekb/, parses records, resolves relationships, loads/validates diagram topology, and validates the whole model. The spine everything else renders.",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
     },
     {
-        "title": "app/routes.php",
-        "summary": "The complete route table mapping method+path to a controller action.",
+        "title": "guide/lib/FrontMatter.php",
+        "summary": "Parses the leading front-matter block of a record (scalars, quoted strings, booleans, ints, inline/block lists) without a YAML dependency.",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
     },
     {
-        "title": "app/Core/Database.php",
-        "summary": "The single PDO access path (SQLite/MySQL); prepared-statement helpers and transactions.",
+        "title": "guide/lib/Markdown.php",
+        "summary": "The pragmatic Markdown subset renderer (headings, lists, tables, code, emphasis, links, blockquotes) that escapes output; not full CommonMark.",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
     },
     {
-        "title": "app/Core/Auth.php",
-        "summary": "Session auth: login/logout, requireLogin/requireVerified/requireAdmin, intended-URL redirects.",
+        "title": "guide/lib/helpers.php",
+        "summary": "Escaping, URL helpers, the controlled vocabularies (status, verification, safety, edge-mechanism, file-role), badges, and the source-link builder — the single source for validation-facing vocabularies.",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
     },
     {
-        "title": "app/Core/Csrf.php",
-        "summary": "The single CSRF gate verified for every POST in the front controller.",
+        "title": "guide/lib/Provenance.php",
+        "summary": "Normalises source + generation provenance and renders the objective provenance panel/stamp; never overstates freshness.",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
     },
     {
-        "title": "app/Core/Router.php",
-        "summary": "Route matching and dispatch, including 404/405 handling.",
+        "title": "guide/lib/search.php",
+        "summary": "Builds the one search index (functionality, memory, files, diagrams, explainable node/edge/file entries) shared by both output modes.",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
     },
     {
-        "title": "app/Controllers/RunnerController.php",
-        "summary": "The core loop: renders gather/review/approved states and every write transition (paste, checks, approve, edit, reopen, restore) with strict step ordering.",
+        "title": "guide/lib/nav.php",
+        "summary": "The single definition of views, routes, primary/secondary navigation, and page titles, consumed by both output modes.",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
     },
     {
-        "title": "app/Services/PromptBuilder.php",
-        "summary": "Builds the copyable prompt by substituting Pantry values and approved-Artifact contents, with matching highlighted HTML.",
+        "title": "guide/lib/UrlStrategy.php",
+        "summary": "Dynamic vs static URL building — the one difference between the two output modes.",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
     },
     {
-        "title": "app/Services/ResponseParser.php",
-        "summary": "Parses a pasted response against a Recipe's output contract to produce structural evidence for Quality Checks.",
+        "title": "guide/index.php",
+        "summary": "The dynamic guide front controller: query-string routing, model load, error posture, live search JSON.",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
     },
     {
-        "title": "app/Services/ProjectKit.php",
-        "summary": "Builds the export zip: numbered Markdown files, a self-contained kit.html reader, and a README manifest.",
+        "title": "guide/templates/layout.php",
+        "summary": "The shared page shell (chrome, nav, provenance stamp) both output modes render every page through.",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
     },
     {
-        "title": "app/Services/SafeText.php",
-        "summary": "Escapes pasted (untrusted) content first, then applies a small Markdown allowlist to the escaped text.",
+        "title": "tools/generate-static.php",
+        "summary": "Renders the same templates into /docs with relative links; refuses to build on validation errors; honours VIBEKB_DOCS_OUT and VIBEKB_GENERATED.",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
     },
     {
-        "title": "app/Services/CollectionResolver.php",
-        "summary": "The single place Collection membership resolves (editorial/dynamic/attribute) and the surfacing gate is applied.",
+        "title": "tools/validate.php",
+        "summary": "Headless model validator (CI gate): loader issues plus provenance completeness, totals reconciliation, and static-search resolution. Accepts an optional content-root path so examples can be validated too.",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
     },
     {
-        "title": "app/Services/SiteStats.php",
-        "summary": "Public and admin metrics computed only from simulation rows, plus the activity heatmap.",
+        "title": "tools/test-topology.php",
+        "summary": "Fixture-driven test proving malformed diagram topology produces useful diagnostics without crashing, and valid topology resolves.",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
     },
     {
-        "title": "app/Controllers/ProjectController.php",
-        "summary": "Start a project (executable gate), the Pantry form and validation, project routing, and deletion.",
+        "title": "tools/vibekb.php",
+        "summary": "The self-maintenance CLI: status (session start), check (drift + validate + snapshot sync), affected (files → functionality), validate, generate. The agent's entry point to the lifecycle.",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
     },
     {
-        "title": "app/Controllers/ExportController.php",
-        "summary": "Export page, build gate (all approved), and owner-scoped zip download from outside the web root.",
+        "title": ".vibekb/manifest.json",
+        "summary": "The active model's provenance and structure metadata: source repository/commit analyzed, verification scope, last verified, and the honest updates_automatically:false.",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
     },
     {
-        "title": "app/Controllers/AuthController.php",
-        "summary": "Register, login (rate-limited), email verification, and the forgot/reset-password flow.",
+        "title": ".cpanel.yml",
+        "summary": "cPanel Git deploy: rsync of runtime paths into the public folder with development-only exclusions. Part of the application.",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
     },
     {
-        "title": "app/Controllers/AccountController.php",
-        "summary": "Account settings: profile, preferences, security (password/email change), data export, onboarding, deletion.",
+        "title": "CLAUDE.md",
+        "summary": "The canonical, repository-owned operating rules and lifecycle for any coding agent working on VibeKB; AGENTS.md and .cursor/rules point here.",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
     },
     {
-        "title": "app/Controllers/MarketplaceController.php",
-        "summary": "The searchable marketplace listing and the full Cookbook detail page.",
-        "type": "file",
-        "url": "../files/index.html",
-        "body": ""
-    },
-    {
-        "title": "app/Controllers/CategoryController.php",
-        "summary": "One shared category index and detail route with difficulty and executable/preview filters.",
-        "type": "file",
-        "url": "../files/index.html",
-        "body": ""
-    },
-    {
-        "title": "app/Controllers/AdminController.php",
-        "summary": "Read-only admin overview gated by requireAdmin.",
-        "type": "file",
-        "url": "../files/index.html",
-        "body": ""
-    },
-    {
-        "title": "app/Models/Artifact.php",
-        "summary": "Artifact and version access: addVersion (append-only), approve/reopen, confirmed checks, status-by-recipe.",
-        "type": "file",
-        "url": "../files/index.html",
-        "body": ""
-    },
-    {
-        "title": "app/Models/Project.php",
-        "summary": "Project lifecycle: create, ownership lookup, Pantry values, markPantrySaved, markCompleteIfDone, delete.",
-        "type": "file",
-        "url": "../files/index.html",
-        "body": ""
-    },
-    {
-        "title": "app/Models/Cookbook.php",
-        "summary": "Catalog access: marketplace search, findBySlug, featured, inCategory, listing helpers.",
-        "type": "file",
-        "url": "../files/index.html",
-        "body": ""
-    },
-    {
-        "title": "app/Models/Recipe.php",
-        "summary": "Recipe access: forCookbook (ordered), checks, evidenceKeys, outputContract.",
-        "type": "file",
-        "url": "../files/index.html",
-        "body": ""
-    },
-    {
-        "title": "app/Models/PantryField.php",
-        "summary": "Pantry field definitions per Cookbook and option decoding for select/multiselect.",
-        "type": "file",
-        "url": "../files/index.html",
-        "body": ""
-    },
-    {
-        "title": "database/schema.sqlite.sql",
-        "summary": "The SQLite schema, kept in lockstep with the MySQL dialect; the data model of the whole app.",
-        "type": "file",
-        "url": "../files/index.html",
-        "body": ""
-    },
-    {
-        "title": "database/schema.mysql.sql",
-        "summary": "The MySQL (production) schema dialect, kept identical in shape to the SQLite one.",
-        "type": "file",
-        "url": "../files/index.html",
-        "body": ""
-    },
-    {
-        "title": "scripts/seed.php",
-        "summary": "CLI seeder: applies schema, upserts the versioned catalog by slug, provisions the admin, resets passwords.",
-        "type": "file",
-        "url": "../files/index.html",
-        "body": ""
-    },
-    {
-        "title": "config/config.example.php",
-        "summary": "Configuration template (env, db driver, session, exports dir, mail); copied to gitignored config.php.",
-        "type": "file",
-        "url": "../files/index.html",
-        "body": ""
-    },
-    {
-        "title": "app/Views/runner/step.php",
-        "summary": "The three-state Runner UI (gather wizard / review / approved) and the copy-prompt and check controls.",
-        "type": "file",
-        "url": "../files/index.html",
-        "body": ""
-    },
-    {
-        "title": "The simplest mental model",
-        "summary": "A Cookbook is a workflow of Recipes; you fill a Pantry, run each Recipe's prompt in your own AI, review and approve the result, then export. SousMeow never calls the AI.",
+        "title": "Mental model",
+        "summary": "One repository-owned model, one loader, one template set, two output modes, and an agent-run maintenance lifecycle that keeps the model true.",
         "type": "architecture",
         "url": "../how-it-works/index.html",
-        "body": "Hold this picture in your head The five nouns Cookbook — a proven workflow. Recipe — one ordered step in it. Pantry — the facts you enter once; every prompt is built from them. Project — your run of a Cookbook owns the Pantry values and Artifacts . Artifact — the reviewed output of one Recipe, kept as immutable versions. Project Kit — the exported deliverable. The one rule that explains everything SousMeow never calls an AI. It builds the prompt, you run it in the AI you already pay for, and you paste the answer back. Everything else — versioning, human Quality Checks, the approval gate, chaining approved Artifacts into later prompts — exists to make that loop trustworthy. What this means for change Change what a Recipe asks for → touch the seed content and maybe the output contract. Chang"
+        "body": "The one paragraph model VibeKB is a model .vibekb/ , a renderer guide/ , a set of tools tools/ , and a workflow the agent lifecycle . The model is the source of truth. The loader guide/lib/Content.php reads it into memory and validates it. The renderer turns it into pages through one template set, in two modes — the live PHP guide Mode A and the static /docs snapshot Mode B — so the two can never disagree. The tools validate the model, generate the snapshot, and new help an agent run the lifecycle and detect drift. The workflow is what keeps the model synchronized with the code as agents change it. What is the primary unit Functionality — the things the software does — not files, decisions, or sessions. Files, memory, and diagrams all link back to functionality. The honesty invariants Inte"
     },
     {
-        "title": "Major components",
-        "summary": "A custom PHP MVC — front controller, Router, Core services, Controllers, Models, Services, and server-rendered Views — with one PDO data path.",
+        "title": "Components",
+        "summary": "The content model, the loader, the shared template set, the two output modes, the validator and topology test, and the self-maintenance CLI.",
         "type": "architecture",
         "url": "../how-it-works/index.html",
-        "body": "The parts and their jobs Component Responsibility public/index.php Front controller: security headers, CSP, CSRF gate, dispatch app/Core/Router.php Route table and dispatch app/routes.php defines routes app/Core/ Framework: Auth , Csrf , Database , Config , Env , Session , Flash , RateLimiter , Mailer , View app/Controllers/ One class per area Marketing, Marketplace, Category, Collection, Auth, Account, Kitchen, Project, Runner, Export, Admin, Legal, Philosophy app/Models/ Table access: Cookbook , Recipe , PantryField , Project , Artifact , Category , Collection , Export , User , CookbookStage , PasswordReset app/Services/ Logic: PromptBuilder , ResponseParser , OutputContract , ProjectKit , SafeText , CollectionResolver , SiteStats , Simulation , Accent , mailers app/Views/ Server rendere"
+        "body": "Content model — .vibekb/ Repository owned Markdown plus front matter records and small JSON manifests. The source of truth. No database. Loader — guide/lib/Content.php Reads, parses FrontMatter.php , Markdown.php , relationship resolves, and validates the model. All filesystem access confined to the content root. Used by the guide and every tool, so nothing can disagree about what the model says. Renderer — guide/templates/ + guide/lib/ One template set rendered through layout.php . Shared navigation/routes/titles nav.php , URL strategy UrlStrategy.php , provenance Provenance.php , search index search.php , and vocabularies/helpers helpers.php . Output modes Mode A — dynamic guide guide/index.php : live PHP, reads .vibekb/ per request. Mode B — static snapshot tools/generate static.php → /"
     },
     {
-        "title": "The request lifecycle",
-        "summary": "Every request enters the single front controller — headers, CSRF gate on POST, then routing to a controller that renders a view or redirects.",
+        "title": "Request flow",
+        "summary": "A browser request enters guide/index.php, which loads the model once, resolves the view, and renders the shared layout — no rewrite rules, no build step.",
         "type": "architecture",
         "url": "../how-it-works/index.html",
-        "body": "One request, start to finish 1. Apache public/.htaccess or the dev server sends the request to public/index.php ; real asset files are served directly. 2. Security headers and the CSP are sent. 3. app/bootstrap.php loads config and the autoloader; an exception handler is installed detailed errors only in development . 4. app.base path is stripped so the app works from a subdirectory. 5. Every POST passes Csrf::verify before routing. 6. Router::dispatch matches the method+path and calls the controller. 7. The controller reads input, calls Models/Services, and either renders a View or issues a redirect post/redirect/get for writes . Authentication in the flow Controllers call Auth::requireLogin / requireVerified / requireAdmin as needed. Write actions in the Runner and Export require a verif"
+        "body": "The dynamic path Mode A 1. The browser requests guide/index.php?view=… query string routing; no rewrite rules . 2. The front controller registers the dynamic URL strategy and loads Content from .vibekb/ or a VIBEKB CONTENT ROOT example . 3. ?view= is resolved against the shared route whitelist; functionality is special cased for index vs detail by ?id ; a live search JSON endpoint is handled inline. 4. The chosen template is rendered inside layout.php with shared navigation. 5. Output is escaped; provenance is stamped; the page returns. The static path Mode B tools/generate static.php runs the same templates offline, swapping in the static URL strategy, and writes the pages to /docs . There is no live request — the snapshot is the dynamic guide, frozen at a commit. Error posture Unknown vi"
     },
     {
-        "title": "How data flows",
-        "summary": "Pantry facts flow into prompts; pasted answers become immutable artifact versions; confirmed checks gate approval; approved artifacts chain into later prompts and the export.",
+        "title": "Data flow",
+        "summary": "Content flows one way — from `.vibekb/` files, through the loader's parse-resolve-validate pipeline, into the in-memory model, out to rendered pages and the search index; the maintenance lifecycle flows the other way, from code changes back into the model via an agent.",
         "type": "data & storage",
         "url": "../data/index.html",
-        "body": "From facts to finished kit What is trusted where Pantry input is validated per type before storage savePantry . Pasted AI output is untrusted: sanitised on store cleanContent and escaped on render SafeText end to end. SQL parameters are always bound one PDO path ; never interpolated. Ownership is enforced at the data layer; ids are never leaked. The alignment rule The fields written for the Pantry and Artifacts must match the fields read by PromptBuilder , the Runner, and ProjectKit . When they drift, prompts get missing: values or the export omits content — the failure the read write path coupling warning describes."
+        "body": "Read path files → pages .vibekb/ .md and .json → FrontMatter / Markdown parse → Content builds the keyed model and resolves relationships → validate accumulates issues → templates render pages Mode A live, Mode B to /docs → build search index produces the searchable index for both modes. Nothing writes back to .vibekb/ on this path. The loader is read only. Maintenance path code → model Code changes → vibekb check detects changed files, broken references, and snapshot staleness → vibekb affected maps changed files to likely functionality via files back links → an agent interprets the change and updates the affected records, memory, diagrams, provenance, and handoff → vibekb validate / generate reconcile and refresh outputs. The detection half is mechanical; the interpretation half requires"
     },
     {
         "title": "Storage",
-        "summary": "One relational database (SQLite dev / MySQL prod) holds the catalog and user work; export zips live on disk outside the web root. No other persistence.",
+        "summary": "There is no runtime database — the model is plain files under `.vibekb/`, generated output is files under `/docs`, and provenance lives in `manifest.json`.",
         "type": "data & storage",
         "url": "../data/index.html",
-        "body": "What is stored, and where All structured data is in one database — SQLite storage/sousmeow.sqlite in dev or MySQL in production, same schema. Export zips are files in storage/exports/ outside the web root . Sessions use PHP's session store. There is no external storage. The catalog seeded, read mostly Table Meaning cookbooks Workflows: slug, status, is executable , difficulty, category cookbook stages , recipes Ordered steps, prompts, output contracts recipe checks Per recipe Quality Checks + evidence keys pantry fields Typed input definitions per Cookbook sousmeow categories , sousmeow collections , sousmeow cookbook collections Discovery taxonomy prefixed to avoid collisions on shared hosting User work written during a run Table Meaning Written by users Accounts, roles, verification, sim"
+        "body": "What is stored, and where Store What Written by .vibekb/ The living model records + manifests Humans and AI agents, by hand .vibekb/manifest.json Provenance and structure metadata Agents, on re verification /docs/ The static snapshot tools/generate static.php generated docs/assets/data/search.json The static search index The generator examples/ /.vibekb/ Bundled example models Field tests rarely changed No runtime database VibeKB deliberately has no SQL database, no cache store, no sessions, and no network at render time. The model is versioned with the code, which is what makes it review able in a pull request and deployable by copying files. What is generated vs authored .vibekb/ and examples/ are authored . /docs/ is generated — never hand edited; the drift check flags a /docs that diff"
     },
     {
         "title": "Deployment",
-        "summary": "Plain PHP 8 on Hostinger shared hosting; only public/ is web-served, config/storage sit above it, and a CLI seed sets up the catalog and admin.",
+        "summary": "Mode A deploys as plain PHP to cPanel shared hosting via `.cpanel.yml` (no build, no DB, no rewrite rules, subfolder-safe); Mode B publishes `/docs` to GitHub Pages or any static host with relative links.",
         "type": "architecture",
         "url": "../how-it-works/index.html",
-        "body": "How it ships SousMeow is plain PHP 8 plus MySQL or SQLite — no Node, no Composer, no workers. The projects/sousmeow folder is uploaded and the domain document root points at sousmeow/public . app/ , config/ , database/ , scripts/ , and storage/ must sit above the document root. public/.htaccess routes clean URLs through index.php mod rewrite . Configure Copy config/config.example.php to config/config.php gitignored and set: app.env = 'production' , app.base url , app.base path if under a subdirectory , session.secure = true , and the DB driver SQLite file in storage/ , or MySQL from hPanel . .env can override sensitive values; environment variables take precedence. Seed php scripts/seed.php admin email you@domain applies the schema, syncs the catalog upsert by slug — safe to re run after d"
+        "body": "Mode A — the dynamic guide on shared hosting .cpanel.yml rsyncs the runtime paths index.php , assets/ , guide/ , .vibekb/ into a cPanel public folder and excludes development only paths tools/ , prompts/ , docs/ , authoring docs, examples/ . Query string routing means no .htaccess rewrite rules are needed and the app runs in a subfolder. .vibekb/ must deploy — it is the content. Mode B — the static snapshot php tools/generate static.php builds /docs ; publish it via GitHub Pages Settings → Pages → branch → /docs or any static host. Relative links make it work at a web root or under a repository subpath. No PHP, database, CDN, or network required. Deployment is part of the application Whenever repository structure, runtime folders, or deployment requirements change, .cpanel.yml and DEPLOYME"
     },
     {
-        "title": "Build Explainable Diagrams into VibeKB V1",
-        "summary": "Turn VibeKB's source-grounded diagrams into explainable diagrams — every node states what it is, every edge states the concrete mechanism connecting its endpoints, every displayed file states why it matters, and the terminal handoff is an external source link.",
+        "title": "Bootstrap VibeKB on itself and make self-maintenance real",
+        "summary": "Self-hosting VibeKB — the active `.vibekb/` now describes VibeKB, examples are isolated under `examples/`, and `tools/vibekb.php` gives agents status / check / affected for the lifecycle.",
         "type": "current work",
         "url": "../current-work/index.html",
-        "body": "What the user asked for Build Explainable Diagrams as a real V1 feature. A diagram is a visual projection of the existing living software model. It must teach at a glance labelled nodes + mechanism labelled edges reading like a sentence and reward selection per node and per edge explanations: purpose, repository location, relevant files with reasons, verification, uncertainty, and an external source link as the terminal \"show me the implementation\" . Everything must justify its own existence; every click answers the reader's next question. The experience must work without JavaScript and render identically in the dynamic guide and the static /docs snapshot. Current behaviour before .vibekb/diagrams/ holds diagram records Markdown + front matter and repository owned SVGs with accessible <tit"
+        "body": "What the user asked for Bootstrap VibeKB inside its own repository and make self maintenance a real part of how the repository operates — an active model of VibeKB itself, examples cleanly separated, a repository owned lifecycle that Claude Code and Cursor follow without a giant prompt, mechanical drift detection that is honest about the detection vs interpretation boundary, and a /docs site that demonstrates VibeKB explaining VibeKB. Current behaviour before The active .vibekb/ modelled SousMeow. VibeKB had the renderer, validator, and explainable diagrams, but no self model and no lifecycle tooling; maintenance was prose in CLAUDE.md / MAINTENANCE.md. Proposed behaviour after Root .vibekb/ is VibeKB's own model; SousMeow and the StopPR audit move under examples/ , still previewable via V"
     },
     {
         "title": "Current handoff",
-        "summary": "Explainable Diagrams shipped in V1 — two SousMeow diagrams now carry a repository-owned topology (nodes, edges, mechanisms, files-with-reasons, source links) rendered identically in both output modes and usable without JavaScript. Next, upgrade the remaining three diagrams and trace the still-inferred SousMeow areas.",
+        "summary": "VibeKB is now self-hosted. The active `.vibekb/` models VibeKB itself; the SousMeow example and StopPR audit are isolated under `examples/`; a new `tools/vibekb.php` CLI (status / check / affected) drives the maintenance lifecycle; agent instructions are unified and repository-owned; `/docs` is regenerated from the self-model. Next: run diagram topology for the second/third diagrams if desired, and keep the model reconciled as VibeKB changes.",
         "type": "handoff",
         "url": "../handoff/index.html",
-        "body": "What the software VibeKB now does VibeKB renders one .vibekb/ source through one template set in two modes: the dynamic PHP guide Mode A and a static /docs snapshot Mode B, via tools/generate static.php . Diagrams are first class source grounded records and can now be explainable : an optional per diagram topology .vibekb/diagrams/topology/<id .json gives every node a plain language purpose, every edge a concrete mechanism from a controlled vocabulary and a one sentence explanation, every displayed file a role and a reason, a compact repository location, and a commit pinned external source link as the terminal \"show me the implementation\". Every rendering shows objective provenance and never implies auto freshness; counts distinguish areas from records; search and filters run client side w"
+        "body": "What the software VibeKB now does VibeKB renders one repository owned model through one template set in two modes dynamic guide, static /docs . As of this change it is self hosted : the active model describes VibeKB's own components — the loader, the guide renderer, the static generator, the validator, the explainable diagram system, and the new self maintenance CLI. Example models of other apps live under examples/ and are not the active model. Completed this change Examples isolated. SousMeow → examples/sousmeow/.vibekb/ ; StopPR audit → examples/field tests/ . guide/index.php gained a VIBEKB CONTENT ROOT override constrained to a .vibekb directory so examples stay previewable/validatable. Self model authored. 17 functionality records across 7 areas, 6 system docs, curated important file"
     }
 ]

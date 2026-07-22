@@ -1,58 +1,49 @@
 ---
-id: project-current-state
+id: current-state
 type: project
-title: Current application status
-summary: The full create-to-export loop is implemented and source-verified. 31 executable + 2 preview Cookbooks are seeded. Password reset and demo simulation carry caveats.
-status: implemented
-verification: verified-from-source
-updated: 2026-07-20
+title: What VibeKB does right now
+summary: A working V1 that loads a repository-owned model, renders it as a dynamic guide and a static snapshot, validates it, ships explainable diagrams, and (new in this change) is self-hosted with a CLI that helps agents run the maintenance lifecycle and detect drift.
+updated: 2026-07-22
 ---
 
-## Right now, the software can
+## Implemented and verified
 
-- Show a marketing home, a searchable marketplace, categories, and collections
-  over the Cookbook catalog.
-- Register an account, verify email, sign in (rate-limited), and manage account
-  settings, data export, and deletion.
-- Start a project from an executable Cookbook, fill and validate a Pantry, and
-  run the Recipe loop: build a prompt, paste a response as an immutable version,
-  confirm per-version Quality Checks, and approve behind an all-checks gate.
-- Preserve full artifact version history (paste / example / edited / restored)
-  and export an approved project as a Project Kit zip (Markdown + offline HTML
-  reader + manifest).
-- Render an admin overview and a portfolio Demo Mode / simulation dashboard.
+- **Content model** — `.vibekb/` is loaded, parsed (front matter + a pragmatic
+  Markdown subset), relationship-resolved, and validated by
+  `guide/lib/Content.php`. All filesystem access is confined to the content root.
+- **Dynamic guide (Mode A)** — `guide/index.php` routes views by `?view=` (no
+  rewrite rules) and renders one template set. Every page carries objective
+  provenance.
+- **Static snapshot (Mode B)** — `tools/generate-static.php` renders the *same*
+  templates into `/docs` with relative, subpath-safe links.
+- **Validation** — the loader plus `tools/validate.php` report structural errors
+  headlessly and gate generation and CI.
+- **Explainable diagrams** — diagrams can carry a repository-owned topology
+  (`diagrams/topology/*.json`): nodes with purposes, edges with controlled
+  mechanisms, files with reasons, and commit-pinned source links, usable without
+  JavaScript. `tools/test-topology.php` proves malformed topology is reported,
+  not crashed.
+- **Self-maintenance CLI (new)** — `tools/vibekb.php` gives agents one entry
+  point for the lifecycle: `status` (session start), `check` (drift + validate +
+  snapshot sync), `affected` (changed files → likely functionality), `validate`,
+  and `generate`.
 
-> Verified from source across `app/routes.php`, the controllers, services, and
-> both schema dialects.
+## Self-hosted
 
-## Counts (from the seed source, not the README)
+This repository now contains VibeKB's own model. The dynamic guide and `/docs`
+both render VibeKB explaining VibeKB. Example models of other apps are isolated
+under `examples/` and are not the active model.
 
-- **31 executable Cookbooks + 2 preview ("coming soon")** — counted from
-  `database/seeds/cookbooks/*.php` (`is_executable => true` × 31, `false` × 2).
-- The `README.md` still says "Twenty-two executable Cookbooks"; that number is
-  stale. See the `cookbook-count-drift` discovery.
+## Honest limitations
 
-## Partial / uncertain areas
-
-- **Password reset (web):** a full forgot/reset flow exists in
-  `AuthController`, but it depends on email delivery. The default mail driver is
-  `log` (writes `.eml` files, sends nothing), and the README frames resets as an
-  admin CLI action. So in a default deploy the web reset appears to work but no
-  email arrives. See `reset-password` (partial) and the `password-reset-depends-on-smtp` warning.
-- **Demo Mode / simulation:** the Runner's "paste example response" path is
-  source-verified; the 772-creator simulation scripts (`scripts/simulate-*.php`,
-  `Services/Simulation*`) were read at the service boundary but not fully traced.
-  See `demo-simulation` (verification: inferred-from-source).
-
-## Active warnings
-
-- Read and write paths for artifacts and pantry must move together when the
-  schema changes (`read-write-path-coupling`).
-- Pasted AI responses are untrusted input and must stay escaped end to end
-  (`pasted-response-is-untrusted`).
-- Password reset silently no-ops without SMTP configured
-  (`password-reset-depends-on-smtp`).
-
-## Last meaningful update
-
-Source snapshot: commit `c1617ab`, 2026-07-16 (dev-portfolio-v2).
+- **Not automatic.** VibeKB detects that files changed; it does not understand
+  what a change *means*. Reconciling the model is an agent's job.
+- **Affected-functionality discovery is a heuristic**, derived from the `files[]`
+  back-links already in the model. A changed file with no back-link is reported
+  as "unmapped," not silently ignored, but the mapping is never assumed perfect.
+- **Cursor discovery** is provided via `.cursor/rules/` and `AGENTS.md`; it is
+  `inferred` that a fresh Cursor session will follow it, not runtime-verified
+  here.
+- **The cPanel deploy target** is described from `.cpanel.yml`; the live host is
+  not exercised in this environment.
+- The Markdown renderer supports a documented subset, not full CommonMark.

@@ -1,0 +1,76 @@
+{
+  "groups": [
+    {
+      "id": "explore-discovery",
+      "title": "Explore & discovery",
+      "description": "How visitors find Cookbooks: the marketing home, marketplace search, categories, and curated collections."
+    },
+    {
+      "id": "accounts-auth",
+      "title": "Accounts & authentication",
+      "description": "Registration, email verification, sign-in, account settings, and password recovery."
+    },
+    {
+      "id": "projects-progress",
+      "title": "Projects & progress",
+      "description": "The signed-in kitchen, starting a project, and tracking it through to completion."
+    },
+    {
+      "id": "pantry-inputs",
+      "title": "Pantry & inputs",
+      "description": "Collecting and validating the project facts every prompt is built from."
+    },
+    {
+      "id": "cookbook-runner",
+      "title": "Cookbook Runner",
+      "description": "The product's core loop: build a prompt, run it in your own AI, and paste the response back."
+    },
+    {
+      "id": "artifacts-quality",
+      "title": "Artifacts & quality checks",
+      "description": "Human review, immutable version history, and the approval gate that governs every step."
+    },
+    {
+      "id": "export-kit",
+      "title": "Export (Project Kit)",
+      "description": "Turning an approved project into a downloadable, self-contained deliverable."
+    },
+    {
+      "id": "administration",
+      "title": "Administration & demo",
+      "description": "The admin overview and the portfolio Demo Mode / simulation."
+    },
+    {
+      "id": "system-deployment",
+      "title": "System & deployment",
+      "description": "Request routing and security, database access, and content seeding."
+    }
+  ],
+  "order": [
+    "view-marketing-home",
+    "browse-marketplace",
+    "view-cookbook-detail",
+    "browse-categories",
+    "view-collection",
+    "register-account",
+    "sign-in",
+    "verify-email",
+    "reset-password",
+    "manage-account",
+    "view-kitchen",
+    "start-project",
+    "track-project-progress",
+    "fill-pantry",
+    "run-recipe",
+    "build-prompt",
+    "paste-response",
+    "review-quality-checks",
+    "approve-and-version",
+    "export-project-kit",
+    "view-admin-overview",
+    "demo-simulation",
+    "route-and-secure-requests",
+    "access-database",
+    "seed-and-sync-content"
+  ]
+}

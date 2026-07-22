@@ -1,63 +1,39 @@
 ---
-id: project-identity
+id: identity
 type: project
-title: SousMeow
-summary: A guided AI cooking companion that packages proven workflows as Cookbooks of step-by-step Recipes — and never calls an AI itself.
-one_liner: Run step-by-step AI workflows using the AI subscription you already have, with human review at every step.
-intended_users: Makers and independent creators who use a chat AI (ChatGPT, Claude, Gemini, etc.) and want reliable, reviewed output instead of a black box.
-primary_outcome: A finished, human-reviewed deliverable — exported as a clean Project Kit (Markdown files, an offline HTML reader, and a manifest).
-stack_language: PHP 8 (custom MVC, no framework)
-stack_database: SQLite (local dev) and MySQL (production) — same schema, two dialects
-stack_hosting: Hostinger shared hosting; document root is public/, app/config/storage sit above it
-stack_frontend: Server-rendered PHP views, progressive-enhancement JS, self-hosted assets
-source_repository: cubixmeow-commits/dev-portfolio-v2 (projects/sousmeow)
-verification: verified-from-source
-updated: 2026-07-20
+title: VibeKB
+summary: A repository-resident living software model that explains what a software project is currently doing — organized around functionality — and keeps that explanation honest and resistant to drift while AI coding agents change the code.
+updated: 2026-07-22
 ---
 
-## What the software is
+## What VibeKB is
 
-SousMeow is a web app that turns a proven workflow into a **Cookbook** made of
-ordered **Recipes**. You stock a **Pantry** with facts about your project; each
-Recipe turns those facts into a precise prompt; you run that prompt in the AI
-you already pay for; you paste the answer back; you confirm human **Quality
-Checks**; and you approve the result. When every Recipe is approved, the whole
-project exports as a **Project Kit**.
+VibeKB is a **living software model** that lives inside a repository (in
+`.vibekb/`) and explains, in plain language, **what the software is currently
+doing**: what functionality exists, how it works, where it is implemented, how
+data moves, what an AI agent is changing right now, what was verified and how,
+and why the important decisions were made.
 
-The defining architectural fact: **SousMeow deliberately never calls an AI
-itself.** There are no API keys and no token billing. The product is structure,
-review discipline, immutable version history, and a finished deliverable —
-never a black box.
+It renders that model as a website through one template set in two modes — a
+dynamic PHP guide (`guide/`) and a static snapshot (`/docs`) — but the website
+is a *view* of the model, not the product. The product is the model and the
+workflow that keeps it true.
 
-> Verified from source: `README.md`, `app/routes.php`, `app/Controllers/RunnerController.php`,
-> `app/Services/PromptBuilder.php`, `app/Services/ProjectKit.php`.
+## What VibeKB is not
 
-## Who uses it
+VibeKB is **not** a documentation generator, a repository-memory archive, a code
+browser, or an AI activity log. Its primary unit is **functionality** (the
+things software does), not files, decisions, or sessions. The file tree supports
+understanding; it is not the subject.
 
-Independent makers who use a chat AI and want dependable, reviewed output. An
-account is required to run a Cookbook (email verification gates the write
-actions). Admins exist only through the CLI seed script.
+## This model describes VibeKB itself
 
-## Current scope
+The `.vibekb/` model in this repository is VibeKB's **own** model: VibeKB
+explaining VibeKB. The functionality records below describe VibeKB's real
+components — the content loader, the guide renderer, the static generator, the
+validator, the explainable-diagram system, and the self-maintenance CLI — traced
+from the source in this repository.
 
-- Discovery: a marketing home, a searchable marketplace, categories, and
-  curated collections over a catalog of Cookbooks.
-- The Runner: the core create → pantry → run → review → approve → export loop.
-- Accounts: registration, email verification, login, account settings, data
-  export, and account deletion.
-- A portfolio **Demo Mode / simulation** that can populate hundreds of
-  simulated creators and a public activity dashboard — all clearly labelled.
-
-## Explicit non-goals (v1, from the source)
-
-- No AI API calls, no API keys, no token markup.
-- No payment SDK or checkout (marketplace previews are honest "coming soon").
-- No Node build step, no Composer, no Docker, no background workers.
-- Cookbooks are seeded from versioned files, not authored through the web UI.
-
-## About this VibeKB model
-
-SousMeow is the **real application** VibeKB is explaining here. It is not
-bundled into VibeKB. Everything below was derived by reading the SousMeow
-source read-only. File paths are relative to `projects/sousmeow/` in the
-[source repository](https://github.com/cubixmeow-commits/dev-portfolio-v2).
+Example models of *other* applications (for demonstration and field testing)
+live under `examples/`. They are not the active model and must never be mistaken
+for the current state of VibeKB.

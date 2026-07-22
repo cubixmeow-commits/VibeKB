@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Current work · SousMeow — VibeKB</title>
-    <meta name="description" content="A living explanation of what SousMeow currently does, how it works, what AI is changing, and why.">
+    <title>Current work · VibeKB — VibeKB</title>
+    <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- Web fonts are a progressive enhancement only. The stylesheet ships a
@@ -21,7 +21,7 @@
         <div class="site-header__inner">
             <a class="brand" href="../index.html">
                 <span class="brand__mark">VibeKB</span>
-                <span class="brand__project">SousMeow</span>
+                <span class="brand__project">VibeKB</span>
             </a>
             <form class="site-search" role="search" action="../search/index.html">
                 <label class="visually-hidden" for="site-search-input">Search guide</label>
@@ -110,100 +110,49 @@
     </header>
 
             <section class="work-summary callout callout--work">
-            <h2>Build Explainable Diagrams into VibeKB V1</h2>
+            <h2>Bootstrap VibeKB on itself and make self-maintenance real</h2>
             <div class="badge-row">
-                <span class="badge badge--info">completed</span>                                    <span class="badge badge--ok">Verified manually</span>                            </div>
+                <span class="badge badge--info">completed</span>                                    <span class="badge badge--ok">Verified by test</span>                            </div>
             <dl class="rail-dl work-meta">
-                <dt>Objective</dt><dd>Add a repository-owned topology model (nodes, edges, edge mechanisms, per-node/edge files with reasons, repository locations, verification) that projects the existing living software model into diagrams that teach how the software works before any click, rendered identically in the dynamic guide and the static snapshot, without JavaScript.</dd>                                                    <dt>Expected files</dt><dd><code class="chip chip--file">guide/lib/helpers.php</code> <code class="chip chip--file">guide/lib/Content.php</code> <code class="chip chip--file">guide/lib/search.php</code> <code class="chip chip--file">guide/templates/diagrams.php</code> <code class="chip chip--file">guide/templates/functionality-detail.php</code> <code class="chip chip--file">guide/assets/css/guide.css</code> <code class="chip chip--file">guide/assets/js/guide.js</code> <code class="chip chip--file">tools/validate.php</code> <code class="chip chip--file">tools/generate-static.php</code> <code class="chip chip--file">.vibekb/diagrams/topology/*.json</code> <code class="chip chip--file">.vibekb/diagrams/records/*.md</code> <code class="chip chip--file">.vibekb/diagrams/assets/*.svg</code> <code class="chip chip--file">SCHEMA.md, PRODUCT.md, INITIALIZE.md, MAINTENANCE.md, prompts/INTEGRATE_VIBEKB.md</code></dd>
-                                <dt>Data impact</dt><dd>None to SousMeow (analysed read-only, never modified). VibeKB product code + repository-owned content only.</dd>                <dt>Risks</dt><dd>Turning VibeKB into a code browser / graph editor / IDE (explicitly out of bounds). Drawing edges without a concrete, stateable mechanism (coincidence edges). Marking an inferred relationship as verified. Fabricating source line numbers or claiming an inferred location is verified. The dynamic guide and static snapshot drifting apart (must share one template). Front-matter fragility if topology were forced into scalar/list front matter.</dd>            </dl>
+                <dt>Objective</dt><dd>Replace the SousMeow active model with VibeKB&#039;s own living model, isolate the examples, and add a repository-owned maintenance lifecycle (a `vibekb` CLI plus unified agent instructions) so VibeKB maintains its own model as it is developed.</dd>                                    <dt>Affected functionality</dt><dd><a class="chip" href="../functionality/start-work-session.html">Start a work session</a> <a class="chip" href="../functionality/detect-drift.html">Detect drift between code and model</a> <a class="chip" href="../functionality/find-affected-functionality.html">Find affected functionality</a> <a class="chip" href="../functionality/load-living-model.html">Load the living model</a> <a class="chip" href="../functionality/validate-model.html">Validate the model</a> <a class="chip" href="../functionality/generate-static-snapshot.html">Generate the static snapshot</a> <a class="chip" href="../functionality/render-guide.html">Render the dynamic guide</a></dd>
+                                                    <dt>Expected files</dt><dd><code class="chip chip--file">tools/vibekb.php</code> <code class="chip chip--file">tools/validate.php</code> <code class="chip chip--file">guide/index.php</code> <code class="chip chip--file">.vibekb/ (the whole active self-model)</code> <code class="chip chip--file">examples/sousmeow/.vibekb/</code> <code class="chip chip--file">examples/field-tests/STOPPR_INTEGRATION_AUDIT.md</code> <code class="chip chip--file">CLAUDE.md, AGENTS.md, .cursor/rules/vibekb.mdc</code> <code class="chip chip--file">MAINTENANCE.md, INITIALIZE.md, README.md, .cpanel.yml, DEPLOYMENT.md</code> <code class="chip chip--file">.github/workflows/vibekb.yml</code> <code class="chip chip--file">docs/ (regenerated)</code></dd>
+                                <dt>Data impact</dt><dd>No runtime data. Repository-owned content and product code only. The SousMeow example is unchanged in content, only relocated.</dd>                <dt>Risks</dt><dd>Making the static snapshot the centre of the architecture (kept it a projection). Claiming automatic semantic updates (kept detection and interpretation separate). Letting the example model be mistaken for the active model (isolated under examples/). Over-building tooling into a checklist agents ignore (kept to one discoverable CLI). Verification overreach on the new CLI records (gated on actually testing the CLI).</dd>            </dl>
         </section>
 
         <section class="doc-section content-section">
             <div class="prose reading-column"><h3>What the user asked for</h3>
-<p>Build <strong>Explainable Diagrams</strong> as a real V1 feature. A diagram is a visual
-projection of the existing living software model. It must teach at a glance
-(labelled nodes + mechanism-labelled edges reading like a sentence) and reward
-selection (per-node and per-edge explanations: purpose, repository location,
-relevant files with reasons, verification, uncertainty, and an external source
-link as the terminal &quot;show me the implementation&quot;). Everything must justify its
-own existence; every click answers the reader&#039;s next question. The experience
-must work without JavaScript and render identically in the dynamic guide and the
-static <code>/docs</code> snapshot.</p>
+<p>Bootstrap VibeKB inside its own repository and make self-maintenance a real part
+of how the repository operates — an active model of VibeKB itself, examples
+cleanly separated, a repository-owned lifecycle that Claude Code and Cursor
+follow without a giant prompt, mechanical drift detection that is honest about the
+detection-vs-interpretation boundary, and a <code>/docs</code> site that demonstrates VibeKB
+explaining VibeKB.</p>
 <h3>Current behaviour (before)</h3>
-<ul>
-<li><code>.vibekb/diagrams/</code> holds diagram records (Markdown + front matter) and</li>
-</ul>
-<p>repository-owned SVGs with accessible <code>&lt;title&gt;</code>/<code>&lt;desc&gt;</code>.</p>
-<ul>
-<li><code>Content.php</code> loads records, inlines the SVG, and resolves back-links to</li>
-</ul>
-<p>functionality, warnings, and other diagrams. <code>diagrams.php</code> renders the SVG
-  plus a prose caption and relationship rails.</p>
-<ul>
-<li>A diagram is a picture plus narrative. There is <strong>no structured topology</strong> — no</li>
-</ul>
-<p>node/edge records, no edge mechanisms, no per-file reasons, no source links,
-  and no way to select a node or edge and learn about it.</p>
+<p>The active <code>.vibekb/</code> modelled SousMeow. VibeKB had the renderer, validator, and
+explainable diagrams, but no self-model and no lifecycle tooling; maintenance was
+prose in CLAUDE.md / MAINTENANCE.md.</p>
 <h3>Proposed behaviour (after)</h3>
 <ul>
-<li>A new optional <strong>topology</strong> file per diagram:</li>
+<li>Root <code>.vibekb/</code> is VibeKB&#039;s own model; SousMeow and the StopPR audit move under</li>
 </ul>
-<p><code>.vibekb/diagrams/topology/&lt;diagram-id&gt;.json</code> (referenced by the record&#039;s
-  <code>topology:</code> field). Simple, human-readable, AI-editable JSON — no YAML, no
-  database, no build step. Contains <code>version</code>, <code>nodes[]</code>, <code>edges[]</code>.</p>
+<p><code>examples/</code>, still previewable via <code>VIBEKB_CONTENT_ROOT</code>.</p>
 <ul>
-<li>A single <strong>controlled edge-mechanism vocabulary</strong> and a **file-role</li>
+<li><code>tools/vibekb.php</code> provides <code>status</code>, <code>check</code>, <code>affected</code>, <code>validate</code>,</li>
 </ul>
-<p>vocabulary**, defined once in <code>guide/lib/helpers.php</code> and used by loading,
-  validation, and documentation. Vague mechanisms (relates-to, works-with,
-  interacts-with, associated-with, connected-to) are rejected by the validator.</p>
+<p><code>generate</code>.</p>
 <ul>
-<li>Two edge verification states in V1: verified (solid line) and inferred (dashed</li>
+<li><code>CLAUDE.md</code> is the canonical workflow; <code>AGENTS.md</code> and <code>.cursor/rules</code> are thin</li>
 </ul>
-<p>line). Both must pass the explainability gate; verification communicates how
-  well the mechanism is grounded, not whether an unexplained edge is allowed.</p>
+<p>pointers. <code>tools/validate.php</code> takes an optional content root; CI runs the
+  checks.</p>
 <ul>
-<li><code>Content.php</code> loads and normalises topology, resolves node/edge functionality,</li>
+<li><code>/docs</code> is regenerated from the self-model.</li>
 </ul>
-<p>warnings, and files (reusing <code>important-files.json</code> metadata), and generates
-  immutable GitHub source links from manifest provenance (commit-pinned; no
-  fabricated line numbers).</p>
-<ul>
-<li><code>diagrams.php</code> renders complete semantic node/edge explanation sections with</li>
-</ul>
-<p>stable anchors (<code>#node-&lt;id&gt;</code>, <code>#edge-&lt;id&gt;</code>) that the SVG&#039;s
-  <code>data-vibekb-node</code> / <code>data-vibekb-edge</code> markers point at. A small,
-  unobtrusive vanilla-JS enhancement adds selection, dimming, and a synced
-  detail panel; nothing essential is hidden behind it.</p>
-<ul>
-<li>Validation (loader + <code>tools/validate.php</code>) enforces the topology contract and</li>
-</ul>
-<p>the SVG-marker↔topology-id mapping in both directions. Malformed topology is
-  reported as a Reference diagnostic; legacy diagrams without topology still
-  render.</p>
-<h3>Affected VibeKB functionality</h3>
-<p>VibeKB&#039;s own guide app (the product) and its documentation. The SousMeow model
-is upgraded only enough to demonstrate the feature honestly on representative
-diagrams (request-flow, run-recipe-flow), re-verified against the recorded
-source commit; SousMeow itself is never modified.</p>
 <h3>Verification plan</h3>
-<ul>
-<li><code>php -l</code> across changed <code>guide/</code> and <code>tools/</code> files.</li>
-<li><code>php tools/validate.php</code> reports zero errors, including the new topology and</li>
-</ul>
-<p>SVG-marker checks; a deliberately malformed topology fixture produces a useful
-  diagnostic and a non-zero exit.</p>
-<ul>
-<li><code>php tools/generate-static.php</code> regenerates <code>/docs</code>; every node/edge anchor,</li>
-</ul>
-<p>internal link, and commit-pinned source link resolves.</p>
-<ul>
-<li>Manually confirm: verified edges render solid, inferred edges render dashed,</li>
-</ul>
-<p>verification is also stated in text; keyboard users reach nodes/edges;
-  no-JavaScript users can read every explanation; the layout holds at mobile
-  widths; legacy diagrams without topology still render; search links reach the
-  correct diagram anchor; no source outside VibeKB was modified.</p></div>
+<p><code>php -l</code> across changed PHP; <code>php tools/validate.php</code> on the root model and the
+example; <code>php tools/test-topology.php</code>; <code>php tools/vibekb.php status|check|affected</code>
+exercised; <code>/docs</code> regenerated and re-validated; guide views spot-checked in both
+modes.</p></div>
         </section>
     
     <nav class="cross-links" aria-label="Related views">
@@ -220,7 +169,7 @@ source commit; SousMeow itself is never modified.</p>
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-21 · source commit c1617ab (2026-07-16) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 05:50 UTC · source commit dbd9c08 (2026-07-21) · not auto-updating</p>
             </div>
         </footer>
     </div>

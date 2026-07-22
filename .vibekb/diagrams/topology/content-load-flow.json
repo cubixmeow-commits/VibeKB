@@ -1,0 +1,155 @@
+{
+  "version": 1,
+  "nodes": [
+    {
+      "id": "entry-point",
+      "title": "Entry point",
+      "purpose": "The guide front controller or a tool (generator, validator, CLI) that needs the model and asks the loader for it.",
+      "location": "guide",
+      "functionality": ["render-guide", "generate-static-snapshot"],
+      "files": [
+        { "path": "guide/index.php", "role": "entry point", "reason": "The representative caller — every guide request constructs Content and calls load()." }
+      ],
+      "verification": "verified-from-source",
+      "uncertainty": ""
+    },
+    {
+      "id": "content-files",
+      "title": "Content files (.vibekb/)",
+      "purpose": "The record and manifest files on disk — Markdown with front matter, and small JSON — parsed into structured metadata plus rendered HTML.",
+      "location": ".vibekb",
+      "functionality": ["load-living-model", "parse-records"],
+      "files": [
+        { "path": "guide/lib/FrontMatter.php", "role": "supporting utility", "reason": "Parses each record's front-matter block without a YAML dependency." },
+        { "path": "guide/lib/Markdown.php", "role": "renderer", "reason": "Renders the record body with a pragmatic, escaping Markdown subset." }
+      ],
+      "verification": "verified-from-source",
+      "uncertainty": ""
+    },
+    {
+      "id": "loader",
+      "title": "Loader (Content::load)",
+      "purpose": "Reads the files, parses them, resolves relationships (dependents, memory and file back-links), and assembles the keyed in-memory model — confining all filesystem access to the content root.",
+      "location": "guide/lib",
+      "functionality": ["load-living-model", "resolve-relationships"],
+      "files": [
+        { "path": "guide/lib/Content.php", "role": "primary implementation", "reason": "load() is the pipeline; isInsideRoot() enforces the content-root confinement." }
+      ],
+      "verification": "verified-from-source",
+      "uncertainty": ""
+    },
+    {
+      "id": "model",
+      "title": "In-memory model",
+      "purpose": "The resolved, queryable model: functionality keyed by id, resolved relationships, normalised diagram topology, and provenance — read by the templates and the search index.",
+      "location": "guide/lib",
+      "functionality": ["resolve-relationships"],
+      "files": [
+        { "path": "guide/lib/Content.php", "role": "data model", "reason": "Holds the loaded records and exposes the accessors templates use." }
+      ],
+      "verification": "verified-from-source",
+      "uncertainty": ""
+    },
+    {
+      "id": "validation",
+      "title": "Validation (validate())",
+      "purpose": "Checks required fields, controlled vocabularies, resolvable references, diagram assets, and the explainable-diagram contract, accumulating errors and warnings.",
+      "location": "guide/lib",
+      "functionality": ["validate-model"],
+      "files": [
+        { "path": "guide/lib/Content.php", "role": "validation", "reason": "validate() and validateTopology() produce the issue list." }
+      ],
+      "verification": "verified-from-source",
+      "uncertainty": ""
+    },
+    {
+      "id": "reference-view",
+      "title": "Reference view & CI",
+      "purpose": "Where the issue list surfaces — the guide's Reference view for humans and `tools/validate.php` for CI, which exits non-zero on any error.",
+      "location": "guide/templates",
+      "functionality": ["validate-model"],
+      "files": [
+        { "path": "guide/templates/reference.php", "role": "renderer", "reason": "Renders the same issues the CI validator reports." }
+      ],
+      "verification": "verified-from-source",
+      "uncertainty": ""
+    }
+  ],
+  "edges": [
+    {
+      "id": "entry-point-delegates-loader",
+      "from": "entry-point",
+      "to": "loader",
+      "mechanism": "delegates-to",
+      "label": "delegates loading to",
+      "explanation": "The entry point constructs Content and delegates reading and assembling the model to load().",
+      "functionality": ["load-living-model"],
+      "files": [
+        { "path": "guide/index.php", "role": "caller", "reason": "Calls Content::load() before rendering." }
+      ],
+      "verification": "verified-from-source",
+      "basis": "",
+      "uncertainty": ""
+    },
+    {
+      "id": "loader-reads-content-files",
+      "from": "loader",
+      "to": "content-files",
+      "mechanism": "reads",
+      "label": "reads & parses",
+      "explanation": "The loader reads each record and manifest and parses it via the front-matter and Markdown utilities, refusing any path outside the content root.",
+      "functionality": ["load-living-model", "parse-records"],
+      "files": [
+        { "path": "guide/lib/FrontMatter.php", "role": "callee", "reason": "Parses the front matter of each file read." }
+      ],
+      "verification": "verified-from-source",
+      "basis": "",
+      "uncertainty": ""
+    },
+    {
+      "id": "loader-creates-model",
+      "from": "loader",
+      "to": "model",
+      "mechanism": "creates",
+      "label": "creates",
+      "explanation": "The loader assembles the parsed records into the keyed, relationship-resolved in-memory model.",
+      "functionality": ["resolve-relationships"],
+      "files": [
+        { "path": "guide/lib/Content.php", "role": "primary implementation", "reason": "Builds the model arrays and resolves reverse links." }
+      ],
+      "verification": "verified-from-source",
+      "basis": "",
+      "uncertainty": ""
+    },
+    {
+      "id": "loader-calls-validation",
+      "from": "loader",
+      "to": "validation",
+      "mechanism": "calls",
+      "label": "calls",
+      "explanation": "After assembling the model, load() calls validate() so problems are found at load time, not at render time.",
+      "functionality": ["validate-model"],
+      "files": [
+        { "path": "guide/lib/Content.php", "role": "caller", "reason": "load() invokes validate() as its final step." }
+      ],
+      "verification": "verified-from-source",
+      "basis": "",
+      "uncertainty": ""
+    },
+    {
+      "id": "validation-emits-reference",
+      "from": "validation",
+      "to": "reference-view",
+      "mechanism": "emits",
+      "label": "emits issues to",
+      "explanation": "Validation emits an error/warning list consumed by the guide's Reference view and by the CI validator.",
+      "functionality": ["validate-model"],
+      "files": [
+        { "path": "guide/templates/reference.php", "role": "renderer", "reason": "Displays the emitted issues in the guide." }
+      ],
+      "verification": "verified-from-source",
+      "basis": "",
+      "uncertainty": ""
+    }
+  ]
+}

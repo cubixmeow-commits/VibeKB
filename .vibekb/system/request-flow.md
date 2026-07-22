@@ -1,34 +1,31 @@
 ---
-id: system-request-flow
+id: request-flow
 type: system
-title: The request lifecycle
-summary: Every request enters the single front controller — headers, CSRF gate on POST, then routing to a controller that renders a view or redirects.
-updated: 2026-07-16
-verification: verified-from-source
+title: Request flow
+summary: A browser request enters guide/index.php, which loads the model once, resolves the view, and renders the shared layout — no rewrite rules, no build step.
+updated: 2026-07-22
 ---
 
-## One request, start to finish
+## The dynamic path (Mode A)
 
-1. Apache (`public/.htaccess`) or the dev server sends the request to
-   `public/index.php`; real asset files are served directly.
-2. Security headers and the CSP are sent.
-3. `app/bootstrap.php` loads config and the autoloader; an exception handler is
-   installed (detailed errors only in development).
-4. `app.base_path` is stripped so the app works from a subdirectory.
-5. **Every POST** passes `Csrf::verify()` before routing.
-6. `Router::dispatch()` matches the method+path and calls the controller.
-7. The controller reads input, calls Models/Services, and either renders a
-   `View` or issues a redirect (post/redirect/get for writes).
+1. The browser requests `guide/index.php?view=…` (query-string routing; no
+   rewrite rules).
+2. The front controller registers the dynamic URL strategy and loads `Content`
+   from `.vibekb/` (or a `VIBEKB_CONTENT_ROOT` example).
+3. `?view=` is resolved against the shared route whitelist; `functionality` is
+   special-cased for index vs detail by `?id`; a live search JSON endpoint is
+   handled inline.
+4. The chosen template is rendered inside `layout.php` with shared navigation.
+5. Output is escaped; provenance is stamped; the page returns.
 
-## Authentication in the flow
+## The static path (Mode B)
 
-Controllers call `Auth::requireLogin()` / `requireVerified()` / `requireAdmin()`
-as needed. Write actions in the Runner and Export require a verified account.
-Ownership is enforced at the data layer (`findForUser`), and unknown ids return
-404 without revealing other users' data.
+`tools/generate-static.php` runs the same templates offline, swapping in the
+static URL strategy, and writes the pages to `/docs`. There is no live request —
+the snapshot is the dynamic guide, frozen at a commit.
 
-## Errors
+## Error posture
 
-- Failed CSRF → 419. Unknown route → 404. Wrong method → 405.
-- Uncaught exceptions are logged; production shows a generic 500 view, dev shows
-  the trace.
+Unknown view or record → `not-found` (404). Model load failure → 500 with a
+dev/prod-appropriate message. Dev mode (`VIBEKB_DEV` or localhost) shows full
+errors and a validation banner.

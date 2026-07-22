@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Changes · SousMeow — VibeKB</title>
-    <meta name="description" content="A living explanation of what SousMeow currently does, how it works, what AI is changing, and why.">
+    <title>Changes · VibeKB — VibeKB</title>
+    <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- Web fonts are a progressive enhancement only. The stylesheet ships a
@@ -21,7 +21,7 @@
         <div class="site-header__inner">
             <a class="brand" href="../index.html">
                 <span class="brand__mark">VibeKB</span>
-                <span class="brand__project">SousMeow</span>
+                <span class="brand__project">VibeKB</span>
             </a>
             <form class="site-search" role="search" action="../search/index.html">
                 <label class="visually-hidden" for="site-search-input">Search guide</label>
@@ -112,123 +112,55 @@
             <ol class="change-list">
                             <li class="change-card">
                     <div class="change-card__head">
-                        <h2>Added a source-grounded diagram set and provenance to the SousMeow model</h2>
+                        <h2>Bootstrap VibeKB on itself with an active self-maintenance lifecycle</h2>
                         <div class="badge-row">
-                                                                                    <span class="muted">2026-07-21</span>
+                            <span class="badge badge--info">implemented</span>                            <span class="badge badge--ok">Verified by test</span>                            <span class="muted">2026-07-22</span>
                         </div>
                     </div>
-                    <p>The SousMeow model gained five source-grounded diagrams and an explicit provenance block; no functionality claim was upgraded.</p>
+                    <p>Replaced the SousMeow active model with VibeKB&#039;s own model, isolated the examples, and added the `vibekb` CLI (status/check/affected) so the model is maintained through a real agent lifecycle as VibeKB is developed.</p>
                     <div class="prose reading-column change-card__body"><h3>Before</h3>
-<p>The SousMeow model had no diagrams and no explicit provenance block. The
-overview relied on an undefined &quot;Last meaningful update&quot; label and counted
-functionality records as &quot;areas&quot;.</p>
+<p>The active <code>.vibekb/</code> model described SousMeow (a separate app). VibeKB had a
+strong renderer, validator, and explainable-diagram system, but no repository-
+resident model of <em>itself</em> and no tooling to help an agent run the maintenance
+lifecycle or detect drift. Maintenance was prose-only (CLAUDE.md / MAINTENANCE.md).</p>
 <h3>After</h3>
 <ul>
-<li>Added <code>.vibekb/diagrams/</code> with five diagrams: app overview, the Run-a-Cookbook</li>
+<li>The active root <code>.vibekb/</code> is VibeKB&#039;s own model (this content).</li>
+<li>The SousMeow model and the StopPR field-test audit moved under <code>examples/</code>; a</li>
 </ul>
-<p>loop, request flow, storage map, and a risk &amp; uncertainty map. Each has an
-  accessible SVG and links to related functionality and warnings.</p>
+<p><code>VIBEKB_CONTENT_ROOT</code> override keeps them previewable/validatable.</p>
 <ul>
-<li>Added a <code>provenance</code> block to <code>manifest.json</code> (source commit analysed,</li>
+<li>A new <code>tools/vibekb.php</code> CLI provides <code>status</code> (session start), <code>check</code> (drift +</li>
 </ul>
-<p>verification scope, last verified, <code>updates_automatically: false</code>).</p>
+<p>validate + snapshot sync), <code>affected</code> (files → functionality), plus <code>validate</code>
+  and <code>generate</code> passthroughs.</p>
 <ul>
-<li>Counts now read &quot;N functionality records across M functional areas&quot;.</li>
+<li>Agent instructions were unified: <code>CLAUDE.md</code> is canonical; <code>AGENTS.md</code> and</li>
 </ul>
+<p><code>.cursor/rules/vibekb.mdc</code> are thin pointers to the same lifecycle and CLI.</p>
+<ul>
+<li><code>tools/validate.php</code> accepts an optional content-root so examples validate in</li>
+</ul>
+<p>CI; a CI workflow runs syntax, validation, topology, and the drift check.</p>
 <h3>Impact</h3>
-<p>Documentation only — SousMeow itself was not touched and no verification state
-was upgraded for presentation. The diagrams reflect existing verified records;
-inferred areas (request-flow&#039;s Router step, <code>manage-account</code>,
-<code>seed-and-sync-content</code>, bulk <code>demo-simulation</code>) are labelled as such in the
-diagrams. This change is about the VibeKB <em>model of</em> SousMeow, produced while
-integrating reusable lessons from the StopPR field test.</p></div>
+<ul>
+<li>VibeKB now demonstrates itself: the dynamic guide and <code>/docs</code> render VibeKB</li>
+</ul>
+<p>explaining VibeKB.</p>
+<ul>
+<li>A normal code change has a low-friction lifecycle: <code>status</code> → work → implement →</li>
+</ul>
+<p><code>affected</code> → update model → <code>check</code> → <code>generate</code> → handoff.</p>
+<ul>
+<li>Drift between code and model is surfaced mechanically and honestly, without any</li>
+</ul>
+<p>false claim of automatic semantic updates.</p>
+<h3>Verification</h3>
+<p><code>php -l</code> clean across changed PHP; <code>php tools/validate.php</code> (root and example) →
+0 errors; <code>php tools/test-topology.php</code> → OK; <code>php tools/vibekb.php check</code> →
+consistent; <code>/docs</code> regenerated from the self-model and re-validated.</p></div>
                                             <p class="change-card__links"><strong>Affected:</strong>
-                            <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a> <a class="chip" href="../functionality/access-database.html">Access the database</a> <a class="chip" href="../functionality/route-and-secure-requests.html">Route &amp; secure every request</a>                        </p>
-                                    </li>
-                            <li class="change-card">
-                    <div class="change-card__head">
-                        <h2>Made diagrams explainable — nodes, edges, mechanisms, files-with-reasons</h2>
-                        <div class="badge-row">
-                                                                                    <span class="muted">2026-07-21</span>
-                        </div>
-                    </div>
-                    <p>Two SousMeow diagrams gained a repository-owned topology so every node states what it is, every edge states a concrete mechanism, every file states why it matters, and external source links reach the implementation — without upgrading any verification claim.</p>
-                    <div class="prose reading-column change-card__body"><h3>Before</h3>
-<p>Diagrams were a picture plus prose. There was no way to select a box or arrow
-and learn what it is, why it connects to its neighbour, which files implement
-it, or where to open the code. Relationships had no stated mechanism.</p>
-<h3>After</h3>
-<ul>
-<li>Added an optional per-diagram topology (<code>.vibekb/diagrams/topology/&lt;id&gt;.json</code>)</li>
-</ul>
-<p>with nodes (title + plain-language purpose), edges (a controlled <strong>mechanism</strong>
-  and a one-sentence explanation), per-node/edge files with roles and reasons,
-  repository locations, and honest verified/inferred states.</p>
-<ul>
-<li>Upgraded two representative diagrams: <strong>Request flow</strong> (verified web path with</li>
-</ul>
-<p>two inferred, dashed edges — the Router match and the CLI write path) and
-  <strong>Run a Cookbook — the core loop</strong> (a verified user journey with the pasted-
-  response and read/write-coupling warnings attached).</p>
-<ul>
-<li>Marked each SVG&#039;s node/edge groups with <code>data-vibekb-node</code> /</li>
-</ul>
-<p><code>data-vibekb-edge</code>, linked to <code>#node-&lt;id&gt;</code> / <code>#edge-&lt;id&gt;</code> anchors so every
-  explanation is reachable without JavaScript. External source links are
-  commit-pinned to the analysed SousMeow commit; no line numbers were invented.</p>
-<h3>Impact</h3>
-<p>VibeKB product + model only — SousMeow itself was not touched, and no
-verification state was upgraded for presentation. The topology reuses existing
-functionality records, <code>important-files.json</code>, and warnings rather than
-duplicating them. Inferred edges are drawn dashed and state their basis;
-verified edges are solid. The loader, <code>tools/validate.php</code>, and a new
-<code>tools/test-topology.php</code> enforce the topology contract (unique ids, resolvable
-edges, controlled mechanisms, files-with-reasons, SVG↔topology marker mapping).
-The other three diagrams remain valid as picture + narrative.</p></div>
-                                            <p class="change-card__links"><strong>Affected:</strong>
-                            <a class="chip" href="../functionality/route-and-secure-requests.html">Route &amp; secure every request</a> <a class="chip" href="../functionality/run-recipe.html">Run a Recipe</a> <a class="chip" href="../functionality/access-database.html">Access the database</a>                        </p>
-                                    </li>
-                            <li class="change-card">
-                    <div class="change-card__head">
-                        <h2>Introduced the categories + collections taxonomy</h2>
-                        <div class="badge-row">
-                            <span class="badge badge--info">shipped</span>                            <span class="badge badge--ok">Verified from source</span>                            <span class="muted">2026-07-16</span>
-                        </div>
-                    </div>
-                    <p>Discovery moved from a single free-text category string to a stable one-category spine plus flexible many-to-many collections, resolved in one service with an honesty gate.</p>
-                    <div class="prose reading-column change-card__body"><h3>Before</h3>
-<p>Each Cookbook stored one free-text <code>category</code> string, used directly for display
-and category-based search. There was no stable URL spine and no way to build
-themed, cross-cutting shelves.</p>
-<h3>After</h3>
-<ul>
-<li><code>sousmeow_categories</code>: a fixed vocabulary; every visible Cookbook has one</li>
-</ul>
-<p><code>primary_category_id</code>. Categories own <code>/categories/{slug}</code>.</p>
-<ul>
-<li><code>sousmeow_collections</code> + <code>sousmeow_cookbook_collections</code>: many-to-many</li>
-</ul>
-<p>merchandising, resolved in <code>CollectionResolver</code> by <code>collection_type</code>
-  (editorial / dynamic / attribute), gated by <code>min_display_count</code>.</p>
-<h3>What caused the change</h3>
-<p>The need for both a stable structure (URLs, breadcrumbs, admin sort) and
-flexible discovery shelves — see the <code>categories-collections-taxonomy</code> decision.</p>
-<h3>Data impact</h3>
-<p>New taxonomy tables (prefixed <code>sousmeow_</code> to avoid collisions on the shared
-production database) and <code>cookbooks.primary_category_id</code>. The legacy
-<code>cookbooks.category</code> column is kept one release for rollback and is written but
-never read (<code>legacy-category-column</code>).</p>
-<h3>Compatibility concerns</h3>
-<p>SQLite cannot <code>ALTER</code>-add the foreign key on an upgraded DB, so the FK is
-MySQL-only on upgrades; <code>--fresh</code> rebuilds it. Documented in
-<code>docs/ARCHITECTURE.md</code>.</p>
-<h3>Verification performed</h3>
-<p>Verified from source: the schema, <code>CollectionResolver</code>, and the category/
-collection controllers were traced.</p>
-<h3>Related decisions</h3>
-<p><code>categories-collections-taxonomy</code>.</p></div>
-                                            <p class="change-card__links"><strong>Affected:</strong>
-                            <a class="chip" href="../functionality/browse-categories.html">Browse by category</a> <a class="chip" href="../functionality/view-collection.html">View a collection</a> <a class="chip" href="../functionality/view-cookbook-detail.html">View a Cookbook detail</a> <a class="chip" href="../functionality/seed-and-sync-content.html">Seed &amp; sync content</a>                        </p>
+                            <a class="chip" href="../functionality/start-work-session.html">Start a work session</a> <a class="chip" href="../functionality/detect-drift.html">Detect drift between code and model</a> <a class="chip" href="../functionality/find-affected-functionality.html">Find affected functionality</a> <a class="chip" href="../functionality/load-living-model.html">Load the living model</a> <a class="chip" href="../functionality/generate-static-snapshot.html">Generate the static snapshot</a>                        </p>
                                     </li>
                     </ol>
     </article>
@@ -241,7 +173,7 @@ collection controllers were traced.</p>
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-21 · source commit c1617ab (2026-07-16) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 05:50 UTC · source commit dbd9c08 (2026-07-21) · not auto-updating</p>
             </div>
         </footer>
     </div>

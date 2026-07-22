@@ -1,40 +1,44 @@
 ---
-id: project-intent
-type: intent
-title: Why SousMeow exists
-summary: To make AI-assisted work trustworthy — structure, human review, and versioning around the AI you already use — not another AI wrapper.
-updated: 2026-07-16
-verification: verified-from-source
-functionality: [run-recipe, review-quality-checks, export-project-kit]
+id: intent
+type: project
+title: Why VibeKB exists
+summary: AI builds and changes software faster than a person can maintain an accurate mental model of it; VibeKB keeps that model accurate, honest about verification, and usable at every point in the project's life.
+updated: 2026-07-22
 ---
 
-## Outcome it must produce
+## The problem
 
-A maker should be able to take a proven workflow, feed it their own facts, run
-it through their own AI, and walk away with a **finished, reviewed deliverable**
-they can trust and hand off — without wiring up an API or trusting an
-unreviewed black box.
+People build software with coding agents (Claude Code, Cursor, Codex, Copilot,
+Gemini CLI). The agent can change six files faster than the human can rebuild
+their mental model. The result is a working app the owner no longer fully
+understands: "I know it works, but I don't know how," "the AI says it's done but
+I can't verify it," "I don't know which files matter."
 
-> Verified from source: `README.md`, `docs/PRODUCT_LAW_002_REMOVE_COGNITIVE_LOAD.md`.
+## The promise
 
-## Problem it addresses
+> **Understand what your software is doing.**
 
-Chat AIs are powerful but unstructured. People get inconsistent output, lose the
-thread across long sessions, and ship work they never really reviewed. SousMeow
-supplies the missing structure: ordered steps, prompts built from stated facts,
-per-version human checks, immutable history, and an explicit approval gate.
+Everything in VibeKB exists to support that outcome. Repository memory
+(decisions, constraints, warnings, discoveries, changes) exists only because it
+keeps the explanation of functionality **accurate and resistant to drift** — not
+as an archive in its own right.
 
-## The core product law
+## What VibeKB must never become
 
-`docs/PRODUCT_LAW_002_REMOVE_COGNITIVE_LOAD.md` states the product's governing
-rule — **Remove Cognitive Load** — enforced as a mandatory "Complexity Gate"
-every Cookbook must pass before it ships. Features that add steps or confusion
-are rejected on principle.
+- A documentation generator that describes *intended* behaviour as if it were
+  implemented.
+- A tool that claims something is verified because an AI edited it or a file
+  exists.
+- A code browser or an activity log.
+- A system that pretends it auto-updates. VibeKB is **agent-maintained**: it can
+  detect mechanically that code changed, but interpreting that change into the
+  model requires an agent or analysis step, and it says so.
 
-## What it must not become
+## The two product tests
 
-- **An AI wrapper.** The moment SousMeow calls an AI itself, it takes on API
-  keys, token billing, and black-box output — the exact things it exists to
-  avoid. See the `never-calls-ai` decision.
-- **A content-authoring CMS.** Cookbooks are curated, versioned seed files that
-  must pass the Complexity Gate — not user-generated web content.
+Before adding any page, record, or feature:
+
+1. Does this help a developer understand what the software is doing right now?
+2. Does this help keep that explanation accurate as the software changes?
+
+If neither is true, it does not belong.

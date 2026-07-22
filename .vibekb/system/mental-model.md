@@ -1,46 +1,36 @@
 ---
-id: system-mental-model
+id: mental-model
 type: system
-title: The simplest mental model
-summary: A Cookbook is a workflow of Recipes; you fill a Pantry, run each Recipe's prompt in your own AI, review and approve the result, then export. SousMeow never calls the AI.
-updated: 2026-07-16
-verification: verified-from-source
+title: Mental model
+summary: One repository-owned model, one loader, one template set, two output modes, and an agent-run maintenance lifecycle that keeps the model true.
+updated: 2026-07-22
 ---
 
-## Hold this picture in your head
+## The one-paragraph model
 
-```
-Cookbook (workflow)  →  Recipes (steps)
-      │
-Pantry (your facts)  →  PromptBuilder  →  prompt you copy
-      │                                        │
-      │                          run in YOUR AI (SousMeow never does)
-      ▼                                        ▼
-Artifact versions (immutable)  ←  paste the answer back
-      │
-Quality Checks (human)  →  Approve (all checks)  →  next Recipe
-      │
-   all approved  →  Project Kit (zip: Markdown + kit.html + README)
-```
+VibeKB is a **model** (`.vibekb/`), a **renderer** (`guide/`), a set of
+**tools** (`tools/`), and a **workflow** (the agent lifecycle). The model is the
+source of truth. The loader (`guide/lib/Content.php`) reads it into memory and
+validates it. The renderer turns it into pages through one template set, in two
+modes — the live PHP guide (Mode A) and the static `/docs` snapshot (Mode B) —
+so the two can never disagree. The tools validate the model, generate the
+snapshot, and (new) help an agent run the lifecycle and detect drift. The
+workflow is what keeps the model synchronized with the code as agents change it.
 
-## The five nouns
+## What is the primary unit
 
-- **Cookbook** — a proven workflow. **Recipe** — one ordered step in it.
-- **Pantry** — the facts you enter once; every prompt is built from them.
-- **Project** — your run of a Cookbook (owns the Pantry values and Artifacts).
-- **Artifact** — the reviewed output of one Recipe, kept as immutable versions.
-- **Project Kit** — the exported deliverable.
+**Functionality** — the things the software does — not files, decisions, or
+sessions. Files, memory, and diagrams all link back to functionality.
 
-## The one rule that explains everything
+## The honesty invariants
 
-**SousMeow never calls an AI.** It builds the prompt, you run it in the AI you
-already pay for, and you paste the answer back. Everything else — versioning,
-human Quality Checks, the approval gate, chaining approved Artifacts into later
-prompts — exists to make that loop trustworthy.
+- Intended, implemented, and verified are different; every record states which.
+- Nothing claims to auto-update; `updates_automatically` is `false`.
+- Detection (mechanical: git diff, path existence, render diff) is never
+  presented as interpretation (an agent deciding what a change means).
 
-## What this means for change
+## How to read this repository
 
-Change what a Recipe *asks for* → touch the seed content and maybe the output
-contract. Change how an Artifact is *stored or reviewed* → touch the Runner,
-`Artifact`, and the schema together. Change the *look* → touch a view. Knowing
-which case you are in is most of the work.
+Start at the Overview, then Functionality. `guide/` is the renderer, `tools/` is
+the tooling, `.vibekb/` is the content, `examples/` is demonstration material,
+`/docs` is generated output.
