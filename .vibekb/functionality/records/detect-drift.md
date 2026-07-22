@@ -5,7 +5,7 @@ title: Detect drift between code and model
 area: agent-workflow
 summary: `php tools/vibekb.php check` reports where the model and the repository have diverged — model references to files that no longer exist, source files changed since the recorded commit, functionality those changes likely affect, and whether the /docs snapshot is stale — separating what was detected mechanically from what still needs an agent to interpret.
 status: implemented
-verification: verified-by-test
+verification: verified-manually
 user_facing: true
 trigger: A coding agent runs `php tools/vibekb.php check` before committing, or CI runs it.
 updated: 2026-07-22

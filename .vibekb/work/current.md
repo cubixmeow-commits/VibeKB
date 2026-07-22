@@ -6,7 +6,7 @@ objective: Replace the SousMeow active model with VibeKB's own living model, iso
 summary: Self-hosting VibeKB — the active `.vibekb/` now describes VibeKB, examples are isolated under `examples/`, and `tools/vibekb.php` gives agents status / check / affected for the lifecycle.
 requested_by: Project owner
 status: completed
-verification_state: verified-by-test
+verification_state: verified-manually
 updated: 2026-07-22
 affected_functionality: [start-work-session, detect-drift, find-affected-functionality, load-living-model, validate-model, generate-static-snapshot, render-guide]
 expected_files:

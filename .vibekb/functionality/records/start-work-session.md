@@ -5,7 +5,7 @@ title: Start a work session
 area: agent-workflow
 summary: `php tools/vibekb.php status` prints the one screen an agent needs to begin — the active model's provenance, the current work record, the handoff's next recommended action, and a one-line validation and drift summary — so a fresh agent can orient without reading every file.
 status: implemented
-verification: verified-by-test
+verification: verified-manually
 user_facing: true
 trigger: A coding agent runs `php tools/vibekb.php status` (or `php tools/vibekb.php`) at the start of a session.
 updated: 2026-07-22

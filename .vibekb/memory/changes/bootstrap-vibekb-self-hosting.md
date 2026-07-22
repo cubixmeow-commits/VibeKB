@@ -4,7 +4,7 @@ type: change
 title: Bootstrap VibeKB on itself with an active self-maintenance lifecycle
 summary: Replaced the SousMeow active model with VibeKB's own model, isolated the examples, and added the `vibekb` CLI (status/check/affected) so the model is maintained through a real agent lifecycle as VibeKB is developed.
 status: implemented
-verification: verified-by-test
+verification: verified-manually
 updated: 2026-07-22
 functionality: [start-work-session, detect-drift, find-affected-functionality, load-living-model, generate-static-snapshot]
 files: [tools/vibekb.php, guide/index.php, tools/validate.php, .vibekb/manifest.json, CLAUDE.md, AGENTS.md]

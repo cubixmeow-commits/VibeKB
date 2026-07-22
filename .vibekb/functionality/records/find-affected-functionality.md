@@ -5,7 +5,7 @@ title: Find affected functionality
 area: agent-workflow
 summary: Given a set of changed files, `php tools/vibekb.php affected` lists the functionality records, important-files entries, and diagram topologies that reference them — turning "six files changed" into "here is the knowledge that may now be wrong."
 status: implemented
-verification: verified-by-test
+verification: verified-manually
 user_facing: true
 trigger: A coding agent runs `php tools/vibekb.php affected <file>...` or `--since <ref>`.
 updated: 2026-07-22

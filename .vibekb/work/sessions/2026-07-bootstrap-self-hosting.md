@@ -3,7 +3,7 @@ id: 2026-07-bootstrap-self-hosting
 type: session
 title: Bootstrap VibeKB self-hosting
 date: 2026-07-22
-verification: verified-by-test
+verification: verified-manually
 functionality: [start-work-session, detect-drift, find-affected-functionality, load-living-model, generate-static-snapshot]
 files: [tools/vibekb.php, guide/index.php, tools/validate.php, .vibekb, examples]
 change: bootstrap-vibekb-self-hosting

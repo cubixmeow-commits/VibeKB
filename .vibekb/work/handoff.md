@@ -2,9 +2,9 @@
 id: handoff
 type: handoff
 title: Current handoff
-summary: VibeKB is now self-hosted. The active `.vibekb/` models VibeKB itself; the SousMeow example and StopPR audit are isolated under `examples/`; a new `tools/vibekb.php` CLI (status / check / affected) drives the maintenance lifecycle; agent instructions are unified and repository-owned; `/docs` is regenerated from the self-model. Next: run diagram topology for the second/third diagrams if desired, and keep the model reconciled as VibeKB changes.
+summary: VibeKB is now self-hosted. The active `.vibekb/` models VibeKB itself; the SousMeow example and StopPR audit are isolated under `examples/`; a new `tools/vibekb.php` CLI (status / check / affected) drives the maintenance lifecycle; agent instructions are unified and repository-owned; `/docs` is regenerated from the self-model. Next: optionally add explainable topology to the one remaining picture-only diagram (self-maintenance-loop), and keep the model reconciled as VibeKB changes.
 updated: 2026-07-22
-verification_state: verified-by-test
+verification_state: verified-manually
 ---
 
 ## What the software (VibeKB) now does
