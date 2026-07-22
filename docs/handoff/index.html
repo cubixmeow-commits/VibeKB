@@ -114,55 +114,56 @@
                                     <span class="badge badge--info">Verification: verified manually</span>                                <span class="muted">Updated 2026-07-22</span>
             </div>
             <div class="prose reading-column"><h3>What the software (VibeKB) now does</h3>
-<p>VibeKB remains self-hosted and its runtime behaviour is unchanged — this was a
-copy / information-architecture pass on the landing page only. The homepage now
-leads with the category (&quot;Understand the software AI helped you build&quot;), is
-organized around one spine (&quot;AI can change six files faster than you can rebuild
-your mental model&quot;), and presents one four-part model: current functionality, how
-it works, active AI work, and repository memory. The hero example card and the
-functionality carousel still render from the live <code>.vibekb/</code> model.</p>
+<p>Runtime behaviour is unchanged — this was an analysis pass plus a documentation
+guardrail. Two prior homepage changes remain in place. The new material:
+<code>TOKEN_ECONOMICS.md</code> at the repo root evaluates whether maintaining/using VibeKB
+is token-justified, and CLAUDE.md gained a &quot;Context economy&quot; section directing
+agents to orient cheaply (<code>status</code> ~400 tok + CLAUDE.md), retrieve by affected
+scope, let the deterministic CLI do mechanical work, and never load the generated
+<code>docs/</code> or <code>examples/</code> trees into context.</p>
 <h3>Completed this change</h3>
 <ul>
-<li>Rewrote <code>index.php</code>: seven sections (hero · problem · what it adds · live proof ·</li>
+<li><code>TOKEN_ECONOMICS.md</code>: executive conclusion, implementation analysis, measured</li>
 </ul>
-<p>workflow · why repository-owned · CTA), new <code>&lt;title&gt;</code>/meta description, updated
-  nav and footer.</p>
+<p>context (whole-repo/by-kind/by-load-behaviour/per-file), baseline comparison,
+  five scenarios, a break-even model (<code>N* = (B + C·M)/S</code>), risk-adjusted value,
+  ranked optimizations, recommended operating model, go/no-go, and a
+  reproducible measurement appendix.</p>
 <ul>
-<li>Removed the PHP-as-product-category framing; relabelled the hero card to</li>
+<li><code>CLAUDE.md</code>: new &quot;Context economy (keep VibeKB token-positive)&quot; section after</li>
 </ul>
-<p>&quot;VibeKB analyzing its own repository&quot;; moved all PHP/runtime details into a
-  collapsed &quot;How this reference implementation runs&quot; note.</p>
+<p>the session-start orientation line; links to TOKEN_ECONOMICS.md.</p>
+<h3>Key measured findings (chars/4 ≈ tokens, approximate)</h3>
 <ul>
-<li>Consolidated the repeated &quot;what it does / how / what AI is changing&quot; blocks and</li>
+<li>Total tracked ~402K tok. Generated <code>docs/</code> ~206K (51%), <code>examples/</code> ~56.6K</li>
 </ul>
-<p>reduced the seven-principle manifesto to three trust principles.</p>
+<p>(14%) → ~264K (65%) that should NEVER enter agent context.</p>
 <ul>
-<li>Retained the interactive tabs, carousel, workflow timeline, and repo map;</li>
+<li>Active <code>.vibekb/</code> source ~35.5K tok across 56 files; honest session-start floor</li>
 </ul>
-<p>removed the redundant stepper, depth, relevance, compare, and manifesto widgets.
-  <code>assets/js/homepage.js</code> and <code>assets/css/homepage.css</code> were left unchanged (removed
-  widgets&#039; binds early-return safely; reused existing CSS classes only).</p>
+<p>~2K (CLAUDE.md + <code>status</code> output), not the full ~5.7K &quot;always&quot; set.</p>
 <ul>
-<li>Added <code>docs/HOMEPAGE_COPY_AUDIT.md</code> and <code>docs/HOMEPAGE_REWRITE_REPORT.md</code></li>
+<li><code>status</code>/<code>check</code>/<code>affected</code>/<code>validate</code>/<code>generate</code> are deterministic PHP — 0 LLM</li>
 </ul>
-<p>(process artifacts; the static generator preserves <code>docs/*.md</code>).</p>
+<p>tokens; agent pays only to read compact output (~220–430 tok) and write updates.</p>
+<ul>
+<li>Anchor: understanding drift-detection from source ~22K tok vs the detect-drift</li>
+</ul>
+<p>record ~1K tok = ~20x compression.</p>
+<ul>
+<li>Break-even ≈ 6–15 fresh sessions/handoffs for this medium-small repo;</li>
+</ul>
+<p>token-negative for one-offs and single-session same-context work.</p>
 <h3>Verification completed</h3>
 <ul>
-<li><code>php -l index.php</code> clean.</li>
-<li>Rendered <code>index.php</code> against loaded <code>.vibekb/</code>: hero + carousel + all seven</li>
+<li>Measurement reproduced deterministically over <code>git ls-files</code>; command-output</li>
 </ul>
-<p>sections present; hero shows 17 functions modelled (matches 17 records); no
-  PHP-as-category language in the body.</p>
+<p>sizes measured by byte count; subsystem anchor measured from real file sizes.</p>
 <ul>
-<li>Degraded paths exercised: missing <code>manifest.json</code> renders normally; missing</li>
-</ul>
-<p><code>.vibekb/</code> renders without a fatal error (carousel omitted; hero card degrades
-  to zeroed metrics).</p>
-<ul>
-<li>All guide links relative (<code>guide/?view=…</code>) — subfolder-safe; no absolute hrefs.</li>
 <li><code>php tools/vibekb.php check</code> and <code>php tools/test-topology.php</code> run before finish;</li>
 </ul>
-<p><code>/docs</code> regenerated.</p>
+<p><code>/docs</code> regenerated. (CLAUDE.md and TOKEN_ECONOMICS.md are not rendered into
+  <code>/docs</code>, so the snapshot is unaffected by them.)</p>
 <h3>Active warnings (VibeKB)</h3>
 <ul>
 <li><code>model-can-drift-from-code</code>, <code>docs-is-generated-never-hand-edit</code>,</li>
@@ -170,18 +171,20 @@ functionality carousel still render from the live <code>.vibekb/</code> model.</
 <p><code>verification-must-reflect-evidence</code>.</p>
 <h3>Honest limitations / not verified</h3>
 <ul>
-<li>Homepage verified by rendering the PHP against loaded content and reading the</li>
+<li>Token figures use the chars/4 approximation, not a real tokenizer; exploration</li>
 </ul>
-<p>markup, not by a full browser screenshot or a mobile-device render in this
-  environment (CSS was unchanged and uses the existing responsive rules).</p>
+<p>and per-change costs are modelled estimates, not A/B telemetry. The report
+  labels these throughout and lists them as evidence still needed.</p>
 <ul>
-<li>Cursor discovery remains <code>inferred</code>; live cPanel host not exercised here.</li>
+<li>The measurement script remains in the session scratchpad; it was intentionally</li>
 </ul>
+<p>not promoted to permanent tooling (recommended as future work #3).</p>
 <h3>Exact next recommended action</h3>
 <p>For any future change, start with <code>php tools/vibekb.php status</code>, use <code>affected</code>
 to find impacted records, update them, and finish with <code>check</code> + <code>generate</code>
-before committing. Optionally author explainable topology for
-<code>self-maintenance-loop</code> if richer visuals are wanted.</p></div>
+before committing. If pursuing the economics work: implement
+<code>php tools/vibekb.php context</code> (optimization #3) with its own functionality
+record, reusing the appendix methodology in TOKEN_ECONOMICS.md.</p></div>
         </section>
     
             <section class="doc-section">
@@ -214,7 +217,7 @@ before committing. Optionally author explainable topology for
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 07:29 UTC · source commit 73c5ea4 (2026-07-22) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-22 07:44 UTC · source commit 73c5ea4 (2026-07-22) · not auto-updating</p>
             </div>
         </footer>
     </div>
