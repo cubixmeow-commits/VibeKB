@@ -44,6 +44,24 @@ VibeKB's own functionality, areas, files, or verification states change, update
 `index.html` are the real, current totals at the recorded source commit
 (`fd08afa`, analysed 2026-07-23).
 
+## Cache busting
+
+Asset references in `index.html` carry a content hash query string
+(`site.css?v=927a2e92…`), so a new deploy is never served from a stale browser
+or CDN cache, while unchanged files keep their URL and stay cached. The hash is
+content-addressed: it changes only when the file's bytes change.
+
+After editing any CSS/JS/data asset, restamp before committing:
+
+```bash
+sh website/stamp-assets.sh
+```
+
+It rewrites the `?v=` values from each asset's current hash. No build step and
+no dependencies beyond a POSIX shell and `sha1sum`/`shasum`; it's idempotent and
+safe to run repeatedly. (Google Fonts is the only external asset and manages its
+own caching.)
+
 ## Deploy
 
 The site is a folder of static files. Any of these work with no changes:
