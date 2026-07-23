@@ -3,19 +3,19 @@ id: run-the-developer-cli
 type: functionality
 title: Run VibeKB from one developer CLI
 area: developer-cli
-summary: A single Go binary (`vibekb`) that is the developer's front door to VibeKB — it installs VibeKB natively (embedded payload, no PHP), runs environment diagnostics natively, and delegates every model-semantic command (status, check, affected, bootstrap, validate, generate) to the canonical PHP tooling it discovers, so there is exactly one model loader and one professional command in front of it.
+summary: A single Go binary (`vibekb`) that is the developer's front door to VibeKB — downloadable from GitHub Releases, installs VibeKB natively (embedded payload, no PHP), runs environment diagnostics natively, and delegates every model-semantic command to the canonical PHP tooling it discovers, so there is exactly one model loader.
 status: implemented
 verification: verified-from-source
 user_facing: true
 trigger: A developer runs `vibekb <command>` (e.g. `vibekb install`, `vibekb doctor`, `vibekb check`) — install from anywhere, model commands from inside a VibeKB repository.
 updated: 2026-07-23
 tags: [cli, go, developer-tool, delegation, native-install, distribution]
-files: [cmd/vibekb/main.go, internal/cli/cli.go, internal/cli/doctor.go, internal/cli/version.go, internal/phpcore/phpcore.go, internal/buildinfo/buildinfo.go, go.mod]
+files: [cmd/vibekb/main.go, internal/cli/cli.go, internal/cli/doctor.go, internal/cli/version.go, internal/phpcore/phpcore.go, internal/buildinfo/buildinfo.go, go.mod, .github/workflows/release.yml, RELEASE.md]
 reads: [tools/vibekb.php]
 writes: []
 config: []
 depends_on: [install-into-a-repository, bootstrap-workspace, validate-model, detect-drift, generate-static-snapshot]
-related_memory: [decision:go-front-end-php-core, decision:native-installer-embedded-payload, decision:two-modes-one-source]
+related_memory: [decision:go-front-end-php-core, decision:native-installer-embedded-payload, decision:two-modes-one-source, change:release-binaries-pipeline]
 ---
 
 ## In one sentence
@@ -26,10 +26,24 @@ for everything that touches the model — never a second implementation of it.
 
 ## User experience
 
+Primary distribution is a downloadable binary from GitHub Releases (no Go
+required). `vibekb version` prints identity stamped at link time:
+
+```
+VibeKB
+Version: 0.1.0
+Commit: 84c81d2
+Built: 2026-07-22
+Platform: darwin/arm64
+```
+
+plus detected PHP and repository when present. Release builds inject Version,
+Commit, and Built via ldflags (see `.github/workflows/release.yml` and
+`RELEASE.md`). Development builds keep `0.1.0-dev` / `unknown` / `dev`.
+
 A developer runs `vibekb` from anywhere inside a VibeKB repository. `vibekb doctor`
 reports whether PHP 8.2+, git, and a `.vibekb/` workspace are present and ends with
-a clear OK or "attention needed". `vibekb version` prints the CLI version and the
-detected PHP and repository. `vibekb check`, `status`, `generate`, and the rest
+a clear OK or "attention needed". `vibekb check`, `status`, `generate`, and the rest
 behave exactly like `php tools/vibekb.php <command>` — same output, same exit
 codes — because the binary runs that very script. If PHP is missing, the command
 fails with a plain message telling the developer to install PHP 8.2+ or set
@@ -72,7 +86,9 @@ dependency: `doctor` states it plainly rather than pretending it is not there.
 - `internal/cli/doctor.go` — native environment check (PHP ≥ 8.2, git, workspace).
 - `internal/cli/version.go` — version and detected-runtime output.
 - `internal/phpcore/phpcore.go` — repo/source/PHP discovery and delegation.
-- `internal/buildinfo/buildinfo.go` — version string (set at link time on release).
+- `internal/buildinfo/buildinfo.go` — Version, Commit, Built (set at link time on release).
+- `.github/workflows/release.yml` — tag-triggered cross-platform release builds.
+- `RELEASE.md` — how to publish a version.
 
 ## Data used
 

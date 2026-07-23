@@ -19,18 +19,19 @@ mental model. VibeKB keeps that mental model accurate — organized around
 
 ## Add VibeKB to your repository
 
-VibeKB installs with one command, native to the `vibekb` CLI — **no PHP required
-to install.** It prepares the workspace; your coding agent builds the model.
+Download the `vibekb` executable from
+[GitHub Releases](https://github.com/cubixmeow-commits/VibeKB/releases), put it
+on your `PATH`, then install into your project — **no Go and no PHP required to
+install.** The installer prepares the workspace; your coding agent builds the
+model.
 
 ```bash
-git clone https://github.com/cubixmeow-commits/VibeKB.git
-cd VibeKB
-go build -o vibekb ./cmd/vibekb           # Go 1.24+ (brew/winget/curl on the roadmap)
-./vibekb install /path/to/your/project
+# After downloading and placing vibekb on your PATH:
+vibekb install /path/to/your/project
 ```
 
-The `vibekb` binary embeds the VibeKB runtime (`guide/`, `tools/`, `prompts/`,
-`.cursor/`, the VibeKB docs, and the starter definition) and copies it into your
+The binary embeds the VibeKB runtime (`guide/`, `tools/`, `prompts/`, `.cursor/`,
+the VibeKB docs, and the starter definition). It copies that payload into your
 repository, scaffolds a fresh, empty-but-valid `.vibekb/` workspace, and verifies
 the result — **without touching your application's code, without analysing it, and
 without launching PHP.** Then open your project in a coding agent (Claude Code,
@@ -42,9 +43,20 @@ Cursor, Codex, …) and ask it to *build the first VibeKB model using
 - Repair a workspace any time: `php tools/vibekb.php bootstrap`.
 - Legacy `php install.php` still works — it now forwards to `vibekb install`.
 
-**PHP 8.2+ is required only to run the installed guide**, never to install it. No
-Composer, no network, cross-platform. See [INSTALLER.md](./INSTALLER.md) for the
-full flow, upgrades, repairs, and the template structure.
+**PHP 8.2+ is required only to run the installed guide and model commands**, never
+to install. See [INSTALLER.md](./INSTALLER.md) for the full flow and
+[RELEASE.md](./RELEASE.md) for publishing binaries.
+
+### Advanced: build from source
+
+```bash
+git clone https://github.com/cubixmeow-commits/VibeKB.git
+cd VibeKB
+go build -o vibekb ./cmd/vibekb           # Go 1.24+
+./vibekb install /path/to/your/project
+```
+
+Homebrew, Winget, and curl installers are on the roadmap after signed releases.
 
 ## How V1 works
 
@@ -122,24 +134,24 @@ VibeKB never claims to auto-update.
 
 ### The `vibekb` developer CLI (Go front-end)
 
-VibeKB is growing a single, portable developer command. The `vibekb` binary
-(`cmd/vibekb`, `internal/*`) **installs VibeKB natively** (embedded payload, no
-PHP), runs environment diagnostics natively, and **delegates every model command
-to the PHP core above** — it does not re-implement the model loader, so there is
-still exactly one implementation of parsing, validation, and generation.
+`vibekb` is a portable developer command. It **installs VibeKB natively**
+(embedded payload, no PHP), runs environment diagnostics natively, and
+**delegates every model command to the PHP core** — it does not re-implement the
+model loader, so there is still exactly one implementation of parsing,
+validation, and generation.
 
 ```bash
-go build -o vibekb ./cmd/vibekb   # build it today (Go 1.24+)
-./vibekb install ../my-project    # native: embeds + copies the runtime, no PHP
-./vibekb doctor                   # native: is PHP 8.2+, git, a workspace present?
-./vibekb check                    # delegates to php tools/vibekb.php check
+vibekb install ../my-project    # native: embeds + copies the runtime, no PHP
+vibekb doctor                   # native: is PHP 8.2+, git, a workspace present?
+vibekb version                  # Version / Commit / Built / Platform
+vibekb check                    # delegates to php tools/vibekb.php check
 ```
 
 `install`, `doctor`, and `version` need no PHP. The *model* commands (`check`,
 `generate`, …) delegate to the PHP core and need PHP 8.2+ present, and
-`vibekb doctor` says so plainly. A one-command install path (`brew` / `winget` /
-`curl`) is on the roadmap. See **[ARCHITECTURE.md](./ARCHITECTURE.md)** for the
-assessment behind this direction and the staged plan.
+`vibekb doctor` says so plainly. Tagged releases publish cross-platform binaries
+(see [RELEASE.md](./RELEASE.md)). Homebrew / Winget / curl installers are later
+roadmap. See **[ARCHITECTURE.md](./ARCHITECTURE.md)** for the staged plan.
 
 ## Run locally
 

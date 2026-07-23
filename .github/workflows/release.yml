@@ -1,0 +1,133 @@
+name: Release vibekb CLI
+
+# Builds cross-platform vibekb binaries when a version tag is pushed
+# (e.g. v0.1.0) and publishes them to a GitHub Release with checksums
+# and auto-generated release notes. Does not change the installer or PHP core.
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Test
+        run: go test ./...
+
+      - name: Derive version metadata
+        id: meta
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          VERSION="${TAG#v}"
+          COMMIT="$(git rev-parse --short HEAD)"
+          BUILT="$(date -u +%Y-%m-%d)"
+          {
+            echo "tag=${TAG}"
+            echo "version=${VERSION}"
+            echo "commit=${COMMIT}"
+            echo "built=${BUILT}"
+          } >> "$GITHUB_OUTPUT"
+          echo "Releasing vibekb ${VERSION} (commit ${COMMIT}, built ${BUILT})"
+
+      - name: Cross-compile release binaries
+        env:
+          VERSION: ${{ steps.meta.outputs.version }}
+          COMMIT: ${{ steps.meta.outputs.commit }}
+          BUILT: ${{ steps.meta.outputs.built }}
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          PKG=github.com/cubixmeow-commits/vibekb/internal/buildinfo
+          LDFLAGS="-s -w -X ${PKG}.Version=${VERSION} -X ${PKG}.Commit=${COMMIT} -X ${PKG}.Built=${BUILT}"
+
+          build() {
+            local goos="$1" goarch="$2" out="$3"
+            echo "→ ${out} (${goos}/${goarch})"
+            CGO_ENABLED=0 GOOS="$goos" GOARCH="$goarch" \
+              go build -trimpath -ldflags "${LDFLAGS}" \
+              -o "dist/${out}" ./cmd/vibekb
+          }
+
+          build windows amd64 vibekb-windows-amd64.exe
+          build windows arm64 vibekb-windows-arm64.exe
+          build darwin  amd64 vibekb-darwin-amd64
+          build darwin  arm64 vibekb-darwin-arm64
+          build linux   amd64 vibekb-linux-amd64
+          build linux   arm64 vibekb-linux-arm64
+
+          ls -la dist
+
+      - name: Generate SHA256 checksums
+        working-directory: dist
+        run: |
+          set -euo pipefail
+          # Stable, sorted checksums.txt for every binary in this release.
+          sha256sum -- * > checksums.txt
+          cat checksums.txt
+
+      - name: Verify injected version (linux amd64 smoke)
+        run: |
+          set -euo pipefail
+          out="$(./dist/vibekb-linux-amd64 version)"
+          echo "$out"
+          echo "$out" | grep -F "Version: ${{ steps.meta.outputs.version }}"
+          echo "$out" | grep -F "Commit: ${{ steps.meta.outputs.commit }}"
+          echo "$out" | grep -F "Built: ${{ steps.meta.outputs.built }}"
+          echo "$out" | grep -F "Platform: linux/amd64"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.meta.outputs.tag }}
+          name: VibeKB ${{ steps.meta.outputs.version }}
+          generate_release_notes: true
+          body: |
+            Download the binary for your platform, make it executable if needed, put it on your `PATH` as `vibekb`, then run:
+
+            ```bash
+            vibekb install /path/to/your/project
+            ```
+
+            Installation does **not** require Go or PHP. PHP 8.2+ is required afterward to run the guide and model commands (`vibekb check`, `vibekb generate`, the dynamic guide).
+
+            | Artifact | Platform |
+            | --- | --- |
+            | `vibekb-windows-amd64.exe` | Windows (x86_64) |
+            | `vibekb-windows-arm64.exe` | Windows (ARM64) |
+            | `vibekb-darwin-amd64` | macOS Intel |
+            | `vibekb-darwin-arm64` | macOS Apple Silicon |
+            | `vibekb-linux-amd64` | Linux (x86_64) |
+            | `vibekb-linux-arm64` | Linux (ARM64) |
+            | `checksums.txt` | SHA256 of every artifact |
+
+            **Build:** commit `${{ steps.meta.outputs.commit }}` · date `${{ steps.meta.outputs.built }}` UTC
+
+            **Not yet included:** code signing / Apple notarization / Windows Authenticode, Homebrew, Winget, or curl installers.
+          files: |
+            dist/vibekb-windows-amd64.exe
+            dist/vibekb-windows-arm64.exe
+            dist/vibekb-darwin-amd64
+            dist/vibekb-darwin-arm64
+            dist/vibekb-linux-amd64
+            dist/vibekb-linux-arm64
+            dist/checksums.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

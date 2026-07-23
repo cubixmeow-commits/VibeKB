@@ -108,7 +108,7 @@
     <header class="page-head reading-column">
         <p class="eyebrow">Developer cli</p>
         <h1>Run VibeKB from one developer CLI</h1>
-        <p class="lede">A single Go binary (`vibekb`) that is the developer&#039;s front door to VibeKB — it installs VibeKB natively (embedded payload, no PHP), runs environment diagnostics natively, and delegates every model-semantic command (status, check, affected, bootstrap, validate, generate) to the canonical PHP tooling it discovers, so there is exactly one model loader and one professional command in front of it.</p>
+        <p class="lede">A single Go binary (`vibekb`) that is the developer&#039;s front door to VibeKB — downloadable from GitHub Releases, installs VibeKB natively (embedded payload, no PHP), runs environment diagnostics natively, and delegates every model-semantic command to the canonical PHP tooling it discovers, so there is exactly one model loader.</p>
         <div class="badge-row">
             <span class="badge badge--ok">Implemented</span>            <span class="badge badge--ok">Verified from source</span>            <span class="badge badge--info">User-facing</span>        </div>
     </header>
@@ -120,10 +120,21 @@
 help that need no runtime, and a thin, honest hand-off to the existing PHP core
 for everything that touches the model — never a second implementation of it.</p>
 <h3>User experience</h3>
+<p>Primary distribution is a downloadable binary from GitHub Releases (no Go
+required). <code>vibekb version</code> prints identity stamped at link time:</p>
+<p>``<code>
+VibeKB
+Version: 0.1.0
+Commit: 84c81d2
+Built: 2026-07-22
+Platform: darwin/arm64
+</code>``</p>
+<p>plus detected PHP and repository when present. Release builds inject Version,
+Commit, and Built via ldflags (see <code>.github/workflows/release.yml</code> and
+<code>RELEASE.md</code>). Development builds keep <code>0.1.0-dev</code> / <code>unknown</code> / <code>dev</code>.</p>
 <p>A developer runs <code>vibekb</code> from anywhere inside a VibeKB repository. <code>vibekb doctor</code>
 reports whether PHP 8.2+, git, and a <code>.vibekb/</code> workspace are present and ends with
-a clear OK or &quot;attention needed&quot;. <code>vibekb version</code> prints the CLI version and the
-detected PHP and repository. <code>vibekb check</code>, <code>status</code>, <code>generate</code>, and the rest
+a clear OK or &quot;attention needed&quot;. <code>vibekb check</code>, <code>status</code>, <code>generate</code>, and the rest
 behave exactly like <code>php tools/vibekb.php &lt;command&gt;</code> — same output, same exit
 codes — because the binary runs that very script. If PHP is missing, the command
 fails with a plain message telling the developer to install PHP 8.2+ or set
@@ -163,7 +174,9 @@ dependency: <code>doctor</code> states it plainly rather than pretending it is n
 <li><code>internal/cli/doctor.go</code> — native environment check (PHP ≥ 8.2, git, workspace).</li>
 <li><code>internal/cli/version.go</code> — version and detected-runtime output.</li>
 <li><code>internal/phpcore/phpcore.go</code> — repo/source/PHP discovery and delegation.</li>
-<li><code>internal/buildinfo/buildinfo.go</code> — version string (set at link time on release).</li>
+<li><code>internal/buildinfo/buildinfo.go</code> — Version, Commit, Built (set at link time on release).</li>
+<li><code>.github/workflows/release.yml</code> — tag-triggered cross-platform release builds.</li>
+<li><code>RELEASE.md</code> — how to publish a version.</li>
 </ul>
 <h3>Data used</h3>
 <ul>
@@ -235,8 +248,15 @@ installation path while keeping exactly one implementation of the model. See
 
             <div class="rail-card metadata-group">
                 <h2>Files involved</h2>
-                                    <p><code class="chip chip--file">cmd/vibekb/main.go</code> <code class="chip chip--file">internal/cli/cli.go</code> <code class="chip chip--file">internal/cli/doctor.go</code> <code class="chip chip--file">internal/cli/version.go</code> <code class="chip chip--file">internal/phpcore/phpcore.go</code> <code class="chip chip--file">internal/buildinfo/buildinfo.go</code> <code class="chip chip--file">go.mod</code></p>
-                            </div>
+                                                        <ul class="rail-list">
+                                                    <li>
+                                <a href="../files/index.html#.github%2Fworkflows%2Frelease.yml"><code>.github/workflows/release.yml</code></a>
+                                <span class="badge badge--info">Moderate impact</span>                            </li>
+                                                    <li>
+                                <a href="../files/index.html#RELEASE.md"><code>RELEASE.md</code></a>
+                                <span class="badge badge--ok">Low impact</span>                            </li>
+                                            </ul>
+                                                </div>
 
             <div class="rail-card metadata-group">
                 <h2>Dependencies</h2>
@@ -247,7 +267,7 @@ installation path while keeping exactly one implementation of the model. See
             
             <div class="rail-card metadata-group">
                 <h2>Related rationale</h2>
-                                    <p><a class="chip" href="../why/decisions/go-front-end-php-core.html">A Go developer CLI fronts VibeKB; PHP stays the single model core and runtime</a> <a class="chip" href="../why/decisions/native-installer-embedded-payload.html">Installation is native to the Go binary, from an embedded payload</a> <a class="chip" href="../why/decisions/two-modes-one-source.html">Two output modes over one source and one template set</a></p>
+                                    <p><a class="chip" href="../why/decisions/go-front-end-php-core.html">A Go developer CLI fronts VibeKB; PHP stays the single model core and runtime</a> <a class="chip" href="../why/decisions/native-installer-embedded-payload.html">Installation is native to the Go binary, from an embedded payload</a> <a class="chip" href="../why/decisions/two-modes-one-source.html">Two output modes over one source and one template set</a> <a class="chip" href="../why/changes/release-binaries-pipeline.html">Downloadable cross-platform vibekb release binaries</a></p>
                             </div>
         </aside>
     </div>
@@ -261,7 +281,7 @@ installation path while keeping exactly one implementation of the model. See
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 03:19 UTC · source commit 8707d5f (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 03:30 UTC · source commit 8707d5f (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

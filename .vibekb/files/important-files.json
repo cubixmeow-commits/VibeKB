@@ -127,9 +127,9 @@
       "functionality": ["load-living-model", "install-into-a-repository", "initialize-in-a-repository", "deploy-and-stay-portable"],
       "runs_when": "Every browser request to the site root.",
       "depended_on_by": ["Public landing / Mode A deployment"],
-      "depends_on": ["guide/lib/Content.php", "guide/lib/helpers.php", ".vibekb/project/identity.md", "assets/css/homepage.css", "assets/js/homepage.js", "assets/images/homepage-developer-journey.webp", "assets/images/homepage-developer-journey.png", "cmd/vibekb/main.go", "internal/installer/installer.go", "INSTALLER.md", "prompts/INTEGRATE_VIBEKB.md", "DEPLOYMENT.md", "PRODUCT.md", "go.mod"],
+      "depends_on": ["guide/lib/Content.php", "guide/lib/helpers.php", ".vibekb/project/identity.md", "assets/css/homepage.css", "assets/js/homepage.js", "assets/images/homepage-developer-journey.webp", "assets/images/homepage-developer-journey.png", "cmd/vibekb/main.go", "internal/installer/installer.go", "INSTALLER.md", "RELEASE.md", "prompts/INTEGRATE_VIBEKB.md", "DEPLOYMENT.md", "PRODUCT.md"],
       "safety": "moderate-impact",
-      "test_after_change": "Load the homepage; confirm section order problem → install → compatibility → understanding → proof; verify install commands and compatibility claims against INSTALLER.md / README.md / go.mod / PRODUCT.md / DEPLOYMENT.md (native Go install, no PHP required to install, PHP 8.2+ after); confirm Coming soon excludes Native CLI and Repository doctor; confirm no auto-analyze claims.",
+      "test_after_change": "Load the homepage; confirm section order problem → install → compatibility → understanding → proof; verify primary install is download from GitHub Releases + vibekb install (no Go build as primary); PHP 8.2+ after install; Coming soon excludes prebuilt binaries; confirm no auto-analyze claims.",
       "provenance": "verified-from-source"
     },
     {
@@ -235,11 +235,33 @@
       "path": "template/manifest.json",
       "purpose": "Declarative definition of a VibeKB installation: the VibeKB-owned payload the installer copies, the project-owned paths it preserves (.vibekb/), the generated paths (docs/), and the deliberately-excluded paths. Keeps 'what belongs in another repository' explicit rather than hard-coded in install.php.",
       "functionality": ["install-into-a-repository"],
-      "runs_when": "Read by install.php on every install/upgrade.",
-      "depended_on_by": ["install.php"],
+      "runs_when": "Read by the native Go installer (embedded) and the install.php wrapper on every install/upgrade.",
+      "depended_on_by": ["internal/installer/installer.go", "install.php"],
       "depends_on": [],
       "safety": "moderate-impact",
       "test_after_change": "Add or remove a payload path and dry-run the installer; confirm the plan reflects it.",
+      "provenance": "verified-from-source"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "purpose": "Tag-triggered release pipeline: tests, cross-compiles vibekb for six platforms with production ldflags, writes checksums.txt, and publishes a GitHub Release.",
+      "functionality": ["run-the-developer-cli"],
+      "runs_when": "A version tag matching v* is pushed.",
+      "depended_on_by": ["GitHub Releases / downloadable CLI"],
+      "depends_on": ["go.mod", "cmd/vibekb/main.go", "internal/buildinfo/buildinfo.go"],
+      "safety": "moderate-impact",
+      "test_after_change": "Push a test tag on a branch or run the job steps locally (cross-compile + checksums + version smoke).",
+      "provenance": "verified-from-source"
+    },
+    {
+      "path": "RELEASE.md",
+      "purpose": "Maintainer guide for publishing vibekb CLI releases: tag commands, artifact list, checksums, and remaining signing/package-manager steps.",
+      "functionality": ["run-the-developer-cli"],
+      "runs_when": "Read by maintainers before tagging a release.",
+      "depended_on_by": ["Release process"],
+      "depends_on": [".github/workflows/release.yml"],
+      "safety": "low-impact",
+      "test_after_change": "Confirm commands match the workflow and artifact names.",
       "provenance": "verified-from-source"
     },
     {

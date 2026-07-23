@@ -327,10 +327,10 @@
                                                                                                                                                 <a class="chip" href="../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a>
                                                                                                                                                 <a class="chip" href="../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a>
                                                                                                 </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">guide/lib/Content.php</code> <code class="chip chip--file">guide/lib/helpers.php</code> <code class="chip chip--file">.vibekb/project/identity.md</code> <code class="chip chip--file">assets/css/homepage.css</code> <code class="chip chip--file">assets/js/homepage.js</code> <code class="chip chip--file">assets/images/homepage-developer-journey.webp</code> <code class="chip chip--file">assets/images/homepage-developer-journey.png</code> <code class="chip chip--file">cmd/vibekb/main.go</code> <code class="chip chip--file">internal/installer/installer.go</code> <code class="chip chip--file">INSTALLER.md</code> <code class="chip chip--file">prompts/INTEGRATE_VIBEKB.md</code> <code class="chip chip--file">DEPLOYMENT.md</code> <code class="chip chip--file">PRODUCT.md</code> <code class="chip chip--file">go.mod</code></dd></div>
+                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">guide/lib/Content.php</code> <code class="chip chip--file">guide/lib/helpers.php</code> <code class="chip chip--file">.vibekb/project/identity.md</code> <code class="chip chip--file">assets/css/homepage.css</code> <code class="chip chip--file">assets/js/homepage.js</code> <code class="chip chip--file">assets/images/homepage-developer-journey.webp</code> <code class="chip chip--file">assets/images/homepage-developer-journey.png</code> <code class="chip chip--file">cmd/vibekb/main.go</code> <code class="chip chip--file">internal/installer/installer.go</code> <code class="chip chip--file">INSTALLER.md</code> <code class="chip chip--file">RELEASE.md</code> <code class="chip chip--file">prompts/INTEGRATE_VIBEKB.md</code> <code class="chip chip--file">DEPLOYMENT.md</code> <code class="chip chip--file">PRODUCT.md</code></dd></div>
                                                                             <div><dt>Depended on by</dt><dd>
                                 Public landing / Mode A deployment                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Load the homepage; confirm section order problem → install → compatibility → understanding → proof; verify install commands and compatibility claims against INSTALLER.md / README.md / go.mod / PRODUCT.md / DEPLOYMENT.md (native Go install, no PHP required to install, PHP 8.2+ after); confirm Coming soon excludes Native CLI and Repository doctor; confirm no auto-analyze claims.</dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Load the homepage; confirm section order problem → install → compatibility → understanding → proof; verify primary install is download from GitHub Releases + vibekb install (no Go build as primary); PHP 8.2+ after install; Coming soon excludes prebuilt binaries; confirm no auto-analyze claims.</dd></div>
                                             </dl>
                 </section>
                             <section class="file-card" id="assets/css/homepage.css">
@@ -508,13 +508,49 @@
                     </div>
                     <p class="file-card__purpose">Declarative definition of a VibeKB installation: the VibeKB-owned payload the installer copies, the project-owned paths it preserves (.vibekb/), the generated paths (docs/), and the deliberately-excluded paths. Keeps &#039;what belongs in another repository&#039; explicit rather than hard-coded in install.php.</p>
                     <dl class="file-card__meta">
-                                                    <div><dt>Runs when</dt><dd>Read by install.php on every install/upgrade.</dd></div>
+                                                    <div><dt>Runs when</dt><dd>Read by the native Go installer (embedded) and the install.php wrapper on every install/upgrade.</dd></div>
                                                                             <div><dt>Implements</dt><dd>
                                                                                                             <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a>
                                                                                                 </dd></div>
                                                                                                     <div><dt>Depended on by</dt><dd>
-                                install.php                            </dd></div>
+                                internal/installer/installer.go; install.php                            </dd></div>
                                                                             <div><dt>Test after change</dt><dd>Add or remove a payload path and dry-run the installer; confirm the plan reflects it.</dd></div>
+                                            </dl>
+                </section>
+                            <section class="file-card" id=".github/workflows/release.yml">
+                    <div class="file-card__head">
+                        <h2><code>.github/workflows/release.yml</code></h2>
+                        <div class="file-card__badges">
+                            <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
+                    </div>
+                    <p class="file-card__purpose">Tag-triggered release pipeline: tests, cross-compiles vibekb for six platforms with production ldflags, writes checksums.txt, and publishes a GitHub Release.</p>
+                    <dl class="file-card__meta">
+                                                    <div><dt>Runs when</dt><dd>A version tag matching v* is pushed.</dd></div>
+                                                                            <div><dt>Implements</dt><dd>
+                                                                                                            <a class="chip" href="../functionality/run-the-developer-cli.html">Run VibeKB from one developer CLI</a>
+                                                                                                </dd></div>
+                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">go.mod</code> <code class="chip chip--file">cmd/vibekb/main.go</code> <code class="chip chip--file">internal/buildinfo/buildinfo.go</code></dd></div>
+                                                                            <div><dt>Depended on by</dt><dd>
+                                GitHub Releases / downloadable CLI                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Push a test tag on a branch or run the job steps locally (cross-compile + checksums + version smoke).</dd></div>
+                                            </dl>
+                </section>
+                            <section class="file-card" id="RELEASE.md">
+                    <div class="file-card__head">
+                        <h2><code>RELEASE.md</code></h2>
+                        <div class="file-card__badges">
+                            <span class="badge badge--ok">Low impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
+                    </div>
+                    <p class="file-card__purpose">Maintainer guide for publishing vibekb CLI releases: tag commands, artifact list, checksums, and remaining signing/package-manager steps.</p>
+                    <dl class="file-card__meta">
+                                                    <div><dt>Runs when</dt><dd>Read by maintainers before tagging a release.</dd></div>
+                                                                            <div><dt>Implements</dt><dd>
+                                                                                                            <a class="chip" href="../functionality/run-the-developer-cli.html">Run VibeKB from one developer CLI</a>
+                                                                                                </dd></div>
+                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">.github/workflows/release.yml</code></dd></div>
+                                                                            <div><dt>Depended on by</dt><dd>
+                                Release process                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Confirm commands match the workflow and artifact names.</dd></div>
                                             </dl>
                 </section>
                             <section class="file-card" id=".vibekb/manifest.json">
@@ -583,7 +619,7 @@
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 03:19 UTC · source commit 8707d5f (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 03:30 UTC · source commit 8707d5f (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

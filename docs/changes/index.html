@@ -263,6 +263,35 @@ force-reset, and self-hosted-refusal paths.</p></div>
                                     </li>
                             <li class="change-card">
                     <div class="change-card__head">
+                        <h2>Downloadable cross-platform vibekb release binaries</h2>
+                        <div class="badge-row">
+                            <span class="badge badge--info">implemented</span>                            <span class="badge badge--ok">Verified from source</span>                            <span class="muted">2026-07-23</span>
+                        </div>
+                    </div>
+                    <p>Added a tag-triggered GitHub Actions release that cross-compiles vibekb for six platforms with stripped ldflags, Version/Commit/Built injection, checksums.txt, and a GitHub Release. Homepage and docs now present Downloads as the primary install path; build-from-source is Advanced. Installer and PHP runtime unchanged.</p>
+                    <div class="prose reading-column change-card__body"><h3>Before</h3>
+<p>Developers were told to clone VibeKB and <code>go build</code> to get <code>vibekb</code>. Version
+output was a one-line <code>vibekb 0.1.0-dev</code>. No automated release workflow existed.</p>
+<h3>After</h3>
+<p>Pushing <code>v*</code> tags runs <code>.github/workflows/release.yml</code>: test/vet, cross-compile
+six GOOS/GOARCH pairs with <code>CGO_ENABLED=0</code> + <code>-trimpath</code> + <code>-ldflags &quot;-s -w …&quot;</code>,
+write <code>checksums.txt</code>, create a GitHub Release with notes and assets.
+<code>vibekb version</code> prints Version / Commit / Built / Platform. Docs and homepage
+lead with Downloads; source builds are Advanced. Next recommended hardening:
+code signing; then Homebrew/Winget/curl (Phase 2b).</p>
+<h3>Honesty preserved</h3>
+<p>Installer and PHP model engine unchanged. PHP 8.2+ still required after install.
+No brew/winget/curl commands are presented as available.</p>
+<h3>Verification note</h3>
+<p>Local cross-compile of all six artifacts succeeded; ldflags smoke test confirmed
+<code>vibekb version</code> fields. Workflow not yet run against a real tag in this session
+(requires push of <code>v0.1.0</code> after merge). Homepage HTML checked for absence of
+primary <code>go build</code> path.</p></div>
+                                            <p class="change-card__links"><strong>Affected:</strong>
+                            <a class="chip" href="../functionality/run-the-developer-cli.html">Run VibeKB from one developer CLI</a> <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a>                        </p>
+                                    </li>
+                            <li class="change-card">
+                    <div class="change-card__head">
                         <h2>Bootstrap VibeKB on itself with an active self-maintenance lifecycle</h2>
                         <div class="badge-row">
                             <span class="badge badge--info">implemented</span>                            <span class="badge badge--ok">Verified manually</span>                            <span class="muted">2026-07-22</span>
@@ -501,7 +530,7 @@ before/after, workflow timeline, repo map, and separate CTA. Accurate but too lo
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 03:19 UTC · source commit 8707d5f (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 03:30 UTC · source commit 8707d5f (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>
