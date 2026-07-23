@@ -14,7 +14,7 @@
         "source_repository": "https://github.com/cubixmeow-commits/VibeKB",
         "source_subpath": "",
         "source_branch": "main",
-        "source_commit": "bb55b0a (2026-07-23)",
+        "source_commit": "493a3f9 (2026-07-23)",
         "analyzed": "2026-07-23",
         "verification_scope": "Final release audit for product 0.2.0 (Safe Repository Integration) on branch cursor/fix-installer-safety-review-b412 against main@bb55b0a plus the branch working tree: gofmt/vet/go test ./..., PHP lint, validate, test-topology, vibekb.php check --strict (after generate). Install write paths reviewed (payload under .vibekb/, namespaced adapters, managed blocks, migrate title+signature gated, uninstall backup relocation). Embedded payload matches template/manifest.json; unix assets lockstep with install.sh; no secrets/credentials/tracked binaries. Homepage layout and prior install/release claims from earlier verification scopes remain as previously recorded. Tag v0.2.0 deliberately not cut in this pass.",
         "last_verified": "2026-07-23",
