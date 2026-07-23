@@ -1,0 +1,8 @@
+# Go developer CLI (the vibekb front-end) build artifacts.
+# The Go source is committed; compiled binaries and caches are not.
+/vibekb
+/vibekb.exe
+/dist/
+/bin/vibekb
+*.test
+*.out

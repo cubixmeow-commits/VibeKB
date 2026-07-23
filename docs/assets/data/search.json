@@ -105,6 +105,13 @@
         "body": "In one sentence Records declare forward links depends on , related memory , functionality , files ; the loader resolves them and derives the reverse links dependents, \"memory for this functionality\", \"files for this functionality\" so authors only state a relationship once. Current behavior resolveFunctionality / resolveMemory / resolveDiagrams turn id references into linkable summaries, flagging any id that does not resolve so templates can render a broken chip warning. dependentsOf computes reverse dependencies from every record's depends on . filesForFunctionality , memoryForFunctionality , diagramsForFunctionality , and diagramNodesForFunctionality gather the records and diagram nodes that point back at a functionality id. Implementation map guide/lib/Content.php — all resolve , For , a"
     },
     {
+        "title": "Run VibeKB from one developer CLI",
+        "summary": "A single Go binary (`vibekb`) that is the developer's front door to VibeKB — it runs environment diagnostics natively and delegates every model-semantic command (status, check, affected, bootstrap, validate, generate, install) to the canonical PHP tooling it discovers, so there is exactly one model loader and one professional command in front of it.",
+        "type": "functionality",
+        "url": "../functionality/run-the-developer-cli.html",
+        "body": "In one sentence vibekb gives developers one portable command for VibeKB: native diagnostics and help that need no runtime, and a thin, honest hand off to the existing PHP core for everything that touches the model — never a second implementation of it. User experience A developer runs vibekb from anywhere inside a VibeKB repository. vibekb doctor reports whether PHP 8.2+, git, and a .vibekb/ workspace are present and ends with a clear OK or \"attention needed\". vibekb version prints the CLI version and the detected PHP and repository. vibekb check , status , generate , and the rest behave exactly like php tools/vibekb.php <command — same output, same exit codes — because the binary runs that very script. If PHP is missing, the command fails with a plain message telling the developer to inst"
+    },
+    {
         "title": "Search the model",
         "summary": "A shared index builder produces one search index covering functionality, memory, files, diagrams, and explainable node/edge/file entries; the dynamic guide serves it as JSON and the static snapshot ships it as a file, with client-side search that needs no server, database, or CDN.",
         "type": "functionality",
@@ -151,6 +158,13 @@
         "summary": "How a coding agent starts a session, finds what a change affects, detects drift, records active work, and hands off — the self-maintenance lifecycle.",
         "type": "functional area",
         "url": "../functionality/index.html#grp-agent-workflow",
+        "body": ""
+    },
+    {
+        "title": "The developer CLI (Go front-end)",
+        "summary": "A single `vibekb` binary that fronts the whole toolchain: native diagnostics that need no runtime, and honest delegation to the canonical PHP core for every command that touches the model.",
+        "type": "functional area",
+        "url": "../functionality/index.html#grp-developer-cli",
         "body": ""
     },
     {
@@ -376,6 +390,13 @@
         "type": "decision",
         "url": "../why/decisions/functionality-first-not-files.html",
         "body": "Context The obvious way to explain a codebase is a file tree or a call graph. But a file tree tells you where code is, not what the software does , and it goes stale as files move. Vibe coders ask \"what does my app do and does it still work?\", not \"what is in app/Services ?\". Decision Functionality — the behaviours the software performs — is VibeKB's primary record type. Files important files.json , memory, and diagram nodes all carry functionality back links; the loader derives the reverse relationships. Alternatives considered File first / directory mirroring model — rejected: it becomes a code browser and drifts with every refactor. Decision log / ADR first model — rejected: that is repository memory, which exists to protect the functionality explanation, not replace it. Reason A functi"
+    },
+    {
+        "title": "A Go developer CLI fronts VibeKB; PHP stays the single model core and runtime",
+        "summary": "VibeKB adds a Go binary (`vibekb`) as a portable developer front-end that delegates every model-semantic operation to the canonical PHP core, rather than re-implementing the model loader in Go. PHP remains the one implementation of parsing, validation, and generation, and the only deployment runtime.",
+        "type": "decision",
+        "url": "../why/decisions/go-front-end-php-core.html",
+        "body": "Context VibeKB is evolving toward a developer tool whose command line is the primary interface like git, cargo, or kubectl . Go is attractive for that: a single static binary, native filesystem/git work, and a brew / winget / curl install story with no runtime to preinstall. The question was whether to port VibeKB's commands install , bootstrap , check , generate to Go. The decisive constraint is that those commands are thin. Their real behaviour lives in the model loader guide/lib/Content.php , ~1,240 lines that both the CLI tools and the dynamic guide already share. Porting the commands means porting the loader — creating a second implementation of the thing VibeKB exists to keep honest. Decision Introduce a Go CLI cmd/vibekb , internal/ as a front end only : Native Go for what must work"
     },
     {
         "title": "Provenance is objective and VibeKB never claims to auto-update",
@@ -735,17 +756,17 @@
         "body": "Mode A — the dynamic guide on shared hosting .cpanel.yml rsyncs the runtime paths index.php , assets/ , guide/ , .vibekb/ into a cPanel public folder and excludes development only paths tools/ , prompts/ , docs/ , authoring docs, examples/ . Query string routing means no .htaccess rewrite rules are needed and the app runs in a subfolder. .vibekb/ must deploy — it is the content. Mode B — the static snapshot php tools/generate static.php builds /docs ; publish it via GitHub Pages Settings → Pages → branch → /docs or any static host. Relative links make it work at a web root or under a repository subpath. No PHP, database, CDN, or network required. Deployment is part of the application Whenever repository structure, runtime folders, or deployment requirements change, .cpanel.yml and DEPLOYME"
     },
     {
-        "title": "Homepage compatibility section and agent-agnostic install",
-        "summary": "Complete — install copy generalized; Compatibility & Requirements added under #install. See handoff.md.",
+        "title": "Go developer CLI as a front-end over the PHP core (Phase 1)",
+        "summary": "Complete — architectural assessment recorded (ARCHITECTURE.md); Phase 1 Go CLI implemented, tested, and run; model reconciled. See handoff.md.",
         "type": "current work",
         "url": "../current-work/index.html",
-        "body": "Status Complete. See .vibekb/work/handoff.md ."
+        "body": "Status Complete. See .vibekb/work/handoff.md . Decision recorded decision:go front end php core — a Go binary fronts VibeKB; PHP remains the one model core and the only deployment runtime. Full assessment and roadmap in ARCHITECTURE.md ."
     },
     {
         "title": "Current handoff",
-        "summary": "Homepage install is agent-agnostic and followed by Compatibility & Requirements. Next: keep homepage claims aligned with INSTALLER.md / PRODUCT.md / DEPLOYMENT.md.",
+        "summary": "A Go developer CLI (`vibekb`) now fronts the PHP toolchain as Phase 1 of the \"Go front-end, PHP core\" architecture. It delegates every model-semantic command and never forks the model loader. Next: distribution (Phase 2) — release binaries and a brew/winget/curl install path.",
         "type": "handoff",
         "url": "../handoff/index.html",
-        "body": "Completed this change Install step 3 generalized: Ask your coding agent Cursor, Claude Code, Codex, Windsurf, and others ; copy control is “Copy agent prompt.” Boundary copy: installer prepares; coding agent understands. New compatibility section: four cards, no extra infrastructure checklist, honest current requirements, inactive coming soon badges. Nav link: Compatibility. Model reconciled: change memory, important files, functionality links, handoff. Verification completed Claims checked against PRODUCT.md agents/audience, no DB/AI API , INSTALLER.md PHP 8.2+, no Composer/network , DEPLOYMENT.md cPanel / GitHub Pages / static . Rendered homepage section order: problem → install → compatibility → understanding → proof. Confirmed honesty lines: agent interprets source; no auto analyze on "
+        "body": "Current state VibeKB has a new developer front end: a Go binary cmd/vibekb , internal/ that runs doctor / version / help natively and delegates status , check , affected , bootstrap , validate , generate , and install to the existing PHP tooling. Nothing in PHP changed — the model loader, the dynamic guide Mode A , and the static generator Mode B are untouched, and php tools/vibekb.php … still works exactly as before. Completed this change Assessment ARCHITECTURE.md : responsibilities inventoried; the model loader identified as the crux; three architectures weighed; \"Go front end, PHP core\" chosen with a command by command verdict and a 4 phase roadmap. Phase 1 CLI : native doctor / version / help ; repo root + PHP discovery internal/phpcore ; delegation with exit code propagation; honest "
     }
 ]

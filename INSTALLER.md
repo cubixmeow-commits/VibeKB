@@ -30,6 +30,13 @@ it to **build the first VibeKB model using `prompts/INTEGRATE_VIBEKB.md`**.
 Requirements: **PHP 8.2+**. No Composer, no framework, no network, no build step.
 Works on Windows, macOS, and Linux.
 
+> **`vibekb install` (Go front-end).** If you have the `vibekb` binary built (see
+> the README and `ARCHITECTURE.md`), `vibekb install /path/to/your/project` does
+> exactly the same thing — it runs this same `install.php` from your source clone.
+> The Go CLI is a portable front door; the installer logic below is unchanged and
+> remains the canonical implementation. Everything in this document applies to
+> both entry points.
+
 ## What gets installed
 
 The installer copies the **VibeKB-owned runtime** into your repository and creates

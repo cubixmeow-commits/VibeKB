@@ -130,3 +130,19 @@ find guide tools -name '*.php' -print0 | xargs -0 -n1 php -l   # syntax
 
 The dynamic guide's **Reference** view shows the same validation issues as
 `check`; in development a banner links to them (`VIBEKB_DEV=1`).
+
+## Changing the Go developer CLI
+
+The `vibekb` binary (`cmd/vibekb`, `internal/*`) is part of VibeKB's own software,
+so a change to it follows this same lifecycle — including updating the
+`run-the-developer-cli` functionality record and regenerating `/docs`. Its own
+checks are:
+
+```bash
+go build ./... && go vet ./... && go test ./...   # the vibekb CLI
+gofmt -l cmd internal                              # must print nothing
+```
+
+Keep the honesty boundary: the CLI **delegates** every model-semantic command to
+the PHP core and must never grow a second model loader, template system, or
+generator. See `ARCHITECTURE.md`.

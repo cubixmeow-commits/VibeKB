@@ -115,6 +115,25 @@ It **detects** changes mechanically (git diff, path existence, a render-and-diff
 and is explicit that **interpreting** a change into the model is an agent's job —
 VibeKB never claims to auto-update.
 
+### The `vibekb` developer CLI (Go front-end)
+
+VibeKB is growing a single, portable developer command. The `vibekb` binary
+(`cmd/vibekb`, `internal/*`) is a Go front-end: it runs environment diagnostics
+natively and **delegates every model command to the PHP core above** — it does not
+re-implement the model loader, so there is still exactly one implementation of
+parsing, validation, and generation.
+
+```bash
+go build -o vibekb ./cmd/vibekb   # build it today (Go 1.24+)
+./vibekb doctor                   # native: is PHP 8.2+, git, a workspace present?
+./vibekb check                    # delegates to php tools/vibekb.php check
+```
+
+Delegated commands still need PHP 8.2+ present, and `vibekb doctor` says so
+plainly. A one-command install path (`brew` / `winget` / `curl`) is on the
+roadmap. See **[ARCHITECTURE.md](./ARCHITECTURE.md)** for the assessment behind
+this direction and the staged plan.
+
 ## Run locally
 
 ```bash

@@ -131,6 +131,7 @@
                     <option value="">Any</option>
                                             <option value="living-model">The living model</option>
                                             <option value="agent-workflow">AI coding workflow</option>
+                                            <option value="developer-cli">The developer CLI (Go front-end)</option>
                                             <option value="dynamic-guide">The dynamic guide (Mode A)</option>
                                             <option value="static-publishing">The static snapshot (Mode B)</option>
                                             <option value="diagrams">Explainable diagrams</option>
@@ -474,6 +475,47 @@
                             <div>
                                 <dt>Updated</dt>
                                 <dd>2026-07-22</dd>
+                            </div>
+                        </dl>
+                    </li>
+                            </ul>
+        </section>
+                            <section class="group-block wide-section" aria-labelledby="grp-developer-cli">
+            <header class="section-intro">
+                <h2 id="grp-developer-cli">The developer CLI (Go front-end)</h2>
+                                    <p class="section-intro__support">A single `vibekb` binary that fronts the whole toolchain: native diagnostics that need no runtime, and honest delegation to the canonical PHP core for every command that touches the model.</p>
+                            </header>
+            <ul class="record-list">
+                                    <li class="record-card"
+                        data-status="implemented"
+                        data-area="developer-cli"
+                        data-verification="verified-from-source"
+                        data-facing="user">
+                        <div class="record-card__row">
+                            <h3 class="record-card__title">
+                                <a class="record-card__link" href="../functionality/run-the-developer-cli.html">
+                                    Run VibeKB from one developer CLI                                </a>
+                            </h3>
+                            <div class="record-card__status">
+                                <span class="badge badge--ok">Implemented</span>                            </div>
+                        </div>
+                        <p class="record-card__summary">A single Go binary (`vibekb`) that is the developer&#039;s front door to VibeKB — it runs environment diagnostics natively and delegates every model-semantic command (status, check, affected, bootstrap, validate, generate, install) to the canonical PHP tooling it discovers, so there is exactly one model loader and one professional command in front of it.</p>
+                        <dl class="record-card__meta">
+                                                            <div>
+                                    <dt>Verification</dt>
+                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
+                                </div>
+                                                                                        <div>
+                                    <dt>Trigger</dt>
+                                    <dd>A developer runs `vibekb &lt;command&gt;` (e.g. `vibekb doctor`, `vibekb check`) from anywhere inside a VibeKB repository or source clone.</dd>
+                                </div>
+                                                        <div>
+                                <dt>Facing</dt>
+                                <dd>User-facing</dd>
+                            </div>
+                            <div>
+                                <dt>Updated</dt>
+                                <dd>2026-07-23</dd>
                             </div>
                         </dl>
                     </li>
@@ -894,7 +936,7 @@
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 00:09 UTC · source commit 11468c3 (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 00:28 UTC · source commit 11468c3 (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>
