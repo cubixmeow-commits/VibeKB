@@ -1,5 +1,5 @@
 /*
- * site.js — tiny, dependency-free page interactions.
+ * site.js: tiny, dependency-free page interactions.
  * Copy-to-clipboard for command blocks. Everything works without it.
  */
 (function () {

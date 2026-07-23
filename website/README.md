@@ -1,7 +1,7 @@
 # VibeKB public website (`/website/`)
 
-A self-contained marketing site for VibeKB. It is **static** — plain HTML, CSS,
-and vanilla JavaScript with no build step, no framework, and no server code — so
+A self-contained marketing site for VibeKB. It is **static**: plain HTML, CSS,
+and vanilla JavaScript with no build step, no framework, and no server code, so
 it deploys anywhere and keeps every guardrail the product itself honours (PHP 8.2
 shared hosting, subfolder-safe, usable without JavaScript, no external API for
 core rendering).
@@ -24,16 +24,16 @@ The hero centrepiece is an interactive SVG map of VibeKB's own functional areas,
 drawn from **real repository data** in `assets/data/model.js`. That data is
 transcribed from VibeKB's living model:
 
-- `.vibekb/functionality/index.json` and `functionality/records/*.md` — the 8
+- `.vibekb/functionality/index.json` and `functionality/records/*.md`: the 8
   functional areas and their 23 capabilities (title, summary, status, files,
   verification), and
-- `.vibekb/diagrams/topology/vibekb-architecture.json` — the real cross-area
+- `.vibekb/diagrams/topology/vibekb-architecture.json`: the real cross-area
   relationships, derived from the `depends_on` links between records.
 
 It is a **progressive enhancement**. The page always ships an accessible list of
 the same areas and capabilities (`.map-fallback`). On screens ≥ 720px with
 JavaScript, `map.js` builds the interactive map on top of that list; otherwise
-the list is the experience. Nothing is invented — if the model changes, refresh
+the list is the experience. Nothing is invented. If the model changes, refresh
 `model.js` from it (the same discipline the product follows).
 
 ### Keeping `model.js` honest
@@ -48,12 +48,12 @@ VibeKB's own functionality, areas, files, or verification states change, update
 
 The site is a folder of static files. Any of these work with no changes:
 
-- **GitHub Pages** — publish the repository (or a `gh-pages` branch) and serve
+- **GitHub Pages**: publish the repository (or a `gh-pages` branch) and serve
   `/website/`, or copy its contents to the Pages root. All asset links are
   relative, so it works at a web root or under a repository subpath.
-- **cPanel / Apache / Nginx** — copy `website/` into the public folder (or a
+- **cPanel / Apache / Nginx**: copy `website/` into the public folder (or a
   subfolder). No PHP, rewrite rules, or database required.
-- **Netlify / Cloudflare Pages / any static host** — set the publish directory
+- **Netlify / Cloudflare Pages / any static host**: set the publish directory
   to `website/`.
 
 To preview locally:
@@ -78,7 +78,7 @@ choose whichever deployment target fits the host.
   `<h1>`.
 - The map's SVG nodes are focusable buttons with `aria-label`s; the whole map
   degrades to a linked list without JavaScript.
-- Colour is never the only signal — capability status and verification are always
+- Colour is never the only signal: capability status and verification are always
   stated in text.
 - Respects `prefers-reduced-motion` (load and idle animations collapse).
 - No external JavaScript/CSS dependencies. The only network request is Google

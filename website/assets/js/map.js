@@ -1,5 +1,5 @@
 /*
- * map.js — the Live Repository Map.
+ * map.js: the Live Repository Map.
  *
  * A progressive enhancement, not a requirement. The homepage already ships an
  * accessible list of every functional area and capability (the ".map-fallback"
@@ -9,7 +9,7 @@
  * between them, capabilities revealed on selection, and a side panel that shows
  * the same record data the guide would.
  *
- * No framework, no build step, no external calls — the map is generated from
+ * No framework, no build step, no external calls. The map is generated from
  * data already in the page. If JavaScript is off, the small screen, or the data
  * is missing, the fallback list is the experience.
  */
@@ -217,7 +217,7 @@
     function renderDefault() {
       panel.innerHTML = "";
       panel.appendChild(h("p", "map-panel-kicker", "The whole system"));
-      panel.appendChild(h("h3", "map-panel-title", meta.app + " — " + (meta.outcome || "")));
+      panel.appendChild(h("h3", "map-panel-title", meta.app + ": " + (meta.outcome || "")));
       panel.appendChild(
         h(
           "p",

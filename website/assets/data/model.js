@@ -1,11 +1,11 @@
 /*
- * model.js — the data behind the Live Repository Map.
+ * model.js: the data behind the Live Repository Map.
  *
  * Every value here is transcribed from VibeKB's own `.vibekb/` model
  * (functionality/index.json, functionality/records/*.md, and the explainable
  * topology under .vibekb/diagrams/topology/). It is real repository knowledge,
  * not invented marketing content. If the model changes, this file is refreshed
- * from it — the same discipline the product itself follows.
+ * from it, the same discipline the product itself follows.
  *
  * Exposed as a plain global so the map works with no build step and no modules.
  */
@@ -30,7 +30,7 @@ window.VIBEKB_MODEL = {
     { key: "diagrams", label: "explainable diagrams", value: 3 },
   ],
 
-  // Level 1 — functional areas (the primary map nodes). `hub: true` marks the
+  // Level 1: functional areas (the primary map nodes). `hub: true` marks the
   // area the rest of the model leans on most (living-model), so the layout can
   // seat it near the centre.
   areas: [
@@ -54,7 +54,7 @@ window.VIBEKB_MODEL = {
           id: "parse-records",
           title: "Parse records (front matter + Markdown)",
           summary:
-            "A small front-matter parser and a pragmatic Markdown subset turn each file into structured metadata plus HTML — no Markdown library, no build step.",
+            "A small front-matter parser and a pragmatic Markdown subset turn each file into structured metadata plus HTML, with no Markdown library and no build step.",
           status: "implemented",
           verification: "verified-from-source",
           files: ["guide/lib/FrontMatter.php", "guide/lib/Markdown.php"],
@@ -72,7 +72,7 @@ window.VIBEKB_MODEL = {
           id: "validate-model",
           title: "Validate the model",
           summary:
-            "The loader and headless tools/validate.php enforce the content contract — required fields, controlled vocabularies, resolvable references — gating generation and CI.",
+            "The loader and headless tools/validate.php enforce the content contract (required fields, controlled vocabularies, resolvable references) gating generation and CI.",
           status: "implemented",
           verification: "verified-from-source",
           files: ["guide/lib/Content.php", "tools/validate.php", "guide/templates/reference.php"],
@@ -83,7 +83,7 @@ window.VIBEKB_MODEL = {
       id: "agent-workflow",
       title: "AI coding workflow",
       blurb:
-        "How a coding agent starts a session, finds what a change affects, detects drift, records active work, and hands off — the self-maintenance lifecycle.",
+        "How a coding agent starts a session, finds what a change affects, detects drift, records active work, and hands off: the self-maintenance lifecycle.",
       capabilities: [
         {
           id: "start-work-session",
@@ -98,7 +98,7 @@ window.VIBEKB_MODEL = {
           id: "detect-drift",
           title: "Detect drift between code and model",
           summary:
-            "php tools/vibekb.php check reports where model and repository diverged — broken file references, changed source, likely-affected functionality, stale /docs.",
+            "php tools/vibekb.php check reports where model and repository diverged: broken file references, changed source, likely-affected functionality, stale /docs.",
           status: "implemented",
           verification: "verified-manually",
           files: ["tools/vibekb.php", "tools/validate.php", "tools/generate-static.php"],
@@ -116,7 +116,7 @@ window.VIBEKB_MODEL = {
           id: "record-current-work",
           title: "Record current AI work",
           summary:
-            ".vibekb/work/current.md holds the active change — outcome, current vs proposed behaviour, affected functionality, risks, verification plan — rendered as a view.",
+            ".vibekb/work/current.md holds the active change (outcome, current vs proposed behaviour, affected functionality, risks, verification plan) rendered as a view.",
           status: "implemented",
           verification: "verified-from-source",
           files: [".vibekb/work/current.md", "guide/templates/current-work.php"],
@@ -142,7 +142,7 @@ window.VIBEKB_MODEL = {
           id: "run-the-developer-cli",
           title: "Run VibeKB from one developer CLI",
           summary:
-            "A single Go binary installs VibeKB natively (embedded payload, no PHP) and delegates every model-semantic command to the canonical PHP tooling — one model loader.",
+            "A single Go binary installs VibeKB natively (embedded payload, no PHP) and delegates every model-semantic command to the canonical PHP tooling: one model loader.",
           status: "implemented",
           verification: "verified-from-source",
           files: ["cmd/vibekb/main.go", "internal/cli/cli.go", "internal/phpcore/phpcore.go"],
@@ -153,7 +153,7 @@ window.VIBEKB_MODEL = {
       id: "dynamic-guide",
       title: "The dynamic guide (Mode A)",
       blurb:
-        "The live PHP app that renders the model in the browser: routing, provenance, the interactive map, and search — no build step, no rewrite rules.",
+        "The live PHP app that renders the model in the browser: routing, provenance, the interactive map, and search. No build step, no rewrite rules.",
       capabilities: [
         {
           id: "render-guide",
@@ -168,7 +168,7 @@ window.VIBEKB_MODEL = {
           id: "render-functionality-map",
           title: "Render the interactive functionality map",
           summary:
-            "The overview's first screen is an interactive map — areas expand to capabilities and open into the docs — built from the existing model, degrading to an accessible list without JavaScript.",
+            "The overview's first screen is an interactive map (areas expand to capabilities and open into the docs) built from the existing model, degrading to an accessible list without JavaScript.",
           status: "implemented",
           verification: "verified-from-source",
           files: ["guide/lib/map.php", "guide/templates/partials/functionality-map.php", "guide/assets/js/guide.js"],
@@ -177,7 +177,7 @@ window.VIBEKB_MODEL = {
           id: "show-provenance",
           title: "Show provenance and freshness",
           summary:
-            "Every rendering carries an objective provenance panel — source commit, analysis date, verification scope, and an explicit 'does not auto-update.'",
+            "Every rendering carries an objective provenance panel: source commit, analysis date, verification scope, and an explicit 'does not auto-update.'",
           status: "implemented",
           verification: "verified-from-source",
           files: ["guide/lib/Provenance.php", "guide/templates/overview.php", "guide/templates/layout.php"],
@@ -203,7 +203,7 @@ window.VIBEKB_MODEL = {
           id: "generate-static-snapshot",
           title: "Generate the static snapshot",
           summary:
-            "php tools/generate-static.php renders the same templates into a self-contained static site with subpath-safe links — refusing to build on validation errors, stamped as generated output.",
+            "php tools/generate-static.php renders the same templates into a self-contained static site with subpath-safe links, refusing to build on validation errors, stamped as generated output.",
           status: "implemented",
           verification: "verified-from-source",
           files: ["tools/generate-static.php", "guide/lib/UrlStrategy.php", "guide/lib/nav.php"],
@@ -220,7 +220,7 @@ window.VIBEKB_MODEL = {
           id: "render-explainable-diagrams",
           title: "Render explainable diagrams",
           summary:
-            "A diagram can carry a topology — nodes with purposes, edges with controlled mechanisms, files with reasons — rendered as semantic explanations that work without JavaScript.",
+            "A diagram can carry a topology (nodes with purposes, edges with controlled mechanisms, files with reasons) rendered as semantic explanations that work without JavaScript.",
           status: "implemented",
           verification: "verified-from-source",
           files: ["guide/lib/Content.php", "guide/templates/diagrams.php", "guide/templates/partials/diagram-explain.php"],
@@ -229,7 +229,7 @@ window.VIBEKB_MODEL = {
           id: "validate-diagram-topology",
           title: "Validate diagram topology",
           summary:
-            "The loader and tools/test-topology.php enforce the explainability contract — resolvable edges, controlled mechanisms, honest verification, files with reasons.",
+            "The loader and tools/test-topology.php enforce the explainability contract: resolvable edges, controlled mechanisms, honest verification, files with reasons.",
           status: "implemented",
           verification: "verified-by-test",
           files: ["guide/lib/Content.php", "tools/test-topology.php"],
@@ -240,13 +240,13 @@ window.VIBEKB_MODEL = {
       id: "integration",
       title: "Adopting VibeKB elsewhere",
       blurb:
-        "Installing a VibeKB model inside another repository — safely, and reversibly.",
+        "Installing a VibeKB model inside another repository, safely and reversibly.",
       capabilities: [
         {
           id: "install-into-a-repository",
           title: "Install VibeKB into a repository",
           summary:
-            "A native, repository-safe installer. vibekb install consolidates everything VibeKB owns under .vibekb/ and touches shared files only through namespaced adapters — nothing at the repo root by default.",
+            "A native, repository-safe installer. vibekb install consolidates everything VibeKB owns under .vibekb/ and touches shared files only through namespaced adapters: nothing at the repo root by default.",
           status: "implemented",
           verification: "verified-from-source",
           files: ["cmd/vibekb/main.go", "internal/installer/installer.go", "template/manifest.json"],
@@ -273,7 +273,7 @@ window.VIBEKB_MODEL = {
           id: "uninstall-from-a-repository",
           title: "Uninstall VibeKB from a repository",
           summary:
-            "vibekb uninstall removes VibeKB, ownership-aware — deleting VibeKB-owned files and stripping only its managed block from shared files, preserving everything else.",
+            "vibekb uninstall removes VibeKB, ownership-aware: it deletes VibeKB-owned files and strips only its managed block from shared files, preserving everything else.",
           status: "implemented",
           verification: "verified-from-source",
           files: ["internal/installer/uninstall.go", "internal/installer/block.go"],
@@ -299,7 +299,7 @@ window.VIBEKB_MODEL = {
           id: "deploy-and-stay-portable",
           title: "Deploy and stay portable",
           summary:
-            "The guide deploys to plain PHP 8.2 shared hosting via .cpanel.yml — no build step, no database, no rewrite rules. Query-string routing and relative links run it at a web root or in a subfolder.",
+            "The guide deploys to plain PHP 8.2 shared hosting via .cpanel.yml: no build step, no database, no rewrite rules. Query-string routing and relative links run it at a web root or in a subfolder.",
           status: "implemented",
           verification: "verified-from-source",
           files: [".cpanel.yml", "DEPLOYMENT.md", "guide/lib/UrlStrategy.php"],
