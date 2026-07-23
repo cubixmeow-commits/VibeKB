@@ -518,7 +518,7 @@
         "body": "Before The homepage explained what VibeKB records and how the repository model works — accurate, but category first. It did not lead with the moment a developer realizes they shipped faster than they understood. After Hero and CTA centre on: AI helped you build it. VibeKB helps you understand it. Six beat developer journey section with comic inspired emotional pacing — balanced for vibe coders building their own software and developers extending open source. Uncertainty section names fear/guessing, not \"documentation.\" VibeKB introduced only after the problem lands, as the missing understanding layer. Before/after transformation section; live proof carousel retained. Story dot navigation progressive enhancement in homepage.js. Impact Visitors should recognize their own arc within the first"
     },
     {
-        "title": "Drop “no Go / no PHP required” homepage claims",
+        "title": "Simplify homepage install requirements copy",
         "summary": "Homepage install and compatibility copy no longer advertise that installation does not require Go or PHP; download → install → agent steps and post-install PHP 8.2+ requirements remain.",
         "type": "change",
         "url": "../why/changes/homepage-drop-no-go-php-claims.html",
@@ -819,8 +819,8 @@
         "body": "Mode A — the dynamic guide on shared hosting .cpanel.yml rsyncs the runtime paths index.php , assets/ , guide/ , .vibekb/ into a cPanel public folder and excludes development only paths tools/ , prompts/ , docs/ , authoring docs, examples/ . Query string routing means no .htaccess rewrite rules are needed and the app runs in a subfolder. .vibekb/ must deploy — it is the content. Mode B — the static snapshot php tools/generate static.php builds /docs ; publish it via GitHub Pages Settings → Pages → branch → /docs or any static host. Relative links make it work at a web root or under a repository subpath. No PHP, database, CDN, or network required. Deployment is part of the application Whenever repository structure, runtime folders, or deployment requirements change, .cpanel.yml and DEPLOYME"
     },
     {
-        "title": "Drop “no Go / no PHP required” homepage claims",
-        "summary": "Complete — removed negative Go/PHP claims from install and compatibility sections.",
+        "title": "Simplify homepage install requirements copy",
+        "summary": "Complete — removed negative Go/PHP requirement claims from install and compatibility sections.",
         "type": "current work",
         "url": "../current-work/index.html",
         "body": "Status Complete. See handoff."
