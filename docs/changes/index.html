@@ -185,6 +185,32 @@ browser in this environment.</p></div>
                                     </li>
                             <li class="change-card">
                     <div class="change-card__head">
+                        <h2>Homepage install copy for GitHub Releases download flow</h2>
+                        <div class="badge-row">
+                            <span class="badge badge--info">implemented</span>                            <span class="badge badge--ok">Verified from source</span>                            <span class="muted">2026-07-23</span>
+                        </div>
+                    </div>
+                    <p>Homepage install and requirements now match the downloadable-binary workflow from release.yml: releases/latest link, real platform asset names, Installing vs Running after vs Advanced build-from-source, no Go for ordinary users, PHP 8.2+ still post-install.</p>
+                    <div class="prose reading-column change-card__body"><h3>Before</h3>
+<p>Homepage already pointed at Releases after Phase 2a, but used <code>/releases</code> (not
+<code>/latest</code>), did not list release asset filenames, and folded install/runtime
+requirements into one card without a secondary build-from-source path.</p>
+<h3>After</h3>
+<ul>
+<li>Download button → <code>…/releases/latest</code></li>
+<li>Step 1 lists the six assets from <code>.github/workflows/release.yml</code></li>
+<li>Requirements split: Installing VibeKB / Running after installation / Advanced build from source</li>
+<li>Badge: “No Go and no PHP required to install”</li>
+<li>Coming soon unchanged (signing, Homebrew, Winget, curl)</li>
+</ul>
+<h3>Verification note</h3>
+<p>Rendered HTML checked against release.yml asset names; <code>vibekb install</code> matches
+installer usage; no <code>install.php</code> or primary <code>go build</code> in install cards.</p></div>
+                                            <p class="change-card__links"><strong>Affected:</strong>
+                            <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a>                        </p>
+                                    </li>
+                            <li class="change-card">
+                    <div class="change-card__head">
                         <h2>Homepage voice pass (indie-developer tone)</h2>
                         <div class="badge-row">
                             <span class="badge badge--info">implemented</span>                            <span class="badge badge--ok">Verified from source</span>                            <span class="muted">2026-07-23</span>
@@ -530,7 +556,7 @@ before/after, workflow timeline, repo map, and separate CTA. Accurate but too lo
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 03:30 UTC · source commit fdd0a59 (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 03:49 UTC · source commit fdd0a59 (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

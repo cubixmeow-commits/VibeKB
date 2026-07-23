@@ -129,7 +129,7 @@
       "depended_on_by": ["Public landing / Mode A deployment"],
       "depends_on": ["guide/lib/Content.php", "guide/lib/helpers.php", ".vibekb/project/identity.md", "assets/css/homepage.css", "assets/js/homepage.js", "assets/images/homepage-developer-journey.webp", "assets/images/homepage-developer-journey.png", "cmd/vibekb/main.go", "internal/installer/installer.go", "INSTALLER.md", "RELEASE.md", "prompts/INTEGRATE_VIBEKB.md", "DEPLOYMENT.md", "PRODUCT.md"],
       "safety": "moderate-impact",
-      "test_after_change": "Load the homepage; confirm section order problem → install → compatibility → understanding → proof; verify primary install is download from GitHub Releases + vibekb install (no Go build as primary); PHP 8.2+ after install; Coming soon excludes prebuilt binaries; confirm no auto-analyze claims.",
+      "test_after_change": "Load the homepage; confirm primary install is Download latest release (/releases/latest) + vibekb install; platform asset names match release.yml; PHP 8.2+ only under after-install; Advanced build-from-source is secondary; no install.php or Go for ordinary users.",
       "provenance": "verified-from-source"
     },
     {
