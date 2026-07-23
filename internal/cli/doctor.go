@@ -46,7 +46,8 @@ func cmdDoctor() int {
 		reportWarn("git", "not found — drift detection (`check`, `status`) is limited without it")
 	}
 
-	// Repository context.
+	// Repository context. `vibekb install` is native and works from anywhere, so
+	// this only reports whether the current directory is already a VibeKB repo.
 	if rt.RepoRoot != "" {
 		reportOK("VibeKB repository", rt.RepoRoot)
 		if info, err := os.Stat(filepath.Join(rt.RepoRoot, ".vibekb")); err == nil && info.IsDir() {
@@ -54,10 +55,8 @@ func cmdDoctor() int {
 		} else {
 			reportWarn(".vibekb/ workspace", "not present here — run 'vibekb bootstrap' to scaffold it")
 		}
-	} else if rt.SourceRoot != "" {
-		reportOK("VibeKB source clone", rt.SourceRoot+" (ready for `vibekb install`)")
 	} else {
-		reportWarn("VibeKB repository", "not detected above the current directory")
+		reportWarn("VibeKB repository", "not detected here — 'vibekb install <target>' can create one")
 	}
 
 	fmt.Println(strings.Repeat("=", 60))

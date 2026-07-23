@@ -108,7 +108,7 @@
     <header class="page-head reading-column">
         <p class="eyebrow">Integration</p>
         <h1>Bootstrap the VibeKB workspace</h1>
-        <p class="lede">A deterministic `php tools/vibekb.php bootstrap` command (and the shared `tools/lib/Starter.php` library) that creates or repairs a `.vibekb/` workspace — every required directory and starter file — without inspecting source, inventing functionality, or overwriting content. &quot;git init&quot; for VibeKB.</p>
+        <p class="lede">A deterministic `php tools/vibekb.php bootstrap` command that creates or repairs a `.vibekb/` workspace — every required directory and starter file — without inspecting source, inventing functionality, or overwriting content. It reads the canonical, language-neutral starter definition under `template/starter/` (the same data the native Go installer embeds), so the two can never disagree. &quot;git init&quot; for VibeKB.</p>
         <div class="badge-row">
             <span class="badge badge--ok">Implemented</span>            <span class="badge badge--ok">Verified from source</span>            <span class="badge badge--info">User-facing</span>        </div>
     </header>
@@ -127,11 +127,14 @@ reports the same plan without writing anything.</p>
 <p><code>vibekb_verify_workspace()</code> reports which required directories and starter files
 are missing; <code>vibekb_scaffold_workspace()</code> creates the missing ones and writes any
 missing starter files, never overwriting an existing file (so it is safe on a
-fresh, partial, or damaged workspace). The starter definition —
-<code>vibekb_starter_dirs()</code> and <code>vibekb_starter_files()</code> — is the single source of
-truth, also used by <code>install.php</code>, so the two can never disagree about what a
-fresh model contains. The starter files are explicit placeholders that tell an
-agent what to write; none claims the target software does anything.</p>
+fresh, partial, or damaged workspace). The starter definition is <strong>data</strong>, not
+code: <code>vibekb_starter_dirs()</code> reads the directory list from
+<code>template/starter/starter.json</code> and <code>vibekb_starter_files()</code> reads the file tree
+under <code>template/starter/files/</code>, substituting the <code>{{DATE}}</code> and
+<code>{{PROJECT_NAME_JSON}}</code> tokens. That one canonical definition is also embedded and
+read by the native Go installer, so the two can never disagree about what a fresh
+model contains. The starter files are explicit placeholders that tell an agent
+what to write; none claims the target software does anything.</p>
 <h3>Step-by-step flow</h3>
 <ol>
 <li>Verify the workspace against the starter definition.</li>
@@ -141,7 +144,14 @@ agent what to write; none claims the target software does anything.</p>
 </ol>
 <h3>Implementation map</h3>
 <ul>
-<li><code>tools/lib/Starter.php</code> — the starter definition plus verify/scaffold helpers.</li>
+<li><code>template/starter/</code> — the canonical, language-neutral starter definition</li>
+</ul>
+<p>(<code>starter.json</code> directory list + a <code>files/</code> tree with tokens).</p>
+<ul>
+<li><code>tools/lib/Starter.php</code> — reads that definition and provides verify/scaffold</li>
+</ul>
+<p>helpers.</p>
+<ul>
 <li><code>tools/vibekb.php</code> — the <code>bootstrap</code> command that reports the scaffold result.</li>
 </ul>
 <h3>Data used</h3>
@@ -155,8 +165,9 @@ agent what to write; none claims the target software does anything.</p>
 </ul>
 <p>content is never at risk because nothing is overwritten.</p>
 <h3>Safe to change</h3>
-<p>Adding a required directory or starter file to <code>tools/lib/Starter.php</code> updates
-both bootstrap and the installer at once. Keep every starter file valid so the
+<p>Adding a required directory to <code>template/starter/starter.json</code>, or a starter file
+under <code>template/starter/files/</code>, updates both bootstrap and the native installer
+at once (the installer embeds the same tree). Keep every starter file valid so the
 scaffolded model passes <code>php tools/vibekb.php check</code>.</p>
 <h3>Use caution</h3>
 <p>Bootstrap must never generate functionality, invent diagrams, inspect source, or
@@ -178,7 +189,7 @@ starter model consistent and makes a damaged workspace trivially recoverable.</p
                                             <dt>Verification</dt>
                         <dd><span class="badge badge--ok">Verified from source</span></dd>
                                         <dt>Updated</dt>
-                    <dd>2026-07-22</dd>
+                    <dd>2026-07-23</dd>
                     <dt>Facing</dt>
                     <dd>User-facing</dd>
                 </dl>
@@ -186,12 +197,12 @@ starter model consistent and makes a damaged workspace trivially recoverable.</p
 
                             <div class="rail-card metadata-group">
                     <h2>Trigger</h2>
-                    <p>A developer runs `php tools/vibekb.php bootstrap` (or the installer calls the same library) against a repository.</p>
+                    <p>A developer runs `php tools/vibekb.php bootstrap` (or the native installer scaffolds from the same definition) against a repository.</p>
                 </div>
             
             <div class="rail-card metadata-group">
                 <h2>Data read or written</h2>
-                <p><strong>Reads:</strong> <span class="muted">None.</span></p>
+                <p><strong>Reads:</strong> <code class="chip chip--file">template/starter</code></p>
                 <p><strong>Writes:</strong> <code class="chip chip--file">.vibekb</code></p>
                             </div>
 
@@ -216,7 +227,7 @@ starter model consistent and makes a damaged workspace trivially recoverable.</p
             
             <div class="rail-card metadata-group">
                 <h2>Related rationale</h2>
-                                    <p><a class="chip" href="../why/decisions/installer-prepares-agent-interprets.html">The installer prepares the workspace; the agent interprets the software</a> <a class="chip" href="../why/decisions/installer-template-not-duplicated-tree.html">The template is a manifest plus a generator, not a duplicated file tree</a></p>
+                                    <p><a class="chip" href="../why/decisions/installer-prepares-agent-interprets.html">The installer prepares the workspace; the agent interprets the software</a> <a class="chip" href="../why/decisions/installer-template-not-duplicated-tree.html">The template is a manifest plus a generator, not a duplicated file tree</a> <a class="chip" href="../why/decisions/native-installer-embedded-payload.html">Installation is native to the Go binary, from an embedded payload</a></p>
                             </div>
         </aside>
     </div>
@@ -230,7 +241,7 @@ starter model consistent and makes a damaged workspace trivially recoverable.</p
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 00:29 UTC · source commit df4a682 (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 02:00 UTC · source commit 3956dbc (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

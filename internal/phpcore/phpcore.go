@@ -23,9 +23,6 @@ type Runtime struct {
 	// RepoRoot is the nearest ancestor directory that holds a VibeKB workspace
 	// or its tooling ("" if the caller is not inside one).
 	RepoRoot string
-	// SourceRoot is the nearest ancestor holding install.php — a VibeKB source
-	// clone, used by the `install` command ("" if not inside one).
-	SourceRoot string
 }
 
 // Discover resolves PHP and the surrounding VibeKB repository from the current
@@ -36,7 +33,6 @@ func Discover() Runtime {
 		PHP:        php,
 		PHPVersion: ver,
 		RepoRoot:   findUp(markerRepo),
-		SourceRoot: findUp(markerSource),
 	}
 }
 
@@ -86,12 +82,6 @@ func (r Runtime) Delegate(script string, args []string) int {
 	return r.run(r.RepoRoot, script, args)
 }
 
-// DelegateSource is Delegate for tooling that lives at a source clone's root
-// (currently only install.php), which is resolved from SourceRoot.
-func (r Runtime) DelegateSource(script string, args []string) int {
-	return r.run(r.SourceRoot, script, args)
-}
-
 func (r Runtime) run(dir, script string, args []string) int {
 	full := filepath.Join(dir, script)
 	cmdArgs := append([]string{full}, args...)
@@ -113,12 +103,6 @@ func (r Runtime) run(dir, script string, args []string) int {
 func markerRepo(dir string) bool {
 	return exists(filepath.Join(dir, "tools", "vibekb.php")) ||
 		isDir(filepath.Join(dir, ".vibekb"))
-}
-
-// markerSource reports whether dir is the root of a VibeKB source clone.
-func markerSource(dir string) bool {
-	return exists(filepath.Join(dir, "install.php")) &&
-		exists(filepath.Join(dir, "template", "manifest.json"))
 }
 
 // findUp walks upward from the working directory to the filesystem root,

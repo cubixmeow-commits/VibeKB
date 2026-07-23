@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/cubixmeow-commits/vibekb/internal/installer"
 	"github.com/cubixmeow-commits/vibekb/internal/phpcore"
 )
 
@@ -40,7 +41,8 @@ func Run(args []string) int {
 	case "doctor":
 		return cmdDoctor()
 	case "install":
-		return delegateInstall(rest)
+		// Fully native: copies embedded payload and scaffolds .vibekb/ with no PHP.
+		return installer.Run(rest)
 	}
 
 	if script, ok := delegatedCommands[cmd]; ok {
@@ -67,23 +69,6 @@ func delegate(subcommand, script string, rest []string) int {
 	}
 	// The PHP CLI expects its own subcommand as the first argument.
 	return rt.Delegate(script, append([]string{subcommand}, rest...))
-}
-
-// delegateInstall forwards to the PHP installer, which must be run from a VibeKB
-// source clone.
-func delegateInstall(rest []string) int {
-	rt := phpcore.Discover()
-	if rt.SourceRoot == "" {
-		fmt.Fprintln(os.Stderr, "vibekb: `install` must run from a VibeKB source clone (install.php not found above the current directory).")
-		fmt.Fprintln(os.Stderr, "  git clone https://github.com/cubixmeow-commits/VibeKB.git && cd VibeKB")
-		fmt.Fprintln(os.Stderr, "  vibekb install /path/to/your/project")
-		return 1
-	}
-	if rt.PHP == "" {
-		reportMissingPHP("install")
-		return 1
-	}
-	return rt.DelegateSource("install.php", rest)
 }
 
 func reportMissingPHP(subcommand string) {
@@ -115,7 +100,9 @@ Model commands (delegated to the PHP core):
   bootstrap [--dry-run]  Verify and repair the .vibekb/ workspace.
   validate [path]     Run the headless model validator.
   generate            Regenerate the static /docs snapshot.
-  install [target]    Install VibeKB into a repository (from a source clone).
+
+Native install (no PHP required):
+  install [target]    Install VibeKB into a repository from the embedded payload.
 
 Run 'vibekb doctor' first if a delegated command reports a missing runtime.
 See ARCHITECTURE.md for how the Go front-end and the PHP core fit together.

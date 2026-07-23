@@ -13,29 +13,40 @@ and where to extend it.
 
 ## Quick start
 
+Installation is native to the `vibekb` Go CLI — **no PHP required to install.**
+Build the binary once, then install:
+
 ```bash
 git clone https://github.com/cubixmeow-commits/VibeKB.git
-php VibeKB/install.php /path/to/your/project
+cd VibeKB
+go build -o vibekb ./cmd/vibekb           # Go 1.24+
+./vibekb install /path/to/your/project
 ```
 
-or, from inside the VibeKB clone, install into the current directory:
+Once the binary is on your `PATH` (or installed via brew/winget/curl, on the
+roadmap) it is simply:
 
 ```bash
-php install.php
+vibekb install /path/to/your/project
 ```
 
 Then open your project in a coding agent (Claude Code, Cursor, Codex, …) and ask
 it to **build the first VibeKB model using `prompts/INTEGRATE_VIBEKB.md`**.
 
-Requirements: **PHP 8.2+**. No Composer, no framework, no network, no build step.
-Works on Windows, macOS, and Linux.
+Requirements: **Go 1.24+** to build the CLI (or a released binary). **PHP 8.2+ is
+required only to *run* the installed guide** (`php tools/vibekb.php …`, the dynamic
+app), never to install. Works on Windows, macOS, and Linux.
 
-> **`vibekb install` (Go front-end).** If you have the `vibekb` binary built (see
-> the README and `ARCHITECTURE.md`), `vibekb install /path/to/your/project` does
-> exactly the same thing — it runs this same `install.php` from your source clone.
-> The Go CLI is a portable front door; the installer logic below is unchanged and
-> remains the canonical implementation. Everything in this document applies to
-> both entry points.
+> **How it works.** The `vibekb` binary embeds the installer payload and a
+> canonical starter definition (`template/starter/`), so `vibekb install` copies
+> files and scaffolds a fresh `.vibekb/` **without launching PHP** and without the
+> source clone needing to remain on disk. The set of installed files is declared
+> in [`template/manifest.json`](./template/manifest.json), which the binary parses
+> directly — the single source of truth.
+>
+> **Legacy `php install.php`.** The old entry point still works: it is now a thin
+> compatibility wrapper that forwards to `vibekb install` (or prints how to get
+> the binary). There is only one installer implementation — the Go one.
 
 ## What gets installed
 
@@ -45,7 +56,7 @@ separated:
 
 | Where | What | Who owns it |
 |-------|------|-------------|
-| `guide/`, `tools/`, `prompts/`, `.cursor/`, VibeKB docs | The **installed runtime** — the app, the CLI, the agent instructions | VibeKB (safe to refresh on upgrade) |
+| `guide/`, `tools/`, `prompts/`, `.cursor/`, `template/starter/`, VibeKB docs | The **installed runtime** — the app, the CLI, the agent instructions, and the starter definition `bootstrap` repairs from | VibeKB (safe to refresh on upgrade) |
 | `.vibekb/` | The **living software model** — your project's knowledge | Your project (never overwritten) |
 | `docs/` | The **generated static snapshot** (`php tools/vibekb.php generate`) | Generated output (not installed) |
 
@@ -63,26 +74,28 @@ installed — the product you use in a target repository is the **guide** at
 
 ## The installation flow
 
-Running `php install.php [target]` does the following:
+Running `vibekb install [target]` does the following, entirely in Go with no PHP:
 
-1. **Resolve source and target.** The installer's own directory is the VibeKB
-   source; the argument (or the current directory) is the target. It refuses to
-   install into VibeKB's own repository (which is self-hosted).
+1. **Resolve the target.** The argument (or the current directory) is the target.
+   It refuses to install into VibeKB's own self-hosted repository (detected via
+   `.vibekb/manifest.json` `self_hosted: true`).
 2. **Detect the repository.** It confirms the target looks like a software project
    (a `.git` directory, common source folders, a README, or a manifest like
    `package.json`/`composer.json`/`go.mod`). If not, it asks for confirmation.
 3. **Show the plan.** Before changing anything it prints exactly what will be
    **created**, **replaced**, **skipped**, and whether `.vibekb/` will be a fresh
    model or preserved.
-4. **Copy the runtime.** It creates only missing directories and, on a fresh
-   install, never overwrites a pre-existing file (those are skipped and reported)
-   unless you pass `--force`. Your application's code is never touched.
-5. **Scaffold a fresh model.** It writes an empty-but-valid `.vibekb/` (see
-   *Template structure* below) and records installer state in
-   `.vibekb/.installer.json`.
-6. **Verify.** It checks the guide, tools, prompts, and starter model are present,
-   and runs the freshly installed `php tools/vibekb.php check` against the target
-   (an empty model is valid and reports OK).
+4. **Copy the runtime.** From the binary's embedded payload, it creates only
+   missing directories and, on a fresh install, never overwrites a pre-existing
+   file (those are skipped and reported) unless you pass `--force`. Your
+   application's code is never touched.
+5. **Scaffold a fresh model.** It writes an empty-but-valid `.vibekb/` from the
+   embedded starter definition (see *Template structure* below) and records
+   installer state in `.vibekb/.installer.json`.
+6. **Verify (natively).** It checks the guide, tools, prompts, starter definition,
+   and starter model are present, and confirms the scaffolded workspace is
+   complete against the embedded definition — no PHP is launched. (Run
+   `vibekb check`, which does need PHP, to validate the model itself.)
 7. **Hand off.** It prints the next action: build the model with
    `prompts/INTEGRATE_VIBEKB.md`.
 
@@ -99,7 +112,7 @@ Running `php install.php [target]` does the following:
 ### Dry run
 
 ```bash
-php install.php --dry-run /path/to/your/project
+vibekb install --dry-run /path/to/your/project
 ```
 
 prints the create/replace/skip plan and the full per-file list, and writes
@@ -111,9 +124,9 @@ When the installer finds a prior installation (a `.vibekb/.installer.json`
 marker), it switches to **upgrade mode** automatically:
 
 ```bash
-php VibeKB/install.php /path/to/your/project     # auto-upgrade
+vibekb install /path/to/your/project     # auto-upgrade
 # or force it explicitly:
-php VibeKB/install.php --upgrade /path/to/your/project
+vibekb install --upgrade /path/to/your/project
 ```
 
 An upgrade **refreshes the VibeKB-owned payload** (`guide/`, `tools/`, `prompts/`,
@@ -141,25 +154,30 @@ workspace in a repository that already has the VibeKB runtime. Like the
 installer, it **never** generates functionality, invents diagrams, inspects your
 source, or writes documentation about your software.
 
-The installer and `bootstrap` share one definition of the starter workspace
-(`tools/lib/Starter.php`), so they can never disagree about what a fresh model
-contains.
+The native installer and `bootstrap` share one definition of the starter
+workspace — the `template/starter/` data — so they can never disagree about what a
+fresh model contains. (The Go installer embeds it; `bootstrap` reads the installed
+copy via `tools/lib/Starter.php`.)
 
 ## Template structure
 
 The "template" is intentionally **not** a duplicated copy of the runtime (that
 would drift instantly in a self-hosted repository). It is a small, declarative
-definition plus a generator:
+payload manifest plus a language-neutral starter definition:
 
 ```
 template/
     manifest.json     # declares the installable payload, preserved paths,
                       # generated paths, and deliberately-excluded paths
     README.md         # orientation for the template system
-tools/lib/Starter.php # the single source of truth for the fresh .vibekb/
-                      # workspace (dirs + starter files), shared by the
-                      # installer and `bootstrap`
+    starter/          # the single source of truth for the fresh .vibekb/ workspace
+        starter.json  #   the required directory list (incl. empty dirs)
+        files/        #   the starter file tree, mirrored onto the target .vibekb/,
+                      #   with {{DATE}} and {{PROJECT_NAME_JSON}} tokens
 ```
+
+Both the Go installer (which embeds `template/starter/`) and PHP `bootstrap`
+(via `tools/lib/Starter.php`, which reads it) consume this one definition.
 
 A freshly scaffolded `.vibekb/` contains:
 
@@ -187,12 +205,14 @@ recorded. The empty model is valid and passes `php tools/vibekb.php check`.
 
 - **Add to the payload.** To install another VibeKB-owned file or directory, add
   its repository-relative path to the appropriate list in
-  `template/manifest.json` (`runtime`, `agent`, or `docs`). The installer picks it
-  up with no code change; dry-run to confirm.
-- **Change the starter workspace.** Edit `vibekb_starter_dirs()` and
-  `vibekb_starter_files()` in `tools/lib/Starter.php`. Both the installer and
-  `bootstrap` update together. Keep every starter file valid so a fresh workspace
-  still passes `check`.
+  `template/manifest.json` (`runtime`, `agent`, or `docs`), **and** add it to the
+  embed directives in `embed.go` so the binary carries its bytes. Dry-run to
+  confirm.
+- **Change the starter workspace.** Edit the data under `template/starter/` —
+  `starter.json` for directories, `files/` for starter files (keeping `{{DATE}}`
+  and `{{PROJECT_NAME_JSON}}` tokens). Both the Go installer and PHP `bootstrap`
+  update together. Keep every starter file valid so a fresh workspace still passes
+  `check`.
 - **Version the template.** Bump `template_version` in `template/manifest.json`
   when the payload or starter changes. The installer records it in
   `.vibekb/.installer.json` and reports the transition on upgrade.
@@ -202,21 +222,23 @@ recorded. The empty model is valid and passes `php tools/vibekb.php check`.
 
 ## Manual installation (advanced, appendix)
 
-The installer is the supported path. If you must install by hand — for example
-into an environment where you cannot run the installer — copy the payload
-declared in `template/manifest.json` into your repository (`guide/`, `tools/`,
-`prompts/`, `.cursor/`, and the VibeKB docs), then create the workspace with:
+The `vibekb` binary is the supported path. If you must install by hand — for
+example where you cannot run the binary — copy the payload declared in
+`template/manifest.json` into your repository (`guide/`, `tools/`, `prompts/`,
+`.cursor/`, `template/starter/`, and the VibeKB docs), then create the workspace
+with:
 
 ```bash
 php tools/vibekb.php bootstrap
 ```
 
-That produces the same fresh, valid `.vibekb/` the installer would. Then follow
+That produces the same fresh, valid `.vibekb/` the installer would (it reads the
+copied `template/starter/` definition). Then follow
 [`INITIALIZE.md`](./INITIALIZE.md) to build the model.
 
 ## Troubleshooting
 
-- **"The target is the VibeKB source repository itself."** You ran the installer
+- **"The target is a VibeKB source/self-hosted repository."** You ran the installer
   against VibeKB's own repo. Install into a *different* repository, or use
   `php tools/vibekb.php bootstrap` to verify/repair this repo's workspace.
 - **"existing file(s) were SKIPPED for safety."** A fresh install found files that

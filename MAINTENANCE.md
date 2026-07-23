@@ -145,4 +145,8 @@ gofmt -l cmd internal                              # must print nothing
 
 Keep the honesty boundary: the CLI **delegates** every model-semantic command to
 the PHP core and must never grow a second model loader, template system, or
-generator. See `ARCHITECTURE.md`.
+generator. Its native surface is the parts that don't interpret the model —
+diagnostics and installation. `vibekb install` is native (`internal/installer` +
+`embed.go`); it scaffolds from the canonical `template/starter/` data, the same
+definition `tools/lib/Starter.php` reads for `bootstrap`. Change starter content in
+`template/starter/`, not in code, so both stay in sync. See `ARCHITECTURE.md`.

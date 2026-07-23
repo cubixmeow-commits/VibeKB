@@ -107,7 +107,7 @@
         <header class="page-head reading-column">
             <p class="eyebrow">Decisions</p>
             <h1>The template is a manifest plus a generator, not a duplicated file tree</h1>
-            <p class="lede">template/ declares the installable payload (manifest.json) and the starter model is produced by tools/lib/Starter.php; the installer copies the runtime from the canonical repository files rather than from a second physical copy under template/, so nothing drifts.</p>
+            <p class="lede">template/ declares the installable payload (manifest.json) and the fresh model comes from a single canonical starter definition (template/starter/) read by both consumers; the installer copies the runtime from the canonical repository files (embedded into the binary at build time) rather than from a second physical copy, so nothing drifts.</p>
             <div class="badge-row">
                 <span class="badge badge--info">accepted</span>                                                <span class="badge badge--ok">Verified from source</span>            </div>
         </header>
@@ -120,12 +120,13 @@ instantly drifts from the canonical one and that VibeKB&#039;s own drift detecti
 would then have to track.</p>
 <h3>Decision</h3>
 <p><code>template/</code> contains a declarative <code>manifest.json</code> (the payload list, the
-preserved paths, the generated paths) and documentation — not a copy of the
-runtime. <code>install.php</code> reads the manifest and copies the runtime from the
-canonical repository files present in the VibeKB clone. The fresh <code>.vibekb/</code>
-model is produced programmatically by <code>tools/lib/Starter.php</code>, the single source
-of truth shared with <code>bootstrap</code>, so there is no second copy of the starter
-content either.</p>
+preserved paths, the generated paths) and the canonical starter definition under
+<code>template/starter/</code> — not a copy of the runtime. The native installer embeds and
+copies the runtime from the canonical repository files at build time (<code>embed.go</code>),
+never from a second physical copy. The fresh <code>.vibekb/</code> model comes from the
+single <code>template/starter/</code> data definition, read by both the Go installer
+(embedded) and <code>tools/lib/Starter.php</code> (for <code>bootstrap</code>), so there is no second
+copy of the starter content either.</p>
 <h3>Alternatives considered</h3>
 <ul>
 <li><strong>A full physical <code>template/guide</code>, <code>template/tools</code>, … tree</strong> — rejected:</li>
@@ -143,23 +144,33 @@ knowledge in one authoritative place. A manifest plus a generator expresses that
 without duplicating the payload.</p>
 <h3>Consequences</h3>
 <ul>
-<li><code>template/</code> is intentionally small; the payload definition lives in</li>
+<li><code>template/</code> holds the payload definition (<code>manifest.json</code>) and the canonical</li>
 </ul>
-<p><code>template/manifest.json</code> and the starter definition in <code>tools/lib/Starter.php</code>.</p>
+<p>starter data (<code>template/starter/</code>); neither is a copy of the runtime.</p>
 <ul>
 <li><code>template/</code> is excluded from VibeKB&#039;s own drift detection (it is distribution</li>
 </ul>
 <p>metadata, like <code>docs/</code> is generated output).</p>
 <ul>
+<li><code>template/starter/</code> is installed into targets so <code>bootstrap</code> can repair a</li>
+</ul>
+<p>workspace from the same definition the installer embeds.</p>
+<ul>
 <li>Upgrades refresh exactly the manifest&#039;s payload and never the preserved</li>
 </ul>
-<p><code>.vibekb/</code>.</p></div></div>
+<p><code>.vibekb/</code>.</p>
+<h3>Update (native installer)</h3>
+<p>This decision predates the native Go installer but still holds: with
+installation moved into the binary (<code>decision:native-installer-embedded-payload</code>),
+&quot;copy from the canonical files&quot; became &quot;embed the canonical files and copy from
+the embed&quot;, and the starter definition moved from PHP code into
+<code>template/starter/</code> data. Both changes keep the one-authoritative-source rule.</p></div></div>
             <aside class="detail-rail" aria-label="Connections">
                 <div class="rail-card">
                     <h2>Affects functionality</h2>
                     <p><a class="chip" href="../../functionality/install-into-a-repository.html">Install VibeKB into a repository</a></p>
                 </div>
-                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">template/manifest.json</code> <code class="chip chip--file">install.php</code> <code class="chip chip--file">tools/lib/Starter.php</code></p></div>
+                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">template/manifest.json</code> <code class="chip chip--file">template/starter/starter.json</code> <code class="chip chip--file">embed.go</code> <code class="chip chip--file">tools/lib/Starter.php</code></p></div>
                             </aside>
         </div>
     </article>
@@ -172,7 +183,7 @@ without duplicating the payload.</p>
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 00:29 UTC · source commit df4a682 (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 02:00 UTC · source commit 3956dbc (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

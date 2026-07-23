@@ -3,19 +3,19 @@ id: run-the-developer-cli
 type: functionality
 title: Run VibeKB from one developer CLI
 area: developer-cli
-summary: A single Go binary (`vibekb`) that is the developer's front door to VibeKB — it runs environment diagnostics natively and delegates every model-semantic command (status, check, affected, bootstrap, validate, generate, install) to the canonical PHP tooling it discovers, so there is exactly one model loader and one professional command in front of it.
+summary: A single Go binary (`vibekb`) that is the developer's front door to VibeKB — it installs VibeKB natively (embedded payload, no PHP), runs environment diagnostics natively, and delegates every model-semantic command (status, check, affected, bootstrap, validate, generate) to the canonical PHP tooling it discovers, so there is exactly one model loader and one professional command in front of it.
 status: implemented
 verification: verified-from-source
 user_facing: true
-trigger: A developer runs `vibekb <command>` (e.g. `vibekb doctor`, `vibekb check`) from anywhere inside a VibeKB repository or source clone.
+trigger: A developer runs `vibekb <command>` (e.g. `vibekb install`, `vibekb doctor`, `vibekb check`) — install from anywhere, model commands from inside a VibeKB repository.
 updated: 2026-07-23
-tags: [cli, go, developer-tool, delegation, distribution]
+tags: [cli, go, developer-tool, delegation, native-install, distribution]
 files: [cmd/vibekb/main.go, internal/cli/cli.go, internal/cli/doctor.go, internal/cli/version.go, internal/phpcore/phpcore.go, internal/buildinfo/buildinfo.go, go.mod]
-reads: [tools/vibekb.php, install.php]
+reads: [tools/vibekb.php]
 writes: []
 config: []
 depends_on: [install-into-a-repository, bootstrap-workspace, validate-model, detect-drift, generate-static-snapshot]
-related_memory: [decision:go-front-end-php-core, decision:two-modes-one-source]
+related_memory: [decision:go-front-end-php-core, decision:native-installer-embedded-payload, decision:two-modes-one-source]
 ---
 
 ## In one sentence
@@ -37,15 +37,16 @@ fails with a plain message telling the developer to install PHP 8.2+ or set
 
 ## Current behavior
 
-`cmd/vibekb` dispatches through `internal/cli`. `help`, `version`, and `doctor` are
-native Go. `status`, `check`, `affected`, `bootstrap`, `validate`, and `generate`
-are delegated to `tools/vibekb.php`; `install` is delegated to `install.php`.
-`internal/phpcore` performs discovery: it walks up from the working directory to
-find the repository root (a directory holding `tools/vibekb.php` or `.vibekb/`) or
-a source clone (holding `install.php` and `template/manifest.json`), and resolves
-the PHP executable from `VIBEKB_PHP` or the usual names on `PATH`. Delegation runs
-`php <script> <subcommand> <args…>` with the repository as the working directory
-and stdio wired straight through, and returns the child process's exit code.
+`cmd/vibekb` dispatches through `internal/cli`. `help`, `version`, `doctor`, and
+`install` are native Go — `install` runs entirely from the binary's embedded
+payload (see **Install VibeKB into a repository**) and launches no PHP. `status`,
+`check`, `affected`, `bootstrap`, `validate`, and `generate` are delegated to
+`tools/vibekb.php`. `internal/phpcore` performs discovery for the delegated
+commands: it walks up from the working directory to find the repository root (a
+directory holding `tools/vibekb.php` or `.vibekb/`) and resolves the PHP
+executable from `VIBEKB_PHP` or the usual names on `PATH`. Delegation runs `php
+<script> <subcommand> <args…>` with the repository as the working directory and
+stdio wired straight through, and returns the child process's exit code.
 
 ## Honesty boundary
 
@@ -75,9 +76,10 @@ dependency: `doctor` states it plainly rather than pretending it is not there.
 
 ## Data used
 
-- **Reads:** the PHP scripts it delegates to (`tools/vibekb.php`, `install.php`)
-  and the surrounding directory tree (to locate the repository and PHP). It reads
-  no `.vibekb/` content itself — the delegated PHP does.
+- **Reads:** the PHP script it delegates to (`tools/vibekb.php`) and the
+  surrounding directory tree (to locate the repository and PHP); for `install`, its
+  own embedded payload. It reads no `.vibekb/` content itself — the delegated PHP
+  does.
 - **Writes:** nothing directly; any writes are performed by the delegated PHP
   (e.g. `bootstrap` scaffolding, `generate` writing `/docs`).
 
@@ -90,7 +92,8 @@ Delegates to the PHP commands documented as their own functionality:
 ## Failure cases
 
 - Not inside a VibeKB repository → reported; exit non-zero (delegated commands).
-- `install` run outside a source clone → reported with the clone command.
+- `install` into VibeKB's own self-hosted repo → refused; into a non-project dir
+  → confirmation prompt.
 - PHP absent → reported with how to install it or set `VIBEKB_PHP`; exit non-zero.
 - A delegated command failing → its exit code is propagated unchanged.
 

@@ -108,7 +108,7 @@
     <header class="page-head reading-column">
         <p class="eyebrow">Integration</p>
         <h1>Install VibeKB into a repository</h1>
-        <p class="lede">A PHP installer (`install.php`) that copies the VibeKB runtime into a target repository and scaffolds a fresh, empty-but-valid `.vibekb/` workspace — without touching the application&#039;s code and without analysing it — so adopting VibeKB is a command, not a manual copy.</p>
+        <p class="lede">A fully native installer built into the `vibekb` Go binary. `vibekb install /path/to/repo` copies the VibeKB runtime and scaffolds a fresh, empty-but-valid `.vibekb/` workspace from files embedded in the binary — without executing PHP, without analysing the application, and without needing the source repository to remain on disk. PHP is required only to run the installed guide.</p>
         <div class="badge-row">
             <span class="badge badge--ok">Implemented</span>            <span class="badge badge--ok">Verified from source</span>            <span class="badge badge--info">User-facing</span>        </div>
     </header>
@@ -116,72 +116,93 @@
     <div class="detail-grid">
         <div class="detail-main">
                             <div class="prose reading-column"><h3>In one sentence</h3>
-<p><code>php install.php /path/to/repo</code> prepares any repository for VibeKB — it installs
-the guide, the tools, the agent instructions, and the VibeKB docs, then lays down
-a fresh empty model — and then hands off to an AI agent to build the model.</p>
+<p><code>vibekb install /path/to/repo</code> prepares any repository for VibeKB — it copies the
+guide, the tools, the agent instructions, the VibeKB docs, and the starter
+definition, then lays down a fresh empty model — all from the binary&#039;s embedded
+payload, with no PHP process launched, and hands off to an AI agent to build the
+model.</p>
 <h3>User experience</h3>
-<p>The public homepage surfaces the intended first-run path in three steps under
-<code>#install</code>: clone VibeKB, run <code>php VibeKB/install.php /path/to/your/project</code>,
-then ask a coding agent (Cursor, Claude Code, Codex, Windsurf, or another capable
-agent) to build the model with <code>prompts/INTEGRATE_VIBEKB.md</code>. A Compatibility &amp;
-Requirements section under <code>#compatibility</code> answers stack/agent/deploy questions
-without claiming language parsers or automatic analysis. That page is marketing
-copy only — the installer itself is unchanged.</p>
-<p>The developer runs one command and sees a plan (what will be created, replaced,
-skipped, and that <code>.vibekb/</code> is a fresh model), confirms, and gets a verified
-installation with explicit next steps. <code>--dry-run</code> shows the full plan and
-changes nothing; <code>--yes</code> runs non-interactively; <code>--force</code> overwrites
-pre-existing files (including resetting an existing model); an existing
-installation is auto-detected and upgraded (runtime refreshed, <code>.vibekb/</code>
-preserved).</p>
+<p>A developer builds the binary once (<code>go build -o vibekb ./cmd/vibekb</code>) — or, in
+future, installs it via brew/winget/curl — and runs <code>vibekb install
+/path/to/your/project</code>. They see a plan (what will be created, replaced, skipped,
+and that <code>.vibekb/</code> is a fresh model), confirm, and get a verified installation
+with explicit next steps. <code>--dry-run</code> shows the full plan and changes nothing;
+<code>--yes</code> runs non-interactively; <code>--force</code> overwrites pre-existing files (including
+resetting an existing model); an existing installation is auto-detected and
+upgraded (runtime refreshed, <code>.vibekb/</code> preserved).</p>
+<p>The historical <code>php install.php</code> entry point still works: it is now a thin
+compatibility wrapper that forwards to <code>vibekb install</code>, or prints how to get the
+binary if none is found.</p>
 <h3>Current behavior</h3>
-<p>The installer resolves its own clone as the <strong>source</strong> and the argument (or the
-current directory) as the <strong>target</strong>. It reads <code>template/manifest.json</code> to learn
-the VibeKB-owned payload (<code>guide/</code>, <code>tools/</code>, <code>prompts/</code>, <code>.cursor/</code>, and the
-VibeKB docs), refusing to install into VibeKB&#039;s own repository. It checks the
-target looks like a software project, builds a per-file plan, and — after
-confirmation — copies the payload, creating only missing directories and never
-overwriting pre-existing files on a fresh install unless <code>--force</code> is given. It
-then scaffolds a fresh <code>.vibekb/</code> via <code>tools/lib/Starter.php</code> (see **Bootstrap the
-VibeKB workspace**), records installer state in <code>.vibekb/.installer.json</code>, and
-verifies the result — including running the freshly installed
-<code>php tools/vibekb.php check</code> against the target.</p>
+<p>The installer is native Go. It reads the embedded <code>template/manifest.json</code> to
+learn the VibeKB-owned payload (<code>guide/</code>, <code>tools/</code>, <code>prompts/</code>, <code>.cursor/</code>, the
+VibeKB docs, and <code>template/starter/</code>), refuses to install into VibeKB&#039;s own
+self-hosted repository (detected via <code>.vibekb/manifest.json</code> <code>self_hosted: true</code>),
+checks the target looks like a software project, builds a per-file plan, and —
+after confirmation — copies the payload from the embedded filesystem, creating
+only missing directories and never overwriting pre-existing files on a fresh
+install unless <code>--force</code> is given. It then scaffolds a fresh <code>.vibekb/</code> from the
+embedded <code>template/starter/</code> definition (see <strong>Bootstrap the VibeKB workspace</strong>),
+records installer state in <code>.vibekb/.installer.json</code>, and verifies the result
+<strong>natively</strong> — presence checks plus a workspace-completeness check against the
+embedded starter definition. It never runs <code>php</code> to install or verify.</p>
 <h3>Step-by-step flow</h3>
 <ol>
-<li>Resolve source (the VibeKB clone) and target; load <code>template/manifest.json</code>.</li>
-<li>Refuse if the target is VibeKB&#039;s own repository; detect a prior install →</li>
+<li>Parse the embedded <code>template/manifest.json</code>; resolve the target.</li>
+<li>Refuse if the target is VibeKB&#039;s own self-hosted repository; detect a prior</li>
 </ol>
-<p>upgrade mode.</p>
+<p>install → upgrade mode.</p>
 <ol>
 <li>Confirm the target looks like a project (ask if not).</li>
 <li>Build and render the plan (create / replace / skip / preserve).</li>
-<li>On confirmation, copy the payload; scaffold or preserve <code>.vibekb/</code>.</li>
-<li>Write <code>.vibekb/.installer.json</code>; verify presence and run the target&#039;s <code>check</code>.</li>
-<li>Print the next action: build the model with <code>prompts/INTEGRATE_VIBEKB.md</code>.</li>
+<li>On confirmation, copy the payload from the embedded FS; scaffold or preserve</li>
 </ol>
+<p><code>.vibekb/</code> from the embedded starter definition.</p>
+<ol>
+<li>Write <code>.vibekb/.installer.json</code>; verify presence and workspace completeness</li>
+</ol>
+<p>natively.</p>
+<ol>
+<li>Print the next action: build the model with <code>prompts/INTEGRATE_VIBEKB.md</code></li>
+</ol>
+<p>(and note that <code>vibekb check</code> / the guide need PHP 8.2+).</p>
 <h3>Implementation map</h3>
 <ul>
-<li><code>install.php</code> — the installer: argument parsing, planning, copying, scaffolding,</li>
+<li><code>cmd/vibekb/main.go</code> → <code>internal/cli</code> dispatch → <code>internal/installer</code>.</li>
+<li><code>internal/installer/installer.go</code> — manifest parsing, planning, embedded-FS</li>
 </ul>
-<p>verification, and the console UI.</p>
+<p>copying, native scaffolding and verification, installer state.</p>
 <ul>
-<li><code>template/manifest.json</code> — declares the installable payload, the preserved</li>
+<li><code>internal/installer/console.go</code> — the plan/confirm/report console UI.</li>
+<li><code>embed.go</code> — embeds the payload, the manifest, and <code>template/starter/</code> into the</li>
 </ul>
-<p>project-owned paths, and the generated paths; the installer is manifest-driven,
-  not a hard-coded copy list.</p>
+<p>binary (the embed directive must live at the module root).</p>
 <ul>
-<li><code>tools/lib/Starter.php</code> — produces the fresh workspace (shared with bootstrap).</li>
+<li><code>template/manifest.json</code> — declares the installable payload and preserved</li>
+</ul>
+<p>paths; parsed directly by Go (no second manifest format).</p>
+<ul>
+<li><code>template/starter/</code> — the canonical, language-neutral starter definition.</li>
+<li><code>tools/lib/Starter.php</code> — reads the <em>same</em> <code>template/starter/</code> data for</li>
+</ul>
+<p><code>bootstrap</code> (shared definition, no duplication).</p>
+<ul>
+<li><code>install.php</code> — a compatibility wrapper that forwards to <code>vibekb install</code>.</li>
 </ul>
 <h3>Data used</h3>
 <ul>
-<li><strong>Reads:</strong> the VibeKB source clone and <code>template/manifest.json</code>.</li>
+<li><strong>Reads:</strong> the binary&#039;s embedded payload (manifest + runtime + starter). At</li>
+</ul>
+<p>install time it reads only the target directory to plan and verify.</p>
+<ul>
 <li><strong>Writes:</strong> into the target only — the payload, a fresh <code>.vibekb/</code>, and</li>
 </ul>
-<p><code>.vibekb/.installer.json</code>. It never writes to the source and never modifies the
-  target application&#039;s code.</p>
+<p><code>.vibekb/.installer.json</code>. It never modifies the target application&#039;s code and
+  never launches PHP.</p>
 <h3>Dependencies</h3>
-<p>Scaffolding the fresh model is delegated to <code>bootstrap-workspace</code>
-(<code>tools/lib/Starter.php</code>); the resulting model is what <code>load-living-model</code> reads.</p>
+<p>Scaffolding the fresh model uses the same starter definition as
+<code>bootstrap-workspace</code>; the resulting model is what <code>load-living-model</code> reads. The
+installer is one subcommand of <code>run-the-developer-cli</code>.</p>
 <h3>Failure cases</h3>
 <ul>
 <li>Target missing or unwritable → reported, no partial guess.</li>
@@ -189,22 +210,29 @@ verifies the result — including running the freshly installed
 </ul>
 <p><code>--force</code>.</p>
 <ul>
-<li>Target is the VibeKB repo → refused, with a pointer to <code>bootstrap</code>.</li>
+<li>Target is VibeKB&#039;s own self-hosted repo → refused, with a pointer to</li>
+</ul>
+<p><code>bootstrap</code>.</p>
+<ul>
+<li>Corrupt embedded manifest → reported clearly (the binary was built wrong).</li>
 </ul>
 <h3>Safe to change</h3>
-<p>Adding a payload path to <code>template/manifest.json</code> extends what is installed
-without touching the installer code. The console UI is presentation-only.</p>
+<p>Adding a payload path to <code>template/manifest.json</code> extends what is installed —
+provided the same path is embedded in <code>embed.go</code> so its bytes are available. The
+console UI is presentation-only.</p>
 <h3>Use caution</h3>
 <p>The installer must never analyse or document the target application, and must
 never overwrite application code or an existing <code>.vibekb/</code> model without an
 explicit <code>--force</code>. Keep the honest boundary: it prepares the workspace; the agent
-interprets the software.</p>
+interprets the software. And keep the payload embedded — installation must not
+depend on PHP or on the source repository still being present.</p>
 <h3>Why it works this way</h3>
-<p>Making installation a real command removes the biggest adoption friction (manual
-copying) while a declarative <code>template/manifest.json</code> keeps &quot;what belongs in
-another repository&quot; explicit and upgrade-safe. The fresh model is produced
-programmatically rather than copied from a second template tree, so there is no
-drift-prone duplicate of the starter content.</p></div>
+<p>Embedding the payload makes installation a single self-contained binary step, so
+&quot;install VibeKB&quot; no longer requires a PHP runtime or a live clone — the entry
+point becomes uniform and packageable (brew/winget/curl). The manifest stays the
+single source of truth for what is installed, and the starter model is one
+canonical data definition read by both the Go installer and PHP <code>bootstrap</code>, so
+nothing is duplicated or drift-prone.</p></div>
                     </div>
 
         <aside class="detail-rail" aria-label="Record metadata">
@@ -216,7 +244,7 @@ drift-prone duplicate of the starter content.</p></div>
                                             <dt>Verification</dt>
                         <dd><span class="badge badge--ok">Verified from source</span></dd>
                                         <dt>Updated</dt>
-                    <dd>2026-07-22</dd>
+                    <dd>2026-07-23</dd>
                     <dt>Facing</dt>
                     <dd>User-facing</dd>
                 </dl>
@@ -224,12 +252,12 @@ drift-prone duplicate of the starter content.</p></div>
 
                             <div class="rail-card metadata-group">
                     <h2>Trigger</h2>
-                    <p>A developer clones VibeKB and runs `php install.php [target]` (or `php install.php` in the current directory).</p>
+                    <p>A developer runs `vibekb install [target]` (or the legacy `php install.php`, which now forwards to it).</p>
                 </div>
             
             <div class="rail-card metadata-group">
                 <h2>Data read or written</h2>
-                <p><strong>Reads:</strong> <code class="chip chip--file">template/manifest.json</code></p>
+                <p><strong>Reads:</strong> <code class="chip chip--file">template/manifest.json</code> <code class="chip chip--file">template/starter</code></p>
                 <p><strong>Writes:</strong> <span class="muted">None.</span></p>
                             </div>
 
@@ -259,14 +287,14 @@ drift-prone duplicate of the starter content.</p></div>
 
             <div class="rail-card metadata-group">
                 <h2>Dependencies</h2>
-                                    <p><strong>Depends on:</strong> <a class="chip" href="../functionality/bootstrap-workspace.html">Bootstrap the VibeKB workspace</a> <a class="chip" href="../functionality/load-living-model.html">Load the living model</a></p>
+                                    <p><strong>Depends on:</strong> <a class="chip" href="../functionality/bootstrap-workspace.html">Bootstrap the VibeKB workspace</a> <a class="chip" href="../functionality/load-living-model.html">Load the living model</a> <a class="chip" href="../functionality/run-the-developer-cli.html">Run VibeKB from one developer CLI</a></p>
                                                     <p><strong>Depended on by:</strong> <a class="chip" href="../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../functionality/run-the-developer-cli.html">Run VibeKB from one developer CLI</a></p>
                             </div>
 
             
             <div class="rail-card metadata-group">
                 <h2>Related rationale</h2>
-                                    <p><a class="chip" href="../why/decisions/installer-template-not-duplicated-tree.html">The template is a manifest plus a generator, not a duplicated file tree</a> <a class="chip" href="../why/decisions/installer-prepares-agent-interprets.html">The installer prepares the workspace; the agent interprets the software</a> <a class="chip" href="../why/changes/first-class-installer.html">Add a first-class installer and bootstrap command</a> <a class="chip" href="../why/changes/homepage-install-fast-start.html">Homepage install fast-start under the hero</a> <a class="chip" href="../why/changes/homepage-compatibility-section.html">Homepage Compatibility &amp; Requirements under install</a></p>
+                                    <p><a class="chip" href="../why/decisions/native-installer-embedded-payload.html">Installation is native to the Go binary, from an embedded payload</a> <a class="chip" href="../why/decisions/installer-template-not-duplicated-tree.html">The template is a manifest plus a generator, not a duplicated file tree</a> <a class="chip" href="../why/decisions/installer-prepares-agent-interprets.html">The installer prepares the workspace; the agent interprets the software</a> <a class="chip" href="../why/changes/native-go-installer.html">Make installation native to the Go CLI (embedded payload, no PHP)</a></p>
                             </div>
         </aside>
     </div>
@@ -280,7 +308,7 @@ drift-prone duplicate of the starter content.</p></div>
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 00:29 UTC · source commit df4a682 (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 02:00 UTC · source commit 3956dbc (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>
