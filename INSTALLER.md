@@ -13,18 +13,10 @@ and where to extend it.
 
 ## Quick start
 
-Installation is native to the `vibekb` Go CLI — **no PHP required to install.**
-Build the binary once, then install:
-
-```bash
-git clone https://github.com/cubixmeow-commits/VibeKB.git
-cd VibeKB
-go build -o vibekb ./cmd/vibekb           # Go 1.24+
-./vibekb install /path/to/your/project
-```
-
-Once the binary is on your `PATH` (or installed via brew/winget/curl, on the
-roadmap) it is simply:
+Download a `vibekb` binary from
+[GitHub Releases](https://github.com/cubixmeow-commits/VibeKB/releases) for your
+platform, rename it to `vibekb` (or `vibekb.exe` on Windows), put it on your
+`PATH`, and install — **no Go and no PHP required to install:**
 
 ```bash
 vibekb install /path/to/your/project
@@ -33,9 +25,9 @@ vibekb install /path/to/your/project
 Then open your project in a coding agent (Claude Code, Cursor, Codex, …) and ask
 it to **build the first VibeKB model using `prompts/INTEGRATE_VIBEKB.md`**.
 
-Requirements: **Go 1.24+** to build the CLI (or a released binary). **PHP 8.2+ is
-required only to *run* the installed guide** (`php tools/vibekb.php …`, the dynamic
-app), never to install. Works on Windows, macOS, and Linux.
+Requirements: a release binary (or a local build). **PHP 8.2+ is required only to
+*run* the installed guide** (`php tools/vibekb.php …`, the dynamic app), never to
+install. Works on Windows, macOS, and Linux.
 
 > **How it works.** The `vibekb` binary embeds the installer payload and a
 > canonical starter definition (`template/starter/`), so `vibekb install` copies
@@ -47,6 +39,18 @@ app), never to install. Works on Windows, macOS, and Linux.
 > **Legacy `php install.php`.** The old entry point still works: it is now a thin
 > compatibility wrapper that forwards to `vibekb install` (or prints how to get
 > the binary). There is only one installer implementation — the Go one.
+
+### Advanced: build from source
+
+```bash
+git clone https://github.com/cubixmeow-commits/VibeKB.git
+cd VibeKB
+go build -o vibekb ./cmd/vibekb           # Go 1.24+
+./vibekb install /path/to/your/project
+```
+
+Publishing new binaries is documented in [RELEASE.md](./RELEASE.md). Package
+managers (Homebrew, Winget, curl) are a later milestone.
 
 ## What gets installed
 

@@ -48,6 +48,7 @@
       "TOKEN_ECONOMICS.md",
       "BUILD_REPORT.md",
       "ARCHITECTURE.md",
+      "RELEASE.md",
       ".github",
       "install.php",
       "template/manifest.json",

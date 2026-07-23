@@ -106,10 +106,10 @@
     },
     {
         "title": "Run VibeKB from one developer CLI",
-        "summary": "A single Go binary (`vibekb`) that is the developer's front door to VibeKB — it installs VibeKB natively (embedded payload, no PHP), runs environment diagnostics natively, and delegates every model-semantic command (status, check, affected, bootstrap, validate, generate) to the canonical PHP tooling it discovers, so there is exactly one model loader and one professional command in front of it.",
+        "summary": "A single Go binary (`vibekb`) that is the developer's front door to VibeKB — downloadable from GitHub Releases, installs VibeKB natively (embedded payload, no PHP), runs environment diagnostics natively, and delegates every model-semantic command to the canonical PHP tooling it discovers, so there is exactly one model loader.",
         "type": "functionality",
         "url": "../functionality/run-the-developer-cli.html",
-        "body": "In one sentence vibekb gives developers one portable command for VibeKB: native diagnostics and help that need no runtime, and a thin, honest hand off to the existing PHP core for everything that touches the model — never a second implementation of it. User experience A developer runs vibekb from anywhere inside a VibeKB repository. vibekb doctor reports whether PHP 8.2+, git, and a .vibekb/ workspace are present and ends with a clear OK or \"attention needed\". vibekb version prints the CLI version and the detected PHP and repository. vibekb check , status , generate , and the rest behave exactly like php tools/vibekb.php <command — same output, same exit codes — because the binary runs that very script. If PHP is missing, the command fails with a plain message telling the developer to inst"
+        "body": "In one sentence vibekb gives developers one portable command for VibeKB: native diagnostics and help that need no runtime, and a thin, honest hand off to the existing PHP core for everything that touches the model — never a second implementation of it. User experience Primary distribution is a downloadable binary from GitHub Releases no Go required . vibekb version prints identity stamped at link time: plus detected PHP and repository when present. Release builds inject Version, Commit, and Built via ldflags see .github/workflows/release.yml and RELEASE.md . Development builds keep 0.1.0 dev / unknown / dev . A developer runs vibekb from anywhere inside a VibeKB repository. vibekb doctor reports whether PHP 8.2+, git, and a .vibekb/ workspace are present and ends with a clear OK or \"attent"
     },
     {
         "title": "Search the model",
@@ -567,6 +567,13 @@
         "body": "Before vibekb install delegated to php install.php , and the starter workspace was defined as PHP heredocs inside tools/lib/Starter.php . Installing therefore required a PHP runtime and the VibeKB source clone to be present. After The starter definition is now data : template/starter/ holds a starter.json directory list and a files/ tree with {{DATE}} and {{PROJECT NAME JSON}} tokens. It is the single canonical definition. tools/lib/Starter.php reads that data byte identical scaffold output to before , so bootstrap is unchanged and no starter content is duplicated. template/starter/ is installed into targets added to the manifest payload so bootstrap can still repair a workspace there. embed.go at the module root embeds the manifest, the runtime payload, and template/starter/ into the bina"
     },
     {
+        "title": "Downloadable cross-platform vibekb release binaries",
+        "summary": "Added a tag-triggered GitHub Actions release that cross-compiles vibekb for six platforms with stripped ldflags, Version/Commit/Built injection, checksums.txt, and a GitHub Release. Homepage and docs now present Downloads as the primary install path; build-from-source is Advanced. Installer and PHP runtime unchanged.",
+        "type": "change",
+        "url": "../why/changes/release-binaries-pipeline.html",
+        "body": "Before Developers were told to clone VibeKB and go build to get vibekb . Version output was a one line vibekb 0.1.0 dev . No automated release workflow existed. After Pushing v tags runs .github/workflows/release.yml : test/vet, cross compile six GOOS/GOARCH pairs with CGO ENABLED=0 + trimpath + ldflags \" s w …\" , write checksums.txt , create a GitHub Release with notes and assets. vibekb version prints Version / Commit / Built / Platform. Docs and homepage lead with Downloads; source builds are Advanced. Next recommended hardening: code signing; then Homebrew/Winget/curl Phase 2b . Honesty preserved Installer and PHP model engine unchanged. PHP 8.2+ still required after install. No brew/winget/curl commands are presented as available. Verification note Local cross compile of all six artif"
+    },
+    {
         "title": "guide/lib/Content.php",
         "summary": "The content loader: reads .vibekb/, parses records, resolves relationships, loads/validates diagram topology, and validates the whole model. The spine everything else renders.",
         "type": "file",
@@ -721,6 +728,20 @@
         "body": ""
     },
     {
+        "title": ".github/workflows/release.yml",
+        "summary": "Tag-triggered release pipeline: tests, cross-compiles vibekb for six platforms with production ldflags, writes checksums.txt, and publishes a GitHub Release.",
+        "type": "file",
+        "url": "../files/index.html",
+        "body": ""
+    },
+    {
+        "title": "RELEASE.md",
+        "summary": "Maintainer guide for publishing vibekb CLI releases: tag commands, artifact list, checksums, and remaining signing/package-manager steps.",
+        "type": "file",
+        "url": "../files/index.html",
+        "body": ""
+    },
+    {
         "title": ".vibekb/manifest.json",
         "summary": "The active model's provenance and structure metadata: source repository/commit analyzed, verification scope, last verified, and the honest updates_automatically:false.",
         "type": "file",
@@ -784,17 +805,17 @@
         "body": "Mode A — the dynamic guide on shared hosting .cpanel.yml rsyncs the runtime paths index.php , assets/ , guide/ , .vibekb/ into a cPanel public folder and excludes development only paths tools/ , prompts/ , docs/ , authoring docs, examples/ . Query string routing means no .htaccess rewrite rules are needed and the app runs in a subfolder. .vibekb/ must deploy — it is the content. Mode B — the static snapshot php tools/generate static.php builds /docs ; publish it via GitHub Pages Settings → Pages → branch → /docs or any static host. Relative links make it work at a web root or under a repository subpath. No PHP, database, CDN, or network required. Deployment is part of the application Whenever repository structure, runtime folders, or deployment requirements change, .cpanel.yml and DEPLOYME"
     },
     {
-        "title": "Homepage voice pass (copy only)",
-        "summary": "Complete — prose rewritten; commands and claims unchanged.",
+        "title": "Release binaries pipeline (Phase 2a)",
+        "summary": "Complete — release workflow, buildinfo Version/Commit/Built, docs + homepage Downloads-first.",
         "type": "current work",
         "url": "../current-work/index.html",
-        "body": "Status Complete. See .vibekb/work/handoff.md . Change recorded change:homepage voice pass"
+        "body": "Status Complete. See .vibekb/work/handoff.md . Change recorded change:release binaries pipeline"
     },
     {
         "title": "Current handoff",
-        "summary": "Homepage install copy matches the native Go CLI, and a follow-up voice pass rewrote marketing prose into a calmer indie-developer tone without changing commands, layout, or claims. Next: Phase 2 distribution (release binaries + brew/winget/curl).",
+        "summary": "Phase 2a downloadable CLI releases are in place — tag v* builds six platform binaries with checksums and version ldflags; homepage/docs lead with GitHub Releases. Next: code signing, then Phase 2b package managers.",
         "type": "handoff",
         "url": "../handoff/index.html",
-        "body": "Current state The homepage describes the real vibekb install path clone → go build → ./vibekb install → coding agent and reads in a plain developer voice. PHP is not required to install; PHP 8.2+ remains required afterward for the guide and model commands. Layout, CSS, and install commands were not changed by the voice pass. Completed this change index.php prose voice pass only hero, install blurbs, compatibility, what you get, proof, footer . change:homepage voice pass ; current work + handoff; provenance; /docs regenerated. Verification completed Command variables and rendered install/dry run strings unchanged vs prior commit. php l index.php php tools/vibekb.php check strict php tools/test topology.php go test ./... unchanged Go code; re run for safety Not done yet roadmap Phase 2 — dis"
+        "body": "Current state vibekb is packaged as a downloadable cross platform CLI. Pushing a v tag runs .github/workflows/release.yml test, vet, cross compile, checksums, GitHub Release . vibekb version reports Version / Commit / Built / Platform. README, INSTALLER.md, and the homepage present Downloads as the primary path; build from source is Advanced. The installer and PHP model engine are unchanged. Completed this change internal/buildinfo : Version, Commit, Built ldflags overrides internal/cli/version.go + test: identity block output .github/workflows/release.yml : six GOOS/GOARCH artifacts + checksums.txt RELEASE.md : publish commands and remaining signing notes README / INSTALLER / ARCHITECTURE Phase 2a/2b split Homepage: download → vibekb install → coding agent install.php migration notice poi"
     }
 ]

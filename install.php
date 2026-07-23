@@ -81,18 +81,18 @@ function vibekb_install_migration_notice(): string
     return <<<TXT
 VibeKB installation is now native to the `vibekb` CLI — no PHP needed to install.
 
-This `php install.php` wrapper could not find a `vibekb` binary. Build it once
-from this clone (Go 1.24+), then install:
+This `php install.php` wrapper could not find a `vibekb` binary. Download one from
+GitHub Releases, put it on your PATH as `vibekb`, then run:
+
+  https://github.com/cubixmeow-commits/VibeKB/releases
+  vibekb install /path/to/your/project
+
+Advanced (build from this clone, Go 1.24+):
 
   go build -o vibekb ./cmd/vibekb
   ./vibekb install /path/to/your/project
 
-Or install the binary system-wide and drop the `./`:
-
-  vibekb install /path/to/your/project
-
-A one-command install path (brew / winget / curl) is on the roadmap; see
-ARCHITECTURE.md and INSTALLER.md. PHP 8.2+ is required only to run the installed
+See RELEASE.md and INSTALLER.md. PHP 8.2+ is required only to run the installed
 guide, not to install it.
 
 TXT;

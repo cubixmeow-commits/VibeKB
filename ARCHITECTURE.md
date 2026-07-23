@@ -181,7 +181,7 @@ VibeKB/
     cli/                 # command surface: dispatch, help, doctor, version
     installer/           # native install: manifest parse, copy, scaffold, verify
     phpcore/             # discover PHP + repo root; delegate to the PHP core
-    buildinfo/           # version string (set at link time on release)
+    buildinfo/           # Version, Commit, Built (set at link time on release)
   go.mod
 
   # --- the canonical PHP core + runtime (unchanged) ---
@@ -224,10 +224,17 @@ keeps working at every phase.
   installer and PHP `bootstrap` read (pulling the starter-as-data item forward
   from Phase 3). `install.php` became a compatibility wrapper. This is what makes
   the single-binary install path real.
-- **Phase 2 — distribution.** Release automation (cross-compiled binaries,
-  checksums), a `curl | sh` installer, a Homebrew tap, and a winget manifest, so
-  `brew install vibekb` / `winget install vibekb` become real. Unblocked now that
-  install is self-contained.
+- **Phase 2a — downloadable release binaries (done, this change).** Tag-triggered
+  GitHub Actions (`.github/workflows/release.yml`) cross-compiles `vibekb` for
+  Windows/macOS/Linux (amd64 + arm64), strips with `-s -w`, injects
+  Version/Commit/Built via ldflags, uploads SHA256 `checksums.txt`, and creates a
+  GitHub Release with auto-generated notes. See [RELEASE.md](./RELEASE.md).
+  Primary install path is now “download the executable,” not “install Go and
+  build.” Code signing (Apple notarization / Windows Authenticode) is the
+  recommended next hardening step.
+- **Phase 2b — package managers (next after signing).** A `curl | sh` helper, a
+  Homebrew tap, and a winget manifest, so `brew install vibekb` /
+  `winget install vibekb` become real.
 - **Phase 3 — shared core boundary.** Extract the model core out of `guide/lib`
   into a shared location imported by both the guide and the tools. (The starter
   payload is already data, done in Phase 1b.) This removes the "tools depend on

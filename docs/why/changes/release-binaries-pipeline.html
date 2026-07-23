@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Homepage hero journey image · VibeKB — VibeKB</title>
+    <title>Downloadable cross-platform vibekb release binaries · VibeKB — VibeKB</title>
     <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -106,27 +106,36 @@
         <p class="breadcrumb"><a href="../../why/index.html">← Decisions &amp; rationale</a></p>
         <header class="page-head reading-column">
             <p class="eyebrow">Changes</p>
-            <h1>Homepage hero journey image</h1>
-            <p class="lede">Optimized and renamed the developer-journey comic; placed beside hero copy in section 1 with responsive layout.</p>
+            <h1>Downloadable cross-platform vibekb release binaries</h1>
+            <p class="lede">Added a tag-triggered GitHub Actions release that cross-compiles vibekb for six platforms with stripped ldflags, Version/Commit/Built injection, checksums.txt, and a GitHub Release. Homepage and docs now present Downloads as the primary install path; build-from-source is Advanced. Installer and PHP runtime unchanged.</p>
             <div class="badge-row">
-                                                                            </div>
+                <span class="badge badge--info">implemented</span>                                                <span class="badge badge--ok">Verified from source</span>            </div>
         </header>
         <div class="detail-grid">
-            <div class="detail-main"><div class="prose reading-column"><h3>What changed</h3>
-<ul>
-<li>Source asset <code>assets/7E1D04F9-6324-4E51-AF19-65328ABA0308.png</code> (~1.4 MB on main) was resized and renamed to <code>assets/images/homepage-developer-journey.webp</code> (~19 KB) with a PNG fallback (~52 KB).</li>
-<li><code>index.php</code> section 1: two columns — copy left; comic stacked above live metrics card in the right column.</li>
-<li><code>homepage.css</code>: <code>hp-hero-aside</code> flex column on desktop; stacks on narrow viewports.</li>
-</ul>
-<h3>Verification</h3>
-<ul>
-<li>Image files present at expected paths; <code>php -l index.php</code>; <code>php tools/vibekb.php check</code> clean.</li>
-</ul></div></div>
+            <div class="detail-main"><div class="prose reading-column"><h3>Before</h3>
+<p>Developers were told to clone VibeKB and <code>go build</code> to get <code>vibekb</code>. Version
+output was a one-line <code>vibekb 0.1.0-dev</code>. No automated release workflow existed.</p>
+<h3>After</h3>
+<p>Pushing <code>v*</code> tags runs <code>.github/workflows/release.yml</code>: test/vet, cross-compile
+six GOOS/GOARCH pairs with <code>CGO_ENABLED=0</code> + <code>-trimpath</code> + <code>-ldflags &quot;-s -w …&quot;</code>,
+write <code>checksums.txt</code>, create a GitHub Release with notes and assets.
+<code>vibekb version</code> prints Version / Commit / Built / Platform. Docs and homepage
+lead with Downloads; source builds are Advanced. Next recommended hardening:
+code signing; then Homebrew/Winget/curl (Phase 2b).</p>
+<h3>Honesty preserved</h3>
+<p>Installer and PHP model engine unchanged. PHP 8.2+ still required after install.
+No brew/winget/curl commands are presented as available.</p>
+<h3>Verification note</h3>
+<p>Local cross-compile of all six artifacts succeeded; ldflags smoke test confirmed
+<code>vibekb version</code> fields. Workflow not yet run against a real tag in this session
+(requires push of <code>v0.1.0</code> after merge). Homepage HTML checked for absence of
+primary <code>go build</code> path.</p></div></div>
             <aside class="detail-rail" aria-label="Connections">
                 <div class="rail-card">
                     <h2>Affects functionality</h2>
-                    <p><span class="muted">None.</span></p>
+                    <p><a class="chip" href="../../functionality/run-the-developer-cli.html">Run VibeKB from one developer CLI</a> <a class="chip" href="../../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a></p>
                 </div>
+                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">.github/workflows/release.yml</code> <code class="chip chip--file">internal/buildinfo/buildinfo.go</code> <code class="chip chip--file">internal/cli/version.go</code> <code class="chip chip--file">RELEASE.md</code> <code class="chip chip--file">README.md</code> <code class="chip chip--file">INSTALLER.md</code> <code class="chip chip--file">ARCHITECTURE.md</code> <code class="chip chip--file">index.php</code> <code class="chip chip--file">install.php</code> <code class="chip chip--file">template/manifest.json</code></p></div>
                             </aside>
         </div>
     </article>

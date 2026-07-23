@@ -1,17 +1,17 @@
 ---
 id: current-work
 type: work
-title: Homepage voice pass (copy only)
-objective: Rewrite homepage marketing prose so it reads like an experienced indie developer, without changing layout, CSS, commands, installation instructions, or claims.
-summary: Complete — prose rewritten; commands and claims unchanged.
-requested_by: Cursor cloud agent follow-up
+title: Release binaries pipeline (Phase 2a)
+objective: Add a tag-triggered GitHub Actions release that cross-compiles vibekb for six platforms with checksums and version ldflags, and present Downloads as the primary install path on the homepage and docs — without Homebrew/Winget/curl yet, and without changing the installer or PHP runtime.
+summary: Complete — release workflow, buildinfo Version/Commit/Built, docs + homepage Downloads-first.
+requested_by: Cursor cloud agent task
 status: complete
 verification_state: verified-from-source
 updated: 2026-07-23
-affected_functionality: [initialize-in-a-repository, deploy-and-stay-portable, install-into-a-repository]
-expected_files: [index.php, .vibekb/memory/changes/homepage-voice-pass.md, .vibekb/work/current.md, .vibekb/work/handoff.md, .vibekb/manifest.json]
-data_impact: None. Homepage prose and self-model records only.
-risks: [Accidentally changing install commands (avoided — verified identical).]
+affected_functionality: [run-the-developer-cli, install-into-a-repository, initialize-in-a-repository, deploy-and-stay-portable]
+expected_files: [.github/workflows/release.yml, internal/buildinfo/buildinfo.go, internal/cli/version.go, RELEASE.md, README.md, INSTALLER.md, ARCHITECTURE.md, index.php, install.php, template/manifest.json]
+data_impact: None to install/runtime behaviour. Packaging, docs, and homepage only.
+risks: [Implying Go still required for normal install (avoided); inventing brew/winget (avoided).]
 ---
 
 ## Status
@@ -20,4 +20,4 @@ Complete. See `.vibekb/work/handoff.md`.
 
 ## Change recorded
 
-`change:homepage-voice-pass`
+`change:release-binaries-pipeline`

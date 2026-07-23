@@ -2,42 +2,45 @@
 id: handoff
 type: handoff
 title: Current handoff
-summary: Homepage install copy matches the native Go CLI, and a follow-up voice pass rewrote marketing prose into a calmer indie-developer tone without changing commands, layout, or claims. Next: Phase 2 distribution (release binaries + brew/winget/curl).
+summary: Phase 2a downloadable CLI releases are in place — tag v* builds six platform binaries with checksums and version ldflags; homepage/docs lead with GitHub Releases. Next: code signing, then Phase 2b package managers.
 updated: 2026-07-23
 verification_state: verified-from-source
 ---
 
 ## Current state
 
-The homepage describes the real `vibekb install` path (clone → `go build` →
-`./vibekb install` → coding agent) and reads in a plain developer voice. PHP is
-not required to install; PHP 8.2+ remains required afterward for the guide and
-model commands. Layout, CSS, and install commands were not changed by the voice
-pass.
+`vibekb` is packaged as a downloadable cross-platform CLI. Pushing a `v*` tag
+runs `.github/workflows/release.yml` (test, vet, cross-compile, checksums,
+GitHub Release). `vibekb version` reports Version / Commit / Built / Platform.
+README, INSTALLER.md, and the homepage present Downloads as the primary path;
+build-from-source is Advanced. The installer and PHP model engine are unchanged.
 
 ## Completed this change
 
-- `index.php` prose voice pass only (hero, install blurbs, compatibility,
-  what-you-get, proof, footer).
-- `change:homepage-voice-pass`; current work + handoff; provenance; `/docs`
-  regenerated.
+- `internal/buildinfo`: Version, Commit, Built (ldflags overrides)
+- `internal/cli/version.go` + test: identity block output
+- `.github/workflows/release.yml`: six GOOS/GOARCH artifacts + `checksums.txt`
+- `RELEASE.md`: publish commands and remaining signing notes
+- README / INSTALLER / ARCHITECTURE Phase 2a/2b split
+- Homepage: download → `vibekb install` → coding agent
+- `install.php` migration notice points at Releases
+- Self-model + `/docs` regenerated
 
 ## Verification completed
 
-- Command variables and rendered install/dry-run strings unchanged vs prior
-  commit.
-- `php -l index.php`
-- `php tools/vibekb.php check --strict`
-- `php tools/test-topology.php`
-- `go test ./...` (unchanged Go code; re-run for safety)
+- `go test ./...`, `go vet`, gofmt clean
+- Local cross-compile of all six artifact names + sha256sum
+- ldflags smoke: `vibekb version` shows injected fields
+- Homepage HTML: no primary `go build`; GitHub Releases + `vibekb install`
+- `php tools/vibekb.php check --strict`; `test-topology.php`
 
-## Not done yet (roadmap)
+## Not done yet
 
-- **Phase 2 — distribution**: release binaries, `curl | sh`, Homebrew, winget.
-- **Phase 3 — shared core boundary**
-- **Phase 4 — evaluate a bundled PHP runtime**
+- **Code signing / notarization** (recommended next)
+- **Phase 2b**: Homebrew, Winget, curl installer
+- **Actually tagging `v0.1.0`** after this merges (manual maintainer step)
 
 ## Exact next recommended action
 
-`php tools/vibekb.php status` before the next change. Continue with Phase 2
-distribution when ready.
+After merge: tag and push `v0.1.0` per `RELEASE.md`. Then plan Apple
+notarization and Windows Authenticode before package-manager distribution.
