@@ -81,11 +81,13 @@ function vibekb_install_migration_notice(): string
     return <<<TXT
 VibeKB installation is now native to the `vibekb` CLI — no PHP needed to install.
 
-This `php install.php` wrapper could not find a `vibekb` binary. Download one from
-GitHub Releases, put it on your PATH as `vibekb`, then run:
+This `php install.php` wrapper could not find a `vibekb` binary. Install the CLI:
 
-  https://github.com/cubixmeow-commits/VibeKB/releases
+  curl -fsSL https://iainreid.dev/vibekb/install.sh | sh
   vibekb install /path/to/your/project
+
+Prefer a manual download?
+  https://github.com/cubixmeow-commits/VibeKB/releases/latest
 
 Advanced (build from this clone, Go 1.24+):
 

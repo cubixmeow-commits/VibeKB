@@ -2,31 +2,35 @@
 id: handoff
 type: handoff
 title: Current handoff
-summary: Homepage no longer advertises that install does not require Go or PHP. Download → vibekb install → coding agent flow is unchanged; PHP 8.2+ remains the post-install runtime.
+summary: Product CLI install is now curl | sh from iainreid.dev/vibekb/install.sh (GitHub Releases behind the scenes). Homepage primary path updated. Next after deploy: confirm /install.sh and /install on the live host; then code signing.
 updated: 2026-07-23
 verification_state: verified-from-source
 ---
 
 ## Current state
 
-Install and Compatibility copy state positive requirements (downloadable
-executable, write access, PHP 8.2+ after install) without “No Go / no PHP
-required to install” marketing lines. Advanced build-from-source still mentions
-Go for contributors.
+- `install.sh` is the website installer (macOS/Linux, arm64/amd64 → latest
+  release asset → `/usr/local/bin` or `~/.local/bin` → `vibekb version`).
+- `.htaccess` rewrites `/install` to the same script.
+- Homepage step 1 is the curl one-liner; Releases is a secondary manual link.
+- Docs (README, INSTALLER, RELEASE, DEPLOYMENT, ARCHITECTURE) match.
 
 ## Verification completed
 
-- Grep of `index.php`: no “No Go”, “no PHP required”, “do not need Go”
-- `php -l index.php`
-- Rendered homepage still has `/releases/latest`, six assets, `vibekb install`
+- `sh -n install.sh`
+- End-to-end smoke against live `v0.1.0` (linux/amd64) into a temp dir;
+  `vibekb version` OK
+- Homepage render: curl command primary; no primary Download-latest-release CTA
 - `php tools/vibekb.php check` + generate (this commit)
 
 ## Unresolved / next
 
-Tag `v0.1.0` was already pushed earlier; next product work remains code signing
-(and other Phase 2 distribution items) when ready.
+Live cPanel deploy must publish `install.sh` and `.htaccess`. Confirm both URLs
+on https://iainreid.dev/vibekb/ after deploy. Code signing remains the next
+hardening milestone; checksum verification can be added to `install.sh` without
+changing the curl command.
 
 ## Exact next recommended action
 
-Plan code signing / further Phase 2 distribution (Homebrew, Winget, curl) per
-RELEASE.md when ready.
+Deploy to cPanel, then `curl -fsSL https://iainreid.dev/vibekb/install.sh | head`
+(and `/install`) to confirm the script is served; plan code signing.

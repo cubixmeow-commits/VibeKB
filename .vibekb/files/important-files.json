@@ -123,13 +123,35 @@
     },
     {
       "path": "index.php",
-      "purpose": "The public homepage: hero/problem, three-step install fast-start (#install), Compatibility & Requirements (#compatibility), what-you-get pillars, live preview card, and functionality carousel driven by the active .vibekb/ model.",
-      "functionality": ["load-living-model", "install-into-a-repository", "initialize-in-a-repository", "deploy-and-stay-portable"],
+      "purpose": "The public homepage: hero/problem, three-step install fast-start (#install) with website curl | sh as the primary CLI acquisition path, Compatibility & Requirements (#compatibility), what-you-get pillars, live preview card, and functionality carousel driven by the active .vibekb/ model.",
+      "functionality": ["load-living-model", "install-into-a-repository", "initialize-in-a-repository", "deploy-and-stay-portable", "run-the-developer-cli"],
       "runs_when": "Every browser request to the site root.",
       "depended_on_by": ["Public landing / Mode A deployment"],
-      "depends_on": ["guide/lib/Content.php", "guide/lib/helpers.php", ".vibekb/project/identity.md", "assets/css/homepage.css", "assets/js/homepage.js", "assets/images/homepage-developer-journey.webp", "assets/images/homepage-developer-journey.png", "cmd/vibekb/main.go", "internal/installer/installer.go", "INSTALLER.md", "RELEASE.md", "prompts/INTEGRATE_VIBEKB.md", "DEPLOYMENT.md", "PRODUCT.md"],
+      "depends_on": ["guide/lib/Content.php", "guide/lib/helpers.php", ".vibekb/project/identity.md", "assets/css/homepage.css", "assets/js/homepage.js", "assets/images/homepage-developer-journey.webp", "assets/images/homepage-developer-journey.png", "install.sh", "cmd/vibekb/main.go", "internal/installer/installer.go", "INSTALLER.md", "RELEASE.md", "prompts/INTEGRATE_VIBEKB.md", "DEPLOYMENT.md", "PRODUCT.md"],
       "safety": "moderate-impact",
-      "test_after_change": "Load the homepage; confirm primary install is Download latest release (/releases/latest) + vibekb install; platform asset names match release.yml; PHP 8.2+ only under after-install; Advanced build-from-source is secondary; no install.php in primary install cards; no ‘No Go / no PHP required’ marketing claims.",
+      "test_after_change": "Load the homepage; confirm primary install is curl -fsSL https://iainreid.dev/vibekb/install.sh | sh; manual Releases link is secondary; step 2 is vibekb install .; PHP 8.2+ only under after-install; Advanced build-from-source is secondary; no primary Download-latest-release CTA.",
+      "provenance": "verified-from-source"
+    },
+    {
+      "path": "install.sh",
+      "purpose": "Product-site CLI installer: curl | sh entry point that detects macOS/Linux + arm64/amd64, downloads the matching GitHub Releases asset, installs vibekb to /usr/local/bin or ~/.local/bin, and verifies with vibekb version.",
+      "functionality": ["run-the-developer-cli", "install-into-a-repository", "deploy-and-stay-portable"],
+      "runs_when": "A user runs curl -fsSL https://iainreid.dev/vibekb/install.sh | sh (or /install).",
+      "depended_on_by": ["Public landing / Mode A deployment", "index.php"],
+      "depends_on": [".github/workflows/release.yml", "RELEASE.md"],
+      "safety": "high-impact",
+      "test_after_change": "sh -n install.sh; smoke-install into a temp dir against the latest GitHub Release; confirm vibekb version succeeds; unsupported OS/arch print actionable errors.",
+      "provenance": "verified-from-source"
+    },
+    {
+      "path": ".htaccess",
+      "purpose": "Marketing-site Apache rules: internal rewrite so /install serves install.sh, and text/plain for .sh so curl | sh receives the script body.",
+      "functionality": ["run-the-developer-cli", "deploy-and-stay-portable"],
+      "runs_when": "Every request to /install or *.sh on the cPanel PHP host.",
+      "depended_on_by": ["Public landing / Mode A deployment"],
+      "depends_on": ["install.sh"],
+      "safety": "moderate-impact",
+      "test_after_change": "After deploy, curl -fsSL https://iainreid.dev/vibekb/install and …/install.sh both return the installer script body.",
       "provenance": "verified-from-source"
     },
     {

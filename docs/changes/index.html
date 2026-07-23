@@ -350,6 +350,45 @@ primary <code>go build</code> path.</p></div>
                                     </li>
                             <li class="change-card">
                     <div class="change-card__head">
+                        <h2>Website curl installer as product CLI entry point</h2>
+                        <div class="badge-row">
+                            <span class="badge badge--info">implemented</span>                            <span class="badge badge--ok">Verified from source</span>                            <span class="muted">2026-07-23</span>
+                        </div>
+                    </div>
+                    <p>Added install.sh (and /install rewrite) on the VibeKB website so users install with curl | sh; homepage primary path updated; GitHub Releases is the download backend and manual fallback only.</p>
+                    <div class="prose reading-column change-card__body"><h3>Before</h3>
+<p>Ordinary users were told to open GitHub Releases, pick a platform asset, rename
+it, chmod it, and put it on PATH. The website was marketing only for CLI
+acquisition. curl installation was still listed under Coming soon.</p>
+<h3>After</h3>
+<ul>
+<li><code>install.sh</code> at the site root: detect macOS/Linux + arm64/amd64, resolve the</li>
+</ul>
+<p>latest GitHub Release asset, install to <code>/usr/local/bin</code> or <code>~/.local/bin</code>,
+  <code>chmod +x</code>, run <code>vibekb version</code></p>
+<ul>
+<li><code>.htaccess</code> internal rewrite so <code>/install</code> serves the same script</li>
+<li>Homepage step 1 is <code>curl -fsSL https://iainreid.dev/vibekb/install.sh | sh</code></li>
+</ul>
+<p>with a secondary “Prefer to install manually?” Releases link</p>
+<ul>
+<li>README / INSTALLER / RELEASE / DEPLOYMENT / ARCHITECTURE / install.php notice</li>
+</ul>
+<p>updated; Coming soon no longer lists curl installation</p>
+<ul>
+<li>Designed so checksums, signing checks, Homebrew/Winget can be added later</li>
+</ul>
+<p>without changing the user-facing curl command</p>
+<h3>Verification note</h3>
+<p><code>sh -n install.sh</code> clean. End-to-end smoke against the live <code>v0.1.0</code> release
+installed <code>vibekb-linux-amd64</code> into a temp dir and <code>vibekb version</code> succeeded.
+Rendered homepage contains the curl one-liner as the primary install command and
+does not use “Download latest release” as the primary CTA.</p></div>
+                                            <p class="change-card__links"><strong>Affected:</strong>
+                            <a class="chip" href="../functionality/run-the-developer-cli.html">Run VibeKB from one developer CLI</a> <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a>                        </p>
+                                    </li>
+                            <li class="change-card">
+                    <div class="change-card__head">
                         <h2>Bootstrap VibeKB on itself with an active self-maintenance lifecycle</h2>
                         <div class="badge-row">
                             <span class="badge badge--info">implemented</span>                            <span class="badge badge--ok">Verified manually</span>                            <span class="muted">2026-07-22</span>
@@ -588,7 +627,7 @@ before/after, workflow timeline, repo map, and separate CTA. Accurate but too lo
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 05:06 UTC · source commit 58a6d4f (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 05:48 UTC · source commit a0d95aa (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

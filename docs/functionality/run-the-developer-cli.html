@@ -108,7 +108,7 @@
     <header class="page-head reading-column">
         <p class="eyebrow">Developer cli</p>
         <h1>Run VibeKB from one developer CLI</h1>
-        <p class="lede">A single Go binary (`vibekb`) that is the developer&#039;s front door to VibeKB — downloadable from GitHub Releases, installs VibeKB natively (embedded payload, no PHP), runs environment diagnostics natively, and delegates every model-semantic command to the canonical PHP tooling it discovers, so there is exactly one model loader.</p>
+        <p class="lede">A single Go binary (`vibekb`) that is the developer&#039;s front door to VibeKB — installed primarily via the website curl script (which downloads from GitHub Releases), installs VibeKB natively (embedded payload, no PHP), runs environment diagnostics natively, and delegates every model-semantic command to the canonical PHP tooling it discovers, so there is exactly one model loader.</p>
         <div class="badge-row">
             <span class="badge badge--ok">Implemented</span>            <span class="badge badge--ok">Verified from source</span>            <span class="badge badge--info">User-facing</span>        </div>
     </header>
@@ -120,8 +120,11 @@
 help that need no runtime, and a thin, honest hand-off to the existing PHP core
 for everything that touches the model — never a second implementation of it.</p>
 <h3>User experience</h3>
-<p>Primary distribution is a downloadable binary from GitHub Releases (no Go
-required). <code>vibekb version</code> prints identity stamped at link time:</p>
+<p>Primary distribution is the website installer
+(<code>curl -fsSL https://iainreid.dev/vibekb/install.sh | sh</code>), which detects the
+platform and downloads the matching binary from GitHub Releases. Manual download
+from Releases remains a secondary path. <code>vibekb version</code> prints identity stamped
+at link time:</p>
 <p>``<code>
 VibeKB
 Version: 0.1.0
@@ -250,6 +253,15 @@ installation path while keeping exactly one implementation of the model. See
                 <h2>Files involved</h2>
                                                         <ul class="rail-list">
                                                     <li>
+                                <a href="../files/index.html#index.php"><code>index.php</code></a>
+                                <span class="badge badge--info">Moderate impact</span>                            </li>
+                                                    <li>
+                                <a href="../files/index.html#install.sh"><code>install.sh</code></a>
+                                <span class="badge badge--danger">High impact</span>                            </li>
+                                                    <li>
+                                <a href="../files/index.html#.htaccess"><code>.htaccess</code></a>
+                                <span class="badge badge--info">Moderate impact</span>                            </li>
+                                                    <li>
                                 <a href="../files/index.html#.github%2Fworkflows%2Frelease.yml"><code>.github/workflows/release.yml</code></a>
                                 <span class="badge badge--info">Moderate impact</span>                            </li>
                                                     <li>
@@ -267,7 +279,7 @@ installation path while keeping exactly one implementation of the model. See
             
             <div class="rail-card metadata-group">
                 <h2>Related rationale</h2>
-                                    <p><a class="chip" href="../why/decisions/go-front-end-php-core.html">A Go developer CLI fronts VibeKB; PHP stays the single model core and runtime</a> <a class="chip" href="../why/decisions/native-installer-embedded-payload.html">Installation is native to the Go binary, from an embedded payload</a> <a class="chip" href="../why/decisions/two-modes-one-source.html">Two output modes over one source and one template set</a> <a class="chip" href="../why/changes/release-binaries-pipeline.html">Downloadable cross-platform vibekb release binaries</a></p>
+                                    <p><a class="chip" href="../why/decisions/go-front-end-php-core.html">A Go developer CLI fronts VibeKB; PHP stays the single model core and runtime</a> <a class="chip" href="../why/decisions/native-installer-embedded-payload.html">Installation is native to the Go binary, from an embedded payload</a> <a class="chip" href="../why/decisions/two-modes-one-source.html">Two output modes over one source and one template set</a> <a class="chip" href="../why/changes/release-binaries-pipeline.html">Downloadable cross-platform vibekb release binaries</a> <a class="chip" href="../why/changes/website-curl-installer.html">Website curl installer as product CLI entry point</a></p>
                             </div>
         </aside>
     </div>
@@ -281,7 +293,7 @@ installation path while keeping exactly one implementation of the model. See
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 05:06 UTC · source commit 58a6d4f (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 05:48 UTC · source commit a0d95aa (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

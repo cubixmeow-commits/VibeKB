@@ -41,6 +41,10 @@ and a `.cpanel.yml` deployment file.
 As of Version 1, this repository contains a plain PHP website with two parts:
 
 - `index.php` — public homepage (entry point).
+- `install.sh` — product CLI installer (`curl | sh`); GitHub Releases is the
+  download backend. Served at `/install.sh` (and `/install` via `.htaccess`).
+- `.htaccess` — internal rewrite so `/install` serves `install.sh` (marketing
+  site only; the Software Guide under `guide/` still needs no rewrite rules).
 - `assets/css/home.css` — homepage styles.
 - `guide/` — the **Software Guide** V1 app (front controller + `lib/` loader +
   `templates/` + `assets/`). Query-string routed; no rewrite rules required.
@@ -88,12 +92,14 @@ or a subfolder, with **no `.htaccess` rewrite rules required**.
 Everything in the repository checkout **except** excluded paths is synced to
 `/home/iainmcok/public_html/vibekb/`. Today that means:
 
-- `index.php`, `assets/`, `guide/`, `.vibekb/`, and `README.md`.
+- `index.php`, `install.sh`, `.htaccess`, `assets/`, `guide/`, `.vibekb/`, and
+  `README.md`.
 - Authoring docs (`PRODUCT.md`, `CLAUDE.md`, `AGENTS.md`, `SCHEMA.md`,
   `MAINTENANCE.md`, `INITIALIZE.md`, `BUILD_REPORT.md`, `DEPLOYMENT.md`) are
   excluded on purpose.
 
-After deploy, `https://<your-domain>/vibekb/` serves the homepage and
+After deploy, `https://<your-domain>/vibekb/` serves the homepage,
+`/vibekb/install.sh` (and `/vibekb/install`) serves the CLI installer, and
 `/vibekb/guide/` serves the Software Guide.
 
 **Important:** The production server is not assumed to have Node.js. Do not rely

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Homepage install copy for GitHub Releases download flow · VibeKB — VibeKB</title>
+    <title>Website curl installer as product CLI entry point · VibeKB — VibeKB</title>
     <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -106,33 +106,46 @@
         <p class="breadcrumb"><a href="../../why/index.html">← Decisions &amp; rationale</a></p>
         <header class="page-head reading-column">
             <p class="eyebrow">Changes</p>
-            <h1>Homepage install copy for GitHub Releases download flow</h1>
-            <p class="lede">Homepage install and requirements now match the downloadable-binary workflow from release.yml: releases/latest link, real platform asset names, Installing vs Running after vs Advanced build-from-source, no Go for ordinary users, PHP 8.2+ still post-install.</p>
+            <h1>Website curl installer as product CLI entry point</h1>
+            <p class="lede">Added install.sh (and /install rewrite) on the VibeKB website so users install with curl | sh; homepage primary path updated; GitHub Releases is the download backend and manual fallback only.</p>
             <div class="badge-row">
                 <span class="badge badge--info">implemented</span>                                                <span class="badge badge--ok">Verified from source</span>            </div>
         </header>
         <div class="detail-grid">
             <div class="detail-main"><div class="prose reading-column"><h3>Before</h3>
-<p>Homepage already pointed at Releases after Phase 2a, but used <code>/releases</code> (not
-<code>/latest</code>), did not list release asset filenames, and folded install/runtime
-requirements into one card without a secondary build-from-source path.</p>
+<p>Ordinary users were told to open GitHub Releases, pick a platform asset, rename
+it, chmod it, and put it on PATH. The website was marketing only for CLI
+acquisition. curl installation was still listed under Coming soon.</p>
 <h3>After</h3>
 <ul>
-<li>Download button → <code>…/releases/latest</code></li>
-<li>Step 1 lists the six assets from <code>.github/workflows/release.yml</code></li>
-<li>Requirements split: Installing VibeKB / Running after installation / Advanced build from source</li>
-<li>Badge: “No Go and no PHP required to install”</li>
-<li>Coming soon unchanged (signing, Homebrew, Winget, curl)</li>
+<li><code>install.sh</code> at the site root: detect macOS/Linux + arm64/amd64, resolve the</li>
 </ul>
+<p>latest GitHub Release asset, install to <code>/usr/local/bin</code> or <code>~/.local/bin</code>,
+  <code>chmod +x</code>, run <code>vibekb version</code></p>
+<ul>
+<li><code>.htaccess</code> internal rewrite so <code>/install</code> serves the same script</li>
+<li>Homepage step 1 is <code>curl -fsSL https://iainreid.dev/vibekb/install.sh | sh</code></li>
+</ul>
+<p>with a secondary “Prefer to install manually?” Releases link</p>
+<ul>
+<li>README / INSTALLER / RELEASE / DEPLOYMENT / ARCHITECTURE / install.php notice</li>
+</ul>
+<p>updated; Coming soon no longer lists curl installation</p>
+<ul>
+<li>Designed so checksums, signing checks, Homebrew/Winget can be added later</li>
+</ul>
+<p>without changing the user-facing curl command</p>
 <h3>Verification note</h3>
-<p>Rendered HTML checked against release.yml asset names; <code>vibekb install</code> matches
-installer usage; no <code>install.php</code> or primary <code>go build</code> in install cards.</p></div></div>
+<p><code>sh -n install.sh</code> clean. End-to-end smoke against the live <code>v0.1.0</code> release
+installed <code>vibekb-linux-amd64</code> into a temp dir and <code>vibekb version</code> succeeded.
+Rendered homepage contains the curl one-liner as the primary install command and
+does not use “Download latest release” as the primary CTA.</p></div></div>
             <aside class="detail-rail" aria-label="Connections">
                 <div class="rail-card">
                     <h2>Affects functionality</h2>
-                    <p><a class="chip" href="../../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a></p>
+                    <p><a class="chip" href="../../functionality/run-the-developer-cli.html">Run VibeKB from one developer CLI</a> <a class="chip" href="../../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a></p>
                 </div>
-                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">index.php</code></p></div>
+                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">install.sh</code> <code class="chip chip--file">.htaccess</code> <code class="chip chip--file">index.php</code> <code class="chip chip--file">assets/css/homepage.css</code> <code class="chip chip--file">.cpanel.yml</code> <code class="chip chip--file">DEPLOYMENT.md</code> <code class="chip chip--file">RELEASE.md</code> <code class="chip chip--file">README.md</code> <code class="chip chip--file">INSTALLER.md</code> <code class="chip chip--file">ARCHITECTURE.md</code> <code class="chip chip--file">install.php</code></p></div>
                             </aside>
         </div>
     </article>

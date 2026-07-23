@@ -114,23 +114,33 @@
                                     <span class="badge badge--info">Verification: verified from source</span>                                <span class="muted">Updated 2026-07-23</span>
             </div>
             <div class="prose reading-column"><h3>Current state</h3>
-<p>Install and Compatibility copy state positive requirements (downloadable
-executable, write access, PHP 8.2+ after install) without “No Go / no PHP
-required to install” marketing lines. Advanced build-from-source still mentions
-Go for contributors.</p>
+<ul>
+<li><code>install.sh</code> is the website installer (macOS/Linux, arm64/amd64 → latest</li>
+</ul>
+<p>release asset → <code>/usr/local/bin</code> or <code>~/.local/bin</code> → <code>vibekb version</code>).</p>
+<ul>
+<li><code>.htaccess</code> rewrites <code>/install</code> to the same script.</li>
+<li>Homepage step 1 is the curl one-liner; Releases is a secondary manual link.</li>
+<li>Docs (README, INSTALLER, RELEASE, DEPLOYMENT, ARCHITECTURE) match.</li>
+</ul>
 <h3>Verification completed</h3>
 <ul>
-<li>Grep of <code>index.php</code>: no “No Go”, “no PHP required”, “do not need Go”</li>
-<li><code>php -l index.php</code></li>
-<li>Rendered homepage still has <code>/releases/latest</code>, six assets, <code>vibekb install</code></li>
+<li><code>sh -n install.sh</code></li>
+<li>End-to-end smoke against live <code>v0.1.0</code> (linux/amd64) into a temp dir;</li>
+</ul>
+<p><code>vibekb version</code> OK</p>
+<ul>
+<li>Homepage render: curl command primary; no primary Download-latest-release CTA</li>
 <li><code>php tools/vibekb.php check</code> + generate (this commit)</li>
 </ul>
 <h3>Unresolved / next</h3>
-<p>Tag <code>v0.1.0</code> was already pushed earlier; next product work remains code signing
-(and other Phase 2 distribution items) when ready.</p>
+<p>Live cPanel deploy must publish <code>install.sh</code> and <code>.htaccess</code>. Confirm both URLs
+on https://iainreid.dev/vibekb/ after deploy. Code signing remains the next
+hardening milestone; checksum verification can be added to <code>install.sh</code> without
+changing the curl command.</p>
 <h3>Exact next recommended action</h3>
-<p>Plan code signing / further Phase 2 distribution (Homebrew, Winget, curl) per
-RELEASE.md when ready.</p></div>
+<p>Deploy to cPanel, then <code>curl -fsSL https://iainreid.dev/vibekb/install.sh | head</code>
+(and <code>/install</code>) to confirm the script is served; plan code signing.</p></div>
         </section>
     
             <section class="doc-section">
@@ -163,7 +173,7 @@ RELEASE.md when ready.</p></div>
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 05:06 UTC · source commit 58a6d4f (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 05:48 UTC · source commit a0d95aa (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

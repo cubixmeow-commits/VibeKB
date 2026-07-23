@@ -3,19 +3,19 @@ id: run-the-developer-cli
 type: functionality
 title: Run VibeKB from one developer CLI
 area: developer-cli
-summary: A single Go binary (`vibekb`) that is the developer's front door to VibeKB — downloadable from GitHub Releases, installs VibeKB natively (embedded payload, no PHP), runs environment diagnostics natively, and delegates every model-semantic command to the canonical PHP tooling it discovers, so there is exactly one model loader.
+summary: A single Go binary (`vibekb`) that is the developer's front door to VibeKB — installed primarily via the website curl script (which downloads from GitHub Releases), installs VibeKB natively (embedded payload, no PHP), runs environment diagnostics natively, and delegates every model-semantic command to the canonical PHP tooling it discovers, so there is exactly one model loader.
 status: implemented
 verification: verified-from-source
 user_facing: true
 trigger: A developer runs `vibekb <command>` (e.g. `vibekb install`, `vibekb doctor`, `vibekb check`) — install from anywhere, model commands from inside a VibeKB repository.
 updated: 2026-07-23
 tags: [cli, go, developer-tool, delegation, native-install, distribution]
-files: [cmd/vibekb/main.go, internal/cli/cli.go, internal/cli/doctor.go, internal/cli/version.go, internal/phpcore/phpcore.go, internal/buildinfo/buildinfo.go, go.mod, .github/workflows/release.yml, RELEASE.md]
+files: [cmd/vibekb/main.go, internal/cli/cli.go, internal/cli/doctor.go, internal/cli/version.go, internal/phpcore/phpcore.go, internal/buildinfo/buildinfo.go, go.mod, .github/workflows/release.yml, RELEASE.md, install.sh, .htaccess]
 reads: [tools/vibekb.php]
 writes: []
 config: []
 depends_on: [install-into-a-repository, bootstrap-workspace, validate-model, detect-drift, generate-static-snapshot]
-related_memory: [decision:go-front-end-php-core, decision:native-installer-embedded-payload, decision:two-modes-one-source, change:release-binaries-pipeline]
+related_memory: [decision:go-front-end-php-core, decision:native-installer-embedded-payload, decision:two-modes-one-source, change:release-binaries-pipeline, change:website-curl-installer]
 ---
 
 ## In one sentence
@@ -26,8 +26,11 @@ for everything that touches the model — never a second implementation of it.
 
 ## User experience
 
-Primary distribution is a downloadable binary from GitHub Releases (no Go
-required). `vibekb version` prints identity stamped at link time:
+Primary distribution is the website installer
+(`curl -fsSL https://iainreid.dev/vibekb/install.sh | sh`), which detects the
+platform and downloads the matching binary from GitHub Releases. Manual download
+from Releases remains a secondary path. `vibekb version` prints identity stamped
+at link time:
 
 ```
 VibeKB

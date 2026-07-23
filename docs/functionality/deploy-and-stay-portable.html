@@ -118,7 +118,8 @@
                             <div class="prose reading-column"><h3>In one sentence</h3>
 <p>VibeKB ships as ordinary PHP plus generated static files, so it deploys by
 copying files — the deployment configuration is maintained alongside the code it
-deploys.</p>
+deploys. The public site also serves <code>install.sh</code> (and <code>/install</code>) as the CLI
+acquisition endpoint.</p>
 <h3>Current behavior</h3>
 <p><code>.cpanel.yml</code> rsyncs the runtime paths (<code>index.php</code>, <code>assets/</code>, <code>guide/</code>,
 <code>.vibekb/</code>) into a cPanel public folder, excluding development-only paths
@@ -180,6 +181,12 @@ treating the deploy config as code keeps it accurate as the structure evolves.</
                                 <a href="../files/index.html#index.php"><code>index.php</code></a>
                                 <span class="badge badge--info">Moderate impact</span>                            </li>
                                                     <li>
+                                <a href="../files/index.html#install.sh"><code>install.sh</code></a>
+                                <span class="badge badge--danger">High impact</span>                            </li>
+                                                    <li>
+                                <a href="../files/index.html#.htaccess"><code>.htaccess</code></a>
+                                <span class="badge badge--info">Moderate impact</span>                            </li>
+                                                    <li>
                                 <a href="../files/index.html#assets%2Fcss%2Fhomepage.css"><code>assets/css/homepage.css</code></a>
                                 <span class="badge badge--ok">Low impact</span>                            </li>
                                                     <li>
@@ -197,7 +204,10 @@ treating the deploy config as code keeps it accurate as the structure evolves.</
             
             <div class="rail-card metadata-group">
                 <h2>Related rationale</h2>
-                                    <p><a class="chip" href="../why/constraints/no-build-step-portable.html">Runs on PHP 8.2 shared hosting with no build step</a> <a class="chip" href="../why/decisions/two-modes-one-source.html">Two output modes over one source and one template set</a> <a class="chip" href="../why/changes/homepage-compatibility-section.html">Homepage Compatibility &amp; Requirements under install</a> <a class="chip" href="../why/changes/homepage-native-installer-copy.html">Homepage copy matches the native Go installer</a> <a class="chip" href="../why/changes/homepage-voice-pass.html">Homepage voice pass (indie-developer tone)</a> <a class="chip" href="../why/changes/homepage-drop-no-go-php-claims.html">Simplify homepage install requirements copy</a></p>
+                                    <details class="rail-disclose">
+                        <summary>Memory links (7)</summary>
+                        <p><a class="chip" href="../why/constraints/no-build-step-portable.html">Runs on PHP 8.2 shared hosting with no build step</a> <a class="chip" href="../why/decisions/two-modes-one-source.html">Two output modes over one source and one template set</a> <a class="chip" href="../why/changes/homepage-compatibility-section.html">Homepage Compatibility &amp; Requirements under install</a> <a class="chip" href="../why/changes/homepage-native-installer-copy.html">Homepage copy matches the native Go installer</a> <a class="chip" href="../why/changes/homepage-voice-pass.html">Homepage voice pass (indie-developer tone)</a> <a class="chip" href="../why/changes/homepage-drop-no-go-php-claims.html">Simplify homepage install requirements copy</a> <a class="chip" href="../why/changes/website-curl-installer.html">Website curl installer as product CLI entry point</a></p>
+                    </details>
                             </div>
         </aside>
     </div>
@@ -211,7 +221,7 @@ treating the deploy config as code keeps it accurate as the structure evolves.</
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 05:06 UTC · source commit 58a6d4f (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 05:48 UTC · source commit a0d95aa (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

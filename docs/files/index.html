@@ -318,7 +318,7 @@
                         <div class="file-card__badges">
                             <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
                     </div>
-                    <p class="file-card__purpose">The public homepage: hero/problem, three-step install fast-start (#install), Compatibility &amp; Requirements (#compatibility), what-you-get pillars, live preview card, and functionality carousel driven by the active .vibekb/ model.</p>
+                    <p class="file-card__purpose">The public homepage: hero/problem, three-step install fast-start (#install) with website curl | sh as the primary CLI acquisition path, Compatibility &amp; Requirements (#compatibility), what-you-get pillars, live preview card, and functionality carousel driven by the active .vibekb/ model.</p>
                     <dl class="file-card__meta">
                                                     <div><dt>Runs when</dt><dd>Every browser request to the site root.</dd></div>
                                                                             <div><dt>Implements</dt><dd>
@@ -326,11 +326,51 @@
                                                                                                                                                 <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a>
                                                                                                                                                 <a class="chip" href="../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a>
                                                                                                                                                 <a class="chip" href="../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a>
+                                                                                                                                                <a class="chip" href="../functionality/run-the-developer-cli.html">Run VibeKB from one developer CLI</a>
                                                                                                 </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">guide/lib/Content.php</code> <code class="chip chip--file">guide/lib/helpers.php</code> <code class="chip chip--file">.vibekb/project/identity.md</code> <code class="chip chip--file">assets/css/homepage.css</code> <code class="chip chip--file">assets/js/homepage.js</code> <code class="chip chip--file">assets/images/homepage-developer-journey.webp</code> <code class="chip chip--file">assets/images/homepage-developer-journey.png</code> <code class="chip chip--file">cmd/vibekb/main.go</code> <code class="chip chip--file">internal/installer/installer.go</code> <code class="chip chip--file">INSTALLER.md</code> <code class="chip chip--file">RELEASE.md</code> <code class="chip chip--file">prompts/INTEGRATE_VIBEKB.md</code> <code class="chip chip--file">DEPLOYMENT.md</code> <code class="chip chip--file">PRODUCT.md</code></dd></div>
+                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">guide/lib/Content.php</code> <code class="chip chip--file">guide/lib/helpers.php</code> <code class="chip chip--file">.vibekb/project/identity.md</code> <code class="chip chip--file">assets/css/homepage.css</code> <code class="chip chip--file">assets/js/homepage.js</code> <code class="chip chip--file">assets/images/homepage-developer-journey.webp</code> <code class="chip chip--file">assets/images/homepage-developer-journey.png</code> <code class="chip chip--file">install.sh</code> <code class="chip chip--file">cmd/vibekb/main.go</code> <code class="chip chip--file">internal/installer/installer.go</code> <code class="chip chip--file">INSTALLER.md</code> <code class="chip chip--file">RELEASE.md</code> <code class="chip chip--file">prompts/INTEGRATE_VIBEKB.md</code> <code class="chip chip--file">DEPLOYMENT.md</code> <code class="chip chip--file">PRODUCT.md</code></dd></div>
                                                                             <div><dt>Depended on by</dt><dd>
                                 Public landing / Mode A deployment                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Load the homepage; confirm primary install is Download latest release (/releases/latest) + vibekb install; platform asset names match release.yml; PHP 8.2+ only under after-install; Advanced build-from-source is secondary; no install.php in primary install cards; no ‘No Go / no PHP required’ marketing claims.</dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Load the homepage; confirm primary install is curl -fsSL https://iainreid.dev/vibekb/install.sh | sh; manual Releases link is secondary; step 2 is vibekb install .; PHP 8.2+ only under after-install; Advanced build-from-source is secondary; no primary Download-latest-release CTA.</dd></div>
+                                            </dl>
+                </section>
+                            <section class="file-card" id="install.sh">
+                    <div class="file-card__head">
+                        <h2><code>install.sh</code></h2>
+                        <div class="file-card__badges">
+                            <span class="badge badge--danger">High impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
+                    </div>
+                    <p class="file-card__purpose">Product-site CLI installer: curl | sh entry point that detects macOS/Linux + arm64/amd64, downloads the matching GitHub Releases asset, installs vibekb to /usr/local/bin or ~/.local/bin, and verifies with vibekb version.</p>
+                    <dl class="file-card__meta">
+                                                    <div><dt>Runs when</dt><dd>A user runs curl -fsSL https://iainreid.dev/vibekb/install.sh | sh (or /install).</dd></div>
+                                                                            <div><dt>Implements</dt><dd>
+                                                                                                            <a class="chip" href="../functionality/run-the-developer-cli.html">Run VibeKB from one developer CLI</a>
+                                                                                                                                                <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a>
+                                                                                                                                                <a class="chip" href="../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a>
+                                                                                                </dd></div>
+                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">.github/workflows/release.yml</code> <code class="chip chip--file">RELEASE.md</code></dd></div>
+                                                                            <div><dt>Depended on by</dt><dd>
+                                Public landing / Mode A deployment; index.php                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>sh -n install.sh; smoke-install into a temp dir against the latest GitHub Release; confirm vibekb version succeeds; unsupported OS/arch print actionable errors.</dd></div>
+                                            </dl>
+                </section>
+                            <section class="file-card" id=".htaccess">
+                    <div class="file-card__head">
+                        <h2><code>.htaccess</code></h2>
+                        <div class="file-card__badges">
+                            <span class="badge badge--info">Moderate impact</span>                                                            <span class="badge badge--ok">Verified from source</span>                                                    </div>
+                    </div>
+                    <p class="file-card__purpose">Marketing-site Apache rules: internal rewrite so /install serves install.sh, and text/plain for .sh so curl | sh receives the script body.</p>
+                    <dl class="file-card__meta">
+                                                    <div><dt>Runs when</dt><dd>Every request to /install or *.sh on the cPanel PHP host.</dd></div>
+                                                                            <div><dt>Implements</dt><dd>
+                                                                                                            <a class="chip" href="../functionality/run-the-developer-cli.html">Run VibeKB from one developer CLI</a>
+                                                                                                                                                <a class="chip" href="../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a>
+                                                                                                </dd></div>
+                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">install.sh</code></dd></div>
+                                                                            <div><dt>Depended on by</dt><dd>
+                                Public landing / Mode A deployment                            </dd></div>
+                                                                            <div><dt>Test after change</dt><dd>After deploy, curl -fsSL https://iainreid.dev/vibekb/install and …/install.sh both return the installer script body.</dd></div>
                                             </dl>
                 </section>
                             <section class="file-card" id="assets/css/homepage.css">
@@ -619,7 +659,7 @@
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 05:06 UTC · source commit 58a6d4f (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 05:48 UTC · source commit a0d95aa (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

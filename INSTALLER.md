@@ -13,32 +13,39 @@ and where to extend it.
 
 ## Quick start
 
-Download a `vibekb` binary from
-[GitHub Releases](https://github.com/cubixmeow-commits/VibeKB/releases) for your
-platform, rename it to `vibekb` (or `vibekb.exe` on Windows), put it on your
-`PATH`, and install — **no Go and no PHP required to install:**
+Install the `vibekb` CLI from the website (macOS/Linux), then install into your
+project:
 
 ```bash
+curl -fsSL https://iainreid.dev/vibekb/install.sh | sh
 vibekb install /path/to/your/project
 ```
+
+Prefer to install the binary manually? Download from
+[GitHub Releases](https://github.com/cubixmeow-commits/VibeKB/releases/latest),
+rename to `vibekb` (or `vibekb.exe` on Windows), put it on your `PATH`, and run
+the same `vibekb install` command.
 
 Then open your project in a coding agent (Claude Code, Cursor, Codex, …) and ask
 it to **build the first VibeKB model using `prompts/INTEGRATE_VIBEKB.md`**.
 
-Requirements: a release binary (or a local build). **PHP 8.2+ is required only to
-*run* the installed guide** (`php tools/vibekb.php …`, the dynamic app), never to
-install. Works on Windows, macOS, and Linux.
+Requirements: network access for the website installer (or a release binary / local
+build). **PHP 8.2+ is required only to *run* the installed guide**
+(`php tools/vibekb.php …`, the dynamic app), never to install. The website
+installer supports macOS and Linux; Windows binaries are available from Releases.
 
-> **How it works.** The `vibekb` binary embeds the installer payload and a
-> canonical starter definition (`template/starter/`), so `vibekb install` copies
-> files and scaffolds a fresh `.vibekb/` **without launching PHP** and without the
-> source clone needing to remain on disk. The set of installed files is declared
-> in [`template/manifest.json`](./template/manifest.json), which the binary parses
+> **How it works.** The website script (`install.sh`) downloads the matching
+> release asset and places `vibekb` on your `PATH`. The `vibekb` binary embeds the
+> installer payload and a canonical starter definition (`template/starter/`), so
+> `vibekb install` copies files and scaffolds a fresh `.vibekb/` **without
+> launching PHP** and without the source clone needing to remain on disk. The set
+> of installed files is declared in
+> [`template/manifest.json`](./template/manifest.json), which the binary parses
 > directly — the single source of truth.
 >
 > **Legacy `php install.php`.** The old entry point still works: it is now a thin
 > compatibility wrapper that forwards to `vibekb install` (or prints how to get
-> the binary). There is only one installer implementation — the Go one.
+> the binary). There is only one repository installer implementation — the Go one.
 
 ### Advanced: build from source
 
@@ -49,8 +56,9 @@ go build -o vibekb ./cmd/vibekb           # Go 1.24+
 ./vibekb install /path/to/your/project
 ```
 
-Publishing new binaries is documented in [RELEASE.md](./RELEASE.md). Package
-managers (Homebrew, Winget, curl) are a later milestone.
+Publishing new binaries is documented in [RELEASE.md](./RELEASE.md). Homebrew and
+Winget are a later milestone; the website `curl | sh` installer is the primary
+end-user path.
 
 ## What gets installed
 
