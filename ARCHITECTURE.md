@@ -158,8 +158,8 @@ The Go CLI adds a dependency only for the *developer* who chooses the binary, an
 
 | Command | Verdict | Why |
 |---------|---------|-----|
-| `install` | **Keep PHP; front with `vibekb install`.** | Copying files needs no model parsing, but the installer is verified, manifest-driven, and shared with `bootstrap` via `Starter.php`. Re-implementing it in Go would duplicate the starter definition. The binary delegates; a future phase may extract the starter payload to data both can read. |
-| `bootstrap` | **Keep PHP; front with `vibekb bootstrap`.** | Same shared `Starter.php` definition as `install`. One definition, no drift. |
+| `install` | **Native Go (done).** | Copying files and scaffolding need no model parsing. The installer now runs entirely in Go from an embedded payload — no PHP, no live clone — with the starter definition extracted to `template/starter/` data that both Go and PHP read. See §5a. |
+| `bootstrap` | **Keep PHP; front with `vibekb bootstrap`.** | Now reads the same `template/starter/` data the installer embeds. One definition, no drift. (A native Go `bootstrap` is straightforward later, since the definition is already shared data.) |
 | `check` | **Keep PHP core; front with `vibekb check`.** | Its drift half is pure git+fs (Go-friendly), but its validation and `/docs`-sync halves run the model loader and the generator. Splitting it would fork the loader. Delegated whole. |
 | `generate` | **Keep PHP — strongly.** | Mode B exists specifically so there is **no second template system**: it renders the *same* templates as Mode A. Generating HTML from Go would reintroduce exactly the duplication VibeKB was built to avoid. This is the clearest "stay PHP". |
 | `status` / `validate` / `affected` | **Keep PHP core; front in Go.** | Thin wrappers over `Content.php`. |
@@ -176,8 +176,10 @@ delegate everything that touches the model.**
 ```
 VibeKB/
   cmd/vibekb/            # Go entry point (main)
+  embed.go               # module-root embed of the installer payload + starter
   internal/
     cli/                 # command surface: dispatch, help, doctor, version
+    installer/           # native install: manifest parse, copy, scaffold, verify
     phpcore/             # discover PHP + repo root; delegate to the PHP core
     buildinfo/           # version string (set at link time on release)
   go.mod
@@ -185,8 +187,8 @@ VibeKB/
   # --- the canonical PHP core + runtime (unchanged) ---
   guide/                 # dynamic guide (Mode A) + guide/lib (the model core)
   tools/                 # vibekb.php, generate-static.php, validate.php, Starter.php
-  install.php            # the installer (delegated to by `vibekb install`)
-  template/              # installer payload manifest
+  install.php            # compatibility wrapper → forwards to `vibekb install`
+  template/              # installer payload manifest + starter/ (canonical data)
   .vibekb/               # the self-hosted living model (the product)
   docs/                  # generated Mode B snapshot
 ```
@@ -211,20 +213,25 @@ layer is established. Avoiding that rewrite now is deliberate.
 Incremental, backwards-compatible, no big-bang rewrite. `php tools/vibekb.php …`
 keeps working at every phase.
 
-- **Phase 1 — Go front-end (implemented here).** `cmd/vibekb` + `internal/*`:
-  native `version`, `doctor`, `help`; delegation for `status`, `check`,
-  `affected`, `bootstrap`, `validate`, `generate`, `install`. Repo-root and PHP
-  discovery, honest missing-runtime errors, exit-code propagation. CI builds,
-  vets, and tests it. Nothing PHP changes.
+- **Phase 1 — Go front-end (done).** `cmd/vibekb` + `internal/*`: native
+  `version`, `doctor`, `help`; delegation for `status`, `check`, `affected`,
+  `bootstrap`, `validate`, `generate`. Repo-root and PHP discovery, honest
+  missing-runtime errors, exit-code propagation. CI builds, vets, and tests it.
+- **Phase 1b — native installation (done, this change).** `vibekb install` is
+  fully native: it embeds the payload and a canonical starter definition
+  (`template/starter/`) and installs with **no PHP** and no live clone. The
+  starter model was extracted from PHP code into shared data that both the Go
+  installer and PHP `bootstrap` read (pulling the starter-as-data item forward
+  from Phase 3). `install.php` became a compatibility wrapper. This is what makes
+  the single-binary install path real.
 - **Phase 2 — distribution.** Release automation (cross-compiled binaries,
   checksums), a `curl | sh` installer, a Homebrew tap, and a winget manifest, so
-  `brew install vibekb` / `winget install vibekb` become real. Still delegating.
+  `brew install vibekb` / `winget install vibekb` become real. Unblocked now that
+  install is self-contained.
 - **Phase 3 — shared core boundary.** Extract the model core out of `guide/lib`
-  into a shared location imported by both the guide and the tools, and turn the
-  `Starter.php` starter payload into data files. This removes the "tools depend on
-  guide" inversion and lets native Go commands (e.g. a fast `doctor`-level model
-  sanity check) read the same starter data without duplicating it. Still one
-  loader.
+  into a shared location imported by both the guide and the tools. (The starter
+  payload is already data, done in Phase 1b.) This removes the "tools depend on
+  guide" inversion. Still one loader.
 - **Phase 4 — evaluate a bundled runtime.** Only if the "developers shouldn't
   think about PHP at all" goal demands it, evaluate shipping PHP *with* the binary
   (e.g. FrankenPHP / static-php-cli) so `vibekb` needs nothing preinstalled. This
@@ -241,30 +248,36 @@ justified on its own; none requires forking the model core.
 The end-state DX is:
 
 ```
-vibekb install        # into your repo (from a source clone)
-vibekb check          # verify the model
-vibekb generate       # publish /docs
+vibekb install        # into your repo — native, no PHP required
+vibekb check          # verify the model  (delegates to PHP)
+vibekb generate       # publish /docs     (delegates to PHP)
 # deploy the PHP guide to any host (cPanel, static Pages, …)
 ```
 
-Phase 1 delivers a single binary and the command surface. Until Phase 4, the
-delegated commands still need PHP 8.2+ present — and that is stated plainly:
-`vibekb doctor` checks for it and tells the developer how to get it, rather than
-pretending PHP isn't there. Overclaiming "no PHP needed" would violate VibeKB's
-own honesty rules. Phase 2 (distribution) and Phase 4 (bundled runtime) are what
-progressively make PHP invisible; Phase 1 makes the *entry point* uniform.
+`install`, `doctor`, and `version` are native and need **no PHP** — installation
+is now a self-contained binary step (Phase 1b). The *model* commands (`check`,
+`generate`, `status`, …) still delegate to PHP 8.2+, and that is stated plainly:
+`vibekb doctor` reports whether PHP is present rather than pretending it isn't.
+Overclaiming "no PHP anywhere" would violate VibeKB's own honesty rules. Phase 2
+(distribution) makes the binary trivial to get; Phase 4 (an optional bundled
+runtime) is what would eventually make even the model commands PHP-free.
 
 ---
 
 ## 9. Backwards compatibility
 
-- `php tools/vibekb.php <cmd>` and `php install.php` are unchanged and remain the
-  supported path. The Go binary is an *additional* front door, not a replacement.
-- The Go layer is additive: no PHP file changed behaviour in Phase 1.
+- `php tools/vibekb.php <cmd>` is unchanged and remains supported. `php
+  install.php` still works too — it is now a thin wrapper that forwards to `vibekb
+  install`, so there is one installer, not two.
+- The model core is untouched: the loader, guide, and generator changed no
+  behaviour. `tools/lib/Starter.php` was refactored to *read* the extracted
+  `template/starter/` data, producing byte-identical scaffolding (verified).
 - The Go source is developer/CI tooling only. It is excluded from the cPanel
   deployment (`.cpanel.yml`) and from the installer payload
-  (`template/manifest.json` → `not_installed`): a repository that adopts VibeKB
-  still receives the PHP runtime exactly as before.
+  (`template/manifest.json` → `not_installed`). The starter *definition*
+  (`template/starter/`) **is** installed into targets, so `bootstrap` keeps
+  working there; a repository that adopts VibeKB still receives the PHP runtime
+  exactly as before.
 
 See `INSTALLER.md` and `MAINTENANCE.md` for the developer workflow, and
 `DEPLOYMENT.md` for why the Go CLI is not deployed.

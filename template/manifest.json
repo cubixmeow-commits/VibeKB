@@ -1,12 +1,13 @@
 {
   "template_version": "1.0.0",
   "vibekb_content_model": "functionality-first",
-  "description": "Definition of a VibeKB installation: the VibeKB-owned runtime payload copied into a target repository, the project-owned paths the installer must never overwrite, and where the fresh starter model comes from. install.php reads this file so the set of installed files is declared here, not hard-coded in the installer.",
+  "description": "Definition of a VibeKB installation: the VibeKB-owned runtime payload copied into a target repository, the project-owned paths the installer must never overwrite, and where the fresh starter model comes from. This file is the single source of truth for the installed file set — the native Go installer parses it (from its embedded copy) and the install.php compatibility wrapper defers to it. The set of installed files is declared here, not hard-coded in either installer.",
   "payload": {
     "note": "Repository-root-relative paths that belong to VibeKB. Copied on install and refreshed on upgrade. Directories are copied recursively. These are safe to overwrite when upgrading because they are VibeKB's runtime, not your application's code.",
     "runtime": [
       "guide",
-      "tools"
+      "tools",
+      "template/starter"
     ],
     "agent": [
       "prompts",
@@ -49,7 +50,8 @@
       "ARCHITECTURE.md",
       ".github",
       "install.php",
-      "template",
+      "template/manifest.json",
+      "template/README.md",
       "cmd",
       "internal",
       "go.mod",
@@ -57,8 +59,9 @@
     ]
   },
   "starter_model": {
-    "note": "The fresh .vibekb/ workspace is produced programmatically by tools/lib/Starter.php (the single source of truth), so it is never a second, drift-prone copy. `php tools/vibekb.php bootstrap` repairs it from the same definition. See INSTALLER.md.",
+    "note": "The fresh .vibekb/ workspace is produced from a single canonical, language-neutral definition under template/starter/ (a starter.json directory list plus a files/ tree with {{DATE}} and {{PROJECT_NAME_JSON}} tokens). template/starter/ IS installed into the target so `php tools/vibekb.php bootstrap` can repair the workspace from the same data the native Go installer embeds. There is no second, code-embedded starter copy: tools/lib/Starter.php reads these files, and the Go installer embeds them.",
     "root": ".vibekb",
-    "generator": "tools/lib/Starter.php"
+    "definition": "template/starter",
+    "readers": ["tools/lib/Starter.php", "cmd/vibekb (embedded)"]
   }
 }

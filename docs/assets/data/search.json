@@ -1,10 +1,10 @@
 [
     {
         "title": "Bootstrap the VibeKB workspace",
-        "summary": "A deterministic `php tools/vibekb.php bootstrap` command (and the shared `tools/lib/Starter.php` library) that creates or repairs a `.vibekb/` workspace — every required directory and starter file — without inspecting source, inventing functionality, or overwriting content. \"git init\" for VibeKB.",
+        "summary": "A deterministic `php tools/vibekb.php bootstrap` command that creates or repairs a `.vibekb/` workspace — every required directory and starter file — without inspecting source, inventing functionality, or overwriting content. It reads the canonical, language-neutral starter definition under `template/starter/` (the same data the native Go installer embeds), so the two can never disagree. \"git init\" for VibeKB.",
         "type": "functionality",
         "url": "../functionality/bootstrap-workspace.html",
-        "body": "In one sentence bootstrap guarantees a valid, empty .vibekb/ skeleton exists — creating any missing directories and starter files and leaving all existing content untouched — so the workspace is always well formed before an agent builds the model. User experience Running php tools/vibekb.php bootstrap prints what it created versus kept and ends with a clear OK or an explanation of what is still missing. dry run reports the same plan without writing anything. Current behavior vibekb verify workspace reports which required directories and starter files are missing; vibekb scaffold workspace creates the missing ones and writes any missing starter files, never overwriting an existing file so it is safe on a fresh, partial, or damaged workspace . The starter definition — vibekb starter dirs and"
+        "body": "In one sentence bootstrap guarantees a valid, empty .vibekb/ skeleton exists — creating any missing directories and starter files and leaving all existing content untouched — so the workspace is always well formed before an agent builds the model. User experience Running php tools/vibekb.php bootstrap prints what it created versus kept and ends with a clear OK or an explanation of what is still missing. dry run reports the same plan without writing anything. Current behavior vibekb verify workspace reports which required directories and starter files are missing; vibekb scaffold workspace creates the missing ones and writes any missing starter files, never overwriting an existing file so it is safe on a fresh, partial, or damaged workspace . The starter definition is data , not code: vibek"
     },
     {
         "title": "Deploy and stay portable",
@@ -50,10 +50,10 @@
     },
     {
         "title": "Install VibeKB into a repository",
-        "summary": "A PHP installer (`install.php`) that copies the VibeKB runtime into a target repository and scaffolds a fresh, empty-but-valid `.vibekb/` workspace — without touching the application's code and without analysing it — so adopting VibeKB is a command, not a manual copy.",
+        "summary": "A fully native installer built into the `vibekb` Go binary. `vibekb install /path/to/repo` copies the VibeKB runtime and scaffolds a fresh, empty-but-valid `.vibekb/` workspace from files embedded in the binary — without executing PHP, without analysing the application, and without needing the source repository to remain on disk. PHP is required only to run the installed guide.",
         "type": "functionality",
         "url": "../functionality/install-into-a-repository.html",
-        "body": "In one sentence php install.php /path/to/repo prepares any repository for VibeKB — it installs the guide, the tools, the agent instructions, and the VibeKB docs, then lays down a fresh empty model — and then hands off to an AI agent to build the model. User experience The public homepage surfaces the intended first run path in three steps under install : clone VibeKB, run php VibeKB/install.php /path/to/your/project , then ask a coding agent Cursor, Claude Code, Codex, Windsurf, or another capable agent to build the model with prompts/INTEGRATE VIBEKB.md . A Compatibility & Requirements section under compatibility answers stack/agent/deploy questions without claiming language parsers or automatic analysis. That page is marketing copy only — the installer itself is unchanged. The developer "
+        "body": "In one sentence vibekb install /path/to/repo prepares any repository for VibeKB — it copies the guide, the tools, the agent instructions, the VibeKB docs, and the starter definition, then lays down a fresh empty model — all from the binary's embedded payload, with no PHP process launched, and hands off to an AI agent to build the model. User experience A developer builds the binary once go build o vibekb ./cmd/vibekb — or, in future, installs it via brew/winget/curl — and runs vibekb install /path/to/your/project . They see a plan what will be created, replaced, skipped, and that .vibekb/ is a fresh model , confirm, and get a verified installation with explicit next steps. dry run shows the full plan and changes nothing; yes runs non interactively; force overwrites pre existing files inclu"
     },
     {
         "title": "Load the living model",
@@ -106,7 +106,7 @@
     },
     {
         "title": "Run VibeKB from one developer CLI",
-        "summary": "A single Go binary (`vibekb`) that is the developer's front door to VibeKB — it runs environment diagnostics natively and delegates every model-semantic command (status, check, affected, bootstrap, validate, generate, install) to the canonical PHP tooling it discovers, so there is exactly one model loader and one professional command in front of it.",
+        "summary": "A single Go binary (`vibekb`) that is the developer's front door to VibeKB — it installs VibeKB natively (embedded payload, no PHP), runs environment diagnostics natively, and delegates every model-semantic command (status, check, affected, bootstrap, validate, generate) to the canonical PHP tooling it discovers, so there is exactly one model loader and one professional command in front of it.",
         "type": "functionality",
         "url": "../functionality/run-the-developer-cli.html",
         "body": "In one sentence vibekb gives developers one portable command for VibeKB: native diagnostics and help that need no runtime, and a thin, honest hand off to the existing PHP core for everything that touches the model — never a second implementation of it. User experience A developer runs vibekb from anywhere inside a VibeKB repository. vibekb doctor reports whether PHP 8.2+, git, and a .vibekb/ workspace are present and ends with a clear OK or \"attention needed\". vibekb version prints the CLI version and the detected PHP and repository. vibekb check , status , generate , and the rest behave exactly like php tools/vibekb.php <command — same output, same exit codes — because the binary runs that very script. If PHP is missing, the command fails with a plain message telling the developer to inst"
@@ -414,10 +414,17 @@
     },
     {
         "title": "The template is a manifest plus a generator, not a duplicated file tree",
-        "summary": "template/ declares the installable payload (manifest.json) and the starter model is produced by tools/lib/Starter.php; the installer copies the runtime from the canonical repository files rather than from a second physical copy under template/, so nothing drifts.",
+        "summary": "template/ declares the installable payload (manifest.json) and the fresh model comes from a single canonical starter definition (template/starter/) read by both consumers; the installer copies the runtime from the canonical repository files (embedded into the binary at build time) rather than from a second physical copy, so nothing drifts.",
         "type": "decision",
         "url": "../why/decisions/installer-template-not-duplicated-tree.html",
-        "body": "Context VibeKB is self hosted: the active .vibekb/ describes the files at the repository root guide/ , tools/ , … . Physically duplicating those into template/guide/ , template/tools/ , etc. would create a second copy that instantly drifts from the canonical one and that VibeKB's own drift detection would then have to track. Decision template/ contains a declarative manifest.json the payload list, the preserved paths, the generated paths and documentation — not a copy of the runtime. install.php reads the manifest and copies the runtime from the canonical repository files present in the VibeKB clone. The fresh .vibekb/ model is produced programmatically by tools/lib/Starter.php , the single source of truth shared with bootstrap , so there is no second copy of the starter content either. Al"
+        "body": "Context VibeKB is self hosted: the active .vibekb/ describes the files at the repository root guide/ , tools/ , … . Physically duplicating those into template/guide/ , template/tools/ , etc. would create a second copy that instantly drifts from the canonical one and that VibeKB's own drift detection would then have to track. Decision template/ contains a declarative manifest.json the payload list, the preserved paths, the generated paths and the canonical starter definition under template/starter/ — not a copy of the runtime. The native installer embeds and copies the runtime from the canonical repository files at build time embed.go , never from a second physical copy. The fresh .vibekb/ model comes from the single template/starter/ data definition, read by both the Go installer embedded "
+    },
+    {
+        "title": "Installation is native to the Go binary, from an embedded payload",
+        "summary": "The installer is implemented in Go and embeds the runtime payload and a canonical starter definition, so `vibekb install` runs without PHP and without the source repository. PHP is required only to run the installed guide. install.php becomes a compatibility wrapper; the starter model becomes shared data.",
+        "type": "decision",
+        "url": "../why/decisions/native-installer-embedded-payload.html",
+        "body": "Context Under \"Go front end, PHP core\", installation was still php install.php . But installing is almost entirely filesystem work — copying a declared payload and writing starter files — and requiring PHP just to install is the opposite of the desired experience brew install vibekb && vibekb install … . Installing a runtime and requiring that runtime are different responsibilities. Decision Move installation into the Go binary and embed everything it needs: embed.go at the module root, because embed patterns cannot escape their directory embeds template/manifest.json , the runtime payload guide/ , tools/ , prompts/ , .cursor/ , the docs , and template/starter/ . internal/installer parses the embedded manifest the single source of truth for the file set — no second manifest format , copies"
     },
     {
         "title": "The maintenance workflow is repository-owned, not agent-specific",
@@ -537,6 +544,13 @@
         "type": "change",
         "url": "../why/changes/homepage-three-sections.html",
         "body": "Before Eleven sections: six beat journey, uncertainty questions, gap, solution, tabs, carousel, before/after, workflow timeline, repo map, and separate CTA. Accurate but too long to scan. After Three sections: 1. The problem — thesis, recognition copy, three beat arc ship / lose plot / fear change , live metrics card. 2. What you get — understanding layer + four pillar cards linking to guide views. 3. See it work — functionality carousel + CTA. homepage.js trimmed to guide carousel only."
+    },
+    {
+        "title": "Make installation native to the Go CLI (embedded payload, no PHP)",
+        "summary": "Reimplemented installation inside the `vibekb` Go binary, which embeds the runtime payload and a canonical, language-neutral starter definition. `vibekb install` now copies files and scaffolds a fresh `.vibekb/` with no PHP process and no live source clone. install.php became a thin compatibility wrapper, and tools/lib/Starter.php now reads the same starter data so there is one definition, not two.",
+        "type": "change",
+        "url": "../why/changes/native-go-installer.html",
+        "body": "Before vibekb install delegated to php install.php , and the starter workspace was defined as PHP heredocs inside tools/lib/Starter.php . Installing therefore required a PHP runtime and the VibeKB source clone to be present. After The starter definition is now data : template/starter/ holds a starter.json directory list and a files/ tree with {{DATE}} and {{PROJECT NAME JSON}} tokens. It is the single canonical definition. tools/lib/Starter.php reads that data byte identical scaffold output to before , so bootstrap is unchanged and no starter content is duplicated. template/starter/ is installed into targets added to the manifest payload so bootstrap can still repair a workspace there. embed.go at the module root embeds the manifest, the runtime payload, and template/starter/ into the bina"
     },
     {
         "title": "guide/lib/Content.php",
@@ -756,17 +770,17 @@
         "body": "Mode A — the dynamic guide on shared hosting .cpanel.yml rsyncs the runtime paths index.php , assets/ , guide/ , .vibekb/ into a cPanel public folder and excludes development only paths tools/ , prompts/ , docs/ , authoring docs, examples/ . Query string routing means no .htaccess rewrite rules are needed and the app runs in a subfolder. .vibekb/ must deploy — it is the content. Mode B — the static snapshot php tools/generate static.php builds /docs ; publish it via GitHub Pages Settings → Pages → branch → /docs or any static host. Relative links make it work at a web root or under a repository subpath. No PHP, database, CDN, or network required. Deployment is part of the application Whenever repository structure, runtime folders, or deployment requirements change, .cpanel.yml and DEPLOYME"
     },
     {
-        "title": "Go developer CLI as a front-end over the PHP core (Phase 1)",
-        "summary": "Complete — architectural assessment recorded (ARCHITECTURE.md); Phase 1 Go CLI implemented, tested, and run; model reconciled. See handoff.md.",
+        "title": "Make vibekb install truly native (no PHP required to install)",
+        "summary": "Complete — native Go installer with embedded payload; starter model turned into shared data (template/starter/); install.php is now a wrapper; model reconciled. See handoff.md.",
         "type": "current work",
         "url": "../current-work/index.html",
-        "body": "Status Complete. See .vibekb/work/handoff.md . Decision recorded decision:go front end php core — a Go binary fronts VibeKB; PHP remains the one model core and the only deployment runtime. Full assessment and roadmap in ARCHITECTURE.md ."
+        "body": "Status Complete. See .vibekb/work/handoff.md . Decisions recorded decision:native installer embedded payload — installation is native to the Go binary, from an embedded payload; PHP is required only to run the guide. decision:installer template not duplicated tree updated for the embed + starter data mechanism. Full assessment in ARCHITECTURE.md ."
     },
     {
         "title": "Current handoff",
-        "summary": "A Go developer CLI (`vibekb`) now fronts the PHP toolchain as Phase 1 of the \"Go front-end, PHP core\" architecture. It delegates every model-semantic command and never forks the model loader. Next: distribution (Phase 2) — release binaries and a brew/winget/curl install path.",
+        "summary": "Installation is now fully native to the `vibekb` Go binary — it embeds the runtime payload and a canonical starter definition and installs with no PHP and no live clone. The starter model became shared data (template/starter/) read by both Go and PHP; install.php is a thin wrapper. Next: distribution (release binaries + brew/winget/curl).",
         "type": "handoff",
         "url": "../handoff/index.html",
-        "body": "Current state VibeKB has a new developer front end: a Go binary cmd/vibekb , internal/ that runs doctor / version / help natively and delegates status , check , affected , bootstrap , validate , generate , and install to the existing PHP tooling. Nothing in PHP changed — the model loader, the dynamic guide Mode A , and the static generator Mode B are untouched, and php tools/vibekb.php … still works exactly as before. Completed this change Assessment ARCHITECTURE.md : responsibilities inventoried; the model loader identified as the crux; three architectures weighed; \"Go front end, PHP core\" chosen with a command by command verdict and a 4 phase roadmap. Phase 1 CLI : native doctor / version / help ; repo root + PHP discovery internal/phpcore ; delegation with exit code propagation; honest "
+        "body": "Current state vibekb install is native Go. It parses the embedded template/manifest.json , copies the runtime payload from the binary's embedded filesystem, and scaffolds a fresh .vibekb/ from the embedded template/starter/ definition — launching no PHP. The PHP runtime is unchanged: the model loader guide/lib , the dynamic guide Mode A , the static generator Mode B , bootstrap , and validation are exactly as before, and php tools/vibekb.php … still works. Completed this change Starter as data : template/starter/ a starter.json directory list + a files/ tree with {{DATE}} / {{PROJECT NAME JSON}} tokens is now the one canonical starter definition. Generated from the old Starter.php so output is byte identical. Starter.php refactored to read template/starter/ — bootstrap unchanged, no duplic"
     }
 ]

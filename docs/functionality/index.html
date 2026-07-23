@@ -499,7 +499,7 @@
                             <div class="record-card__status">
                                 <span class="badge badge--ok">Implemented</span>                            </div>
                         </div>
-                        <p class="record-card__summary">A single Go binary (`vibekb`) that is the developer&#039;s front door to VibeKB — it runs environment diagnostics natively and delegates every model-semantic command (status, check, affected, bootstrap, validate, generate, install) to the canonical PHP tooling it discovers, so there is exactly one model loader and one professional command in front of it.</p>
+                        <p class="record-card__summary">A single Go binary (`vibekb`) that is the developer&#039;s front door to VibeKB — it installs VibeKB natively (embedded payload, no PHP), runs environment diagnostics natively, and delegates every model-semantic command (status, check, affected, bootstrap, validate, generate) to the canonical PHP tooling it discovers, so there is exactly one model loader and one professional command in front of it.</p>
                         <dl class="record-card__meta">
                                                             <div>
                                     <dt>Verification</dt>
@@ -507,7 +507,7 @@
                                 </div>
                                                                                         <div>
                                     <dt>Trigger</dt>
-                                    <dd>A developer runs `vibekb &lt;command&gt;` (e.g. `vibekb doctor`, `vibekb check`) from anywhere inside a VibeKB repository or source clone.</dd>
+                                    <dd>A developer runs `vibekb &lt;command&gt;` (e.g. `vibekb install`, `vibekb doctor`, `vibekb check`) — install from anywhere, model commands from inside a VibeKB repository.</dd>
                                 </div>
                                                         <div>
                                 <dt>Facing</dt>
@@ -795,7 +795,7 @@
                             <div class="record-card__status">
                                 <span class="badge badge--ok">Implemented</span>                            </div>
                         </div>
-                        <p class="record-card__summary">A PHP installer (`install.php`) that copies the VibeKB runtime into a target repository and scaffolds a fresh, empty-but-valid `.vibekb/` workspace — without touching the application&#039;s code and without analysing it — so adopting VibeKB is a command, not a manual copy.</p>
+                        <p class="record-card__summary">A fully native installer built into the `vibekb` Go binary. `vibekb install /path/to/repo` copies the VibeKB runtime and scaffolds a fresh, empty-but-valid `.vibekb/` workspace from files embedded in the binary — without executing PHP, without analysing the application, and without needing the source repository to remain on disk. PHP is required only to run the installed guide.</p>
                         <dl class="record-card__meta">
                                                             <div>
                                     <dt>Verification</dt>
@@ -803,7 +803,7 @@
                                 </div>
                                                                                         <div>
                                     <dt>Trigger</dt>
-                                    <dd>A developer clones VibeKB and runs `php install.php [target]` (or `php install.php` in the current directory).</dd>
+                                    <dd>A developer runs `vibekb install [target]` (or the legacy `php install.php`, which now forwards to it).</dd>
                                 </div>
                                                         <div>
                                 <dt>Facing</dt>
@@ -811,7 +811,7 @@
                             </div>
                             <div>
                                 <dt>Updated</dt>
-                                <dd>2026-07-22</dd>
+                                <dd>2026-07-23</dd>
                             </div>
                         </dl>
                     </li>
@@ -828,7 +828,7 @@
                             <div class="record-card__status">
                                 <span class="badge badge--ok">Implemented</span>                            </div>
                         </div>
-                        <p class="record-card__summary">A deterministic `php tools/vibekb.php bootstrap` command (and the shared `tools/lib/Starter.php` library) that creates or repairs a `.vibekb/` workspace — every required directory and starter file — without inspecting source, inventing functionality, or overwriting content. &quot;git init&quot; for VibeKB.</p>
+                        <p class="record-card__summary">A deterministic `php tools/vibekb.php bootstrap` command that creates or repairs a `.vibekb/` workspace — every required directory and starter file — without inspecting source, inventing functionality, or overwriting content. It reads the canonical, language-neutral starter definition under `template/starter/` (the same data the native Go installer embeds), so the two can never disagree. &quot;git init&quot; for VibeKB.</p>
                         <dl class="record-card__meta">
                                                             <div>
                                     <dt>Verification</dt>
@@ -836,7 +836,7 @@
                                 </div>
                                                                                         <div>
                                     <dt>Trigger</dt>
-                                    <dd>A developer runs `php tools/vibekb.php bootstrap` (or the installer calls the same library) against a repository.</dd>
+                                    <dd>A developer runs `php tools/vibekb.php bootstrap` (or the native installer scaffolds from the same definition) against a repository.</dd>
                                 </div>
                                                         <div>
                                 <dt>Facing</dt>
@@ -844,7 +844,7 @@
                             </div>
                             <div>
                                 <dt>Updated</dt>
-                                <dd>2026-07-22</dd>
+                                <dd>2026-07-23</dd>
                             </div>
                         </dl>
                     </li>
@@ -936,7 +936,7 @@
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 00:29 UTC · source commit df4a682 (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 01:59 UTC · source commit df4a682 (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

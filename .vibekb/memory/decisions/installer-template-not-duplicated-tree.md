@@ -2,12 +2,12 @@
 id: installer-template-not-duplicated-tree
 type: decision
 title: The template is a manifest plus a generator, not a duplicated file tree
-summary: template/ declares the installable payload (manifest.json) and the starter model is produced by tools/lib/Starter.php; the installer copies the runtime from the canonical repository files rather than from a second physical copy under template/, so nothing drifts.
+summary: template/ declares the installable payload (manifest.json) and the fresh model comes from a single canonical starter definition (template/starter/) read by both consumers; the installer copies the runtime from the canonical repository files (embedded into the binary at build time) rather than from a second physical copy, so nothing drifts.
 status: accepted
 verification: verified-from-source
-updated: 2026-07-22
+updated: 2026-07-23
 functionality: [install-into-a-repository]
-files: [template/manifest.json, install.php, tools/lib/Starter.php]
+files: [template/manifest.json, template/starter/starter.json, embed.go, tools/lib/Starter.php]
 tags: [installer, template, dry, self-hosting]
 ---
 
@@ -22,12 +22,13 @@ would then have to track.
 ## Decision
 
 `template/` contains a declarative `manifest.json` (the payload list, the
-preserved paths, the generated paths) and documentation — not a copy of the
-runtime. `install.php` reads the manifest and copies the runtime from the
-canonical repository files present in the VibeKB clone. The fresh `.vibekb/`
-model is produced programmatically by `tools/lib/Starter.php`, the single source
-of truth shared with `bootstrap`, so there is no second copy of the starter
-content either.
+preserved paths, the generated paths) and the canonical starter definition under
+`template/starter/` — not a copy of the runtime. The native installer embeds and
+copies the runtime from the canonical repository files at build time (`embed.go`),
+never from a second physical copy. The fresh `.vibekb/` model comes from the
+single `template/starter/` data definition, read by both the Go installer
+(embedded) and `tools/lib/Starter.php` (for `bootstrap`), so there is no second
+copy of the starter content either.
 
 ## Alternatives considered
 
@@ -46,9 +47,19 @@ without duplicating the payload.
 
 ## Consequences
 
-- `template/` is intentionally small; the payload definition lives in
-  `template/manifest.json` and the starter definition in `tools/lib/Starter.php`.
+- `template/` holds the payload definition (`manifest.json`) and the canonical
+  starter data (`template/starter/`); neither is a copy of the runtime.
 - `template/` is excluded from VibeKB's own drift detection (it is distribution
   metadata, like `docs/` is generated output).
+- `template/starter/` is installed into targets so `bootstrap` can repair a
+  workspace from the same definition the installer embeds.
 - Upgrades refresh exactly the manifest's payload and never the preserved
   `.vibekb/`.
+
+## Update (native installer)
+
+This decision predates the native Go installer but still holds: with
+installation moved into the binary (`decision:native-installer-embedded-payload`),
+"copy from the canonical files" became "embed the canonical files and copy from
+the embed", and the starter definition moved from PHP code into
+`template/starter/` data. Both changes keep the one-authoritative-source rule.

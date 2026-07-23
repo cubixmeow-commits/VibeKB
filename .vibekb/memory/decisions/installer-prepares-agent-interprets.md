@@ -7,7 +7,7 @@ status: accepted
 verification: verified-from-source
 updated: 2026-07-22
 functionality: [install-into-a-repository, bootstrap-workspace]
-files: [install.php, tools/lib/Starter.php]
+files: [internal/installer/installer.go, tools/lib/Starter.php, install.php]
 tags: [installer, honesty, boundary]
 ---
 

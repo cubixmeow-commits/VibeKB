@@ -68,7 +68,7 @@ jobs:
 
       - name: gofmt
         run: |
-          unformatted="$(gofmt -l cmd internal)"
+          unformatted="$(gofmt -l cmd internal embed.go)"
           if [ -n "$unformatted" ]; then
             echo "These files need gofmt:"; echo "$unformatted"; exit 1
           fi

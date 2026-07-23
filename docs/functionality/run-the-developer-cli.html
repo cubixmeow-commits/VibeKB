@@ -108,7 +108,7 @@
     <header class="page-head reading-column">
         <p class="eyebrow">Developer cli</p>
         <h1>Run VibeKB from one developer CLI</h1>
-        <p class="lede">A single Go binary (`vibekb`) that is the developer&#039;s front door to VibeKB — it runs environment diagnostics natively and delegates every model-semantic command (status, check, affected, bootstrap, validate, generate, install) to the canonical PHP tooling it discovers, so there is exactly one model loader and one professional command in front of it.</p>
+        <p class="lede">A single Go binary (`vibekb`) that is the developer&#039;s front door to VibeKB — it installs VibeKB natively (embedded payload, no PHP), runs environment diagnostics natively, and delegates every model-semantic command (status, check, affected, bootstrap, validate, generate) to the canonical PHP tooling it discovers, so there is exactly one model loader and one professional command in front of it.</p>
         <div class="badge-row">
             <span class="badge badge--ok">Implemented</span>            <span class="badge badge--ok">Verified from source</span>            <span class="badge badge--info">User-facing</span>        </div>
     </header>
@@ -129,15 +129,16 @@ codes — because the binary runs that very script. If PHP is missing, the comma
 fails with a plain message telling the developer to install PHP 8.2+ or set
 <code>VIBEKB_PHP</code>, and to run <code>vibekb doctor</code>.</p>
 <h3>Current behavior</h3>
-<p><code>cmd/vibekb</code> dispatches through <code>internal/cli</code>. <code>help</code>, <code>version</code>, and <code>doctor</code> are
-native Go. <code>status</code>, <code>check</code>, <code>affected</code>, <code>bootstrap</code>, <code>validate</code>, and <code>generate</code>
-are delegated to <code>tools/vibekb.php</code>; <code>install</code> is delegated to <code>install.php</code>.
-<code>internal/phpcore</code> performs discovery: it walks up from the working directory to
-find the repository root (a directory holding <code>tools/vibekb.php</code> or <code>.vibekb/</code>) or
-a source clone (holding <code>install.php</code> and <code>template/manifest.json</code>), and resolves
-the PHP executable from <code>VIBEKB_PHP</code> or the usual names on <code>PATH</code>. Delegation runs
-<code>php &lt;script&gt; &lt;subcommand&gt; &lt;args…&gt;</code> with the repository as the working directory
-and stdio wired straight through, and returns the child process&#039;s exit code.</p>
+<p><code>cmd/vibekb</code> dispatches through <code>internal/cli</code>. <code>help</code>, <code>version</code>, <code>doctor</code>, and
+<code>install</code> are native Go — <code>install</code> runs entirely from the binary&#039;s embedded
+payload (see <strong>Install VibeKB into a repository</strong>) and launches no PHP. <code>status</code>,
+<code>check</code>, <code>affected</code>, <code>bootstrap</code>, <code>validate</code>, and <code>generate</code> are delegated to
+<code>tools/vibekb.php</code>. <code>internal/phpcore</code> performs discovery for the delegated
+commands: it walks up from the working directory to find the repository root (a
+directory holding <code>tools/vibekb.php</code> or <code>.vibekb/</code>) and resolves the PHP
+executable from <code>VIBEKB_PHP</code> or the usual names on <code>PATH</code>. Delegation runs <code>php
+&lt;script&gt; &lt;subcommand&gt; &lt;args…&gt;</code> with the repository as the working directory and
+stdio wired straight through, and returns the child process&#039;s exit code.</p>
 <h3>Honesty boundary</h3>
 <p>The CLI never re-implements the VibeKB content model. Parsing, validation, drift
 interpretation, and HTML generation have exactly one implementation — the PHP core
@@ -166,10 +167,11 @@ dependency: <code>doctor</code> states it plainly rather than pretending it is n
 </ul>
 <h3>Data used</h3>
 <ul>
-<li><strong>Reads:</strong> the PHP scripts it delegates to (<code>tools/vibekb.php</code>, <code>install.php</code>)</li>
+<li><strong>Reads:</strong> the PHP script it delegates to (<code>tools/vibekb.php</code>) and the</li>
 </ul>
-<p>and the surrounding directory tree (to locate the repository and PHP). It reads
-  no <code>.vibekb/</code> content itself — the delegated PHP does.</p>
+<p>surrounding directory tree (to locate the repository and PHP); for <code>install</code>, its
+  own embedded payload. It reads no <code>.vibekb/</code> content itself — the delegated PHP
+  does.</p>
 <ul>
 <li><strong>Writes:</strong> nothing directly; any writes are performed by the delegated PHP</li>
 </ul>
@@ -181,7 +183,10 @@ dependency: <code>doctor</code> states it plainly rather than pretending it is n
 <h3>Failure cases</h3>
 <ul>
 <li>Not inside a VibeKB repository → reported; exit non-zero (delegated commands).</li>
-<li><code>install</code> run outside a source clone → reported with the clone command.</li>
+<li><code>install</code> into VibeKB&#039;s own self-hosted repo → refused; into a non-project dir</li>
+</ul>
+<p>→ confirmation prompt.</p>
+<ul>
 <li>PHP absent → reported with how to install it or set <code>VIBEKB_PHP</code>; exit non-zero.</li>
 <li>A delegated command failing → its exit code is propagated unchanged.</li>
 </ul>
@@ -219,12 +224,12 @@ installation path while keeping exactly one implementation of the model. See
 
                             <div class="rail-card metadata-group">
                     <h2>Trigger</h2>
-                    <p>A developer runs `vibekb &lt;command&gt;` (e.g. `vibekb doctor`, `vibekb check`) from anywhere inside a VibeKB repository or source clone.</p>
+                    <p>A developer runs `vibekb &lt;command&gt;` (e.g. `vibekb install`, `vibekb doctor`, `vibekb check`) — install from anywhere, model commands from inside a VibeKB repository.</p>
                 </div>
             
             <div class="rail-card metadata-group">
                 <h2>Data read or written</h2>
-                <p><strong>Reads:</strong> <code class="chip chip--file">tools/vibekb.php</code> <code class="chip chip--file">install.php</code></p>
+                <p><strong>Reads:</strong> <code class="chip chip--file">tools/vibekb.php</code></p>
                 <p><strong>Writes:</strong> <span class="muted">None.</span></p>
                             </div>
 
@@ -236,13 +241,13 @@ installation path while keeping exactly one implementation of the model. See
             <div class="rail-card metadata-group">
                 <h2>Dependencies</h2>
                                     <p><strong>Depends on:</strong> <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/bootstrap-workspace.html">Bootstrap the VibeKB workspace</a> <a class="chip" href="../functionality/validate-model.html">Validate the model</a> <a class="chip" href="../functionality/detect-drift.html">Detect drift between code and model</a> <a class="chip" href="../functionality/generate-static-snapshot.html">Generate the static snapshot</a></p>
-                                                    <p><strong>Depended on by:</strong> <span class="muted">None.</span></p>
+                                                    <p><strong>Depended on by:</strong> <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a></p>
                             </div>
 
             
             <div class="rail-card metadata-group">
                 <h2>Related rationale</h2>
-                                    <p><a class="chip" href="../why/decisions/go-front-end-php-core.html">A Go developer CLI fronts VibeKB; PHP stays the single model core and runtime</a> <a class="chip" href="../why/decisions/two-modes-one-source.html">Two output modes over one source and one template set</a></p>
+                                    <p><a class="chip" href="../why/decisions/go-front-end-php-core.html">A Go developer CLI fronts VibeKB; PHP stays the single model core and runtime</a> <a class="chip" href="../why/decisions/native-installer-embedded-payload.html">Installation is native to the Go binary, from an embedded payload</a> <a class="chip" href="../why/decisions/two-modes-one-source.html">Two output modes over one source and one template set</a></p>
                             </div>
         </aside>
     </div>
@@ -256,7 +261,7 @@ installation path while keeping exactly one implementation of the model. See
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 00:29 UTC · source commit df4a682 (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 01:59 UTC · source commit df4a682 (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

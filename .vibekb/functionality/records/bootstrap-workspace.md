@@ -3,19 +3,19 @@ id: bootstrap-workspace
 type: functionality
 title: Bootstrap the VibeKB workspace
 area: integration
-summary: A deterministic `php tools/vibekb.php bootstrap` command (and the shared `tools/lib/Starter.php` library) that creates or repairs a `.vibekb/` workspace — every required directory and starter file — without inspecting source, inventing functionality, or overwriting content. "git init" for VibeKB.
+summary: A deterministic `php tools/vibekb.php bootstrap` command that creates or repairs a `.vibekb/` workspace — every required directory and starter file — without inspecting source, inventing functionality, or overwriting content. It reads the canonical, language-neutral starter definition under `template/starter/` (the same data the native Go installer embeds), so the two can never disagree. "git init" for VibeKB.
 status: implemented
 verification: verified-from-source
 user_facing: true
-trigger: A developer runs `php tools/vibekb.php bootstrap` (or the installer calls the same library) against a repository.
-updated: 2026-07-22
+trigger: A developer runs `php tools/vibekb.php bootstrap` (or the native installer scaffolds from the same definition) against a repository.
+updated: 2026-07-23
 tags: [integration, scaffolding, cli, repair]
-files: [tools/lib/Starter.php, tools/vibekb.php]
-reads: []
+files: [tools/lib/Starter.php, tools/vibekb.php, template/starter/starter.json]
+reads: [template/starter]
 writes: [.vibekb]
 config: []
 depends_on: []
-related_memory: [decision:installer-prepares-agent-interprets, decision:installer-template-not-duplicated-tree]
+related_memory: [decision:installer-prepares-agent-interprets, decision:installer-template-not-duplicated-tree, decision:native-installer-embedded-payload]
 ---
 
 ## In one sentence
@@ -35,11 +35,14 @@ reports the same plan without writing anything.
 `vibekb_verify_workspace()` reports which required directories and starter files
 are missing; `vibekb_scaffold_workspace()` creates the missing ones and writes any
 missing starter files, never overwriting an existing file (so it is safe on a
-fresh, partial, or damaged workspace). The starter definition —
-`vibekb_starter_dirs()` and `vibekb_starter_files()` — is the single source of
-truth, also used by `install.php`, so the two can never disagree about what a
-fresh model contains. The starter files are explicit placeholders that tell an
-agent what to write; none claims the target software does anything.
+fresh, partial, or damaged workspace). The starter definition is **data**, not
+code: `vibekb_starter_dirs()` reads the directory list from
+`template/starter/starter.json` and `vibekb_starter_files()` reads the file tree
+under `template/starter/files/`, substituting the `{{DATE}}` and
+`{{PROJECT_NAME_JSON}}` tokens. That one canonical definition is also embedded and
+read by the native Go installer, so the two can never disagree about what a fresh
+model contains. The starter files are explicit placeholders that tell an agent
+what to write; none claims the target software does anything.
 
 ## Step-by-step flow
 
@@ -50,7 +53,10 @@ agent what to write; none claims the target software does anything.
 
 ## Implementation map
 
-- `tools/lib/Starter.php` — the starter definition plus verify/scaffold helpers.
+- `template/starter/` — the canonical, language-neutral starter definition
+  (`starter.json` directory list + a `files/` tree with tokens).
+- `tools/lib/Starter.php` — reads that definition and provides verify/scaffold
+  helpers.
 - `tools/vibekb.php` — the `bootstrap` command that reports the scaffold result.
 
 ## Data used
@@ -65,8 +71,9 @@ agent what to write; none claims the target software does anything.
 
 ## Safe to change
 
-Adding a required directory or starter file to `tools/lib/Starter.php` updates
-both bootstrap and the installer at once. Keep every starter file valid so the
+Adding a required directory to `template/starter/starter.json`, or a starter file
+under `template/starter/files/`, updates both bootstrap and the native installer
+at once (the installer embeds the same tree). Keep every starter file valid so the
 scaffolded model passes `php tools/vibekb.php check`.
 
 ## Use caution

@@ -141,6 +141,56 @@ does not automatically analyze repositories.</p></div>
                                     </li>
                             <li class="change-card">
                     <div class="change-card__head">
+                        <h2>Make installation native to the Go CLI (embedded payload, no PHP)</h2>
+                        <div class="badge-row">
+                            <span class="badge badge--info">implemented</span>                            <span class="badge badge--ok">Verified from source</span>                            <span class="muted">2026-07-23</span>
+                        </div>
+                    </div>
+                    <p>Reimplemented installation inside the `vibekb` Go binary, which embeds the runtime payload and a canonical, language-neutral starter definition. `vibekb install` now copies files and scaffolds a fresh `.vibekb/` with no PHP process and no live source clone. install.php became a thin compatibility wrapper, and tools/lib/Starter.php now reads the same starter data so there is one definition, not two.</p>
+                    <div class="prose reading-column change-card__body"><h3>Before</h3>
+<p><code>vibekb install</code> delegated to <code>php install.php</code>, and the starter workspace was
+defined as PHP heredocs inside <code>tools/lib/Starter.php</code>. Installing therefore
+required a PHP runtime and the VibeKB source clone to be present.</p>
+<h3>After</h3>
+<ul>
+<li>The starter definition is now <strong>data</strong>: <code>template/starter/</code> holds a</li>
+</ul>
+<p><code>starter.json</code> directory list and a <code>files/</code> tree with <code>{{DATE}}</code> and
+  <code>{{PROJECT_NAME_JSON}}</code> tokens. It is the single canonical definition.</p>
+<ul>
+<li><code>tools/lib/Starter.php</code> reads that data (byte-identical scaffold output to</li>
+</ul>
+<p>before), so <code>bootstrap</code> is unchanged and no starter content is duplicated.</p>
+<ul>
+<li><code>template/starter/</code> is installed into targets (added to the manifest payload)</li>
+</ul>
+<p>so <code>bootstrap</code> can still repair a workspace there.</p>
+<ul>
+<li><code>embed.go</code> (at the module root) embeds the manifest, the runtime payload, and</li>
+</ul>
+<p><code>template/starter/</code> into the binary.</p>
+<ul>
+<li><code>internal/installer</code> performs a fully native install: parse the embedded</li>
+</ul>
+<p>manifest, plan, copy from the embedded FS, scaffold <code>.vibekb/</code> from the embedded
+  starter, write <code>.vibekb/.installer.json</code>, and verify natively — no PHP.</p>
+<ul>
+<li><code>install.php</code> is now a compatibility wrapper that forwards to <code>vibekb install</code></li>
+</ul>
+<p>(or prints how to get the binary). There is one installer implementation.</p>
+<h3>Impact</h3>
+<p>Installing VibeKB no longer needs PHP or a live clone — the entry point is a
+single self-contained binary, ready for brew/winget/curl packaging. PHP is
+required only to run the installed guide. The manifest stays the single source of
+truth for the file set, and the starter model has exactly one definition read by
+both Go and PHP. Verified end-to-end: native install with PHP removed from PATH,
+then PHP <code>bootstrap</code>/<code>validate</code> on the installed target, plus dry-run, upgrade,
+force-reset, and self-hosted-refusal paths.</p></div>
+                                            <p class="change-card__links"><strong>Affected:</strong>
+                            <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/bootstrap-workspace.html">Bootstrap the VibeKB workspace</a> <a class="chip" href="../functionality/run-the-developer-cli.html">Run VibeKB from one developer CLI</a>                        </p>
+                                    </li>
+                            <li class="change-card">
+                    <div class="change-card__head">
                         <h2>Bootstrap VibeKB on itself with an active self-maintenance lifecycle</h2>
                         <div class="badge-row">
                             <span class="badge badge--info">implemented</span>                            <span class="badge badge--ok">Verified manually</span>                            <span class="muted">2026-07-22</span>
@@ -379,7 +429,7 @@ before/after, workflow timeline, repo map, and separate CTA. Accurate but too lo
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 00:29 UTC · source commit df4a682 (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 01:59 UTC · source commit df4a682 (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

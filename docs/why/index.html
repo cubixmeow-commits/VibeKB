@@ -154,8 +154,17 @@
                             <div class="badge-row">
                                                                 <span class="badge badge--ok">Verified from source</span>                            </div>
                         </div>
-                        <p>template/ declares the installable payload (manifest.json) and the starter model is produced by tools/lib/Starter.php; the installer copies the runtime from the canonical repository files rather than from a second physical copy under template/, so nothing drifts.</p>
+                        <p>template/ declares the installable payload (manifest.json) and the fresh model comes from a single canonical starter definition (template/starter/) read by both consumers; the installer copies the runtime from the canonical repository files (embedded into the binary at build time) rather than from a second physical copy, so nothing drifts.</p>
                                                     <p class="why-item__links"><a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a></p>
+                                            </li>
+                                    <li class="why-item">
+                        <div class="why-item__head">
+                            <h3><a href="../why/decisions/native-installer-embedded-payload.html">Installation is native to the Go binary, from an embedded payload</a></h3>
+                            <div class="badge-row">
+                                                                <span class="badge badge--ok">Verified from source</span>                            </div>
+                        </div>
+                        <p>The installer is implemented in Go and embeds the runtime payload and a canonical starter definition, so `vibekb install` runs without PHP and without the source repository. PHP is required only to run the installed guide. install.php becomes a compatibility wrapper; the starter model becomes shared data.</p>
+                                                    <p class="why-item__links"><a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/bootstrap-workspace.html">Bootstrap the VibeKB workspace</a></p>
                                             </li>
                                     <li class="why-item">
                         <div class="why-item__head">
@@ -334,6 +343,15 @@
                         <p>Collapsed the long story-driven homepage into three sections — the problem (with a three-beat arc), what you get (four pillars), and live proof + CTA — while keeping the developer-journey message and real carousel.</p>
                                                     <p class="why-item__links"><a class="chip" href="../functionality/load-living-model.html">Load the living model</a></p>
                                             </li>
+                                    <li class="why-item">
+                        <div class="why-item__head">
+                            <h3><a href="../why/changes/native-go-installer.html">Make installation native to the Go CLI (embedded payload, no PHP)</a></h3>
+                            <div class="badge-row">
+                                                                <span class="badge badge--ok">Verified from source</span>                            </div>
+                        </div>
+                        <p>Reimplemented installation inside the `vibekb` Go binary, which embeds the runtime payload and a canonical, language-neutral starter definition. `vibekb install` now copies files and scaffolds a fresh `.vibekb/` with no PHP process and no live source clone. install.php became a thin compatibility wrapper, and tools/lib/Starter.php now reads the same starter data so there is one definition, not two.</p>
+                                                    <p class="why-item__links"><a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/bootstrap-workspace.html">Bootstrap the VibeKB workspace</a> <a class="chip" href="../functionality/run-the-developer-cli.html">Run VibeKB from one developer CLI</a></p>
+                                            </li>
                             </ul>
         </section>
     </article>
@@ -346,7 +364,7 @@
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 00:29 UTC · source commit df4a682 (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 01:59 UTC · source commit df4a682 (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

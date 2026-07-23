@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Installation is native to the Go binary, from an embedded payload · VibeKB — VibeKB</title>
+    <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Web fonts are a progressive enhancement only. The stylesheet ships a
+         full system-font fallback stack, so the guide renders correctly with no
+         external CDN — required for offline and locked-down static hosting. -->
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/css/guide.css">
+</head>
+<body data-mode="static">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="app-shell">
+    <header class="site-header">
+        <div class="site-header__inner">
+            <a class="brand" href="../../index.html">
+                <span class="brand__mark">VibeKB</span>
+                <span class="brand__project">VibeKB</span>
+            </a>
+            <form class="site-search" role="search" action="../../search/index.html">
+                <label class="visually-hidden" for="site-search-input">Search guide</label>
+                <input id="site-search-input" name="q" type="search" placeholder="Search guide…" autocomplete="off">
+            </form>
+            <button
+                class="nav-toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="guide-sidebar"
+                hidden
+            >Menu</button>
+        </div>
+    </header>
+
+    <div class="nav-backdrop" id="nav-backdrop" hidden></div>
+
+    <aside class="sidebar" id="guide-sidebar" aria-label="Guide navigation">
+        <nav class="sidebar-nav" aria-label="Guide sections">
+            <p class="sidebar-nav__label" id="nav-primary-label">Primary</p>
+            <ul class="sidebar-nav__list" aria-labelledby="nav-primary-label">
+                                                        <li>
+                        <a href="../../index.html">
+                            Overview                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../../functionality/index.html">
+                            Functionality                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../../how-it-works/index.html">
+                            Architecture                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../../diagrams/index.html">
+                            Diagrams                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../../current-work/index.html">
+                            Current work                        </a>
+                    </li>
+                            </ul>
+
+                            <p class="sidebar-nav__label" id="nav-explore-label">Explore</p>
+                <ul class="sidebar-nav__list sidebar-nav__list--secondary" aria-labelledby="nav-explore-label">
+                                                                    <li>
+                            <a href="../../data/index.html">
+                                Data &amp; storage                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../../files/index.html">
+                                Files that matter                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../../changes/index.html">
+                                Changes                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../../why/index.html" aria-current="page">
+                                Decisions &amp; rationale                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../../handoff/index.html">
+                                AI handoff                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../../reference/index.html">
+                                Reference                            </a>
+                        </li>
+                                    </ul>
+                    </nav>
+    </aside>
+
+    <div class="app-main">
+                    <p class="generated-notice" role="note">
+                Generated output — this is a static snapshot rendered from <code>.vibekb/</code>. The
+                <code>.vibekb/</code> content is the source of truth. See <a href="../../reference/index.html">Reference</a> for provenance.
+            </p>
+                
+        <main id="main" class="wrap">
+                <article class="view view-doc">
+        <p class="breadcrumb"><a href="../../why/index.html">← Decisions &amp; rationale</a></p>
+        <header class="page-head reading-column">
+            <p class="eyebrow">Decisions</p>
+            <h1>Installation is native to the Go binary, from an embedded payload</h1>
+            <p class="lede">The installer is implemented in Go and embeds the runtime payload and a canonical starter definition, so `vibekb install` runs without PHP and without the source repository. PHP is required only to run the installed guide. install.php becomes a compatibility wrapper; the starter model becomes shared data.</p>
+            <div class="badge-row">
+                <span class="badge badge--info">accepted</span>                                                <span class="badge badge--ok">Verified from source</span>            </div>
+        </header>
+        <div class="detail-grid">
+            <div class="detail-main"><div class="prose reading-column"><h3>Context</h3>
+<p>Under &quot;Go front-end, PHP core&quot;, installation was still <code>php install.php</code>. But
+installing is almost entirely filesystem work — copying a declared payload and
+writing starter files — and requiring PHP just to <em>install</em> is the opposite of
+the desired experience (<code>brew install vibekb &amp;&amp; vibekb install …</code>). Installing a
+runtime and requiring that runtime are different responsibilities.</p>
+<h3>Decision</h3>
+<p>Move installation into the Go binary and embed everything it needs:</p>
+<ul>
+<li><code>embed.go</code> (at the module root, because embed patterns cannot escape their</li>
+</ul>
+<p>directory) embeds <code>template/manifest.json</code>, the runtime payload (<code>guide/</code>,
+  <code>tools/</code>, <code>prompts/</code>, <code>.cursor/</code>, the docs), and <code>template/starter/</code>.</p>
+<ul>
+<li><code>internal/installer</code> parses the embedded manifest (the single source of truth</li>
+</ul>
+<p>for the file set — no second manifest format), copies from the embedded FS,
+  scaffolds <code>.vibekb/</code> from the embedded starter definition, and verifies
+  natively. No PHP process is launched at any point.</p>
+<ul>
+<li>The starter model becomes language-neutral <strong>data</strong> under <code>template/starter/</code></li>
+</ul>
+<p>(<code>starter.json</code> + a <code>files/</code> tree with <code>{{DATE}}</code> / <code>{{PROJECT_NAME_JSON}}</code>
+  tokens), read by both the Go installer (embedded) and <code>tools/lib/Starter.php</code>
+  (on disk, for <code>bootstrap</code>). <code>template/starter/</code> is installed into targets so
+  <code>bootstrap</code> keeps working there.</p>
+<ul>
+<li><code>install.php</code> becomes a thin wrapper that forwards to <code>vibekb install</code>, so there</li>
+</ul>
+<p>is only one installer implementation.</p>
+<h3>Alternatives considered</h3>
+<ul>
+<li><strong>Keep delegating to install.php</strong> — rejected: installation would still require</li>
+</ul>
+<p>PHP and a live clone, blocking the single-binary distribution goal.</p>
+<ul>
+<li><strong>Reimplement the starter as Go code</strong> — rejected: it would duplicate the</li>
+</ul>
+<p>starter content (Go copy + PHP copy) and drift. Making it shared data keeps one
+  definition.</p>
+<ul>
+<li><strong>Embed by duplicating the runtime under template/</strong> — rejected: a second</li>
+</ul>
+<p>physical copy of <code>guide/</code>/<code>tools/</code> would drift (the very thing
+  <code>installer-template-not-duplicated-tree</code> avoids). <code>embed.go</code> embeds the
+  canonical files directly at build time.</p>
+<h3>Reason</h3>
+<p>Installing should be one self-contained, PHP-free step, while the model loader,
+generator, and guide stay PHP (unchanged). Embedding the canonical payload and a
+single shared starter definition achieves that with no duplication and no second
+source of truth. It is verified: a native install with PHP removed from PATH
+produces a workspace that PHP <code>bootstrap</code> and <code>validate</code> then accept, byte-identical
+to PHP&#039;s own scaffold.</p></div></div>
+            <aside class="detail-rail" aria-label="Connections">
+                <div class="rail-card">
+                    <h2>Affects functionality</h2>
+                    <p><a class="chip" href="../../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../../functionality/bootstrap-workspace.html">Bootstrap the VibeKB workspace</a></p>
+                </div>
+                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">embed.go</code> <code class="chip chip--file">internal/installer/installer.go</code> <code class="chip chip--file">template/starter/starter.json</code> <code class="chip chip--file">install.php</code></p></div>
+                            </aside>
+        </div>
+    </article>
+            </main>
+
+        <footer class="site-footer">
+            <div class="wrap site-footer__inner">
+                <p><strong>VibeKB</strong> — Understand what your software is doing.</p>
+                <p class="muted">
+                    A living explanation generated from repository-owned content in <code>.vibekb/</code>.
+                    <a href="../../index.html">About VibeKB</a>
+                </p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 01:59 UTC · source commit df4a682 (2026-07-23) · not auto-updating</p>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script src="../../assets/js/guide.js" defer></script>
+</body>
+</html>
