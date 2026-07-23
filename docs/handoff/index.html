@@ -114,18 +114,23 @@
                                     <span class="badge badge--info">Verification: verified from source</span>                                <span class="muted">Updated 2026-07-23</span>
             </div>
             <div class="prose reading-column"><h3>Current state</h3>
-<p>Ordinary users are told to download from GitHub Releases (<code>/releases/latest</code>),
-pick the correct <code>vibekb-*</code> asset, run <code>vibekb install</code>, then use a coding agent.
-Go appears only under Advanced. PHP 8.2+ is clearly a post-install requirement.</p>
+<p>Install and Compatibility copy state positive requirements (downloadable
+executable, write access, PHP 8.2+ after install) without “No Go / no PHP
+required to install” marketing lines. Advanced build-from-source still mentions
+Go for contributors.</p>
 <h3>Verification completed</h3>
 <ul>
-<li>Asset names on homepage match <code>.github/workflows/release.yml</code> exactly</li>
-<li><code>php -l index.php</code>; rendered checks for install.php / Native CLI / doctor absent</li>
-<li><code>go test ./...</code>, <code>go vet ./...</code></li>
-<li><code>php tools/vibekb.php check --strict</code> (after generate)</li>
+<li>Grep of <code>index.php</code>: no “No Go”, “no PHP required”, “do not need Go”</li>
+<li><code>php -l index.php</code></li>
+<li>Rendered homepage still has <code>/releases/latest</code>, six assets, <code>vibekb install</code></li>
+<li><code>php tools/vibekb.php check</code> + generate (this commit)</li>
 </ul>
+<h3>Unresolved / next</h3>
+<p>Tag <code>v0.1.0</code> was already pushed earlier; next product work remains code signing
+(and other Phase 2 distribution items) when ready.</p>
 <h3>Exact next recommended action</h3>
-<p>Tag <code>v0.1.0</code> per <code>RELEASE.md</code> when ready, then plan code signing.</p></div>
+<p>Plan code signing / further Phase 2 distribution (Homebrew, Winget, curl) per
+RELEASE.md when ready.</p></div>
         </section>
     
             <section class="doc-section">
@@ -158,7 +163,7 @@ Go appears only under Advanced. PHP 8.2+ is clearly a post-install requirement.<
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 03:49 UTC · source commit 4de3ea9 (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 05:06 UTC · source commit 4de3ea9 (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

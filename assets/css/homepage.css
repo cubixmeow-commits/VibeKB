@@ -764,21 +764,6 @@ html.js .hp-journey-panel.is-active {
   font-size: 0.96rem;
 }
 
-.hp-install-req {
-  margin: -0.35rem 0 0.75rem;
-}
-
-.hp-install-req span {
-  display: inline-block;
-  padding: 0.2rem 0.55rem;
-  border-radius: 0.4rem;
-  background: var(--hp-accent-soft);
-  color: var(--hp-accent-deep);
-  font-size: 0.78rem;
-  font-weight: 650;
-  letter-spacing: 0.01em;
-}
-
 .hp-install-example-label {
   margin: 0.75rem 0 0.35rem;
   color: var(--hp-muted);

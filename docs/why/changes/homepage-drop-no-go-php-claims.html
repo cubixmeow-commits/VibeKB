@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Rewrite homepage around the developer journey story · VibeKB — VibeKB</title>
+    <title>Drop “no Go / no PHP required” homepage claims · VibeKB — VibeKB</title>
     <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -106,35 +106,39 @@
         <p class="breadcrumb"><a href="../../why/index.html">← Decisions &amp; rationale</a></p>
         <header class="page-head reading-column">
             <p class="eyebrow">Changes</p>
-            <h1>Rewrite homepage around the developer journey story</h1>
-            <p class="lede">The homepage now follows the comic-inspired emotional arc (excitement → confusion → fear → VibeKB → confidence) with &quot;AI helped you build it. VibeKB helps you understand it.&quot; as the spine — selling understanding, not documentation.</p>
+            <h1>Drop “no Go / no PHP required” homepage claims</h1>
+            <p class="lede">Homepage install and compatibility copy no longer advertise that installation does not require Go or PHP; download → install → agent steps and post-install PHP 8.2+ requirements remain.</p>
             <div class="badge-row">
-                <span class="badge badge--info">implemented</span>                                                <span class="badge badge--ok">Verified manually</span>            </div>
+                <span class="badge badge--info">implemented</span>                                                <span class="badge badge--ok">Verified from source</span>            </div>
         </header>
         <div class="detail-grid">
             <div class="detail-main"><div class="prose reading-column"><h3>Before</h3>
-<p>The homepage explained what VibeKB records and how the repository model works —
-accurate, but category-first. It did not lead with the moment a developer realizes
-they shipped faster than they understood.</p>
+<p>Install lead, step cards, a badge (“No Go and no PHP required to install”), and
+Compatibility / Current Requirements listed negative “does not require Go/PHP”
+claims alongside the real downloadable-binary workflow.</p>
 <h3>After</h3>
 <ul>
-<li>Hero and CTA centre on: AI helped you build it. VibeKB helps you understand it.</li>
-<li>Six-beat developer journey section with comic-inspired emotional pacing — balanced for vibe coders building their own software and developers extending open source.</li>
-<li>Uncertainty section names fear/guessing, not &quot;documentation.&quot;</li>
-<li>VibeKB introduced only after the problem lands, as the missing understanding layer.</li>
-<li>Before/after transformation section; live proof carousel retained.</li>
-<li>Story dot navigation (progressive enhancement) in homepage.js.</li>
+<li>Removed lead sentences about not needing Go / PHP-only-afterward</li>
+<li>Removed “Ordinary users do not need to install Go” from step 1</li>
+<li>Removed the install-step badge and unused <code>.hp-install-req</code> CSS</li>
+<li>Removed step-2 “You do not need it to run vibekb install”</li>
+<li>Compatibility Installing and Current Requirements Installation no longer list</li>
 </ul>
-<h3>Impact</h3>
-<p>Visitors should recognize their own arc within the first scroll and describe
-VibeKB as the thing that helps them understand the AI-built app they were afraid
-to touch — not as a documentation generator.</p></div></div>
+<p>“No Go…” / “No PHP process required to install”</p>
+<ul>
+<li>Positive post-install PHP 8.2+ requirements under Running / Using after</li>
+</ul>
+<p>installation are unchanged</p>
+<h3>Verification note</h3>
+<p>Grep of <code>index.php</code> found no remaining “No Go”, “no PHP required”, or
+“do not need Go” phrasing. <code>php -l index.php</code> clean. Rendered HTML still shows
+releases/latest, six platform assets, and <code>vibekb install</code>.</p></div></div>
             <aside class="detail-rail" aria-label="Connections">
                 <div class="rail-card">
                     <h2>Affects functionality</h2>
-                    <p><a class="chip" href="../../functionality/load-living-model.html">Load the living model</a></p>
+                    <p><a class="chip" href="../../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a></p>
                 </div>
-                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">index.php</code> <code class="chip chip--file">assets/css/homepage.css</code> <code class="chip chip--file">assets/js/homepage.js</code></p></div>
+                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">index.php</code> <code class="chip chip--file">assets/css/homepage.css</code></p></div>
                             </aside>
         </div>
     </article>

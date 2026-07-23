@@ -518,6 +518,13 @@
         "body": "Before The homepage explained what VibeKB records and how the repository model works — accurate, but category first. It did not lead with the moment a developer realizes they shipped faster than they understood. After Hero and CTA centre on: AI helped you build it. VibeKB helps you understand it. Six beat developer journey section with comic inspired emotional pacing — balanced for vibe coders building their own software and developers extending open source. Uncertainty section names fear/guessing, not \"documentation.\" VibeKB introduced only after the problem lands, as the missing understanding layer. Before/after transformation section; live proof carousel retained. Story dot navigation progressive enhancement in homepage.js. Impact Visitors should recognize their own arc within the first"
     },
     {
+        "title": "Drop “no Go / no PHP required” homepage claims",
+        "summary": "Homepage install and compatibility copy no longer advertise that installation does not require Go or PHP; download → install → agent steps and post-install PHP 8.2+ requirements remain.",
+        "type": "change",
+        "url": "../why/changes/homepage-drop-no-go-php-claims.html",
+        "body": "Before Install lead, step cards, a badge “No Go and no PHP required to install” , and Compatibility / Current Requirements listed negative “does not require Go/PHP” claims alongside the real downloadable binary workflow. After Removed lead sentences about not needing Go / PHP only afterward Removed “Ordinary users do not need to install Go” from step 1 Removed the install step badge and unused .hp install req CSS Removed step 2 “You do not need it to run vibekb install” Compatibility Installing and Current Requirements Installation no longer list “No Go…” / “No PHP process required to install” Positive post install PHP 8.2+ requirements under Running / Using after installation are unchanged Verification note Grep of index.php found no remaining “No Go”, “no PHP required”, or “do not need G"
+    },
+    {
         "title": "Homepage hero journey image",
         "summary": "Optimized and renamed the developer-journey comic; placed beside hero copy in section 1 with responsive layout.",
         "type": "change",
@@ -812,17 +819,17 @@
         "body": "Mode A — the dynamic guide on shared hosting .cpanel.yml rsyncs the runtime paths index.php , assets/ , guide/ , .vibekb/ into a cPanel public folder and excludes development only paths tools/ , prompts/ , docs/ , authoring docs, examples/ . Query string routing means no .htaccess rewrite rules are needed and the app runs in a subfolder. .vibekb/ must deploy — it is the content. Mode B — the static snapshot php tools/generate static.php builds /docs ; publish it via GitHub Pages Settings → Pages → branch → /docs or any static host. Relative links make it work at a web root or under a repository subpath. No PHP, database, CDN, or network required. Deployment is part of the application Whenever repository structure, runtime folders, or deployment requirements change, .cpanel.yml and DEPLOYME"
     },
     {
-        "title": "Homepage install copy for Releases download flow",
-        "summary": "Complete — homepage matches release.yml download flow; PHP still post-install.",
+        "title": "Drop “no Go / no PHP required” homepage claims",
+        "summary": "Complete — removed negative Go/PHP claims from install and compatibility sections.",
         "type": "current work",
         "url": "../current-work/index.html",
         "body": "Status Complete. See handoff."
     },
     {
         "title": "Current handoff",
-        "summary": "Homepage install copy now matches the downloadable release workflow (releases/latest, six platform assets, Installing vs Running after vs Advanced source build). PHP 8.2+ remains the post-install runtime. Next: tag v0.1.0, then code signing.",
+        "summary": "Homepage no longer advertises that install does not require Go or PHP. Download → vibekb install → coding agent flow is unchanged; PHP 8.2+ remains the post-install runtime.",
         "type": "handoff",
         "url": "../handoff/index.html",
-        "body": "Current state Ordinary users are told to download from GitHub Releases /releases/latest , pick the correct vibekb asset, run vibekb install , then use a coding agent. Go appears only under Advanced. PHP 8.2+ is clearly a post install requirement. Verification completed Asset names on homepage match .github/workflows/release.yml exactly php l index.php ; rendered checks for install.php / Native CLI / doctor absent go test ./... , go vet ./... php tools/vibekb.php check strict after generate Exact next recommended action Tag v0.1.0 per RELEASE.md when ready, then plan code signing."
+        "body": "Current state Install and Compatibility copy state positive requirements downloadable executable, write access, PHP 8.2+ after install without “No Go / no PHP required to install” marketing lines. Advanced build from source still mentions Go for contributors. Verification completed Grep of index.php : no “No Go”, “no PHP required”, “do not need Go” php l index.php Rendered homepage still has /releases/latest , six assets, vibekb install php tools/vibekb.php check + generate this commit Unresolved / next Tag v0.1.0 was already pushed earlier; next product work remains code signing and other Phase 2 distribution items when ready. Exact next recommended action Plan code signing / further Phase 2 distribution Homebrew, Winget, curl per RELEASE.md when ready."
     }
 ]

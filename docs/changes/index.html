@@ -141,6 +141,38 @@ does not automatically analyze repositories.</p></div>
                                     </li>
                             <li class="change-card">
                     <div class="change-card__head">
+                        <h2>Drop “no Go / no PHP required” homepage claims</h2>
+                        <div class="badge-row">
+                            <span class="badge badge--info">implemented</span>                            <span class="badge badge--ok">Verified from source</span>                            <span class="muted">2026-07-23</span>
+                        </div>
+                    </div>
+                    <p>Homepage install and compatibility copy no longer advertise that installation does not require Go or PHP; download → install → agent steps and post-install PHP 8.2+ requirements remain.</p>
+                    <div class="prose reading-column change-card__body"><h3>Before</h3>
+<p>Install lead, step cards, a badge (“No Go and no PHP required to install”), and
+Compatibility / Current Requirements listed negative “does not require Go/PHP”
+claims alongside the real downloadable-binary workflow.</p>
+<h3>After</h3>
+<ul>
+<li>Removed lead sentences about not needing Go / PHP-only-afterward</li>
+<li>Removed “Ordinary users do not need to install Go” from step 1</li>
+<li>Removed the install-step badge and unused <code>.hp-install-req</code> CSS</li>
+<li>Removed step-2 “You do not need it to run vibekb install”</li>
+<li>Compatibility Installing and Current Requirements Installation no longer list</li>
+</ul>
+<p>“No Go…” / “No PHP process required to install”</p>
+<ul>
+<li>Positive post-install PHP 8.2+ requirements under Running / Using after</li>
+</ul>
+<p>installation are unchanged</p>
+<h3>Verification note</h3>
+<p>Grep of <code>index.php</code> found no remaining “No Go”, “no PHP required”, or
+“do not need Go” phrasing. <code>php -l index.php</code> clean. Rendered HTML still shows
+releases/latest, six platform assets, and <code>vibekb install</code>.</p></div>
+                                            <p class="change-card__links"><strong>Affected:</strong>
+                            <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a>                        </p>
+                                    </li>
+                            <li class="change-card">
+                    <div class="change-card__head">
                         <h2>Homepage copy matches the native Go installer</h2>
                         <div class="badge-row">
                             <span class="badge badge--info">implemented</span>                            <span class="badge badge--ok">Verified from source</span>                            <span class="muted">2026-07-23</span>
@@ -556,7 +588,7 @@ before/after, workflow timeline, repo map, and separate CTA. Accurate but too lo
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 03:49 UTC · source commit 4de3ea9 (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 05:06 UTC · source commit 4de3ea9 (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

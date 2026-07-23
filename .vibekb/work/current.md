@@ -1,16 +1,16 @@
 ---
 id: current-work
 type: work
-title: Homepage install copy for Releases download flow
-objective: Align homepage install section and requirements with the downloadable-binary workflow (releases/latest, platform assets, clear install vs runtime vs build-from-source) without redesign or command invention.
-summary: Complete — homepage matches release.yml download flow; PHP still post-install.
-requested_by: Cursor cloud agent follow-up
+title: Simplify homepage install requirements copy
+objective: Remove homepage copy that advertises installation as not requiring Go or PHP; keep factual install steps and post-install PHP requirements.
+summary: Complete — removed negative Go/PHP requirement claims from install and compatibility sections.
+requested_by: User
 status: complete
 verification_state: verified-from-source
 updated: 2026-07-23
 affected_functionality: [install-into-a-repository, initialize-in-a-repository, deploy-and-stay-portable]
-expected_files: [index.php, .vibekb/memory/changes/homepage-releases-install-copy.md]
-data_impact: None. Homepage copy and self-model only.
+expected_files: [index.php, assets/css/homepage.css, .vibekb/memory/changes/homepage-drop-no-go-php-claims.md]
+data_impact: None. Homepage marketing copy only.
 risks: []
 ---
 
