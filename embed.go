@@ -21,9 +21,9 @@ import "embed"
 //
 //go:embed template/manifest.json
 //go:embed all:template/starter
+//go:embed all:template/integrations
 //go:embed all:guide
 //go:embed all:tools
 //go:embed all:prompts
-//go:embed all:.cursor
-//go:embed CLAUDE.md AGENTS.md PRODUCT.md SCHEMA.md INITIALIZE.md MAINTENANCE.md INSTALLER.md
+//go:embed PRODUCT.md SCHEMA.md INITIALIZE.md MAINTENANCE.md INSTALLER.md
 var PayloadFS embed.FS

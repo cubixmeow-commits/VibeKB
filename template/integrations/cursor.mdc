@@ -1,0 +1,31 @@
+---
+description: VibeKB — understand what this software currently does; maintenance lifecycle for coding agents
+globs:
+alwaysApply: true
+---
+
+# VibeKB (Cursor rule)
+
+This repository uses **VibeKB** to explain what the software currently does. The
+knowledge base and tooling live under `.vibekb/`. This file is a namespaced
+pointer that VibeKB owns; it does not touch your other Cursor rules.
+
+## Every session
+
+- **Orient:** `vibekb status` (or `php .vibekb/runtime/tools/vibekb.php status`) —
+  provenance, current work, the handoff's next action, and drift.
+- **The canonical operating rules** live in
+  [`.vibekb/reference/WORKFLOW.md`](../../.vibekb/reference/WORKFLOW.md). Read it
+  before meaningful work; if anything here disagrees, that file wins.
+
+## The lifecycle
+
+orient → record work (`.vibekb/work/current.md`) → implement → find impact
+(`vibekb affected --since <base>`) → verify honestly → update the living model
+(records, memory, diagrams, provenance) → update the handoff → `vibekb check`.
+
+## Honesty
+
+Distinguish intended / implemented / verified behaviour. Never claim a
+`verified-*` state you did not confirm, and never imply VibeKB auto-updates —
+it is agent-maintained. See [`.vibekb/reference/PRODUCT.md`](../../.vibekb/reference/PRODUCT.md).

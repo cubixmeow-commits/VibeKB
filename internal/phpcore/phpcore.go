@@ -23,17 +23,41 @@ type Runtime struct {
 	// RepoRoot is the nearest ancestor directory that holds a VibeKB workspace
 	// or its tooling ("" if the caller is not inside one).
 	RepoRoot string
+	// ToolsScript is the repo-relative path to the self-maintenance CLI:
+	// ".vibekb/runtime/tools/vibekb.php" for a consolidated install, or the
+	// legacy "tools/vibekb.php". "" if none is present.
+	ToolsScript string
 }
 
 // Discover resolves PHP and the surrounding VibeKB repository from the current
 // working directory.
 func Discover() Runtime {
 	php, ver := FindPHP()
+	root := findUp(markerRepo)
 	return Runtime{
-		PHP:        php,
-		PHPVersion: ver,
-		RepoRoot:   findUp(markerRepo),
+		PHP:         php,
+		PHPVersion:  ver,
+		RepoRoot:    root,
+		ToolsScript: locateToolsScript(root),
 	}
+}
+
+// locateToolsScript returns the repo-relative path to vibekb.php, preferring the
+// consolidated location under .vibekb/runtime and falling back to the legacy
+// root-level tools/.
+func locateToolsScript(root string) string {
+	if root == "" {
+		return ""
+	}
+	for _, rel := range []string{
+		filepath.Join(".vibekb", "runtime", "tools", "vibekb.php"),
+		filepath.Join("tools", "vibekb.php"),
+	} {
+		if exists(filepath.Join(root, rel)) {
+			return rel
+		}
+	}
+	return ""
 }
 
 // FindPHP resolves the php executable and its version. The VIBEKB_PHP environment
@@ -102,6 +126,7 @@ func (r Runtime) run(dir, script string, args []string) int {
 // markerRepo reports whether dir is (or contains) a VibeKB workspace or tooling.
 func markerRepo(dir string) bool {
 	return exists(filepath.Join(dir, "tools", "vibekb.php")) ||
+		exists(filepath.Join(dir, ".vibekb", "runtime", "tools", "vibekb.php")) ||
 		isDir(filepath.Join(dir, ".vibekb"))
 }
 

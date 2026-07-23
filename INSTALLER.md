@@ -62,27 +62,32 @@ end-user path.
 
 ## What gets installed
 
-The installer copies the **VibeKB-owned runtime** into your repository and creates
-a fresh, empty **`.vibekb/` workspace**. Three responsibilities stay cleanly
-separated:
+Everything VibeKB owns is written **under `.vibekb/`** — nothing lands at your
+repository root. See [docs/REPOSITORY_SAFETY.md](./docs/REPOSITORY_SAFETY.md) for
+the full ownership model and the safety guarantee.
 
 | Where | What | Who owns it |
 |-------|------|-------------|
-| `guide/`, `tools/`, `prompts/`, `.cursor/`, `template/starter/`, VibeKB docs | The **installed runtime** — the app, the CLI, the agent instructions, and the starter definition `bootstrap` repairs from | VibeKB (safe to refresh on upgrade) |
-| `.vibekb/` | The **living software model** — your project's knowledge | Your project (never overwritten) |
-| `docs/` | The **generated static snapshot** (`php tools/vibekb.php generate`) | Generated output (not installed) |
+| `.vibekb/runtime/` (`guide/`, `tools/`, `template/starter/`) | The **installed runtime** — the app, the CLI, and the starter definition `bootstrap` repairs from | VibeKB (safe to refresh on upgrade) |
+| `.vibekb/reference/`, `.vibekb/prompts/` | VibeKB's operating docs and the integration prompt | VibeKB |
+| `.vibekb/` (root: `project/`, `functionality/`, …) | The **living software model** — your project's knowledge | Your project (never overwritten) |
+| `.vibekb/generated/` | The **generated static snapshot** (`vibekb generate`) | Generated output |
+| `.cursor/rules/vibekb.mdc`, `.github/instructions/vibekb.instructions.md` | Optional **namespaced adapters** — added only when that tool is already in use | VibeKB (namespaced) |
+| `AGENTS.md` / `CLAUDE.md` (managed block only) | An optional **managed block** — added only if the file already exists | **Shared** — you own the file; VibeKB owns only its block |
 
-The exact payload is declared in [`template/manifest.json`](./template/manifest.json),
-so "what belongs in another repository" is explicit and versioned — not hidden in
-the installer's code.
+The exact payload, the adapters, and the ownership rules are declared in
+[`template/manifest.json`](./template/manifest.json), so "what belongs in another
+repository" is explicit and versioned — not hidden in the installer's code.
 
 ### What is deliberately *not* installed
 
 The marketing homepage (`index.php` and the root `assets/`) is VibeKB's own
 landing page and would collide with your application's root, so it is not
 installed — the product you use in a target repository is the **guide** at
-`guide/`. Also excluded: VibeKB's own `.vibekb/` model, `examples/`, generated
-`docs/`, and host-specific deploy config (`.cpanel.yml`, `DEPLOYMENT.md`).
+`.vibekb/runtime/guide/`. Also excluded: VibeKB's own `.vibekb/` model,
+`examples/`, and host-specific deploy config (`.cpanel.yml`, `DEPLOYMENT.md`).
+VibeKB never writes generic root files such as `README`, `.gitignore`, or your
+`docs/`.
 
 ## The installation flow
 
@@ -132,8 +137,9 @@ nothing. Use it to see exactly what an install or upgrade would do.
 
 ## Upgrading
 
-When the installer finds a prior installation (a `.vibekb/.installer.json`
-marker), it switches to **upgrade mode** automatically:
+When the installer finds a prior installation (a `.vibekb/install.json` manifest,
+or a legacy `.vibekb/.installer.json` marker), it switches to **upgrade mode**
+automatically:
 
 ```bash
 vibekb install /path/to/your/project     # auto-upgrade
@@ -141,14 +147,17 @@ vibekb install /path/to/your/project     # auto-upgrade
 vibekb install --upgrade /path/to/your/project
 ```
 
-An upgrade **refreshes the VibeKB-owned payload** (`guide/`, `tools/`, `prompts/`,
-`.cursor/`, docs) and **preserves your `.vibekb/` model** untouched. It also
-repairs any missing workspace scaffolding without overwriting your content. To
-reset the model as well, pass `--force` (this is the only way an upgrade touches
-`.vibekb/`).
+An upgrade **refreshes the VibeKB-owned payload** (everything under
+`.vibekb/runtime/`, `.vibekb/reference/`, `.vibekb/prompts/`) and **preserves your
+`.vibekb/` model** untouched. It also repairs any missing workspace scaffolding
+without overwriting your content. To reset the model as well, pass `--force` (this
+is the only way an upgrade touches the model records).
 
-The installer records the template version in `.vibekb/.installer.json` and shows
-the version transition (e.g. `1.0.0 → 1.1.0`) at the top of the run.
+The installer records the template version and per-file ownership/hashes in
+`.vibekb/install.json` and shows the version transition (e.g. `1.0.0 → 2.0.0`) at
+the top of the run. A pre-2.0 root-level install is detected and can be
+consolidated with `vibekb migrate .` (see
+[docs/REPOSITORY_SAFETY.md](./docs/REPOSITORY_SAFETY.md)).
 
 ## Repairing a workspace — `bootstrap`
 
@@ -227,7 +236,7 @@ recorded. The empty model is valid and passes `php tools/vibekb.php check`.
   `check`.
 - **Version the template.** Bump `template_version` in `template/manifest.json`
   when the payload or starter changes. The installer records it in
-  `.vibekb/.installer.json` and reports the transition on upgrade.
+  `.vibekb/install.json` and reports the transition on upgrade.
 - **Exclude new VibeKB-repo-only paths.** Distribution/tooling paths that must
   never install into a target belong in the `not_installed` list (documentation)
   and in the drift-exclusion set in `tools/vibekb.php`.
@@ -235,17 +244,17 @@ recorded. The empty model is valid and passes `php tools/vibekb.php check`.
 ## Manual installation (advanced, appendix)
 
 The `vibekb` binary is the supported path. If you must install by hand — for
-example where you cannot run the binary — copy the payload declared in
-`template/manifest.json` into your repository (`guide/`, `tools/`, `prompts/`,
-`.cursor/`, `template/starter/`, and the VibeKB docs), then create the workspace
-with:
+example where you cannot run the binary — copy the payload declared in the `map`
+of `template/manifest.json` into your repository, honoring each entry's `dest`
+(everything lands under `.vibekb/`, e.g. `guide` → `.vibekb/runtime/guide`), then
+create the workspace with:
 
 ```bash
-php tools/vibekb.php bootstrap
+php .vibekb/runtime/tools/vibekb.php bootstrap
 ```
 
 That produces the same fresh, valid `.vibekb/` the installer would (it reads the
-copied `template/starter/` definition). Then follow
+copied `.vibekb/runtime/template/starter/` definition). Then follow
 [`INITIALIZE.md`](./INITIALIZE.md) to build the model.
 
 ## Troubleshooting

@@ -59,6 +59,8 @@
     "render-explainable-diagrams",
     "validate-diagram-topology",
     "install-into-a-repository",
+    "migrate-legacy-install",
+    "uninstall-from-a-repository",
     "bootstrap-workspace",
     "run-the-developer-cli",
     "initialize-in-a-repository",

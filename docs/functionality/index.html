@@ -795,7 +795,7 @@
                             <div class="record-card__status">
                                 <span class="badge badge--ok">Implemented</span>                            </div>
                         </div>
-                        <p class="record-card__summary">A fully native installer built into the `vibekb` Go binary. `vibekb install /path/to/repo` copies the VibeKB runtime and scaffolds a fresh, empty-but-valid `.vibekb/` workspace from files embedded in the binary — without executing PHP, without analysing the application, and without needing the source repository to remain on disk. PHP is required only to run the installed guide.</p>
+                        <p class="record-card__summary">A fully native, repository-safe installer built into the `vibekb` Go binary. `vibekb install /path/to/repo` consolidates everything VibeKB owns under the target&#039;s `.vibekb/` (runtime, reference docs, prompts, and a fresh empty model) and integrates with shared files (AGENTS.md, CLAUDE.md) only through namespaced adapters or a single clearly marked managed block — nothing is written at the repository root by default. It runs from the binary&#039;s embedded payload without executing PHP; PHP is required only to run the installed guide.</p>
                         <dl class="record-card__meta">
                                                             <div>
                                     <dt>Verification</dt>
@@ -804,6 +804,72 @@
                                                                                         <div>
                                     <dt>Trigger</dt>
                                     <dd>A developer runs `vibekb install [target]` (or the legacy `php install.php`, which now forwards to it).</dd>
+                                </div>
+                                                        <div>
+                                <dt>Facing</dt>
+                                <dd>User-facing</dd>
+                            </div>
+                            <div>
+                                <dt>Updated</dt>
+                                <dd>2026-07-23</dd>
+                            </div>
+                        </dl>
+                    </li>
+                                    <li class="record-card"
+                        data-status="implemented"
+                        data-area="integration"
+                        data-verification="verified-from-source"
+                        data-facing="user">
+                        <div class="record-card__row">
+                            <h3 class="record-card__title">
+                                <a class="record-card__link" href="../functionality/migrate-legacy-install.html">
+                                    Migrate a legacy root-level install                                </a>
+                            </h3>
+                            <div class="record-card__status">
+                                <span class="badge badge--ok">Implemented</span>                            </div>
+                        </div>
+                        <p class="record-card__summary">`vibekb migrate` consolidates a pre-2.0 root-level VibeKB install under `.vibekb/`. It installs the consolidated layout, converts a whole-file VibeKB CLAUDE.md/AGENTS.md into a managed block (preserving user-authored content), relocates the reference docs, and removes only root-level files it can positively identify as unmodified VibeKB content by content signature or byte-for-byte hash. Modified or ambiguous files are preserved and reported; backups are written under `.vibekb/backups/`.</p>
+                        <dl class="record-card__meta">
+                                                            <div>
+                                    <dt>Verification</dt>
+                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
+                                </div>
+                                                                                        <div>
+                                    <dt>Trigger</dt>
+                                    <dd>A developer runs `vibekb migrate [target]` (auto-suggested when `install` detects a legacy layout).</dd>
+                                </div>
+                                                        <div>
+                                <dt>Facing</dt>
+                                <dd>User-facing</dd>
+                            </div>
+                            <div>
+                                <dt>Updated</dt>
+                                <dd>2026-07-23</dd>
+                            </div>
+                        </dl>
+                    </li>
+                                    <li class="record-card"
+                        data-status="implemented"
+                        data-area="integration"
+                        data-verification="verified-from-source"
+                        data-facing="user">
+                        <div class="record-card__row">
+                            <h3 class="record-card__title">
+                                <a class="record-card__link" href="../functionality/uninstall-from-a-repository.html">
+                                    Uninstall VibeKB from a repository                                </a>
+                            </h3>
+                            <div class="record-card__status">
+                                <span class="badge badge--ok">Implemented</span>                            </div>
+                        </div>
+                        <p class="record-card__summary">`vibekb uninstall` removes VibeKB from a repository, ownership-aware. Driven by the `.vibekb/install.json` manifest, it deletes VibeKB-owned files (everything under `.vibekb/` and namespaced adapters) and strips only VibeKB&#039;s managed block from shared files (AGENTS.md, CLAUDE.md), preserving everything else. `--keep-knowledge` retains the model records; `--dry-run` previews.</p>
+                        <dl class="record-card__meta">
+                                                            <div>
+                                    <dt>Verification</dt>
+                                    <dd><span class="badge badge--ok">Verified from source</span></dd>
+                                </div>
+                                                                                        <div>
+                                    <dt>Trigger</dt>
+                                    <dd>A developer runs `vibekb uninstall [target]`.</dd>
                                 </div>
                                                         <div>
                                 <dt>Facing</dt>
@@ -936,7 +1002,7 @@
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 05:48 UTC · source commit a0d95aa (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 07:06 UTC · source commit a0d95aa (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

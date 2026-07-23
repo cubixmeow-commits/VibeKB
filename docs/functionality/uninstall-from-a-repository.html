@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Uninstall VibeKB from a repository · VibeKB — VibeKB</title>
+    <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Web fonts are a progressive enhancement only. The stylesheet ships a
+         full system-font fallback stack, so the guide renders correctly with no
+         external CDN — required for offline and locked-down static hosting. -->
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/guide.css">
+</head>
+<body data-mode="static">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="app-shell">
+    <header class="site-header">
+        <div class="site-header__inner">
+            <a class="brand" href="../index.html">
+                <span class="brand__mark">VibeKB</span>
+                <span class="brand__project">VibeKB</span>
+            </a>
+            <form class="site-search" role="search" action="../search/index.html">
+                <label class="visually-hidden" for="site-search-input">Search guide</label>
+                <input id="site-search-input" name="q" type="search" placeholder="Search guide…" autocomplete="off">
+            </form>
+            <button
+                class="nav-toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="guide-sidebar"
+                hidden
+            >Menu</button>
+        </div>
+    </header>
+
+    <div class="nav-backdrop" id="nav-backdrop" hidden></div>
+
+    <aside class="sidebar" id="guide-sidebar" aria-label="Guide navigation">
+        <nav class="sidebar-nav" aria-label="Guide sections">
+            <p class="sidebar-nav__label" id="nav-primary-label">Primary</p>
+            <ul class="sidebar-nav__list" aria-labelledby="nav-primary-label">
+                                                        <li>
+                        <a href="../index.html">
+                            Overview                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../functionality/index.html" aria-current="page">
+                            Functionality                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../how-it-works/index.html">
+                            Architecture                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../diagrams/index.html">
+                            Diagrams                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../current-work/index.html">
+                            Current work                        </a>
+                    </li>
+                            </ul>
+
+                            <p class="sidebar-nav__label" id="nav-explore-label">Explore</p>
+                <ul class="sidebar-nav__list sidebar-nav__list--secondary" aria-labelledby="nav-explore-label">
+                                                                    <li>
+                            <a href="../data/index.html">
+                                Data &amp; storage                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../files/index.html">
+                                Files that matter                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../changes/index.html">
+                                Changes                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../why/index.html">
+                                Decisions &amp; rationale                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../handoff/index.html">
+                                AI handoff                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../reference/index.html">
+                                Reference                            </a>
+                        </li>
+                                    </ul>
+                    </nav>
+    </aside>
+
+    <div class="app-main">
+                    <p class="generated-notice" role="note">
+                Generated output — this is a static snapshot rendered from <code>.vibekb/</code>. The
+                <code>.vibekb/</code> content is the source of truth. See <a href="../reference/index.html">Reference</a> for provenance.
+            </p>
+                
+        <main id="main" class="wrap">
+            <article class="view view-func-detail">
+    <p class="breadcrumb"><a href="../functionality/index.html">← All functionality</a></p>
+
+    <header class="page-head reading-column">
+        <p class="eyebrow">Integration</p>
+        <h1>Uninstall VibeKB from a repository</h1>
+        <p class="lede">`vibekb uninstall` removes VibeKB from a repository, ownership-aware. Driven by the `.vibekb/install.json` manifest, it deletes VibeKB-owned files (everything under `.vibekb/` and namespaced adapters) and strips only VibeKB&#039;s managed block from shared files (AGENTS.md, CLAUDE.md), preserving everything else. `--keep-knowledge` retains the model records; `--dry-run` previews.</p>
+        <div class="badge-row">
+            <span class="badge badge--ok">Implemented</span>            <span class="badge badge--ok">Verified from source</span>            <span class="badge badge--info">User-facing</span>        </div>
+    </header>
+
+    <div class="detail-grid">
+        <div class="detail-main">
+                            <div class="prose reading-column"><h3>In one sentence</h3>
+<p><code>vibekb uninstall</code> reverses an installation safely: it removes what VibeKB owns
+and strips only its managed block from shared files, leaving all of your own
+content intact.</p>
+<h3>Current behavior</h3>
+<p>Uninstall reads <code>.vibekb/install.json</code>. For each recorded shared file it removes
+only the managed block (via the block engine), backing the file up under
+<code>.vibekb/backups/</code> first; a shared file VibeKB created solely to hold its block is
+removed, while a file that pre-existed VibeKB is kept. Namespaced adapters are
+removed (and now-empty parent directories tidied), unless the manifest marks them
+pre-existing. Finally it removes <code>.vibekb/</code> — or, with <code>--keep-knowledge</code>, removes
+only <code>runtime/</code>, <code>reference/</code>, <code>prompts/</code>, <code>generated/</code>, <code>backups/</code>, and
+<code>install.json</code>, retaining the model records. Files with malformed markers are left
+untouched and reported. <code>--dry-run</code> previews every action.</p>
+<p>Without a <code>.vibekb/install.json</code> manifest, uninstall refuses to strip managed
+blocks (it cannot prove ownership) and reports that a legacy install should be
+migrated first.</p>
+<h3>Implementation map</h3>
+<ul>
+<li><code>internal/installer/uninstall.go</code> — the manifest-driven removal, flags, and report.</li>
+<li><code>internal/installer/block.go</code> — <code>removeManagedBlock</code> (preserves outside content,</li>
+</ul>
+<p>refuses malformed markers).</p>
+<ul>
+<li><code>internal/cli/cli.go</code> — dispatches <code>uninstall</code> to <code>installer.Uninstall</code>.</li>
+</ul>
+<h3>Failure cases</h3>
+<ul>
+<li>No install manifest → nothing changed; suggests <code>vibekb migrate</code>.</li>
+<li>Shared file with malformed markers → skipped and reported.</li>
+<li>Target is VibeKB&#039;s own self-hosted repo → refused.</li>
+</ul>
+<h3>Use caution</h3>
+<p>Uninstall must never delete a shared file&#039;s non-VibeKB content, and never remove a
+file it cannot prove VibeKB created. Ambiguity is preserved, not resolved.</p></div>
+                    </div>
+
+        <aside class="detail-rail" aria-label="Record metadata">
+            <div class="rail-card metadata-group">
+                <h2>Status</h2>
+                <dl class="rail-dl">
+                    <dt>Status</dt>
+                    <dd><span class="badge badge--ok">Implemented</span></dd>
+                                            <dt>Verification</dt>
+                        <dd><span class="badge badge--ok">Verified from source</span></dd>
+                                        <dt>Updated</dt>
+                    <dd>2026-07-23</dd>
+                    <dt>Facing</dt>
+                    <dd>User-facing</dd>
+                </dl>
+            </div>
+
+                            <div class="rail-card metadata-group">
+                    <h2>Trigger</h2>
+                    <p>A developer runs `vibekb uninstall [target]`.</p>
+                </div>
+            
+            <div class="rail-card metadata-group">
+                <h2>Data read or written</h2>
+                <p><strong>Reads:</strong> <code class="chip chip--file">.vibekb/install.json</code></p>
+                <p><strong>Writes:</strong> <span class="muted">None.</span></p>
+                            </div>
+
+            <div class="rail-card metadata-group">
+                <h2>Files involved</h2>
+                                    <p><code class="chip chip--file">internal/installer/uninstall.go</code> <code class="chip chip--file">internal/installer/block.go</code> <code class="chip chip--file">internal/installer/state.go</code> <code class="chip chip--file">internal/cli/cli.go</code></p>
+                            </div>
+
+            <div class="rail-card metadata-group">
+                <h2>Dependencies</h2>
+                                    <p><strong>Depends on:</strong> <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a></p>
+                                                    <p><strong>Depended on by:</strong> <a class="chip" href="../functionality/run-the-developer-cli.html">Run VibeKB from one developer CLI</a></p>
+                            </div>
+
+            
+            <div class="rail-card metadata-group">
+                <h2>Related rationale</h2>
+                                    <p><a class="chip" href="../why/decisions/repository-safety-consolidation.html">VibeKB owns only .vibekb/; everything else is an adapter or managed block</a></p>
+                            </div>
+        </aside>
+    </div>
+</article>
+        </main>
+
+        <footer class="site-footer">
+            <div class="wrap site-footer__inner">
+                <p><strong>VibeKB</strong> — Understand what your software is doing.</p>
+                <p class="muted">
+                    A living explanation generated from repository-owned content in <code>.vibekb/</code>.
+                    <a href="../index.html">About VibeKB</a>
+                </p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 07:06 UTC · source commit a0d95aa (2026-07-23) · not auto-updating</p>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script src="../assets/js/guide.js" defer></script>
+</body>
+</html>

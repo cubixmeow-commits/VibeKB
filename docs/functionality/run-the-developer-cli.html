@@ -143,16 +143,22 @@ codes — because the binary runs that very script. If PHP is missing, the comma
 fails with a plain message telling the developer to install PHP 8.2+ or set
 <code>VIBEKB_PHP</code>, and to run <code>vibekb doctor</code>.</p>
 <h3>Current behavior</h3>
-<p><code>cmd/vibekb</code> dispatches through <code>internal/cli</code>. <code>help</code>, <code>version</code>, <code>doctor</code>, and
-<code>install</code> are native Go — <code>install</code> runs entirely from the binary&#039;s embedded
-payload (see <strong>Install VibeKB into a repository</strong>) and launches no PHP. <code>status</code>,
-<code>check</code>, <code>affected</code>, <code>bootstrap</code>, <code>validate</code>, and <code>generate</code> are delegated to
-<code>tools/vibekb.php</code>. <code>internal/phpcore</code> performs discovery for the delegated
-commands: it walks up from the working directory to find the repository root (a
-directory holding <code>tools/vibekb.php</code> or <code>.vibekb/</code>) and resolves the PHP
-executable from <code>VIBEKB_PHP</code> or the usual names on <code>PATH</code>. Delegation runs <code>php
-&lt;script&gt; &lt;subcommand&gt; &lt;args…&gt;</code> with the repository as the working directory and
-stdio wired straight through, and returns the child process&#039;s exit code.</p>
+<p><code>cmd/vibekb</code> dispatches through <code>internal/cli</code>. <code>help</code>, <code>version</code>, <code>doctor</code>,
+<code>install</code>, <code>migrate</code>, and <code>uninstall</code> are native Go — the installer family runs
+entirely from the binary&#039;s embedded payload (see **Install VibeKB into a
+repository<strong>, </strong>Migrate a legacy root-level install<strong>, </strong>Uninstall VibeKB from a
+repository**) and launches no PHP. <code>doctor</code> additionally reports repository
+footprint problems via <code>installer.DiagnoseRepo</code> (legacy layout, malformed managed
+blocks, missing authoritative files, manifest drift). <code>status</code>, <code>check</code>,
+<code>affected</code>, <code>bootstrap</code>, <code>validate</code>, and <code>generate</code> are delegated to the PHP core.
+<code>internal/phpcore</code> performs discovery for the delegated commands: it walks up from
+the working directory to find the repository root (a directory holding
+<code>.vibekb/runtime/tools/vibekb.php</code>, the legacy <code>tools/vibekb.php</code>, or <code>.vibekb/</code>),
+resolves the tools script (preferring the consolidated <code>.vibekb/runtime/</code> location
+via <code>ToolsScript</code>), and resolves the PHP executable from <code>VIBEKB_PHP</code> or the usual
+names on <code>PATH</code>. Delegation runs <code>php &lt;script&gt; &lt;subcommand&gt; &lt;args…&gt;</code> with the
+repository as the working directory and stdio wired straight through, and returns
+the child process&#039;s exit code.</p>
 <h3>Honesty boundary</h3>
 <p>The CLI never re-implements the VibeKB content model. Parsing, validation, drift
 interpretation, and HTML generation have exactly one implementation — the PHP core
@@ -272,7 +278,10 @@ installation path while keeping exactly one implementation of the model. See
 
             <div class="rail-card metadata-group">
                 <h2>Dependencies</h2>
-                                    <p><strong>Depends on:</strong> <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/bootstrap-workspace.html">Bootstrap the VibeKB workspace</a> <a class="chip" href="../functionality/validate-model.html">Validate the model</a> <a class="chip" href="../functionality/detect-drift.html">Detect drift between code and model</a> <a class="chip" href="../functionality/generate-static-snapshot.html">Generate the static snapshot</a></p>
+                                    <details class="rail-disclose" open>
+                        <summary>Depends on (7)</summary>
+                        <p><a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/migrate-legacy-install.html">Migrate a legacy root-level install</a> <a class="chip" href="../functionality/uninstall-from-a-repository.html">Uninstall VibeKB from a repository</a> <a class="chip" href="../functionality/bootstrap-workspace.html">Bootstrap the VibeKB workspace</a> <a class="chip" href="../functionality/validate-model.html">Validate the model</a> <a class="chip" href="../functionality/detect-drift.html">Detect drift between code and model</a> <a class="chip" href="../functionality/generate-static-snapshot.html">Generate the static snapshot</a></p>
+                    </details>
                                                     <p><strong>Depended on by:</strong> <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a></p>
                             </div>
 
@@ -293,7 +302,7 @@ installation path while keeping exactly one implementation of the model. See
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 05:48 UTC · source commit a0d95aa (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 07:06 UTC · source commit a0d95aa (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

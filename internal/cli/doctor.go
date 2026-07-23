@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/cubixmeow-commits/vibekb/internal/installer"
 	"github.com/cubixmeow-commits/vibekb/internal/phpcore"
 )
 
@@ -57,6 +58,29 @@ func cmdDoctor() int {
 		}
 	} else {
 		reportWarn("VibeKB repository", "not detected here — 'vibekb install <target>' can create one")
+	}
+
+	// Repository footprint diagnostics (native; no PHP).
+	if rt.RepoRoot != "" {
+		fmt.Println()
+		fmt.Println("Repository footprint")
+		fmt.Println(strings.Repeat("-", 60))
+		for _, f := range installer.DiagnoseRepo(rt.RepoRoot) {
+			switch f.Severity {
+			case installer.SevError:
+				reportFail(f.Label, f.Detail)
+				ok = false
+			case installer.SevWarn:
+				reportWarn(f.Label, f.Detail)
+			case installer.SevOK:
+				reportOK(f.Label, f.Detail)
+			default:
+				fmt.Printf("  [info] %-22s %s\n", f.Label, f.Detail)
+			}
+			if f.Fix != "" {
+				fmt.Printf("         ↳ %s\n", f.Fix)
+			}
+		}
 	}
 
 	fmt.Println(strings.Repeat("=", 60))
