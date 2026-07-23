@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AI handoff · VibeKB — VibeKB</title>
+    <title>Homepage voice pass (indie-developer tone) · VibeKB — VibeKB</title>
     <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +11,7 @@
          full system-font fallback stack, so the guide renders correctly with no
          external CDN — required for offline and locked-down static hosting. -->
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/guide.css">
+    <link rel="stylesheet" href="../../assets/css/guide.css">
 </head>
 <body data-mode="static">
 <a class="skip-link" href="#main">Skip to content</a>
@@ -19,11 +19,11 @@
 <div class="app-shell">
     <header class="site-header">
         <div class="site-header__inner">
-            <a class="brand" href="../index.html">
+            <a class="brand" href="../../index.html">
                 <span class="brand__mark">VibeKB</span>
                 <span class="brand__project">VibeKB</span>
             </a>
-            <form class="site-search" role="search" action="../search/index.html">
+            <form class="site-search" role="search" action="../../search/index.html">
                 <label class="visually-hidden" for="site-search-input">Search guide</label>
                 <input id="site-search-input" name="q" type="search" placeholder="Search guide…" autocomplete="off">
             </form>
@@ -44,23 +44,23 @@
             <p class="sidebar-nav__label" id="nav-primary-label">Primary</p>
             <ul class="sidebar-nav__list" aria-labelledby="nav-primary-label">
                                                         <li>
-                        <a href="../index.html">
+                        <a href="../../index.html">
                             Overview                        </a>
                     </li>
                                                         <li>
-                        <a href="../functionality/index.html">
+                        <a href="../../functionality/index.html">
                             Functionality                        </a>
                     </li>
                                                         <li>
-                        <a href="../how-it-works/index.html">
+                        <a href="../../how-it-works/index.html">
                             Architecture                        </a>
                     </li>
                                                         <li>
-                        <a href="../diagrams/index.html">
+                        <a href="../../diagrams/index.html">
                             Diagrams                        </a>
                     </li>
                                                         <li>
-                        <a href="../current-work/index.html">
+                        <a href="../../current-work/index.html">
                             Current work                        </a>
                     </li>
                             </ul>
@@ -68,27 +68,27 @@
                             <p class="sidebar-nav__label" id="nav-explore-label">Explore</p>
                 <ul class="sidebar-nav__list sidebar-nav__list--secondary" aria-labelledby="nav-explore-label">
                                                                     <li>
-                            <a href="../data/index.html">
+                            <a href="../../data/index.html">
                                 Data &amp; storage                            </a>
                         </li>
                                                                     <li>
-                            <a href="../files/index.html">
+                            <a href="../../files/index.html">
                                 Files that matter                            </a>
                         </li>
                                                                     <li>
-                            <a href="../changes/index.html">
+                            <a href="../../changes/index.html">
                                 Changes                            </a>
                         </li>
                                                                     <li>
-                            <a href="../why/index.html">
+                            <a href="../../why/index.html" aria-current="page">
                                 Decisions &amp; rationale                            </a>
                         </li>
                                                                     <li>
-                            <a href="../handoff/index.html" aria-current="page">
+                            <a href="../../handoff/index.html">
                                 AI handoff                            </a>
                         </li>
                                                                     <li>
-                            <a href="../reference/index.html">
+                            <a href="../../reference/index.html">
                                 Reference                            </a>
                         </li>
                                     </ul>
@@ -98,87 +98,54 @@
     <div class="app-main">
                     <p class="generated-notice" role="note">
                 Generated output — this is a static snapshot rendered from <code>.vibekb/</code>. The
-                <code>.vibekb/</code> content is the source of truth. See <a href="../reference/index.html">Reference</a> for provenance.
+                <code>.vibekb/</code> content is the source of truth. See <a href="../../reference/index.html">Reference</a> for provenance.
             </p>
                 
         <main id="main" class="wrap">
-            <article class="view view-doc">
-    <header class="page-head reading-column">
-        <p class="eyebrow">AI handoff</p>
-        <h1>Start here before you change anything</h1>
-        <p class="lede">Everything the next human or AI session needs to avoid reconstructing the project incorrectly.</p>
-    </header>
-
-            <section class="doc-section callout callout--work">
+                <article class="view view-doc">
+        <p class="breadcrumb"><a href="../../why/index.html">← Decisions &amp; rationale</a></p>
+        <header class="page-head reading-column">
+            <p class="eyebrow">Changes</p>
+            <h1>Homepage voice pass (indie-developer tone)</h1>
+            <p class="lede">Rewrote homepage marketing prose to sound like an experienced indie developer explaining a tool they built, without changing layout, CSS, commands, installation instructions, or product claims.</p>
             <div class="badge-row">
-                                    <span class="badge badge--info">Verification: verified from source</span>                                <span class="muted">Updated 2026-07-23</span>
-            </div>
-            <div class="prose reading-column"><h3>Current state</h3>
-<p>The homepage describes the real <code>vibekb install</code> path (clone → <code>go build</code> →
-<code>./vibekb install</code> → coding agent) and reads in a plain developer voice. PHP is
-not required to install; PHP 8.2+ remains required afterward for the guide and
-model commands. Layout, CSS, and install commands were not changed by the voice
-pass.</p>
-<h3>Completed this change</h3>
-<ul>
-<li><code>index.php</code> prose voice pass only (hero, install blurbs, compatibility,</li>
-</ul>
-<p>what-you-get, proof, footer).</p>
-<ul>
-<li><code>change:homepage-voice-pass</code>; current work + handoff; provenance; <code>/docs</code></li>
-</ul>
-<p>regenerated.</p>
-<h3>Verification completed</h3>
-<ul>
-<li>Command variables and rendered install/dry-run strings unchanged vs prior</li>
-</ul>
-<p>commit.</p>
-<ul>
-<li><code>php -l index.php</code></li>
-<li><code>php tools/vibekb.php check --strict</code></li>
-<li><code>php tools/test-topology.php</code></li>
-<li><code>go test ./...</code> (unchanged Go code; re-run for safety)</li>
-</ul>
-<h3>Not done yet (roadmap)</h3>
-<ul>
-<li><strong>Phase 2 — distribution</strong>: release binaries, <code>curl | sh</code>, Homebrew, winget.</li>
-<li><strong>Phase 3 — shared core boundary</strong></li>
-<li><strong>Phase 4 — evaluate a bundled PHP runtime</strong></li>
-</ul>
-<h3>Exact next recommended action</h3>
-<p><code>php tools/vibekb.php status</code> before the next change. Continue with Phase 2
-distribution when ready.</p></div>
-        </section>
-    
-            <section class="doc-section">
-            <h2>Recent work sessions</h2>
-            <ul class="why-list">
-                                    <li class="why-item">
-                        <div class="why-item__head">
-                            <h3>Bootstrap VibeKB self-hosting</h3>
-                            <div class="badge-row">
-                                <span class="badge badge--ok">Verified manually</span>                                <span class="muted">2026-07-22</span>
-                            </div>
-                        </div>
-                        <p></p>
-                                                    <p class="why-item__links"><a class="chip" href="../functionality/start-work-session.html">Start a work session</a> <a class="chip" href="../functionality/detect-drift.html">Detect drift between code and model</a> <a class="chip" href="../functionality/find-affected-functionality.html">Find affected functionality</a> <a class="chip" href="../functionality/load-living-model.html">Load the living model</a> <a class="chip" href="../functionality/generate-static-snapshot.html">Generate the static snapshot</a></p>
-                                            </li>
-                            </ul>
-        </section>
-    
-    <nav class="cross-links" aria-label="Related views">
-        <a class="btn" href="../current-work/index.html">Current AI work →</a>
-        <a class="btn" href="../index.html">Overview →</a>
-    </nav>
-</article>
-        </main>
+                <span class="badge badge--info">implemented</span>                                                <span class="badge badge--ok">Verified from source</span>            </div>
+        </header>
+        <div class="detail-grid">
+            <div class="detail-main"><div class="prose reading-column"><h3>Before</h3>
+<p>Homepage copy was accurate but read like software-marketing: punchy arc labels
+(“Lose the plot”, “Fear the next change”), “understanding layer”, and
+advertisement-adjacent CTAs.</p>
+<h3>After</h3>
+<p>Same section order, commands, and claims. Prose uses shorter sentences and a
+calm developer voice (README / indie launch post). Examples: the three-beat arc
+became “You ship quickly / The app outgrows your map of it / Every change
+starts to feel like a guess”; the product headline became “A living knowledge
+base that stays with your repository.”</p>
+<h3>Honesty preserved</h3>
+<p>Install commands, Go vs PHP requirements, Coming soon items, and the
+installer-does-not-analyze boundary are unchanged.</p>
+<h3>Verification note</h3>
+<p>Diffed <code>index.php</code> to confirm command variables and install command strings
+were unchanged. <code>php -l index.php</code> passed. Copy-button clicks were not
+exercised in a browser here.</p></div></div>
+            <aside class="detail-rail" aria-label="Connections">
+                <div class="rail-card">
+                    <h2>Affects functionality</h2>
+                    <p><a class="chip" href="../../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a> <a class="chip" href="../../functionality/install-into-a-repository.html">Install VibeKB into a repository</a></p>
+                </div>
+                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">index.php</code></p></div>
+                            </aside>
+        </div>
+    </article>
+            </main>
 
         <footer class="site-footer">
             <div class="wrap site-footer__inner">
                 <p><strong>VibeKB</strong> — Understand what your software is doing.</p>
                 <p class="muted">
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
-                    <a href="../index.html">About VibeKB</a>
+                    <a href="../../index.html">About VibeKB</a>
                 </p>
                 <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 03:19 UTC · source commit f1a8665 (2026-07-23) · not auto-updating</p>
             </div>
@@ -186,6 +153,6 @@ distribution when ready.</p></div>
     </div>
 </div>
 
-<script src="../assets/js/guide.js" defer></script>
+<script src="../../assets/js/guide.js" defer></script>
 </body>
 </html>

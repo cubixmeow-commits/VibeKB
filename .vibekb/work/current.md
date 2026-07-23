@@ -1,25 +1,23 @@
 ---
 id: current-work
 type: work
-title: Update homepage for the native Go installer
-objective: Make the public homepage accurately describe the native `vibekb install` workflow (clone → build Go CLI → install → coding agent), remove outdated PHP-install and Coming soon claims, strip em dashes from homepage copy, and keep the PHP post-install runtime distinction clear.
-summary: Complete — homepage matches INSTALLER.md native Go flow; PHP required only after install; Native CLI / Repository doctor removed from Coming soon.
-requested_by: Cursor cloud agent task
+title: Homepage voice pass (copy only)
+objective: Rewrite homepage marketing prose so it reads like an experienced indie developer, without changing layout, CSS, commands, installation instructions, or claims.
+summary: Complete — prose rewritten; commands and claims unchanged.
+requested_by: Cursor cloud agent follow-up
 status: complete
 verification_state: verified-from-source
 updated: 2026-07-23
-affected_functionality: [install-into-a-repository, initialize-in-a-repository, deploy-and-stay-portable]
-expected_files: [index.php, .vibekb/work/current.md, .vibekb/work/handoff.md, .vibekb/memory/changes/homepage-native-installer-copy.md, .vibekb/files/important-files.json, .vibekb/manifest.json, .vibekb/project/identity.md, .vibekb/functionality/records/initialize-in-a-repository.md]
-data_impact: None to runtime behaviour. Homepage marketing copy and self-model records only; `/docs` regenerated.
-risks: [Implying VibeKB is entirely Go (avoided — PHP kept as post-install runtime); inventing brew/winget/curl commands (avoided — Coming soon only).]
+affected_functionality: [initialize-in-a-repository, deploy-and-stay-portable, install-into-a-repository]
+expected_files: [index.php, .vibekb/memory/changes/homepage-voice-pass.md, .vibekb/work/current.md, .vibekb/work/handoff.md, .vibekb/manifest.json]
+data_impact: None. Homepage prose and self-model records only.
+risks: [Accidentally changing install commands (avoided — verified identical).]
 ---
 
 ## Status
 
 Complete. See `.vibekb/work/handoff.md`.
 
-## Decisions / changes recorded
+## Change recorded
 
-`change:homepage-native-installer-copy` — homepage install copy matches the
-native Go installer; requirements and Coming soon reconciled with ARCHITECTURE.md
-Phase 2.
+`change:homepage-voice-pass`

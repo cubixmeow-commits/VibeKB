@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 /**
  * VibeKB homepage: hero/problem, install fast-start, what you get, live proof + CTA.
- * Copy is distilled from the developer-journey story (ship fast → lose understanding
- * → fear change → VibeKB restores clarity). Section 1 includes an optimized hero comic
- * beside the copy. The install section mirrors the real installer workflow (clone →
- * build native CLI → vibekb install → coding agent builds the model). Compatibility &
- * Requirements sits under install. The guide-preview carousel and hero metrics are
- * driven by real `.vibekb/` records (never invented).
+ * Copy follows the developer journey (build fast → lose understanding → fear change →
+ * keep understanding in the repo). Section 1 includes a hero comic beside the copy.
+ * The install section mirrors the real installer workflow (clone → build native CLI →
+ * vibekb install → coding agent builds the model). Compatibility & Requirements sits
+ * under install. The guide-preview carousel and hero metrics are driven by real
+ * `.vibekb/` records (never invented).
  *
  * Interactions: assets/js/homepage.js (guide carousel + copy buttons). Styling: homepage.css.
  */
@@ -122,7 +122,7 @@ $selfHosted = !empty($manifest['self_hosted']) || (($example['is_sample'] ?? tru
 $sampleName = (string) ($identity['meta']['title'] ?? ($example['name'] ?? 'the example project'));
 $sampleTagline = (string) ($identity['meta']['one_liner'] ?? $identity['meta']['summary'] ?? '');
 if ($sampleTagline === '') {
-    $sampleTagline = 'A living software model that explains what your application is currently doing, organized around functionality.';
+    $sampleTagline = 'A living model of what your application does now, organized around functionality.';
 }
 $sampleRepo = (string) ($example['source_repository'] ?? $provenance['source_repository'] ?? $repoUrl);
 
@@ -163,7 +163,7 @@ if ($loaded) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>VibeKB: AI helped you build it. VibeKB helps you understand it.</title>
-    <meta name="description" content="Whether you built your own app with <?= hp_e($codingAgents) ?> or extended something from GitHub, you probably shipped faster than you understood. VibeKB is the missing understanding layer in your repo.">
+    <meta name="description" content="If you build with <?= hp_e($codingAgents) ?>, you can ship software faster than you understand it. VibeKB keeps that understanding in your repository.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -192,33 +192,37 @@ if ($loaded) {
         <section class="hp-section hp-hero" id="problem" aria-labelledby="hero-title">
             <div class="hp-wrap hp-hero-grid">
                 <div class="hp-hero-copy">
-                    <p class="hp-eyebrow">For vibe coders who ship with AI</p>
+                    <p class="hp-eyebrow">For developers building with AI coding agents</p>
                     <h1 id="hero-title">AI helped you build it. VibeKB helps you understand it.</h1>
                     <p class="hp-hero-support">
-                        Whether you greenfielded your own app or built on open source,
-                        <?= hp_e($codingAgents) ?> let you ship faster than your mental model can keep up.
-                        The demo runs. The feature looks done. Then you realise you are guessing which files
-                        matter and afraid the next edit breaks something three features away.
+                        Whether you started from scratch or built on something from GitHub,
+                        <?= hp_e($codingAgents) ?> make it easy to ship software surprisingly fast.
+                        Understanding what you built usually does not keep up.
+                        The demo runs. The feature looks finished. Then you notice you are guessing
+                        which files matter, and worrying that the next edit breaks something you cannot see.
                     </p>
 
                     <ol class="hp-arc" aria-label="The developer journey in three beats">
                         <li>
-                            <strong>Ship fast.</strong>
-                            Describe it, accept the diffs, iterate in chat: your software exists.
+                            <strong>You ship quickly.</strong>
+                            You describe what you want, accept the diffs, and keep going in chat.
+                            Pretty soon the software exists.
                         </li>
                         <li>
-                            <strong>Lose the plot.</strong>
-                            Prompts, starter templates, agent sessions: the codebase outgrew what you can explain.
+                            <strong>The app outgrows your map of it.</strong>
+                            Prompts, starter templates, and agent sessions pile up.
+                            The codebase grows faster than your understanding of it.
                         </li>
                         <li>
-                            <strong>Fear the next change.</strong>
-                            Not documentation debt. Uncertainty: re-asking the same architecture questions every session.
+                            <strong>Every change starts to feel like a guess.</strong>
+                            It is not missing docs. It is uncertainty.
+                            You keep asking the same architecture questions in a new session.
                         </li>
                     </ol>
 
                     <div class="hp-actions">
                         <a class="hp-btn hp-btn-primary" href="<?= hp_e($guideUrl) ?>">Open the live guide</a>
-                        <a class="hp-btn hp-btn-ghost" href="#understanding">What VibeKB gives you</a>
+                        <a class="hp-btn hp-btn-ghost" href="#understanding">What VibeKB is</a>
                     </div>
                 </div>
                 <div class="hp-hero-aside">
@@ -229,7 +233,7 @@ if ($loaded) {
                                 srcset="<?= hp_e(hp_asset('assets/images/homepage-developer-journey.webp')) ?>">
                             <img
                                 src="<?= hp_e(hp_asset('assets/images/homepage-developer-journey.png')) ?>"
-                                alt="Comic journey from shipping fast with AI, losing the plot in a growing codebase, fearing the next change, to clarity with VibeKB"
+                                alt="Comic of building quickly with AI, losing track of how the app works, then using VibeKB to keep that understanding in the repository"
                                 width="560"
                                 height="449"
                                 decoding="async">
@@ -250,9 +254,9 @@ if ($loaded) {
                         <p class="hp-example-work"><span class="hp-status hp-status--info">AI now</span> <?= hp_e((string) ($currentWork['meta']['title'] ?? '')) ?></p>
                     <?php endif; ?>
                     <p class="hp-example-note"><?php if ($selfHosted): ?>
-                        Real numbers from VibeKB&#39;s own <code>.vibekb/</code> model, not marketing copy.
+                        These numbers come from VibeKB&#39;s own <code>.vibekb/</code> model.
                     <?php else: ?>
-                        Real numbers from the <?= hp_e($sampleName) ?> <code>.vibekb/</code> model.
+                        These numbers come from the <?= hp_e($sampleName) ?> <code>.vibekb/</code> model.
                     <?php endif; ?></p>
                 </aside>
                 <?php endif; ?>
@@ -263,12 +267,12 @@ if ($loaded) {
         <!-- 2. Install: three-step fast-start (clone → build CLI → install → coding agent) -->
         <section class="hp-section hp-install" id="install" aria-labelledby="install-title">
             <div class="hp-wrap">
-                <p class="hp-kicker">Install VibeKB in three steps</p>
+                <p class="hp-kicker">Install in three steps</p>
                 <h2 id="install-title">Add VibeKB to your repository</h2>
                 <p class="hp-lead hp-install-lead">
-                    Build the native CLI from source, install the understanding layer into your project
-                    (no PHP required to install), then let your coding agent build the first model from
-                    your source code and keep it updated as you build.
+                    Build the CLI from source, install it into your project
+                    (PHP is not required for install), then ask your coding agent
+                    to build the first model from the real source.
                 </p>
 
                 <ol class="hp-install-cards" aria-label="Install VibeKB in three steps">
@@ -276,8 +280,8 @@ if ($loaded) {
                         <p class="hp-install-step-num" aria-hidden="true">1</p>
                         <h3>Get the VibeKB CLI</h3>
                         <p class="hp-install-card-copy">
-                            Clone the repository and build the native installer from Go source.
-                            Prebuilt binaries and package-manager installs are not available yet.
+                            Clone the repo and build the installer from Go source.
+                            Prebuilt binaries and package managers are not ready yet.
                         </p>
                         <div class="hp-cmd-block">
                             <pre class="hp-cmd" id="cmd-clone"><code><?= hp_e($cloneCmd) ?></code></pre>
@@ -293,7 +297,7 @@ if ($loaded) {
                         <p class="hp-install-step-num" aria-hidden="true">2</p>
                         <h3>Install it into your project</h3>
                         <p class="hp-install-card-copy">
-                            From the VibeKB directory, install into the repository you want VibeKB to understand.
+                            From the VibeKB directory, point install at the project you want to understand.
                         </p>
                         <p class="hp-install-req"><span>Native installer: no PHP required</span></p>
                         <div class="hp-cmd-block">
@@ -306,17 +310,17 @@ if ($loaded) {
                             <button type="button" class="hp-copy-btn" data-copy-target="#cmd-install-example">Copy</button>
                         </div>
                         <p class="hp-install-card-copy">
-                            PHP 8.2+ is required afterward for the installed guide and model commands,
-                            not for running <code>vibekb install</code>.
+                            You will need PHP 8.2+ later for the guide and model commands.
+                            You do not need it to run <code>vibekb install</code>.
                         </p>
                     </li>
                     <li class="hp-install-card">
                         <p class="hp-install-step-num" aria-hidden="true">3</p>
                         <h3>Ask your coding agent</h3>
                         <p class="hp-install-card-copy">
-                            The installer prepares the workspace. Open the project in Cursor, Claude Code,
-                            Codex, Windsurf, or another coding agent, then paste this prompt so it builds
-                            the first understanding model.
+                            The installer only sets up the workspace. Open the project in Cursor, Claude Code,
+                            Codex, Windsurf, or another coding agent, then paste this prompt so the agent
+                            builds the first model from source.
                         </p>
                         <div class="hp-cmd-block">
                             <pre class="hp-cmd hp-cmd--prompt" id="cmd-agent-prompt"><code><?= hp_e($agentPrompt) ?></code></pre>
@@ -326,12 +330,12 @@ if ($loaded) {
                 </ol>
 
                 <div class="hp-install-result" aria-label="What your project contains after install">
-                    <p class="hp-install-result-title">Your project now contains:</p>
+                    <p class="hp-install-result-title">After install, your project has:</p>
                     <ul class="hp-install-result-list">
                         <li>
                             <code>.vibekb/</code>
-                            <span>Living understanding of your application</span>
-                            <span class="hp-install-result-note">Fresh empty-but-valid workspace from the installer</span>
+                            <span>Living knowledge base for the application</span>
+                            <span class="hp-install-result-note">Empty but valid workspace from the installer</span>
                         </li>
                         <li>
                             <code>guide/</code>
@@ -346,7 +350,7 @@ if ($loaded) {
                         <li>
                             <code>docs/</code>
                             <span>Static guide generated after analysis</span>
-                            <span class="hp-install-result-note">Generated after the first model is built</span>
+                            <span class="hp-install-result-note">Created after the first model is built</span>
                         </li>
                     </ul>
                     <p class="hp-install-result-gen">
@@ -359,15 +363,15 @@ if ($loaded) {
                     <summary>What does the installer do?</summary>
                     <div class="hp-install-details-body">
                         <ol>
-                            <li>Reads the canonical <code>template/manifest.json</code> from the embedded installer payload.</li>
+                            <li>Reads <code>template/manifest.json</code> from the payload embedded in the binary.</li>
                             <li>Copies the VibeKB PHP runtime and agent instructions into the target repository.</li>
-                            <li>Creates a fresh empty-but-valid <code>.vibekb/</code> workspace without inventing functionality.</li>
-                            <li>Does not analyze or modify the target application, and does not require PHP to install.</li>
-                            <li>Verifies the installation natively and points your coding agent to the integration prompt.</li>
+                            <li>Creates a fresh empty-but-valid <code>.vibekb/</code> workspace. It does not invent functionality.</li>
+                            <li>Does not analyze or modify your application. It does not need PHP to install.</li>
+                            <li>Checks the install locally and points your coding agent at the integration prompt.</li>
                         </ol>
                         <p>
-                            The installer-owned payload is declared by <code>template/manifest.json</code> and
-                            currently includes <code>guide/</code>, <code>tools/</code>, <code>prompts/</code>,
+                            The installed payload is listed in <code>template/manifest.json</code>.
+                            Today that includes <code>guide/</code>, <code>tools/</code>, <code>prompts/</code>,
                             <code>.cursor/</code>, <code>CLAUDE.md</code>, <code>AGENTS.md</code>,
                             <code>PRODUCT.md</code>, <code>SCHEMA.md</code>, <code>INITIALIZE.md</code>,
                             <code>MAINTENANCE.md</code>, and <code>INSTALLER.md</code>.
@@ -378,13 +382,13 @@ if ($loaded) {
                             <button type="button" class="hp-copy-btn" data-copy-target="#cmd-dry-run">Copy</button>
                         </div>
                         <p class="hp-install-card-copy">
-                            Preview every file the installer will create, replace, or skip without changing anything.
+                            Shows every file the installer would create, replace, or skip. Writes nothing.
                         </p>
                     </div>
                 </details>
 
                 <p class="hp-thesis hp-install-boundary">
-                    The installer prepares VibeKB. Your coding agent understands the application.
+                    The installer sets up VibeKB. Your coding agent reads the application and builds the model.
                 </p>
 
                 <div class="hp-actions hp-install-actions">
@@ -400,8 +404,8 @@ if ($loaded) {
                 <p class="hp-kicker">Will this work with my project?</p>
                 <h2 id="compatibility-title">Compatibility &amp; Requirements</h2>
                 <p class="hp-lead hp-compat-lead">
-                    Installation is native Go. The deployed guide and model engine remain PHP.
-                    Your coding agent builds the understanding model from your source code.
+                    Install is native Go. The guide and model tooling stay PHP.
+                    Your coding agent builds the model by reading your source.
                 </p>
 
                 <div class="hp-compat-grid">
@@ -431,7 +435,7 @@ if ($loaded) {
                     <article class="hp-compat-card">
                         <h3>Works With</h3>
                         <p class="hp-compat-card-copy">
-                            VibeKB stores understanding. Your coding agent interprets the source code;
+                            VibeKB stores what the agent learns. Your coding agent reads the source.
                             VibeKB does not parse these languages itself.
                         </p>
                         <ul class="hp-badge-grid" aria-label="Example stacks your agent can model">
@@ -450,9 +454,9 @@ if ($loaded) {
                             <?php endforeach; ?>
                         </ul>
                         <p class="hp-compat-card-copy">
-                            Any coding agent capable of understanding a repository and following repository
-                            instructions. Agent behaviour depends on the tool and the prompt; VibeKB does not
-                            claim end-to-end certification for every agent.
+                            Any coding agent that can read a repository and follow repo instructions.
+                            How well that works depends on the agent and the prompt.
+                            VibeKB does not claim every agent is certified end to end.
                         </p>
                     </article>
 
@@ -487,7 +491,7 @@ if ($loaded) {
                 </div>
 
                 <div class="hp-compat-noneed">
-                    <h3 class="hp-compat-subhead">No Extra Infrastructure Required</h3>
+                    <h3 class="hp-compat-subhead">No extra infrastructure</h3>
                     <ul class="hp-compat-noneed-grid">
                         <?php foreach ($noInfraItems as $item): ?>
                             <li><?= hp_e($item) ?></li>
@@ -509,9 +513,9 @@ if ($loaded) {
                         <li>A developer to initialize the first model</li>
                     </ul>
                     <p class="hp-compat-card-copy">
-                        The installer prepares the workspace. The coding agent builds and maintains the
-                        software understanding model. VibeKB does not automatically analyze repositories
-                        during installation.
+                        The installer only prepares the workspace.
+                        The coding agent builds and maintains the model.
+                        VibeKB does not analyze your repository during install.
                     </p>
                 </div>
 
@@ -522,7 +526,7 @@ if ($loaded) {
                             <li><span class="hp-badge hp-badge--soon"><?= hp_e($item) ?></span></li>
                         <?php endforeach; ?>
                     </ul>
-                    <p class="hp-compat-card-note">Roadmap ideas, not implemented features.</p>
+                    <p class="hp-compat-card-note">On the roadmap. Not available yet.</p>
                 </div>
             </div>
         </section>
@@ -531,39 +535,39 @@ if ($loaded) {
         <section class="hp-section hp-surface" id="understanding" aria-labelledby="understanding-title">
             <div class="hp-wrap">
                 <p class="hp-kicker">What VibeKB is</p>
-                <h2 id="understanding-title">The understanding layer your repository is missing.</h2>
+                <h2 id="understanding-title">A living knowledge base that stays with your repository.</h2>
                 <p class="hp-lead">
-                    Not another coding agent. Not documentation you write once and forget. A living model in
-                    <code>.vibekb/</code>, committed with your code, that explains what your software is
-                    doing <em>right now</em>: architecture, relationships, key files, active AI work, and what
-                    is actually verified vs still guessing.
+                    Not another coding agent. Not docs you write once and forget.
+                    A model in <code>.vibekb/</code>, committed with your code, that explains what the
+                    software is doing <em>right now</em>: how it is structured, which files matter,
+                    what AI is changing, and what is verified versus still a guess.
                 </p>
 
                 <div class="hp-pillars">
                     <article>
                         <h3>What it does now</h3>
-                        <p>Every behaviour with an honest status: implemented, partial, broken, or unknown.</p>
+                        <p>Each behaviour with an honest status: implemented, partial, broken, or unknown.</p>
                         <a class="hp-text-link" href="<?= hp_e(hp_guide('functionality')) ?>">Functionality</a>
                     </article>
                     <article>
                         <h3>How it works</h3>
-                        <p>Readable flows, files, data, and what breaks if you change something.</p>
+                        <p>Flows, files, data, and what tends to break when you change something.</p>
                         <a class="hp-text-link" href="<?= hp_e(hp_guide('how-it-works')) ?>">How it works</a>
                     </article>
                     <article>
                         <h3>What AI is changing</h3>
-                        <p>The current objective, affected functionality, risks, and verification plan.</p>
+                        <p>The current goal, what it touches, the risks, and how you plan to verify it.</p>
                         <a class="hp-text-link" href="<?= hp_e(hp_guide('current-work')) ?>">Current AI work</a>
                     </article>
                     <article>
                         <h3>Why it works this way</h3>
-                        <p>Decisions, constraints, warnings: tied to the functionality they explain.</p>
+                        <p>Decisions, constraints, and warnings, linked to the behaviour they explain.</p>
                         <a class="hp-text-link" href="<?= hp_e(hp_guide('why')) ?>">Repository memory</a>
                     </article>
                 </div>
 
                 <p class="hp-thesis">
-                    Open the guide before you edit. Know what you can safely change. Ship without guessing.
+                    Open the guide before you edit. See what is safe to touch. Change less by guesswork.
                 </p>
             </div>
         </section>
@@ -572,15 +576,15 @@ if ($loaded) {
         <?php if ($previewItems !== []): ?>
         <section class="hp-section" id="proof" aria-labelledby="proof-title">
             <div class="hp-wrap">
-                <p class="hp-kicker">See it on a real project</p>
-                <h2 id="proof-title">Real functionality records, not a product tour.</h2>
+                <p class="hp-kicker">See it on this project</p>
+                <h2 id="proof-title">Real functionality records from the repo, not a demo script.</h2>
                 <p class="hp-lead">
                     <?php if ($selfHosted): ?>
-                        Each slide is from this project&#39;s <code>.vibekb/</code> model: status, verification,
-                        and flows traced from source.
+                        Each slide comes from this project&#39;s <code>.vibekb/</code> model:
+                        status, verification, and flows traced from source.
                     <?php else: ?>
-                        Each slide is from the <?= hp_e($sampleName) ?> <code>.vibekb/</code> model, the same
-                        clarity you want in the app you are building.
+                        Each slide comes from the <?= hp_e($sampleName) ?> <code>.vibekb/</code> model,
+                        the same kind of clarity you would want in your own app.
                     <?php endif; ?>
                 </p>
 
@@ -652,7 +656,7 @@ if ($loaded) {
         <?php else: ?>
         <section class="hp-section hp-final" id="proof" aria-labelledby="proof-title">
             <div class="hp-wrap hp-narrow">
-                <h2 id="proof-title">Stop guessing. Start understanding.</h2>
+                <h2 id="proof-title">Stop guessing. Read the model first.</h2>
                 <p class="hp-thesis">AI helped you build it. VibeKB helps you understand it.</p>
                 <div class="hp-actions">
                     <a class="hp-btn hp-btn-primary" href="<?= hp_e($guideUrl) ?>">Explore the live guide</a>
@@ -665,7 +669,7 @@ if ($loaded) {
 
     <footer class="hp-footer">
         <div class="hp-wrap hp-footer-inner">
-            <p><strong>VibeKB.</strong> The understanding layer for the software you&#39;re building.</p>
+            <p><strong>VibeKB.</strong> Keeps the understanding in your repository, not in yesterday&#39;s chat.</p>
             <p class="hp-footer-note">Lives in your repo (<code>.vibekb/</code>) · <a href="<?= hp_e($guideUrl) ?>">Software guide</a></p>
         </div>
     </footer>
