@@ -122,8 +122,11 @@ a fresh empty model — and then hands off to an AI agent to build the model.</p
 <h3>User experience</h3>
 <p>The public homepage surfaces the intended first-run path in three steps under
 <code>#install</code>: clone VibeKB, run <code>php VibeKB/install.php /path/to/your/project</code>,
-then ask Cursor to build the model with <code>prompts/INTEGRATE_VIBEKB.md</code>. That page
-is marketing copy only — the installer itself is unchanged.</p>
+then ask a coding agent (Cursor, Claude Code, Codex, Windsurf, or another capable
+agent) to build the model with <code>prompts/INTEGRATE_VIBEKB.md</code>. A Compatibility &amp;
+Requirements section under <code>#compatibility</code> answers stack/agent/deploy questions
+without claiming language parsers or automatic analysis. That page is marketing
+copy only — the installer itself is unchanged.</p>
 <p>The developer runs one command and sees a plan (what will be created, replaced,
 skipped, and that <code>.vibekb/</code> is a fresh model), confirms, and gets a verified
 installation with explicit next steps. <code>--dry-run</code> shows the full plan and
@@ -277,7 +280,7 @@ drift-prone duplicate of the starter content.</p></div>
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 00:09 UTC · source commit 3c8d1f8 (2026-07-22) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 00:09 UTC · source commit 11468c3 (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

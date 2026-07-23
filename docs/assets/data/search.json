@@ -53,7 +53,7 @@
         "summary": "A PHP installer (`install.php`) that copies the VibeKB runtime into a target repository and scaffolds a fresh, empty-but-valid `.vibekb/` workspace — without touching the application's code and without analysing it — so adopting VibeKB is a command, not a manual copy.",
         "type": "functionality",
         "url": "../functionality/install-into-a-repository.html",
-        "body": "In one sentence php install.php /path/to/repo prepares any repository for VibeKB — it installs the guide, the tools, the agent instructions, and the VibeKB docs, then lays down a fresh empty model — and then hands off to an AI agent to build the model. User experience The public homepage surfaces the intended first run path in three steps under install : clone VibeKB, run php VibeKB/install.php /path/to/your/project , then ask Cursor to build the model with prompts/INTEGRATE VIBEKB.md . That page is marketing copy only — the installer itself is unchanged. The developer runs one command and sees a plan what will be created, replaced, skipped, and that .vibekb/ is a fresh model , confirms, and gets a verified installation with explicit next steps. dry run shows the full plan and changes noth"
+        "body": "In one sentence php install.php /path/to/repo prepares any repository for VibeKB — it installs the guide, the tools, the agent instructions, and the VibeKB docs, then lays down a fresh empty model — and then hands off to an AI agent to build the model. User experience The public homepage surfaces the intended first run path in three steps under install : clone VibeKB, run php VibeKB/install.php /path/to/your/project , then ask a coding agent Cursor, Claude Code, Codex, Windsurf, or another capable agent to build the model with prompts/INTEGRATE VIBEKB.md . A Compatibility & Requirements section under compatibility answers stack/agent/deploy questions without claiming language parsers or automatic analysis. That page is marketing copy only — the installer itself is unchanged. The developer "
     },
     {
         "title": "Load the living model",
@@ -736,16 +736,16 @@
     },
     {
         "title": "Homepage compatibility section and agent-agnostic install",
-        "summary": "In progress — install copy generalized; compatibility cards pending verification against PRODUCT.md / DEPLOYMENT.md / installer constraints.",
+        "summary": "Complete — install copy generalized; Compatibility & Requirements added under #install. See handoff.md.",
         "type": "current work",
         "url": "../current-work/index.html",
-        "body": "Requested outcome 1. Install step 3 and surrounding copy name coding agents generally Cursor, Claude Code, Codex, Windsurf, and others , not Cursor alone. 2. A Compatibility & Requirements section immediately under install with four compact cards, a “no extra infrastructure” checklist, honest current requirements, and inactive “coming soon” badges. Verification plan Cross check every claim against PRODUCT.md, INSTALLER.md, DEPLOYMENT.md, and technical guardrails PHP 8.2, no Composer/DB/AI API, agent maintained . Render homepage; confirm section order and mobile layout. php l index.php , php tools/vibekb.php check , topology, generate."
+        "body": "Status Complete. See .vibekb/work/handoff.md ."
     },
     {
         "title": "Current handoff",
-        "summary": "The homepage now leads with a three-step install fast-start (clone → install.php → Cursor prompt) under the hero, matching the real installer. Next: keep the model reconciled as VibeKB changes.",
+        "summary": "Homepage install is agent-agnostic and followed by Compatibility & Requirements. Next: keep homepage claims aligned with INSTALLER.md / PRODUCT.md / DEPLOYMENT.md.",
         "type": "handoff",
         "url": "../handoff/index.html",
-        "body": "Completed this change Homepage install moved directly under the hero before “What you get” . Three primary steps with working copy buttons: clone command, install command + example , and a Cursor prompt pointing at prompts/INTEGRATE VIBEKB.md . Result strip distinguishes installed runtime from docs/ generated later . Expandable “What does the installer do?” disclosure with payload list and optional dry run . Nav order: The problem → Install → What you get → See it work. Model reconciled: important files for homepage assets, new change record homepage install fast start , installer/initialize records linked, provenance and work records updated. Verification completed Displayed commands checked against install.php / INSTALLER.md / template/manifest.json no fabricated commands . php l index.p"
+        "body": "Completed this change Install step 3 generalized: Ask your coding agent Cursor, Claude Code, Codex, Windsurf, and others ; copy control is “Copy agent prompt.” Boundary copy: installer prepares; coding agent understands. New compatibility section: four cards, no extra infrastructure checklist, honest current requirements, inactive coming soon badges. Nav link: Compatibility. Model reconciled: change memory, important files, functionality links, handoff. Verification completed Claims checked against PRODUCT.md agents/audience, no DB/AI API , INSTALLER.md PHP 8.2+, no Composer/network , DEPLOYMENT.md cPanel / GitHub Pages / static . Rendered homepage section order: problem → install → compatibility → understanding → proof. Confirmed honesty lines: agent interprets source; no auto analyze on "
     }
 ]

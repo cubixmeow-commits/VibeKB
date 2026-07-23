@@ -111,49 +111,43 @@
 
             <section class="doc-section callout callout--work">
             <div class="badge-row">
-                                    <span class="badge badge--info">Verification: verified from source</span>                                <span class="muted">Updated 2026-07-22</span>
+                                    <span class="badge badge--info">Verification: verified from source</span>                                <span class="muted">Updated 2026-07-23</span>
             </div>
             <div class="prose reading-column"><h3>Completed this change</h3>
 <ul>
-<li>Homepage <code>#install</code> moved directly under the hero (before “What you get”).</li>
-<li>Three primary steps with working copy buttons: clone command, install command</li>
+<li>Install step 3 generalized: <strong>Ask your coding agent</strong> (Cursor, Claude Code,</li>
 </ul>
-<p>(+ example), and a Cursor prompt pointing at <code>prompts/INTEGRATE_VIBEKB.md</code>.</p>
+<p>Codex, Windsurf, and others); copy control is “Copy agent prompt.”</p>
 <ul>
-<li>Result strip distinguishes installed runtime from <code>docs/</code> (generated later).</li>
-<li>Expandable “What does the installer do?” disclosure with payload list and</li>
+<li>Boundary copy: installer prepares; coding agent understands.</li>
+<li>New <code>#compatibility</code> section: four cards, no-extra-infrastructure checklist,</li>
 </ul>
-<p>optional <code>--dry-run</code>.</p>
+<p>honest current requirements, inactive coming-soon badges.</p>
 <ul>
-<li>Nav order: The problem → Install → What you get → See it work.</li>
-<li>Model reconciled: important-files for homepage assets, new change record</li>
+<li>Nav link: Compatibility.</li>
+<li>Model reconciled: change memory, important-files, functionality links, handoff.</li>
 </ul>
-<p><code>homepage-install-fast-start</code>, installer/initialize records linked, provenance
-  and work records updated.</p>
 <h3>Verification completed</h3>
 <ul>
-<li>Displayed commands checked against <code>install.php</code> / <code>INSTALLER.md</code> /</li>
+<li>Claims checked against PRODUCT.md (agents/audience, no DB/AI API), INSTALLER.md</li>
 </ul>
-<p><code>template/manifest.json</code> (no fabricated commands).</p>
+<p>(PHP 8.2+, no Composer/network), DEPLOYMENT.md (cPanel / GitHub Pages / static).</p>
 <ul>
-<li><code>php -l index.php</code>, <code>php -l install.php</code>.</li>
-<li>Rendered <code>index.php</code>: section order problem → install → understanding → proof;</li>
+<li>Rendered homepage section order: problem → install → compatibility →</li>
 </ul>
-<p>GitHub + INSTALLER.md links present; honesty phrases present; no auto-understand
-  claims.</p>
+<p>understanding → proof.</p>
 <ul>
-<li><code>php tools/vibekb.php check</code>, <code>php tools/test-topology.php</code>,</li>
+<li>Confirmed honesty lines: agent interprets source; no auto-analyze on install;</li>
 </ul>
-<p><code>php tools/vibekb.php generate</code> (run before commit).</p>
-<h3>Unresolved / active warnings</h3>
-<p>None introduced by this change. Homepage copy-button click behaviour was not
-exercised in a real browser in this environment (Clipboard API) — the JS path
-and no-JS readability were reviewed from source; treat interactive copy as
-<code>inferred-from-source</code> until manually clicked.</p>
+<p>coming soon labelled not implemented.</p>
+<ul>
+<li><code>php -l index.php</code>; <code>php tools/vibekb.php check</code>; <code>php tools/test-topology.php</code>;</li>
+</ul>
+<p><code>php tools/vibekb.php generate</code>.</p>
 <h3>Exact next recommended action</h3>
-<p><code>php tools/vibekb.php status</code> before the next change. If install commands or the
-integration prompt change, update the homepage <code>#install</code> section in the same
-commit as <code>INSTALLER.md</code> / <code>install.php</code> / <code>prompts/INTEGRATE_VIBEKB.md</code>.</p></div>
+<p><code>php tools/vibekb.php status</code> before the next change. If install commands,
+supported agents, or deploy modes change, update <code>#install</code> and <code>#compatibility</code>
+in the same commit as the docs they mirror.</p></div>
         </section>
     
             <section class="doc-section">
@@ -186,7 +180,7 @@ commit as <code>INSTALLER.md</code> / <code>install.php</code> / <code>prompts/I
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 00:09 UTC · source commit 3c8d1f8 (2026-07-22) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 00:09 UTC · source commit 11468c3 (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

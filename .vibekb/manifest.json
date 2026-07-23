@@ -14,7 +14,7 @@
     "source_repository": "https://github.com/cubixmeow-commits/VibeKB",
     "source_subpath": "",
     "source_branch": "main",
-    "source_commit": "3c8d1f8 (2026-07-22)",
+    "source_commit": "11468c3 (2026-07-23)",
     "analyzed": "2026-07-23",
     "verification_scope": "The content loader, dynamic guide, static generator, validator, topology test, and self-maintenance CLI were traced from source in this repository. Diagram topology (architecture, content-load-flow) is verified-from-source. Homepage layout verified by rendering index. Homepage Compatibility & Requirements (#compatibility) verified by rendering index.php and checking claims against PRODUCT.md, INSTALLER.md, and DEPLOYMENT.md (PHP 8.2+, no Composer/DB/AI API; agent-maintained; static via generate; coming-soon badges labelled not implemented).php (section order problem \u2192 install \u2192 understanding \u2192 proof; install commands checked against install.php / INSTALLER.md / template/manifest.json; docs/ labelled as generated, not installed). Homepage copy-button click behaviour is inferred-from-source (Clipboard path reviewed; not clicked in a browser here). The interactive functionality map (overview first screen) was verified by rendering the overview in both modes and driving the map in a headless browser (expand, list toggle, double-click-to-docs, mobile fallback). The installer (install.php) and bootstrap command were traced from source and exercised end-to-end: dry-run and real install into a scratch repository, an upgrade run preserving .vibekb/, and bootstrap repairing a damaged workspace; the scaffolded starter model validates with 0 errors. The cPanel host and Cursor discovery are inferred/not-verified as noted per record.",
     "last_verified": "2026-07-23",
