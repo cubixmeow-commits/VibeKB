@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>The installer prepares the workspace; the agent interprets the software · VibeKB — VibeKB</title>
+    <title>Homepage copy matches the native Go installer · VibeKB — VibeKB</title>
     <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -105,49 +105,52 @@
                 <article class="view view-doc">
         <p class="breadcrumb"><a href="../../why/index.html">← Decisions &amp; rationale</a></p>
         <header class="page-head reading-column">
-            <p class="eyebrow">Decisions</p>
-            <h1>The installer prepares the workspace; the agent interprets the software</h1>
-            <p class="lede">install.php and bootstrap only scaffold an empty, valid VibeKB workspace and install the runtime — they never analyse, understand, or document the target application. Building the model is left to an AI agent following the integration prompt.</p>
+            <p class="eyebrow">Changes</p>
+            <h1>Homepage copy matches the native Go installer</h1>
+            <p class="lede">The public homepage now describes the real source-build Go CLI workflow (clone → go build → vibekb install → coding agent), splits install vs post-install requirements, drops Native CLI and Repository doctor from Coming soon, and removes em dashes from homepage marketing copy.</p>
             <div class="badge-row">
-                <span class="badge badge--info">accepted</span>                                                <span class="badge badge--ok">Verified from source</span>            </div>
+                <span class="badge badge--info">implemented</span>                                                <span class="badge badge--ok">Verified from source</span>            </div>
         </header>
         <div class="detail-grid">
-            <div class="detail-main"><div class="prose reading-column"><h3>Context</h3>
-<p>The installer removes the friction of adopting VibeKB. The tempting next step is
-to have it also inspect the repository and pre-fill functionality — but that would
-fabricate understanding a script cannot honestly have, exactly the drift VibeKB
-exists to prevent.</p>
-<h3>Decision</h3>
-<p>The installer (and <code>bootstrap</code>) do only mechanical preparation: copy the runtime,
-create directories, and write empty starter placeholders. Every starter record is
-explicitly a placeholder that tells an agent what to write; none claims the
-software does anything. Provenance is left blank because no commit was analysed.
-An AI agent builds the model afterwards via <code>prompts/INTEGRATE_VIBEKB.md</code>.</p>
-<h3>Alternatives considered</h3>
-<ul>
-<li><strong>Auto-analyse the repo during install</strong> — rejected: it would produce</li>
-</ul>
-<p>unverified, fabricated functionality and undermine VibeKB&#039;s honesty guarantees.</p>
-<ul>
-<li><strong>Ship a pre-filled example model</strong> — rejected: it would describe some other</li>
-</ul>
-<p>app, not the target, and invite confusion with the real model.</p>
-<h3>Reason</h3>
-<p>VibeKB&#039;s core promise is an honest explanation of what software actually does.
-A script cannot trace behaviour; only analysis can. Keeping that line bright is
-more valuable than a flashier one-command &quot;model.&quot;</p>
-<h3>Consequences</h3>
-<ul>
-<li>A fresh install has zero functionality records — valid but empty, by design.</li>
-<li>The verification step reports the empty model as OK, not as a failure.</li>
-<li>The hand-off to the agent is explicit in the installer&#039;s final output.</li>
-</ul></div></div>
+            <div class="detail-main"><div class="prose reading-column"><h3>Before</h3>
+<p>The homepage still taught the old PHP installer path:</p>
+<ol>
+<li><code>git clone …</code></li>
+<li><code>php VibeKB/install.php /path/to/your/project</code> with “Requires PHP 8.2+”</li>
+<li>Coding-agent prompt</li>
+</ol>
+<p>Install Requirements and Current Requirements listed PHP as if it were needed to
+install. Coming soon still advertised Native CLI and Repository doctor, which
+are already implemented. Marketing copy used em dashes heavily.</p>
+<h3>After</h3>
+<p>Page flow is unchanged (hero → install → compatibility → what you get → proof).
+Commands match <code>INSTALLER.md</code> / <code>README.md</code> / <code>go.mod</code>:</p>
+<ol>
+<li>Clone + <code>go build -o vibekb ./cmd/vibekb</code> (Go 1.24+)</li>
+<li><code>./vibekb install /path/to/your/project</code> (native; no PHP required to install)</li>
+<li>Same integration prompt for the coding agent</li>
+</ol>
+<p>Requirements are split: Go/Git/write access to install from source today; PHP
+8.2+ and an AI coding agent after installation. Coming soon lists only Phase 2
+distribution items (prebuilt binaries, Homebrew, Winget, curl). The identity
+one_liner used on the hero card no longer uses em dashes.</p>
+<h3>Honesty preserved</h3>
+<p>Installation is native Go; the guide and model engine remain PHP. <code>docs/</code> is
+still generated with <code>php tools/vibekb.php generate</code>. No brew/winget/curl
+commands are shown as available. The installer still does not analyze the target
+application.</p>
+<h3>Verification note</h3>
+<p>Commands and rendered homepage HTML were checked against <code>INSTALLER.md</code>,
+<code>go.mod</code>, and <code>internal/installer</code> argument parsing. Old <code>install.php</code> /
+“Requires PHP 8.2+” install-card / Native CLI / Repository doctor strings are
+absent from the rendered homepage. Copy-button clicks were not exercised in a
+browser in this environment.</p></div></div>
             <aside class="detail-rail" aria-label="Connections">
                 <div class="rail-card">
                     <h2>Affects functionality</h2>
-                    <p><a class="chip" href="../../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../../functionality/bootstrap-workspace.html">Bootstrap the VibeKB workspace</a></p>
+                    <p><a class="chip" href="../../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a></p>
                 </div>
-                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">internal/installer/installer.go</code> <code class="chip chip--file">tools/lib/Starter.php</code> <code class="chip chip--file">install.php</code></p></div>
+                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">index.php</code> <code class="chip chip--file">.vibekb/project/identity.md</code></p></div>
                             </aside>
         </div>
     </article>

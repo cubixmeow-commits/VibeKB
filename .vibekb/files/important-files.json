@@ -127,9 +127,9 @@
       "functionality": ["load-living-model", "install-into-a-repository", "initialize-in-a-repository", "deploy-and-stay-portable"],
       "runs_when": "Every browser request to the site root.",
       "depended_on_by": ["Public landing / Mode A deployment"],
-      "depends_on": ["guide/lib/Content.php", "guide/lib/helpers.php", ".vibekb/project/identity.md", "assets/css/homepage.css", "assets/js/homepage.js", "assets/images/homepage-developer-journey.webp", "assets/images/homepage-developer-journey.png", "install.php", "INSTALLER.md", "prompts/INTEGRATE_VIBEKB.md", "DEPLOYMENT.md", "PRODUCT.md"],
+      "depends_on": ["guide/lib/Content.php", "guide/lib/helpers.php", ".vibekb/project/identity.md", "assets/css/homepage.css", "assets/js/homepage.js", "assets/images/homepage-developer-journey.webp", "assets/images/homepage-developer-journey.png", "cmd/vibekb/main.go", "internal/installer/installer.go", "INSTALLER.md", "prompts/INTEGRATE_VIBEKB.md", "DEPLOYMENT.md", "PRODUCT.md", "go.mod"],
       "safety": "moderate-impact",
-      "test_after_change": "Load the homepage; confirm section order problem → install → compatibility → understanding → proof; verify install commands and compatibility claims against INSTALLER.md / PRODUCT.md / DEPLOYMENT.md; confirm no auto-analyze claims.",
+      "test_after_change": "Load the homepage; confirm section order problem → install → compatibility → understanding → proof; verify install commands and compatibility claims against INSTALLER.md / README.md / go.mod / PRODUCT.md / DEPLOYMENT.md (native Go install, no PHP required to install, PHP 8.2+ after); confirm Coming soon excludes Native CLI and Repository doctor; confirm no auto-analyze claims.",
       "provenance": "verified-from-source"
     },
     {

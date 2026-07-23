@@ -110,23 +110,22 @@
     </header>
 
             <section class="work-summary callout callout--work">
-            <h2>Make vibekb install truly native (no PHP required to install)</h2>
+            <h2>Update homepage for the native Go installer</h2>
             <div class="badge-row">
                 <span class="badge badge--info">complete</span>                                    <span class="badge badge--ok">Verified from source</span>                            </div>
             <dl class="rail-dl work-meta">
-                <dt>Objective</dt><dd>Move installation into the Go CLI so `vibekb install` copies the runtime and scaffolds .vibekb/ from an embedded payload, with no PHP process and no live source clone — while leaving the PHP runtime, guide, model loader, and generator untouched.</dd>                                    <dt>Affected functionality</dt><dd><a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/bootstrap-workspace.html">Bootstrap the VibeKB workspace</a> <a class="chip" href="../functionality/run-the-developer-cli.html">Run VibeKB from one developer CLI</a></dd>
-                                                    <dt>Expected files</dt><dd><code class="chip chip--file">embed.go</code> <code class="chip chip--file">internal/installer/installer.go</code> <code class="chip chip--file">internal/installer/console.go</code> <code class="chip chip--file">install.php</code> <code class="chip chip--file">tools/lib/Starter.php</code> <code class="chip chip--file">template/starter/starter.json</code> <code class="chip chip--file">template/manifest.json</code></dd>
-                                <dt>Data impact</dt><dd>None to the runtime. Installation writes into target repositories only (payload + fresh .vibekb/ + .installer.json); the guide, model loader, and generator are unchanged.</dd>                <dt>Risks</dt><dd>Duplicating the starter definition (avoided — one template/starter/ read by Go and PHP); requiring PHP to install (removed — native verified with PHP off PATH); breaking bootstrap on targets (avoided — template/starter/ is installed); breaking the self-hosted-repo guard (kept — refuses self_hosted models).</dd>            </dl>
+                <dt>Objective</dt><dd>Make the public homepage accurately describe the native `vibekb install` workflow (clone → build Go CLI → install → coding agent), remove outdated PHP-install and Coming soon claims, strip em dashes from homepage copy, and keep the PHP post-install runtime distinction clear.</dd>                                    <dt>Affected functionality</dt><dd><a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a></dd>
+                                                    <dt>Expected files</dt><dd><code class="chip chip--file">index.php</code> <code class="chip chip--file">.vibekb/work/current.md</code> <code class="chip chip--file">.vibekb/work/handoff.md</code> <code class="chip chip--file">.vibekb/memory/changes/homepage-native-installer-copy.md</code> <code class="chip chip--file">.vibekb/files/important-files.json</code> <code class="chip chip--file">.vibekb/manifest.json</code> <code class="chip chip--file">.vibekb/project/identity.md</code> <code class="chip chip--file">.vibekb/functionality/records/initialize-in-a-repository.md</code></dd>
+                                <dt>Data impact</dt><dd>None to runtime behaviour. Homepage marketing copy and self-model records only; `/docs` regenerated.</dd>                <dt>Risks</dt><dd>Implying VibeKB is entirely Go (avoided — PHP kept as post-install runtime); inventing brew/winget/curl commands (avoided — Coming soon only).</dd>            </dl>
         </section>
 
         <section class="doc-section content-section">
             <div class="prose reading-column"><h3>Status</h3>
 <p>Complete. See <code>.vibekb/work/handoff.md</code>.</p>
-<h3>Decisions recorded</h3>
-<p><code>decision:native-installer-embedded-payload</code> — installation is native to the Go
-binary, from an embedded payload; PHP is required only to run the guide.
-<code>decision:installer-template-not-duplicated-tree</code> updated for the embed + starter
-data mechanism. Full assessment in <code>ARCHITECTURE.md</code>.</p></div>
+<h3>Decisions / changes recorded</h3>
+<p><code>change:homepage-native-installer-copy</code> — homepage install copy matches the
+native Go installer; requirements and Coming soon reconciled with ARCHITECTURE.md
+Phase 2.</p></div>
         </section>
     
     <nav class="cross-links" aria-label="Related views">
@@ -143,7 +142,7 @@ data mechanism. Full assessment in <code>ARCHITECTURE.md</code>.</p></div>
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 02:00 UTC · source commit 3956dbc (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 02:34 UTC · source commit eb2f948 (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

@@ -2,8 +2,8 @@
 id: identity
 type: project
 title: VibeKB
-one_liner: A living software model that explains what your application is currently doing — organized around functionality, kept honest as AI coding agents change the code.
-summary: A repository-resident living software model that explains what a software project is currently doing — organized around functionality — and keeps that explanation honest and resistant to drift while AI coding agents change the code.
+one_liner: A living software model that explains what your application is currently doing, organized around functionality, kept honest as AI coding agents change the code.
+summary: A repository-resident living software model that explains what a software project is currently doing, organized around functionality, and keeps that explanation honest and resistant to drift while AI coding agents change the code.
 updated: 2026-07-22
 ---
 

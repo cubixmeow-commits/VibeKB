@@ -1,26 +1,25 @@
 ---
 id: current-work
 type: work
-title: Make vibekb install truly native (no PHP required to install)
-objective: Move installation into the Go CLI so `vibekb install` copies the runtime and scaffolds .vibekb/ from an embedded payload, with no PHP process and no live source clone — while leaving the PHP runtime, guide, model loader, and generator untouched.
-summary: Complete — native Go installer with embedded payload; starter model turned into shared data (template/starter/); install.php is now a wrapper; model reconciled. See handoff.md.
-requested_by: cubix.meow@gmail.com
+title: Update homepage for the native Go installer
+objective: Make the public homepage accurately describe the native `vibekb install` workflow (clone → build Go CLI → install → coding agent), remove outdated PHP-install and Coming soon claims, strip em dashes from homepage copy, and keep the PHP post-install runtime distinction clear.
+summary: Complete — homepage matches INSTALLER.md native Go flow; PHP required only after install; Native CLI / Repository doctor removed from Coming soon.
+requested_by: Cursor cloud agent task
 status: complete
 verification_state: verified-from-source
 updated: 2026-07-23
-affected_functionality: [install-into-a-repository, bootstrap-workspace, run-the-developer-cli]
-expected_files: [embed.go, internal/installer/installer.go, internal/installer/console.go, install.php, tools/lib/Starter.php, template/starter/starter.json, template/manifest.json]
-data_impact: None to the runtime. Installation writes into target repositories only (payload + fresh .vibekb/ + .installer.json); the guide, model loader, and generator are unchanged.
-risks: [Duplicating the starter definition (avoided — one template/starter/ read by Go and PHP); requiring PHP to install (removed — native, verified with PHP off PATH); breaking bootstrap on targets (avoided — template/starter/ is installed); breaking the self-hosted-repo guard (kept — refuses self_hosted models).]
+affected_functionality: [install-into-a-repository, initialize-in-a-repository, deploy-and-stay-portable]
+expected_files: [index.php, .vibekb/work/current.md, .vibekb/work/handoff.md, .vibekb/memory/changes/homepage-native-installer-copy.md, .vibekb/files/important-files.json, .vibekb/manifest.json, .vibekb/project/identity.md, .vibekb/functionality/records/initialize-in-a-repository.md]
+data_impact: None to runtime behaviour. Homepage marketing copy and self-model records only; `/docs` regenerated.
+risks: [Implying VibeKB is entirely Go (avoided — PHP kept as post-install runtime); inventing brew/winget/curl commands (avoided — Coming soon only).]
 ---
 
 ## Status
 
 Complete. See `.vibekb/work/handoff.md`.
 
-## Decisions recorded
+## Decisions / changes recorded
 
-`decision:native-installer-embedded-payload` — installation is native to the Go
-binary, from an embedded payload; PHP is required only to run the guide.
-`decision:installer-template-not-duplicated-tree` updated for the embed + starter
-data mechanism. Full assessment in `ARCHITECTURE.md`.
+`change:homepage-native-installer-copy` — homepage install copy matches the
+native Go installer; requirements and Coming soon reconciled with ARCHITECTURE.md
+Phase 2.

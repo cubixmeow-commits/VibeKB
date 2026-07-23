@@ -7,14 +7,14 @@ summary: A documented, project-agnostic process (INITIALIZE.md plus a paste-read
 status: partial
 verification: reported-by-developer
 user_facing: true
-trigger: A developer runs `php install.php` to prepare the repo, then runs the integration prompt in their coding agent.
-updated: 2026-07-22
+trigger: A developer runs `vibekb install` to prepare the repo, then runs the integration prompt in their coding agent.
+updated: 2026-07-23
 tags: [integration, onboarding, process]
 files: [INITIALIZE.md, prompts/INTEGRATE_VIBEKB.md, index.php]
 reads: []
 writes: []
 depends_on: [install-into-a-repository, load-living-model, validate-model, generate-static-snapshot]
-related_memory: [assumption:agents-follow-session-workflow, change:homepage-install-fast-start, change:homepage-compatibility-section]
+related_memory: [assumption:agents-follow-session-workflow, change:homepage-install-fast-start, change:homepage-compatibility-section, change:homepage-native-installer-copy]
 ---
 
 ## In one sentence
@@ -28,14 +28,14 @@ app without modifying it.
 
 `INITIALIZE.md` defines the step-by-step process and
 `prompts/INTEGRATE_VIBEKB.md` is a project-agnostic prompt that drives it. The
-workspace it starts from is now prepared by the installer
-(`install-into-a-repository`) rather than a manual copy: `php install.php`
-installs the runtime and scaffolds an empty, valid `.vibekb/`. The *building* of
-the model is still a **documented process**, not executable code — the quality
-depends on the agent following it. It is demonstrated by the bundled example
-models under `examples/` (the SousMeow model and the StopPR field-test audit)
-and, most directly, by this repository — VibeKB's own model was produced by this
-workflow.
+workspace it starts from is now prepared by the native installer
+(`install-into-a-repository`) rather than a manual copy: `vibekb install`
+copies the runtime and scaffolds an empty, valid `.vibekb/` (no PHP required to
+install). The *building* of the model is still a **documented process**, not
+executable code — the quality depends on the agent following it. It is
+demonstrated by the bundled example models under `examples/` (the SousMeow model
+and the StopPR field-test audit) and, most directly, by this repository —
+VibeKB's own model was produced by this workflow.
 
 ## Implementation map
 
