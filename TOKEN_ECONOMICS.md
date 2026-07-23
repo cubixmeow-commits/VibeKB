@@ -60,6 +60,16 @@ This pushes the expensive-to-automate-but-cheap-as-a-script work (drift
 detection, broken-reference checks, affected-file mapping, snapshot sync,
 validation) entirely off the token budget.
 
+> **Layout note (post repository-safety redesign).** Measurements below are of
+> **this self-hosted VibeKB repository**, where the runtime still lives at the
+> root (`guide/`, `tools/`) and agents orient via root `CLAUDE.md`. A **target
+> repository** after `vibekb install` keeps that same runtime under
+> `.vibekb/runtime/`, reference docs under `.vibekb/reference/`, and the
+> integration prompt at `.vibekb/prompts/INTEGRATE_VIBEKB.md`. Session-start
+> orientation there is `php .vibekb/runtime/tools/vibekb.php status` plus any
+> managed block already present in the project's own `AGENTS.md`/`CLAUDE.md` —
+> VibeKB does not own those files. See `docs/REPOSITORY_SAFETY.md`.
+
 **What is efficient (measured):**
 
 - **Compact command surface.** `status` output ≈ **428 tok**, `check` ≈ **237

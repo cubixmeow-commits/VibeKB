@@ -12,7 +12,7 @@ available as `/install`). It downloads the matching asset from the latest GitHub
 Release. Homebrew and Winget remain later milestones. Code signing (Apple
 notarization, Windows Authenticode) is the recommended next hardening step.
 
-## Publish v0.1.0
+## Publish v0.2.0
 
 On `main`, with a clean tree and CI green:
 
@@ -24,35 +24,43 @@ git pull origin main
 PKG=github.com/cubixmeow-commits/vibekb/internal/buildinfo
 go test ./...
 CGO_ENABLED=0 go build -trimpath \
-  -ldflags "-s -w -X ${PKG}.Version=0.1.0 -X ${PKG}.Commit=$(git rev-parse --short HEAD) -X ${PKG}.Built=$(date -u +%Y-%m-%d)" \
+  -ldflags "-s -w -X ${PKG}.Version=0.2.0 -X ${PKG}.Commit=$(git rev-parse --short HEAD) -X ${PKG}.Built=$(date -u +%Y-%m-%d)" \
   -o vibekb ./cmd/vibekb
 ./vibekb version
 
-git tag -a v0.1.0 -m "vibekb 0.1.0"
-git push origin v0.1.0
+git tag -a v0.2.0 -m "vibekb 0.2.0"
+git push origin v0.2.0
 ```
 
 Then open the Actions run for **Release vibekb CLI** and, when it finishes, the
 [Releases](https://github.com/cubixmeow-commits/VibeKB/releases) page for
-`v0.1.0`.
+`v0.2.0`. Prefer the prepared notes in
+[`docs/RELEASE_NOTES_0.2.0.md`](./docs/RELEASE_NOTES_0.2.0.md) (title:
+**VibeKB 0.2.0 — Safe Repository Integration**) as the GitHub Release body;
+keep [`CHANGELOG.md`](./CHANGELOG.md) as the long-form history.
 
 ## Release artifacts
 
 Each tag produces:
 
-| File | Platform |
-|------|----------|
-| `vibekb-windows-amd64.exe` | Windows x86_64 |
-| `vibekb-windows-arm64.exe` | Windows ARM64 |
-| `vibekb-darwin-amd64` | macOS Intel |
-| `vibekb-darwin-arm64` | macOS Apple Silicon |
-| `vibekb-linux-amd64` | Linux x86_64 |
-| `vibekb-linux-arm64` | Linux ARM64 |
-| `checksums.txt` | SHA256 of every binary above |
+| File | Platform | Consumed by |
+|------|----------|-------------|
+| `vibekb-darwin-arm64` | macOS Apple Silicon | `install.sh` |
+| `vibekb-darwin-amd64` | macOS Intel | `install.sh` |
+| `vibekb-linux-amd64` | Linux x86_64 | `install.sh` |
+| `vibekb-linux-arm64` | Linux ARM64 | `install.sh` |
+| `vibekb-windows-amd64.exe` | Windows x86_64 | manual download |
+| `vibekb-windows-arm64.exe` | Windows ARM64 | manual download |
+| `checksums.txt` | SHA256 of every binary above | manual verify |
+
+Unix asset names are exactly what [`install.sh`](./install.sh) builds as
+`vibekb-${GOOS}-${GOARCH}`. The release workflow refuses to publish if any of
+those files (or the Windows manuals / `checksums.txt`) is missing.
 
 Binaries are built with `CGO_ENABLED=0`, `-trimpath`, and `-ldflags "-s -w …"`
 so they are static where the Go toolchain allows, stripped, and stamped with
-`Version`, `Commit`, and `Built` for `vibekb version`.
+`Version`, `Commit`, and `Built` for `vibekb version`. The tagged commit is what
+is checked out and tested (Go + PHP suite) before any artifact is uploaded.
 
 ## End-user install (primary)
 

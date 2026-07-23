@@ -108,7 +108,7 @@
     <header class="page-head reading-column">
         <p class="eyebrow">Integration</p>
         <h1>Uninstall VibeKB from a repository</h1>
-        <p class="lede">`vibekb uninstall` removes VibeKB from a repository, ownership-aware. Driven by the `.vibekb/install.json` manifest, it deletes VibeKB-owned files (everything under `.vibekb/` and namespaced adapters) and strips only VibeKB&#039;s managed block from shared files (AGENTS.md, CLAUDE.md), preserving everything else. `--keep-knowledge` retains the model records; `--dry-run` previews.</p>
+        <p class="lede">`vibekb uninstall` removes VibeKB from a repository, ownership-aware. Driven by the `.vibekb/install.json` manifest, it deletes VibeKB-owned files (everything under `.vibekb/` and namespaced adapters) and strips only VibeKB&#039;s managed block from shared files (AGENTS.md, CLAUDE.md), preserving everything else. Shared-file backups are retained under `--keep-knowledge` or relocated to a stamped temp directory on a full uninstall so they are not lost with `.vibekb/`.</p>
         <div class="badge-row">
             <span class="badge badge--ok">Implemented</span>            <span class="badge badge--ok">Verified from source</span>            <span class="badge badge--info">User-facing</span>        </div>
     </header>
@@ -125,16 +125,23 @@ only the managed block (via the block engine), backing the file up under
 <code>.vibekb/backups/</code> first; a shared file VibeKB created solely to hold its block is
 removed, while a file that pre-existed VibeKB is kept. Namespaced adapters are
 removed (and now-empty parent directories tidied), unless the manifest marks them
-pre-existing. Finally it removes <code>.vibekb/</code> — or, with <code>--keep-knowledge</code>, removes
-only <code>runtime/</code>, <code>reference/</code>, <code>prompts/</code>, <code>generated/</code>, <code>backups/</code>, and
-<code>install.json</code>, retaining the model records. Files with malformed markers are left
-untouched and reported. <code>--dry-run</code> previews every action.</p>
+pre-existing.</p>
+<p>With <code>--keep-knowledge</code>, it removes only <code>runtime/</code>, <code>reference/</code>, <code>prompts/</code>,
+<code>generated/</code>, and <code>install.json</code>, retaining the model records <strong>and</strong>
+<code>.vibekb/backups/</code>. On a full uninstall it relocates any <code>.vibekb/backups/</code>
+contents to a stamped directory under the system temp folder (and prints that
+path) before deleting <code>.vibekb/</code>, so shared-file snapshots survive. Files with
+malformed markers are left untouched and reported. <code>--dry-run</code> previews every
+action.</p>
 <p>Without a <code>.vibekb/install.json</code> manifest, uninstall refuses to strip managed
 blocks (it cannot prove ownership) and reports that a legacy install should be
 migrated first.</p>
 <h3>Implementation map</h3>
 <ul>
-<li><code>internal/installer/uninstall.go</code> — the manifest-driven removal, flags, and report.</li>
+<li><code>internal/installer/uninstall.go</code> — the manifest-driven removal, backup</li>
+</ul>
+<p>relocation, flags, and report.</p>
+<ul>
 <li><code>internal/installer/block.go</code> — <code>removeManagedBlock</code> (preserves outside content,</li>
 </ul>
 <p>refuses malformed markers).</p>
@@ -149,7 +156,8 @@ migrated first.</p>
 </ul>
 <h3>Use caution</h3>
 <p>Uninstall must never delete a shared file&#039;s non-VibeKB content, and never remove a
-file it cannot prove VibeKB created. Ambiguity is preserved, not resolved.</p></div>
+file it cannot prove VibeKB created. Ambiguity is preserved, not resolved.
+Shared-file backups must outlive a full uninstall.</p></div>
                     </div>
 
         <aside class="detail-rail" aria-label="Record metadata">
@@ -206,7 +214,7 @@ file it cannot prove VibeKB created. Ambiguity is preserved, not resolved.</p></
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 07:06 UTC · source commit a0d95aa (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 07:58 UTC · source commit bb55b0a (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

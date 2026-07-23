@@ -8,13 +8,30 @@ import (
 	"strings"
 )
 
-// legacySignatures identify a root-level file that a pre-2.0 install copied
-// verbatim from VibeKB, so migration can recognise VibeKB-owned content without a
-// manifest. A match plus the absence of a managed block means the whole file was
-// VibeKB's.
+// legacyTitles are the exact first-line titles of the whole-file pointer docs a
+// pre-2.0 install wrote at the repository root. Migration only converts a file
+// when this title is the first non-empty line *and* the supporting signatures
+// below are present — never on a loose substring match alone.
+var legacyTitles = map[string]string{
+	"CLAUDE.md": "# CLAUDE.md — Canonical operating rules for AI agents working on VibeKB",
+	"AGENTS.md": "# AGENTS.md — Entry point for coding agents",
+}
+
+// legacySignatures are additional phrases that must all appear in a legacy
+// whole-file pointer. Combined with legacyTitles they identify VibeKB-owned
+// content without a manifest, without treating a user file that merely quotes
+// one of these phrases as replaceable.
 var legacySignatures = map[string][]string{
-	"CLAUDE.md": {"Canonical operating rules for AI agents working on VibeKB", "php tools/vibekb.php status"},
-	"AGENTS.md": {"Entry point for coding agents", "php tools/vibekb.php status"},
+	"CLAUDE.md": {
+		"Canonical operating rules for AI agents working on VibeKB",
+		"php tools/vibekb.php status",
+		"VibeKB is self-hosted",
+	},
+	"AGENTS.md": {
+		"Entry point for coding agents",
+		"php tools/vibekb.php status",
+		"The canonical, repository-owned",
+	},
 }
 
 // Migrate consolidates a legacy root-level VibeKB install under .vibekb/. It
@@ -195,16 +212,32 @@ func Migrate(args []string) int {
 }
 
 func matchesLegacy(name string, b []byte) bool {
-	sigs, ok := legacySignatures[name]
+	title, ok := legacyTitles[name]
 	if !ok {
 		return false
 	}
+	if firstNonEmptyLine(string(b)) != title {
+		return false
+	}
+	sigs := legacySignatures[name]
 	for _, s := range sigs {
 		if !bytes.Contains(b, []byte(s)) {
 			return false
 		}
 	}
 	return true
+}
+
+// firstNonEmptyLine returns the first line of s that is not blank, with trailing
+// CR stripped so CRLF files compare cleanly against the LF titles above.
+func firstNonEmptyLine(s string) string {
+	for _, line := range strings.Split(s, "\n") {
+		line = strings.TrimRight(line, "\r")
+		if strings.TrimSpace(line) != "" {
+			return line
+		}
+	}
+	return ""
 }
 
 // embeddedFileMatches reports whether b equals the embedded file at embedPath.

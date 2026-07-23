@@ -40,12 +40,16 @@ root, without analysing it, and without launching PHP.** VibeKB owns only
 `.vibekb/`; it never replaces your `README`, `AGENTS.md`, or `CLAUDE.md` (see
 [docs/REPOSITORY_SAFETY.md](./docs/REPOSITORY_SAFETY.md)). Then open your project in a coding agent (Claude Code,
 Cursor, Codex, …) and ask it to *build the first VibeKB model using
-`prompts/INTEGRATE_VIBEKB.md`*.
+`.vibekb/prompts/INTEGRATE_VIBEKB.md`*.
 
 - Preview the plan first: `vibekb install --dry-run .`
 - Upgrade later (refresh runtime, keep your model): re-run `vibekb install`.
-- Repair a workspace any time: `php tools/vibekb.php bootstrap`.
+- Repair a workspace any time:
+  `php .vibekb/runtime/tools/vibekb.php bootstrap` (target install) or
+  `php tools/vibekb.php bootstrap` (this self-hosted repository).
 - Legacy `php install.php` still works — it now forwards to `vibekb install`.
+- Remove VibeKB later: `vibekb uninstall .` (or `--keep-knowledge`).
+- Consolidate a pre-2.0 root-level install: `vibekb migrate .`
 
 **PHP 8.2+ is required only to run the installed guide and model commands**, never
 to install. See [INSTALLER.md](./INSTALLER.md) for the full flow and

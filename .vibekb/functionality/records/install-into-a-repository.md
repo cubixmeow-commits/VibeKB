@@ -10,7 +10,7 @@ user_facing: true
 trigger: A developer runs `vibekb install [target]` (or the legacy `php install.php`, which now forwards to it).
 updated: 2026-07-23
 tags: [integration, installer, onboarding, scaffolding, go, embed, native, repository-safety, managed-block]
-files: [cmd/vibekb/main.go, internal/installer/installer.go, internal/installer/plan.go, internal/installer/apply.go, internal/installer/block.go, internal/installer/manifest.go, internal/installer/state.go, internal/installer/scaffold.go, internal/installer/console.go, embed.go, template/manifest.json, template/starter/starter.json, template/integrations/agents-block.md, tools/lib/Starter.php, install.php]
+files: [cmd/vibekb/main.go, internal/installer/installer.go, internal/installer/plan.go, internal/installer/apply.go, internal/installer/block.go, internal/installer/manifest.go, internal/installer/state.go, internal/installer/scaffold.go, internal/installer/console.go, internal/installer/scenarios_test.go, internal/installer/block_test.go, internal/installer/installer_test.go, embed.go, template/manifest.json, template/starter/starter.json, template/integrations/agents-block.md, tools/lib/Starter.php, install.php]
 reads: [template/manifest.json, template/starter, template/integrations]
 writes: []
 config: []
