@@ -2,6 +2,7 @@ package installer
 
 import (
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -259,10 +260,105 @@ func TestUninstallKeepKnowledge(t *testing.T) {
 	}
 }
 
+func TestForceTakesOverForeignVibekb(t *testing.T) {
+	dir := tmpRepo(t)
+	os.MkdirAll(filepath.Join(dir, ".vibekb"), 0o755)
+	os.WriteFile(filepath.Join(dir, ".vibekb", "notes.txt"), []byte("mine\n"), 0o644)
+	if code := installInto(t, dir, "--force"); code != 0 {
+		t.Fatalf("install --force exit %d", code)
+	}
+	if !exists(t, dir, ".vibekb/manifest.json") || !exists(t, dir, ".vibekb/install.json") {
+		t.Fatal("--force should scaffold a recognised VibeKB model")
+	}
+	// Foreign content is not deleted; VibeKB only writes its own paths.
+	if !exists(t, dir, ".vibekb/notes.txt") {
+		t.Fatal("--force must not delete unrecognized files inside .vibekb/")
+	}
+	if got := read(t, dir, ".vibekb/notes.txt"); got != "mine\n" {
+		t.Fatalf("foreign content altered: %q", got)
+	}
+}
+
+func TestUninstallPreservesSharedFileBackups(t *testing.T) {
+	dir := tmpRepo(t)
+	orig := "# My rules\n\nKeep me.\n"
+	os.WriteFile(filepath.Join(dir, "AGENTS.md"), []byte(orig), 0o644)
+	installInto(t, dir)
+	if !exists(t, dir, ".vibekb/backups") {
+		t.Fatal("precondition: install should have backed up AGENTS.md")
+	}
+	before, _ := os.ReadDir(os.TempDir())
+	beforeSet := map[string]bool{}
+	for _, e := range before {
+		beforeSet[e.Name()] = true
+	}
+	if code := Uninstall([]string{"--yes", dir}); code != 0 {
+		t.Fatalf("uninstall exit %d", code)
+	}
+	if exists(t, dir, ".vibekb") {
+		t.Fatal("uninstall left .vibekb/")
+	}
+	// Backups must survive outside the deleted .vibekb/ (relocated under temp).
+	entries, _ := os.ReadDir(os.TempDir())
+	found := false
+	for _, e := range entries {
+		name := e.Name()
+		if beforeSet[name] || !strings.HasPrefix(name, "vibekb-backups-") || !e.IsDir() {
+			continue
+		}
+		bakEntries, _ := os.ReadDir(filepath.Join(os.TempDir(), name))
+		for _, b := range bakEntries {
+			if strings.HasPrefix(b.Name(), "AGENTS.md.") && strings.HasSuffix(b.Name(), ".bak") {
+				body, _ := os.ReadFile(filepath.Join(os.TempDir(), name, b.Name()))
+				if strings.Contains(string(body), "Keep me.") {
+					found = true
+				}
+			}
+		}
+	}
+	if !found {
+		t.Fatal("uninstall did not preserve shared-file backups outside .vibekb/")
+	}
+	got := read(t, dir, "AGENTS.md")
+	if !strings.Contains(got, "Keep me.") || strings.Contains(got, blockStartPrefix) {
+		t.Fatalf("shared content not restored cleanly:\n%s", got)
+	}
+}
+
+func TestUninstallKeepKnowledgeRetainsBackups(t *testing.T) {
+	dir := tmpRepo(t)
+	os.WriteFile(filepath.Join(dir, "AGENTS.md"), []byte("# rules\n"), 0o644)
+	installInto(t, dir)
+	Uninstall([]string{"--yes", "--keep-knowledge", dir})
+	if !exists(t, dir, ".vibekb/backups") {
+		t.Fatal("--keep-knowledge must retain .vibekb/backups/")
+	}
+	if exists(t, dir, ".vibekb/runtime") {
+		t.Fatal("--keep-knowledge should still remove runtime")
+	}
+}
+
+func TestMigrateRejectsLookalikeUserClaude(t *testing.T) {
+	dir := tmpRepo(t)
+	// Quotes a VibeKB phrase but is not a whole-file pointer (wrong title line).
+	lookalike := "# My Claude rules\n\nSee also Canonical operating rules for AI agents working on VibeKB\nand php tools/vibekb.php status and VibeKB is self-hosted.\n"
+	os.WriteFile(filepath.Join(dir, "CLAUDE.md"), []byte(lookalike), 0o644)
+	os.MkdirAll(filepath.Join(dir, ".vibekb"), 0o755)
+	os.WriteFile(filepath.Join(dir, ".vibekb", ".installer.json"), []byte(`{}`), 0o644)
+	Migrate([]string{dir})
+	got := read(t, dir, "CLAUDE.md")
+	if !strings.Contains(got, "# My Claude rules") {
+		t.Fatalf("lookalike user CLAUDE.md was replaced:\n%s", got)
+	}
+	if strings.HasPrefix(strings.TrimLeft(got, "\r\n"), "<!-- VIBEKB:START") && !strings.Contains(got, "# My Claude rules") {
+		t.Fatal("user title lost")
+	}
+}
+
 func TestMigrateFromLegacyRootDocs(t *testing.T) {
 	dir := tmpRepo(t)
-	// A legacy whole-file VibeKB CLAUDE.md pointer.
-	legacy := "# CLAUDE.md — Canonical operating rules for AI agents working on VibeKB\n\nRun php tools/vibekb.php status\n"
+	// A legacy whole-file VibeKB CLAUDE.md pointer (title + signatures).
+	legacy := "# CLAUDE.md — Canonical operating rules for AI agents working on VibeKB\n\nVibeKB is self-hosted.\n\nRun php tools/vibekb.php status\n"
 	os.WriteFile(filepath.Join(dir, "CLAUDE.md"), []byte(legacy), 0o644)
 	// A legacy installer state to mark it as a prior install.
 	os.MkdirAll(filepath.Join(dir, ".vibekb"), 0o755)
@@ -302,5 +398,38 @@ func TestMigratePreservesUserModifiedRootDoc(t *testing.T) {
 	// It should have received a managed block (integration), not been replaced.
 	if !strings.Contains(got, blockStartPrefix) {
 		t.Fatalf("expected a managed block added to user file:\n%s", got)
+	}
+}
+
+func TestConsolidatedGenerateCopiesAssets(t *testing.T) {
+	php, err := exec.LookPath("php")
+	if err != nil {
+		t.Skip("php not available")
+	}
+	dir := tmpRepo(t)
+	if code := installInto(t, dir); code != 0 {
+		t.Fatalf("install exit %d", code)
+	}
+	gen := filepath.Join(dir, ".vibekb", "runtime", "tools", "generate-static.php")
+	cmd := exec.Command(php, gen)
+	cmd.Dir = dir
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		t.Fatalf("generate-static failed: %v\n%s", err, out)
+	}
+	css := filepath.Join(dir, ".vibekb", "generated", "assets", "css", "guide.css")
+	js := filepath.Join(dir, ".vibekb", "generated", "assets", "js", "guide.js")
+	if !fileExists(css) {
+		t.Fatalf("consolidated generate missing CSS at %s\n%s", css, out)
+	}
+	if !fileExists(js) {
+		t.Fatalf("consolidated generate missing JS at %s\n%s", js, out)
+	}
+	if !exists(t, dir, ".vibekb/generated/index.html") {
+		t.Fatal("consolidated generate did not write index.html under .vibekb/generated/")
+	}
+	// Must never write into a repository-owned root docs/ directory.
+	if exists(t, dir, "docs") {
+		t.Fatal("consolidated generate wrote root docs/ — should use .vibekb/generated/")
 	}
 }

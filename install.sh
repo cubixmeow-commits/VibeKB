@@ -93,6 +93,10 @@ Manual binaries: https://github.com/${REPO}/releases/latest"
   fi
 
   ASSET="${BIN_NAME}-${GOOS}-${GOARCH}"
+  # Must match the unix assets published by .github/workflows/release.yml:
+  #   vibekb-darwin-arm64, vibekb-darwin-amd64,
+  #   vibekb-linux-amd64,  vibekb-linux-arm64
+  # (Windows release assets use a .exe suffix and are manual-download only.)
 }
 
 # --- download helpers --------------------------------------------------------

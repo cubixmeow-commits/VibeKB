@@ -3,7 +3,7 @@ id: migrate-legacy-install
 type: functionality
 title: Migrate a legacy root-level install
 area: integration
-summary: `vibekb migrate` consolidates a pre-2.0 root-level VibeKB install under `.vibekb/`. It installs the consolidated layout, converts a whole-file VibeKB CLAUDE.md/AGENTS.md into a managed block (preserving user-authored content), relocates the reference docs, and removes only root-level files it can positively identify as unmodified VibeKB content by content signature or byte-for-byte hash. Modified or ambiguous files are preserved and reported; backups are written under `.vibekb/backups/`.
+summary: `vibekb migrate` consolidates a pre-2.0 root-level VibeKB install under `.vibekb/`. It installs the consolidated layout, converts a whole-file VibeKB CLAUDE.md/AGENTS.md into a managed block only when the exact first-line title plus supporting signatures match (preserving user-authored and lookalike content), relocates the reference docs, and removes only root-level files it can positively identify as unmodified VibeKB content by byte-for-byte hash. Modified or ambiguous files are preserved and reported; backups are written under `.vibekb/backups/`.
 status: implemented
 verification: verified-from-source
 user_facing: true
@@ -28,10 +28,12 @@ it can prove are unmodified VibeKB content.
 
 Migration runs in a safe order:
 
-1. **Convert legacy shared docs first.** If `CLAUDE.md`/`AGENTS.md` matches a
-   legacy VibeKB whole-file signature and has no managed block, it is backed up
-   and replaced by a managed block; a user-authored file is left in place (a block
-   is added later by the consolidation step, preserving its text).
+1. **Convert legacy shared docs first.** If `CLAUDE.md`/`AGENTS.md` has the exact
+   VibeKB whole-file title as its first non-empty line *and* all supporting
+   signatures, and has no managed block, it is backed up and replaced by a
+   managed block. A user-authored or lookalike file (wrong title, even if it
+   quotes VibeKB phrases) is left in place; a managed block is added later by the
+   consolidation step, preserving its text.
 2. **Install the consolidated layout** under `.vibekb/` (payload + adapters +
    model preserve/scaffold), writing `.vibekb/install.json`.
 3. **Relocate reference docs.** Root `PRODUCT.md`, `SCHEMA.md`, `INITIALIZE.md`,

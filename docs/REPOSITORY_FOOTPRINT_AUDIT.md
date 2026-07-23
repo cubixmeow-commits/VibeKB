@@ -1,17 +1,18 @@
-# REPOSITORY_FOOTPRINT_AUDIT.md — What VibeKB writes into a target repository
+# REPOSITORY_FOOTPRINT_AUDIT.md — Historical audit of the pre-2.0 installer
 
-> Phase 1 deliverable. This is a complete, source-derived inventory of every
-> path VibeKB may create, copy, overwrite, append to, update, migrate, remove,
-> regenerate, or assume it owns inside a **target** repository (the repo a user
-> runs `vibekb install .` in — *not* VibeKB's own source repo).
->
-> It was produced by reading the installer and tooling source, not the docs:
-> `internal/installer/*.go`, `internal/cli/*.go`, `internal/phpcore/*.go`,
-> `embed.go`, `template/manifest.json`, `install.php`, `tools/*.php`,
-> `guide/index.php`. The design that follows this audit lives in
+> **Historical (Phase 1 deliverable, pre-2.0).** This document inventories the
+> *old* root-level installer footprint that the repository-safety redesign
+> replaced. It is kept as evidence of what was wrong and why the redesign
+> happened. **It does not describe current behavior.** For the live ownership
+> model, install/migrate/uninstall rules, and guarantees, see
 > [REPOSITORY_SAFETY.md](./REPOSITORY_SAFETY.md).
+>
+> Produced by reading the installer and tooling source as it existed before the
+> consolidation: `internal/installer/*.go`, `internal/cli/*.go`,
+> `internal/phpcore/*.go`, `embed.go`, `template/manifest.json`, `install.php`,
+> `tools/*.php`, `guide/index.php`.
 
-## How installation works today (the mechanics)
+## How installation worked then (pre-2.0 mechanics)
 
 1. `vibekb install [target]` runs `internal/installer.Run` (Go, no PHP). The
    legacy `php install.php` is a thin wrapper that forwards to the same binary.
@@ -35,7 +36,7 @@ by the user, another tool, or a framework.
 
 ---
 
-## Footprint inventory (current behavior)
+## Footprint inventory (pre-2.0 behavior)
 
 Legend for **Ownership**: `V` VibeKB-owned · `S` shared (may pre-exist, others
 may own) · `R` repository-owned. **Collision risk**: how likely the name already
@@ -166,4 +167,5 @@ shared/user-owned and must never be owned**, and **all of `PRODUCT.md`,
 
 See [REPOSITORY_SAFETY.md](./REPOSITORY_SAFETY.md) for the redesigned ownership
 model, the consolidated `.vibekb/` layout, and the safe installation, migration,
-doctor, and uninstall behavior that resolve every row above.
+doctor, and uninstall behavior that resolve every row above. That document — not
+this audit — is the source of truth for what VibeKB does now.

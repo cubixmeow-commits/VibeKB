@@ -10,12 +10,12 @@ user_facing: true
 trigger: A developer runs `vibekb <command>` (e.g. `vibekb install`, `vibekb doctor`, `vibekb check`) — install from anywhere, model commands from inside a VibeKB repository.
 updated: 2026-07-23
 tags: [cli, go, developer-tool, delegation, native-install, distribution]
-files: [cmd/vibekb/main.go, internal/cli/cli.go, internal/cli/doctor.go, internal/cli/version.go, internal/installer/doctor.go, internal/phpcore/phpcore.go, internal/buildinfo/buildinfo.go, go.mod, .github/workflows/release.yml, RELEASE.md, install.sh, .htaccess]
+files: [cmd/vibekb/main.go, internal/cli/cli.go, internal/cli/doctor.go, internal/cli/version.go, internal/installer/doctor.go, internal/phpcore/phpcore.go, internal/buildinfo/buildinfo.go, internal/buildinfo/buildinfo_test.go, go.mod, .github/workflows/release.yml, RELEASE.md, install.sh, .htaccess]
 reads: [tools/vibekb.php]
 writes: []
 config: []
 depends_on: [install-into-a-repository, migrate-legacy-install, uninstall-from-a-repository, bootstrap-workspace, validate-model, detect-drift, generate-static-snapshot]
-related_memory: [decision:go-front-end-php-core, decision:native-installer-embedded-payload, decision:two-modes-one-source, change:release-binaries-pipeline, change:website-curl-installer]
+related_memory: [decision:go-front-end-php-core, decision:native-installer-embedded-payload, decision:two-modes-one-source, change:release-binaries-pipeline, change:website-curl-installer, change:prepare-version-0-2-0]
 ---
 
 ## In one sentence
@@ -34,15 +34,15 @@ at link time:
 
 ```
 VibeKB
-Version: 0.1.0
+Version: 0.2.0
 Commit: 84c81d2
-Built: 2026-07-22
+Built: 2026-07-23
 Platform: darwin/arm64
 ```
 
 plus detected PHP and repository when present. Release builds inject Version,
 Commit, and Built via ldflags (see `.github/workflows/release.yml` and
-`RELEASE.md`). Development builds keep `0.1.0-dev` / `unknown` / `dev`.
+`RELEASE.md`). Development builds keep `0.2.0-dev` / `unknown` / `dev`.
 
 A developer runs `vibekb` from anywhere inside a VibeKB repository. `vibekb doctor`
 reports whether PHP 8.2+, git, and a `.vibekb/` workspace are present and ends with

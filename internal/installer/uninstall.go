@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 // Uninstall removes VibeKB from a repository, ownership-aware: VibeKB-owned files
@@ -56,6 +57,7 @@ func Uninstall(args []string) int {
 	}
 
 	var removed, kept, skipped []string
+	var preservedBackups string
 
 	// ---- shared files: strip only the managed block ------------------------
 	for _, rec := range im.Files {
@@ -124,8 +126,11 @@ func Uninstall(args []string) int {
 
 	// ---- .vibekb/ itself ---------------------------------------------------
 	vibekbRoot := filepath.Join(target, ".vibekb")
+	backupsDir := filepath.Join(vibekbRoot, "backups")
 	if opts.keepKnowledge {
-		for _, sub := range []string{"runtime", "reference", "prompts", "generated", "backups", "install.json"} {
+		// Retain model records and any shared-file backups; remove only runtime
+		// payload and the install manifest.
+		for _, sub := range []string{"runtime", "reference", "prompts", "generated", "install.json"} {
 			p := filepath.Join(vibekbRoot, sub)
 			if !pathExists(p) {
 				continue
@@ -138,11 +143,38 @@ func Uninstall(args []string) int {
 			removed = append(removed, ".vibekb/"+sub)
 		}
 		kept = append(kept, ".vibekb/ (model records retained via --keep-knowledge)")
+		if pathExists(backupsDir) {
+			kept = append(kept, ".vibekb/backups/ (shared-file backups retained)")
+		}
 	} else {
 		if pathExists(vibekbRoot) {
 			if opts.dryRun {
 				removed = append(removed, ".vibekb/ (entire directory)")
+				if dirHasEntries(backupsDir) {
+					kept = append(kept, ".vibekb/backups/ would be relocated so shared-file backups survive")
+				}
 			} else {
+				// Relocate backups out of .vibekb/ before deletion so install-
+				// and uninstall-time shared-file snapshots are not lost.
+				if dirHasEntries(backupsDir) {
+					stamp := time.Now().UTC().Format("20060102T150405.000Z")
+					dest := filepath.Join(os.TempDir(), "vibekb-backups-"+projectName(target)+"-"+stamp+"-"+fmt.Sprintf("%d", os.Getpid()))
+					// Ensure uniqueness even when two uninstalls land in the same millisecond.
+					for n := 0; pathExists(dest); n++ {
+						dest = filepath.Join(os.TempDir(), "vibekb-backups-"+projectName(target)+"-"+stamp+"-"+fmt.Sprintf("%d-%d", os.Getpid(), n))
+					}
+					if err := os.Rename(backupsDir, dest); err != nil {
+						// Cross-device rename can fail; fall back to copy+remove.
+						if copyErr := copyDir(backupsDir, dest); copyErr != nil {
+							c.warn("could not preserve .vibekb/backups/: " + copyErr.Error() + " (rename: " + err.Error() + ")")
+						} else {
+							_ = os.RemoveAll(backupsDir)
+							preservedBackups = dest
+						}
+					} else {
+						preservedBackups = dest
+					}
+				}
 				_ = os.RemoveAll(vibekbRoot)
 				removed = append(removed, ".vibekb/ (entire directory)")
 			}
@@ -160,18 +192,25 @@ func Uninstall(args []string) int {
 	for _, s := range skipped {
 		c.warn("skip    " + s)
 	}
+	if preservedBackups != "" {
+		c.line("  backups " + preservedBackups)
+		kept = append(kept, "shared-file backups preserved outside .vibekb/")
+	}
 	c.blank()
 	if opts.dryRun {
 		c.ok("Dry run complete. No files were changed.")
 	} else {
 		c.ok("VibeKB uninstalled. Content outside VibeKB's ownership was preserved.")
+		if preservedBackups != "" {
+			c.line("Shared-file backups were moved to: " + preservedBackups)
+		}
 	}
 	return 0
 }
 
 type uninstallOptions struct {
-	target                                  string
-	dryRun, keepKnowledge, yes, force, help bool
+	target                           string
+	dryRun, keepKnowledge, yes, help bool
 }
 
 func parseUninstallArgs(args []string) (uninstallOptions, error) {
@@ -184,8 +223,6 @@ func parseUninstallArgs(args []string) (uninstallOptions, error) {
 			o.keepKnowledge = true
 		case "--yes", "-y":
 			o.yes = true
-		case "--force":
-			o.force = true
 		case "--help", "-h":
 			o.help = true
 		default:
@@ -209,6 +246,8 @@ Removes VibeKB-owned files (everything under .vibekb/ and namespaced adapters)
 and strips only VibeKB's managed block from shared files (AGENTS.md, CLAUDE.md,
 …), preserving everything else. Shared files that VibeKB created solely to hold
 its block are removed; files that pre-existed VibeKB are left in place.
+Shared-file backups under .vibekb/backups/ are relocated to a temp directory
+so they survive a full uninstall (or retained under .vibekb/ with --keep-knowledge).
 
 Options:
   --keep-knowledge  Keep the .vibekb/ model records; remove only runtime + adapters.
@@ -221,6 +260,36 @@ Options:
 func pathExists(p string) bool {
 	_, err := os.Stat(p)
 	return err == nil
+}
+
+func dirHasEntries(p string) bool {
+	entries, err := os.ReadDir(p)
+	return err == nil && len(entries) > 0
+}
+
+// copyDir recursively copies src to dst (used when os.Rename cannot cross devices).
+func copyDir(src, dst string) error {
+	if err := os.MkdirAll(dst, 0o755); err != nil {
+		return err
+	}
+	return filepath.Walk(src, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		rel, err := filepath.Rel(src, path)
+		if err != nil {
+			return err
+		}
+		out := filepath.Join(dst, rel)
+		if info.IsDir() {
+			return os.MkdirAll(out, 0o755)
+		}
+		b, err := os.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		return writeFileAtomic(out, b, info.Mode())
+	})
 }
 
 // removeEmptyParents removes now-empty parent directories up to (not including)

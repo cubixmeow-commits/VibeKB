@@ -209,8 +209,11 @@ $ensureDir($docsRoot . '/assets/js');
 $ensureDir($docsRoot . '/assets/data');
 $ensureDir($docsRoot . '/assets/diagrams');
 
-copy($repoRoot . '/guide/assets/css/guide.css', $docsRoot . '/assets/css/guide.css');
-copy($repoRoot . '/guide/assets/js/guide.js', $docsRoot . '/assets/js/guide.js');
+// Assets live next to the runtime (self-hosted: <repo>/guide; consolidated:
+// <repo>/.vibekb/runtime/guide). Never read them from $repoRoot/guide — that
+// path does not exist in a target install and would silently omit CSS/JS.
+copy($runtimeRoot . '/guide/assets/css/guide.css', $docsRoot . '/assets/css/guide.css');
+copy($runtimeRoot . '/guide/assets/js/guide.js', $docsRoot . '/assets/js/guide.js');
 
 foreach (glob($contentRoot . '/diagrams/assets/*.svg') ?: [] as $svg) {
     copy($svg, $docsRoot . '/assets/diagrams/' . basename($svg));

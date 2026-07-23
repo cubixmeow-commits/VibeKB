@@ -680,7 +680,7 @@
                             <div class="record-card__status">
                                 <span class="badge badge--ok">Implemented</span>                            </div>
                         </div>
-                        <p class="record-card__summary">`php tools/generate-static.php` renders the same templates as the live guide into a self-contained `/docs` site with relative, subpath-safe links — refusing to build if the model has validation errors, and clearly stamped as generated output that does not update itself.</p>
+                        <p class="record-card__summary">`php tools/generate-static.php` (or the installed copy under `.vibekb/runtime/tools/`) renders the same templates as the live guide into a self-contained static site with relative, subpath-safe links — refusing to build if the model has validation errors, and clearly stamped as generated output that does not update itself. Self-hosted VibeKB publishes to `/docs`; a consolidated target install publishes to `.vibekb/generated/` so it never collides with the project&#039;s own `docs/`.</p>
                         <dl class="record-card__meta">
                                                             <div>
                                     <dt>Verification</dt>
@@ -688,7 +688,7 @@
                                 </div>
                                                                                         <div>
                                     <dt>Trigger</dt>
-                                    <dd>A developer runs `php tools/generate-static.php` (locally or in CI) to refresh /docs.</dd>
+                                    <dd>A developer runs `php tools/generate-static.php` (self-hosted) or `php .vibekb/runtime/tools/generate-static.php` / `vibekb generate` (target install) to refresh the snapshot.</dd>
                                 </div>
                                                         <div>
                                 <dt>Facing</dt>
@@ -696,7 +696,7 @@
                             </div>
                             <div>
                                 <dt>Updated</dt>
-                                <dd>2026-07-22</dd>
+                                <dd>2026-07-23</dd>
                             </div>
                         </dl>
                     </li>
@@ -828,7 +828,7 @@
                             <div class="record-card__status">
                                 <span class="badge badge--ok">Implemented</span>                            </div>
                         </div>
-                        <p class="record-card__summary">`vibekb migrate` consolidates a pre-2.0 root-level VibeKB install under `.vibekb/`. It installs the consolidated layout, converts a whole-file VibeKB CLAUDE.md/AGENTS.md into a managed block (preserving user-authored content), relocates the reference docs, and removes only root-level files it can positively identify as unmodified VibeKB content by content signature or byte-for-byte hash. Modified or ambiguous files are preserved and reported; backups are written under `.vibekb/backups/`.</p>
+                        <p class="record-card__summary">`vibekb migrate` consolidates a pre-2.0 root-level VibeKB install under `.vibekb/`. It installs the consolidated layout, converts a whole-file VibeKB CLAUDE.md/AGENTS.md into a managed block only when the exact first-line title plus supporting signatures match (preserving user-authored and lookalike content), relocates the reference docs, and removes only root-level files it can positively identify as unmodified VibeKB content by byte-for-byte hash. Modified or ambiguous files are preserved and reported; backups are written under `.vibekb/backups/`.</p>
                         <dl class="record-card__meta">
                                                             <div>
                                     <dt>Verification</dt>
@@ -861,7 +861,7 @@
                             <div class="record-card__status">
                                 <span class="badge badge--ok">Implemented</span>                            </div>
                         </div>
-                        <p class="record-card__summary">`vibekb uninstall` removes VibeKB from a repository, ownership-aware. Driven by the `.vibekb/install.json` manifest, it deletes VibeKB-owned files (everything under `.vibekb/` and namespaced adapters) and strips only VibeKB&#039;s managed block from shared files (AGENTS.md, CLAUDE.md), preserving everything else. `--keep-knowledge` retains the model records; `--dry-run` previews.</p>
+                        <p class="record-card__summary">`vibekb uninstall` removes VibeKB from a repository, ownership-aware. Driven by the `.vibekb/install.json` manifest, it deletes VibeKB-owned files (everything under `.vibekb/` and namespaced adapters) and strips only VibeKB&#039;s managed block from shared files (AGENTS.md, CLAUDE.md), preserving everything else. Shared-file backups are retained under `--keep-knowledge` or relocated to a stamped temp directory on a full uninstall so they are not lost with `.vibekb/`.</p>
                         <dl class="record-card__meta">
                                                             <div>
                                     <dt>Verification</dt>
@@ -1002,7 +1002,7 @@
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 07:06 UTC · source commit a0d95aa (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 08:00 UTC · source commit 803d976 (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

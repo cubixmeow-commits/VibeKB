@@ -2,7 +2,7 @@
 //
 // Release builds override Version, Commit, and Built via -ldflags, e.g.:
 //
-//	go build -ldflags "-X github.com/cubixmeow-commits/vibekb/internal/buildinfo.Version=0.1.0 \
+//	go build -ldflags "-X github.com/cubixmeow-commits/vibekb/internal/buildinfo.Version=0.2.0 \
 //	  -X github.com/cubixmeow-commits/vibekb/internal/buildinfo.Commit=84c81d2 \
 //	  -X github.com/cubixmeow-commits/vibekb/internal/buildinfo.Built=2026-07-23"
 //
@@ -10,7 +10,7 @@
 package buildinfo
 
 // Version is the vibekb CLI version (semver without a leading "v").
-var Version = "0.1.0-dev"
+var Version = "0.2.0-dev"
 
 // Commit is the short git SHA the binary was built from ("unknown" in local builds).
 var Commit = "unknown"

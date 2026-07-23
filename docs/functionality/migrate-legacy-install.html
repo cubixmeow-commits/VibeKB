@@ -108,7 +108,7 @@
     <header class="page-head reading-column">
         <p class="eyebrow">Integration</p>
         <h1>Migrate a legacy root-level install</h1>
-        <p class="lede">`vibekb migrate` consolidates a pre-2.0 root-level VibeKB install under `.vibekb/`. It installs the consolidated layout, converts a whole-file VibeKB CLAUDE.md/AGENTS.md into a managed block (preserving user-authored content), relocates the reference docs, and removes only root-level files it can positively identify as unmodified VibeKB content by content signature or byte-for-byte hash. Modified or ambiguous files are preserved and reported; backups are written under `.vibekb/backups/`.</p>
+        <p class="lede">`vibekb migrate` consolidates a pre-2.0 root-level VibeKB install under `.vibekb/`. It installs the consolidated layout, converts a whole-file VibeKB CLAUDE.md/AGENTS.md into a managed block only when the exact first-line title plus supporting signatures match (preserving user-authored and lookalike content), relocates the reference docs, and removes only root-level files it can positively identify as unmodified VibeKB content by byte-for-byte hash. Modified or ambiguous files are preserved and reported; backups are written under `.vibekb/backups/`.</p>
         <div class="badge-row">
             <span class="badge badge--ok">Implemented</span>            <span class="badge badge--ok">Verified from source</span>            <span class="badge badge--info">User-facing</span>        </div>
     </header>
@@ -122,11 +122,13 @@ it can prove are unmodified VibeKB content.</p>
 <h3>Current behavior</h3>
 <p>Migration runs in a safe order:</p>
 <ol>
-<li><strong>Convert legacy shared docs first.</strong> If <code>CLAUDE.md</code>/<code>AGENTS.md</code> matches a</li>
+<li><strong>Convert legacy shared docs first.</strong> If <code>CLAUDE.md</code>/<code>AGENTS.md</code> has the exact</li>
 </ol>
-<p>legacy VibeKB whole-file signature and has no managed block, it is backed up
-   and replaced by a managed block; a user-authored file is left in place (a block
-   is added later by the consolidation step, preserving its text).</p>
+<p>VibeKB whole-file title as its first non-empty line <em>and</em> all supporting
+   signatures, and has no managed block, it is backed up and replaced by a
+   managed block. A user-authored or lookalike file (wrong title, even if it
+   quotes VibeKB phrases) is left in place; a managed block is added later by the
+   consolidation step, preserving its text.</p>
 <ol>
 <li><strong>Install the consolidated layout</strong> under <code>.vibekb/</code> (payload + adapters +</li>
 </ol>
@@ -225,7 +227,7 @@ unmodified VibeKB files are removed. Everything else is preserved with a report.
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 07:06 UTC · source commit a0d95aa (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 08:00 UTC · source commit 803d976 (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

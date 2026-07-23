@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>The template is a manifest plus a generator, not a duplicated file tree · VibeKB — VibeKB</title>
+    <title>Prepare product version 0.2.0 — Safe Repository Integration · VibeKB — VibeKB</title>
     <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -105,72 +105,40 @@
                 <article class="view view-doc">
         <p class="breadcrumb"><a href="../../why/index.html">← Decisions &amp; rationale</a></p>
         <header class="page-head reading-column">
-            <p class="eyebrow">Decisions</p>
-            <h1>The template is a manifest plus a generator, not a duplicated file tree</h1>
-            <p class="lede">template/ declares the installable payload (manifest.json) and the fresh model comes from a single canonical starter definition (template/starter/) read by both consumers; the installer copies the runtime from the canonical repository files (embedded into the binary at build time) rather than from a second physical copy, so nothing drifts.</p>
+            <p class="eyebrow">Changes</p>
+            <h1>Prepare product version 0.2.0 — Safe Repository Integration</h1>
+            <p class="lede">Product/CLI version 0.2.0 with repository-safety install footprint, changelog, and GitHub release notes. Prevents overwriting repository-owned files; consolidates VibeKB under .vibekb/; managed-block and namespaced integrations; migrate/uninstall/doctor; hardened release workflow. Tag/release not cut in this change.</p>
             <div class="badge-row">
-                <span class="badge badge--info">accepted</span>                                                <span class="badge badge--ok">Verified from source</span>            </div>
+                <span class="badge badge--info">implemented</span>                                                <span class="badge badge--ok">Verified from source</span>            </div>
         </header>
         <div class="detail-grid">
-            <div class="detail-main"><div class="prose reading-column"><h3>Context</h3>
-<p>VibeKB is self-hosted: the active <code>.vibekb/</code> describes the files at the
-repository root (<code>guide/</code>, <code>tools/</code>, …). Physically duplicating those into
-<code>template/guide/</code>, <code>template/tools/</code>, etc. would create a second copy that
-instantly drifts from the canonical one and that VibeKB&#039;s own drift detection
-would then have to track.</p>
-<h3>Decision</h3>
-<p><code>template/</code> contains a declarative <code>manifest.json</code> (the payload list, the
-preserved paths, the generated paths) and the canonical starter definition under
-<code>template/starter/</code> — not a copy of the runtime. The native installer embeds and
-copies the runtime from the canonical repository files at build time (<code>embed.go</code>),
-never from a second physical copy. The fresh <code>.vibekb/</code> model comes from the
-single <code>template/starter/</code> data definition, read by both the Go installer
-(embedded) and <code>tools/lib/Starter.php</code> (for <code>bootstrap</code>), so there is no second
-copy of the starter content either.</p>
-<h3>Alternatives considered</h3>
+            <div class="detail-main"><div class="prose reading-column"><h3>Before</h3>
+<p>The only published product version was <code>v0.1.0</code>. Default install wrote root-level
+docs and runtime into target repositories. There was no root <code>CHANGELOG.md</code>.</p>
+<h3>After</h3>
 <ul>
-<li><strong>A full physical <code>template/guide</code>, <code>template/tools</code>, … tree</strong> — rejected:</li>
+<li>Product/CLI version <strong>0.2.0</strong> (<code>0.2.0-dev</code> locally).</li>
+<li>Safe repository integration (see <code>docs/REPOSITORY_SAFETY.md</code>).</li>
+<li><a href="../../CHANGELOG.md"><code>CHANGELOG.md</code></a> records 0.2.0 / 0.1.0.</li>
+<li><a href="../../docs/RELEASE_NOTES_0.2.0.md"><code>docs/RELEASE_NOTES_0.2.0.md</code></a> is the</li>
 </ul>
-<p>guaranteed drift in a self-hosted repo, and a large duplicated surface to
-  maintain.</p>
+<p>paste-ready GitHub Release body (title: **VibeKB 0.2.0 — Safe Repository
+  Integration**).</p>
 <ul>
-<li><strong>A hard-coded copy list inside install.php</strong> — rejected: the set of installed</li>
+<li>Installer <code>template_version</code> remains <strong>2.0.0</strong> (separate namespace).</li>
 </ul>
-<p>files would be invisible and hard to change; the manifest makes it explicit and
-  upgrade-aware.</p>
-<h3>Reason</h3>
-<p>The installer must know exactly which files belong to VibeKB and keep that
-knowledge in one authoritative place. A manifest plus a generator expresses that
-without duplicating the payload.</p>
-<h3>Consequences</h3>
-<ul>
-<li><code>template/</code> holds the payload definition (<code>manifest.json</code>) and the canonical</li>
-</ul>
-<p>starter data (<code>template/starter/</code>); neither is a copy of the runtime.</p>
-<ul>
-<li><code>template/</code> is excluded from VibeKB&#039;s own drift detection (it is distribution</li>
-</ul>
-<p>metadata, like <code>docs/</code> is generated output).</p>
-<ul>
-<li><code>template/starter/</code> is installed into targets so <code>bootstrap</code> can repair a</li>
-</ul>
-<p>workspace from the same definition the installer embeds.</p>
-<ul>
-<li>Upgrades refresh exactly the manifest&#039;s payload and never the preserved</li>
-</ul>
-<p><code>.vibekb/</code>.</p>
-<h3>Update (native installer)</h3>
-<p>This decision predates the native Go installer but still holds: with
-installation moved into the binary (<code>decision:native-installer-embedded-payload</code>),
-&quot;copy from the canonical files&quot; became &quot;embed the canonical files and copy from
-the embed&quot;, and the starter definition moved from PHP code into
-<code>template/starter/</code> data. Both changes keep the one-authoritative-source rule.</p></div></div>
+<h3>Verification note</h3>
+<p>Local pre-release validation (format, lint, full tests, install scenarios,
+migrate, doctor) passed. Final release audit against <code>origin/main</code> passed
+(install writes, embeds, asset lockstep, versions, changelog, Actions, tests,
+generated docs, junk/secret scan) — <strong>READY TO RELEASE</strong>. Tag and GitHub
+Release are deliberately not created until asked.</p></div></div>
             <aside class="detail-rail" aria-label="Connections">
                 <div class="rail-card">
                     <h2>Affects functionality</h2>
-                    <p><a class="chip" href="../../functionality/install-into-a-repository.html">Install VibeKB into a repository</a></p>
+                    <p><a class="chip" href="../../functionality/run-the-developer-cli.html">Run VibeKB from one developer CLI</a> <a class="chip" href="../../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../../functionality/migrate-legacy-install.html">Migrate a legacy root-level install</a> <a class="chip" href="../../functionality/uninstall-from-a-repository.html">Uninstall VibeKB from a repository</a> <a class="chip" href="../../functionality/generate-static-snapshot.html">Generate the static snapshot</a></p>
                 </div>
-                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">template/manifest.json</code> <code class="chip chip--file">template/starter/starter.json</code> <code class="chip chip--file">embed.go</code> <code class="chip chip--file">tools/lib/Starter.php</code></p></div>
+                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">internal/buildinfo/buildinfo.go</code> <code class="chip chip--file">RELEASE.md</code> <code class="chip chip--file">.github/workflows/release.yml</code> <code class="chip chip--file">CHANGELOG.md</code> <code class="chip chip--file">docs/RELEASE_NOTES_0.2.0.md</code> <code class="chip chip--file">.vibekb/functionality/records/run-the-developer-cli.md</code> <code class="chip chip--file">internal/buildinfo/buildinfo_test.go</code></p></div>
                             </aside>
         </div>
     </article>

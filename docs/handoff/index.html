@@ -115,74 +115,50 @@
             </div>
             <div class="prose reading-column"><h3>Current state</h3>
 <ul>
-<li><strong>Ownership model</strong> (docs/REPOSITORY_SAFETY.md): VibeKB owns only <code>.vibekb/</code></li>
+<li><strong>READY TO RELEASE</strong> for product version <strong>0.2.0</strong> (Safe Repository Integration).</li>
+<li><code>internal/buildinfo.Version = &quot;0.2.0-dev&quot;</code>; release tags stamp <code>0.2.0</code> via ldflags.</li>
+<li>Installer <code>template_version</code> remains <strong>2.0.0</strong> (separate namespace). Content</li>
 </ul>
-<p>plus namespaced adapters; shared files get a single <code>&lt;!-- VIBEKB:START v1 --&gt;…
-  &lt;!-- VIBEKB:END --&gt;</code> managed block. Nothing at the repo root by default.</p>
+<p><code>vibekb_version</code> remains <strong>1.0</strong>.</p>
 <ul>
-<li><strong>Payload manifest</strong> <code>template/manifest.json</code> (schema 2) is a <code>src</code>→<code>dest</code></li>
+<li>Authoritative materials: <code>CHANGELOG.md</code>, <code>docs/RELEASE_NOTES_0.2.0.md</code>,</li>
 </ul>
-<p><code>map</code>: the binary embeds VibeKB&#039;s dev layout but installs it under
-  <code>.vibekb/runtime/</code>, <code>.vibekb/reference/</code>, <code>.vibekb/prompts/</code>.</p>
+<p><code>RELEASE.md</code>, hardened <code>.github/workflows/release.yml</code>, buildinfo + tests.</p>
+<h3>Verification completed (final release audit)</h3>
 <ul>
-<li><strong>Managed-block engine</strong> (<code>internal/installer/block.go</code>): insert/update/remove,</li>
+<li>Full diff vs <code>origin/main</code> reviewed (safety review fixes + 0.2.0 prep only).</li>
+<li>Install write classes: payload under <code>.vibekb/</code>; namespaced adapters; managed</li>
 </ul>
-<p>idempotent, CRLF/LF and trailing-newline aware, malformed/duplicate markers →
-  reported conflict (never a silent rewrite).</p>
+<p>blocks only; no wholesale shared-file overwrite; migrate title+signature gated.</p>
 <ul>
-<li><strong>Safe install</strong> (<code>installer.go</code>/<code>plan.go</code>/<code>apply.go</code>): flags <code>--dry-run</code>,</li>
+<li>Embedded payload matches <code>template/manifest.json</code>; no secrets in embed tree.</li>
+<li>Unix release assets lockstep with <code>install.sh</code>; workflow verifies assets and</li>
 </ul>
-<p><code>--knowledge-only</code>/<code>--no-integrations</code>, <code>--integrate &lt;list&gt;</code>, narrowed
-  <code>--force</code>; atomic writes; shared-file backups under <code>.vibekb/backups/</code>;
-  unrecognized <code>.vibekb/</code> treated as a collision.</p>
+<p>sorted checksums; <code>fail_on_unmatched_files: true</code>.</p>
 <ul>
-<li><strong>Install manifest</strong> <code>.vibekb/install.json</code> (<code>state.go</code>): ownership, kind,</li>
+<li>Version consistency: product <code>0.2.0</code> / <code>0.2.0-dev</code>; no accidental duplicate of</li>
 </ul>
-<p>hashes, block version, pre-existing flag — no absolute paths.</p>
+<p>product version into <code>template_version</code> or content <code>vibekb_version</code>.</p>
 <ul>
-<li><strong>migrate</strong> (<code>migrate.go</code>) consolidates a legacy root install; <strong>uninstall</strong></li>
+<li>Changelog + release notes accurate vs implemented behaviour.</li>
+<li><code>gofmt</code>/<code>go vet</code>/<code>go test ./...</code>, PHP lint, <code>validate</code>, <code>test-topology</code>,</li>
 </ul>
-<p>(<code>uninstall.go</code>) is ownership-aware; <strong>doctor</strong> gained footprint diagnostics
-  (<code>internal/installer/doctor.go</code>).</p>
+<p><code>php tools/vibekb.php check --strict</code> clean after regenerate.</p>
 <ul>
-<li><strong>Layout-aware PHP</strong> (<code>guide/lib/workspace.php</code>): guide/tools run from either</li>
+<li>No tracked secrets, credentials, temp/backup binaries, or compiled CLI</li>
 </ul>
-<p>the self-hosted root or <code>.vibekb/runtime/</code>; <code>phpcore</code> discovers the relocated
-  <code>ToolsScript</code>. VibeKB&#039;s own self-hosted layout is unchanged.</p>
-<h3>Verification completed</h3>
-<ul>
-<li><code>go build ./...</code> clean; <code>go test ./...</code> green (block engine, scenarios,</li>
-</ul>
-<p>manifest — empty/AGENTS/CLAUDE/both, LF/CRLF/no-final-newline, foreign
-  <code>.vibekb</code>, valid/legacy installs, malformed/duplicate markers, repeat install,
-  upgrade, dry-run, integrate/knowledge-only, uninstall, migrate).</p>
-<ul>
-<li>End-to-end: built <code>vibekb</code>, installed into a demo repo → root clean (only</li>
-</ul>
-<p><code>.cursor</code>, <code>.git</code>, <code>.vibekb</code>, <code>AGENTS.md</code>, <code>README.md</code>, <code>src</code>), AGENTS.md
-  managed block inserted + backed up, <code>php .vibekb/runtime/tools/vibekb.php status</code>
-  / <code>bootstrap</code> / <code>generate</code> all work, guide renders; uninstall restored the repo.</p>
-<ul>
-<li>Self-hosted <code>php tools/vibekb.php check</code> OK, <code>php tools/test-topology.php</code> OK,</li>
-</ul>
-<p><code>/docs</code> regenerated.</p>
+<p>artifacts; <code>/tmp</code> pre-release fixtures are outside the repo.</p>
 <h3>Unresolved / next</h3>
 <ul>
-<li>Human docs updated (README, INSTALLER, INITIALIZE, the two new <code>docs/</code> files).</li>
+<li>Merge this branch to <code>main</code> when accepted.</li>
+<li><strong>Do not</strong> tag until explicitly asked. When cutting the release: tag</li>
 </ul>
-<p><code>TOKEN_ECONOMICS.md</code>/<code>ARCHITECTURE.md</code> were not swept for stale root-path
-  language and could be reviewed later.</p>
-<ul>
-<li>No automated end-to-end test yet exercises the <em>installed</em> PHP runtime under</li>
-</ul>
-<p><code>.vibekb/runtime/</code> from Go (covered manually); consider a scripted smoke test.</p>
-<ul>
-<li>Checksum/signing of release binaries remains a separate hardening milestone.</li>
-</ul>
+<p><code>v0.2.0</code>, push the tag, and paste <code>docs/RELEASE_NOTES_0.2.0.md</code> as the GitHub
+  Release body (see <code>RELEASE.md</code>).</p>
 <h3>Exact next recommended action</h3>
-<p>Review <code>TOKEN_ECONOMICS.md</code> and <code>ARCHITECTURE.md</code> for any remaining references to
-the old root-level footprint (<code>guide/</code>, <code>tools/</code>, root <code>CLAUDE.md</code>), and update
-them to the consolidated <code>.vibekb/</code> layout; then cut a 2.0.0 release.</p></div>
+<p>Merge PR → on <code>main</code>, when asked, tag <code>v0.2.0</code> and push to trigger
+<code>.github/workflows/release.yml</code>; paste <code>docs/RELEASE_NOTES_0.2.0.md</code> into the
+Release body.</p></div>
         </section>
     
             <section class="doc-section">
@@ -215,7 +191,7 @@ them to the consolidated <code>.vibekb/</code> layout; then cut a 2.0.0 release.
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 07:06 UTC · source commit a0d95aa (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 08:00 UTC · source commit 803d976 (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

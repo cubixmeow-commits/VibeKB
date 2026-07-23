@@ -108,7 +108,7 @@
     <header class="page-head reading-column">
         <p class="eyebrow">Static publishing</p>
         <h1>Generate the static snapshot</h1>
-        <p class="lede">`php tools/generate-static.php` renders the same templates as the live guide into a self-contained `/docs` site with relative, subpath-safe links — refusing to build if the model has validation errors, and clearly stamped as generated output that does not update itself.</p>
+        <p class="lede">`php tools/generate-static.php` (or the installed copy under `.vibekb/runtime/tools/`) renders the same templates as the live guide into a self-contained static site with relative, subpath-safe links — refusing to build if the model has validation errors, and clearly stamped as generated output that does not update itself. Self-hosted VibeKB publishes to `/docs`; a consolidated target install publishes to `.vibekb/generated/` so it never collides with the project&#039;s own `docs/`.</p>
         <div class="badge-row">
             <span class="badge badge--ok">Implemented</span>            <span class="badge badge--ok">Verified from source</span>            <span class="badge badge--info">User-facing</span>        </div>
     </header>
@@ -120,24 +120,33 @@
 and writes the rendered HTML to disk — there is no second template system, so the
 snapshot is the live guide, frozen.</p>
 <h3>Current behavior</h3>
-<p>It loads the model, refuses to build if there are any validation errors, records
-the generation event (mode <code>static</code>, generated time, generator commit/branch),
-then renders every view — overview, each functionality record, the section pages,
-each memory record — into the output directory, copies CSS/JS and diagram SVGs,
-writes the search index built for the static location, and drops a <code>.nojekyll</code>.
-It cleans only the generated site, leaving other files in <code>/docs</code> alone. The
-output directory defaults to <code>/docs</code> but honours <code>VIBEKB_DOCS_OUT</code> (used by the
-drift check to render into a temp dir); <code>VIBEKB_GENERATED</code> pins the timestamp.</p>
+<p>It resolves the content root and project root via <code>guide/lib/workspace.php</code> so it
+works from either the self-hosted layout (<code>&lt;repo&gt;/tools</code>) or a consolidated
+install (<code>&lt;repo&gt;/.vibekb/runtime/tools</code>). It loads the model, refuses to build if
+there are any validation errors, records the generation event (mode <code>static</code>,
+generated time, generator commit/branch), then renders every view — overview,
+each functionality record, the section pages, each memory record — into the
+output directory, copies CSS/JS from the <strong>runtime</strong> guide assets (never from a
+missing <code>$repoRoot/guide</code> path), copies diagram SVGs, writes the search index
+built for the static location, and drops a <code>.nojekyll</code>. It cleans only the
+generated site, leaving other files in the output directory alone.</p>
+<p>Default output: <code>&lt;repo&gt;/docs</code> when the active model is self-hosted; otherwise
+<code>.vibekb/generated</code> so a target repository&#039;s own <code>docs/</code> is never touched.
+<code>VIBEKB_DOCS_OUT</code> overrides the destination (used by the drift check to render
+into a temp dir); <code>VIBEKB_GENERATED</code> pins the timestamp.</p>
 <h3>Step-by-step flow</h3>
 <ol>
+<li>Locate content root / project root (layout-aware).</li>
 <li>Load the model; abort non-zero if it has errors.</li>
 <li>Stamp the generation event.</li>
 <li>Render the full page inventory through <code>layout</code> with the static URL strategy.</li>
-<li>Copy assets and diagram SVGs; write <code>search.json</code>; write <code>.nojekyll</code>.</li>
+<li>Copy assets from <code>$runtimeRoot/guide/assets</code> and diagram SVGs; write</li>
 </ol>
+<p><code>search.json</code>; write <code>.nojekyll</code>.</p>
 <h3>Implementation map</h3>
 <ul>
-<li><code>tools/generate-static.php</code> — orchestration and page inventory.</li>
+<li><code>tools/generate-static.php</code> — orchestration, layout-aware defaults, page inventory.</li>
+<li><code>guide/lib/workspace.php</code> — content/project root resolution.</li>
 <li><code>guide/lib/UrlStrategy.php</code> — <code>StaticUrlStrategy</code> (relative links).</li>
 <li><code>guide/lib/nav.php</code> — the shared inventory both modes render.</li>
 </ul>
@@ -146,12 +155,20 @@ drift check to render into a temp dir); <code>VIBEKB_GENERATED</code> pins the t
 <li>Any model validation error → refuses to build (a snapshot must not ship a</li>
 </ul>
 <p>broken model).</p>
+<ul>
+<li>Missing runtime guide assets → copy fails (should not happen after a valid</li>
+</ul>
+<p>install); pages may still emit without CSS/JS.</p>
 <h3>Use caution</h3>
-<p><code>/docs</code> is <strong>generated output</strong>. Never hand-edit it — change <code>.vibekb/</code> and
-regenerate. The drift check flags a hand-edited or stale <code>/docs</code>.</p>
+<p>The snapshot directory is <strong>generated output</strong>. Never hand-edit it — change
+<code>.vibekb/</code> and regenerate. In this self-hosted repo that directory is <code>/docs</code>;
+in a target install it is <code>.vibekb/generated/</code>. The drift check flags a
+hand-edited or stale snapshot.</p>
 <h3>Why it works this way</h3>
 <p>Publishing the exact live guide as a static file set means the public site is a
-true demonstration of the model, not a separately-authored marketing page.</p></div>
+true demonstration of the model, not a separately-authored marketing page.
+Consolidated installs keep that snapshot inside <code>.vibekb/</code> so they never collide
+with a project&#039;s own documentation tree.</p></div>
                     </div>
 
         <aside class="detail-rail" aria-label="Record metadata">
@@ -163,7 +180,7 @@ true demonstration of the model, not a separately-authored marketing page.</p></
                                             <dt>Verification</dt>
                         <dd><span class="badge badge--ok">Verified from source</span></dd>
                                         <dt>Updated</dt>
-                    <dd>2026-07-22</dd>
+                    <dd>2026-07-23</dd>
                     <dt>Facing</dt>
                     <dd>User-facing</dd>
                 </dl>
@@ -171,13 +188,13 @@ true demonstration of the model, not a separately-authored marketing page.</p></
 
                             <div class="rail-card metadata-group">
                     <h2>Trigger</h2>
-                    <p>A developer runs `php tools/generate-static.php` (locally or in CI) to refresh /docs.</p>
+                    <p>A developer runs `php tools/generate-static.php` (self-hosted) or `php .vibekb/runtime/tools/generate-static.php` / `vibekb generate` (target install) to refresh the snapshot.</p>
                 </div>
             
             <div class="rail-card metadata-group">
                 <h2>Data read or written</h2>
                 <p><strong>Reads:</strong> <code class="chip chip--file">.vibekb</code> <code class="chip chip--file">guide/templates</code> <code class="chip chip--file">guide/assets</code></p>
-                <p><strong>Writes:</strong> <code class="chip chip--file">docs</code></p>
+                <p><strong>Writes:</strong> <code class="chip chip--file">docs</code> <code class="chip chip--file">.vibekb/generated</code></p>
                                     <p><strong>Config:</strong> <code class="chip chip--file">VIBEKB_GENERATED</code> <code class="chip chip--file">VIBEKB_DOCS_OUT</code></p>
                             </div>
 
@@ -219,7 +236,7 @@ true demonstration of the model, not a separately-authored marketing page.</p></
             
             <div class="rail-card metadata-group">
                 <h2>Related rationale</h2>
-                                    <p><a class="chip" href="../why/decisions/two-modes-one-source.html">Two output modes over one source and one template set</a> <a class="chip" href="../why/warnings/docs-is-generated-never-hand-edit.html">/docs is generated output — never hand-edit it</a></p>
+                                    <p><a class="chip" href="../why/decisions/two-modes-one-source.html">Two output modes over one source and one template set</a> <a class="chip" href="../why/warnings/docs-is-generated-never-hand-edit.html">/docs is generated output — never hand-edit it</a> <a class="chip" href="../why/decisions/repository-safety-consolidation.html">VibeKB owns only .vibekb/; everything else is an adapter or managed block</a></p>
                             </div>
         </aside>
     </div>
@@ -233,7 +250,7 @@ true demonstration of the model, not a separately-authored marketing page.</p></
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 07:06 UTC · source commit a0d95aa (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 08:00 UTC · source commit 803d976 (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

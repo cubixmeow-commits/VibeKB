@@ -20,6 +20,16 @@ external API, and no build step. It runs on cPanel/shared hosting, deploys into 
 subfolder, and works without JavaScript. Those properties are locked (see
 `CLAUDE.md`, `PRODUCT.md`) and every decision below protects them.
 
+**Two layouts, one core.** VibeKB's *own* repository is **self-hosted**: the
+runtime lives at the repo root (`guide/`, `tools/`) beside the active model at
+`.vibekb/`. A **target repository** after `vibekb install` uses the
+**consolidated** layout: the same runtime is installed under
+`.vibekb/runtime/`, reference docs under `.vibekb/reference/`, and prompts under
+`.vibekb/prompts/`, with optional namespaced adapters / managed blocks outside
+`.vibekb/` (see `docs/REPOSITORY_SAFETY.md`). `guide/lib/workspace.php` makes the
+PHP core layout-aware so both resolve to the same active model. Paths below
+describe the self-hosted source tree unless noted.
+
 Its PHP responsibilities fall into four groups. Mapping them is the whole point of
 the assessment, because the right architecture follows from *which* responsibility
 each file carries — not from a language preference.
@@ -30,11 +40,12 @@ Deterministic operations over files and git. No web request, no HTML.
 
 | File | Responsibility |
 |------|----------------|
-| `install.php` | Copy the VibeKB runtime payload into a target repo; scaffold a fresh `.vibekb/`. Reads `template/manifest.json`; walks and copies directories. |
-| `tools/vibekb.php` | The self-maintenance CLI: `status`, `check`, `affected`, `bootstrap`, `validate`, `generate`. Uses git (`shell_exec`) and the filesystem. |
+| `cmd/vibekb` + `internal/installer/` | Native Go installer: embeds the payload, writes the consolidated `.vibekb/` layout into a **target** repo, managed-block integrations, migrate/uninstall/doctor. `install.php` is a thin forwarder. |
+| `tools/vibekb.php` | The self-maintenance CLI: `status`, `check`, `affected`, `bootstrap`, `validate`, `generate`. Uses git (`shell_exec`) and the filesystem. In a target install this file lives at `.vibekb/runtime/tools/vibekb.php`. |
 | `tools/lib/Starter.php` | The single definition of a fresh, empty `.vibekb/` workspace (directories + starter file contents). Shared by the installer and `bootstrap`. |
 | `tools/validate.php` | Headless model validator (CI gate). |
 | `tools/test-topology.php` | Topology parser test. |
+| `guide/lib/workspace.php` | Layout-aware resolution of the active `.vibekb/` (self-hosted root vs consolidated `.vibekb/runtime/`). |
 
 The commands themselves are thin. Their *real* work — the part with all the
 subtlety — is model parsing, which lives in the shared core below.
@@ -184,15 +195,21 @@ VibeKB/
     buildinfo/           # Version, Commit, Built (set at link time on release)
   go.mod
 
-  # --- the canonical PHP core + runtime (unchanged) ---
+  # --- the canonical PHP core + runtime (self-hosted layout in this repo) ---
   guide/                 # dynamic guide (Mode A) + guide/lib (the model core)
+                         #   including workspace.php (layout-aware content root)
   tools/                 # vibekb.php, generate-static.php, validate.php, Starter.php
   install.php            # compatibility wrapper → forwards to `vibekb install`
-  template/              # installer payload manifest + starter/ (canonical data)
+  template/              # installer payload manifest + starter/ + integrations/
   .vibekb/               # the self-hosted living model (the product)
-  docs/                  # generated Mode B snapshot
+  docs/                  # generated Mode B snapshot (self-hosted GitHub Pages path)
+                         #   target installs generate to .vibekb/generated/ instead
 ```
 
+> **Target-install note.** After `vibekb install`, the same `guide/` + `tools/`
+> tree is written under `.vibekb/runtime/`; VibeKB never places those directories
+> (or root `CLAUDE.md` / `AGENTS.md` / reference docs) at the target repository
+> root. See `docs/REPOSITORY_SAFETY.md`.
 Directories the brief sketched (`internal/validator`, `internal/generator`,
 `internal/model`, …) are **intentionally not created empty**. They appear only if
 and when a phase actually needs native logic there — creating them speculatively

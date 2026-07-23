@@ -125,10 +125,12 @@ or only a block. It stores **no absolute paths**. This is what makes upgrades,
 
 For repositories that already have a pre-2.0 root-level VibeKB install:
 
-- detects legacy files by content signature and known hashes — never by filename
-  alone;
+- detects legacy files by **exact first-line title** plus supporting content
+  signatures (for `CLAUDE.md`/`AGENTS.md`) and by known hashes for reference
+  docs — never by filename alone;
 - converts a whole-file VibeKB `CLAUDE.md`/`AGENTS.md` pointer into a managed
   block; adds a managed block to a user-authored one while preserving its text;
+  lookalike files that merely quote VibeKB phrases are not replaced;
 - relocates the reference docs under `.vibekb/reference/` and removes the
   root-level copies **only when they are byte-identical to VibeKB's** (modified
   copies are left in place and reported);
@@ -153,15 +155,26 @@ files modified since install. It performs no repairs on its own.
   else; a shared file VibeKB created solely to hold its block is removed, while a
   file that pre-existed VibeKB is kept;
 - leaves files with malformed markers untouched and reports them;
-- `--keep-knowledge` retains the `.vibekb/` model records and removes only the
-  runtime and adapters; `--dry-run` previews everything.
+- `--keep-knowledge` retains the `.vibekb/` model records **and**
+  `.vibekb/backups/`, and removes only the runtime, reference, prompts,
+  generated snapshot, and install manifest; `--dry-run` previews everything;
+- a full uninstall relocates any `.vibekb/backups/` contents to a stamped
+  directory under the system temp folder and prints that path, so shared-file
+  snapshots are not deleted with `.vibekb/`.
 
 ## Transaction safety
 
-Writes go through a temporary file + atomic rename, so a reader never sees a
-half-written file. Shared files are backed up before their first edit. The
-installation manifest is written last, after the payload and model are in place.
-Temporary files are not left behind on success.
+Individual writes go through a temporary file + atomic rename, so a reader never
+sees a half-written file. Shared files are backed up under `.vibekb/backups/`
+before their first edit (and those backups are relocated out of `.vibekb/` on a
+full uninstall so they survive removal). The installation manifest is written
+last, after the payload and model are in place. Temporary `*.vibekb-tmp` files are
+not left behind on success.
+
+This is **per-file atomicity**, not a multi-file transaction: a crash mid-install
+can leave a partial `.vibekb/` tree. Re-run `vibekb install` (upgrade) or
+`vibekb uninstall` to reconcile; nothing outside VibeKB's ownership is rewritten
+to recover.
 
 ## What VibeKB will never do
 
