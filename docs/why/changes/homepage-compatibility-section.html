@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Two output modes over one source and one template set · VibeKB — VibeKB</title>
+    <title>Homepage Compatibility &amp; Requirements under install · VibeKB — VibeKB</title>
     <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -105,44 +105,37 @@
                 <article class="view view-doc">
         <p class="breadcrumb"><a href="../../why/index.html">← Decisions &amp; rationale</a></p>
         <header class="page-head reading-column">
-            <p class="eyebrow">Decisions</p>
-            <h1>Two output modes over one source and one template set</h1>
-            <p class="lede">The dynamic guide (Mode A) and the static snapshot (Mode B) render the same `.vibekb/` through the same templates; the only difference is the URL strategy.</p>
+            <p class="eyebrow">Changes</p>
+            <h1>Homepage Compatibility &amp; Requirements under install</h1>
+            <p class="lede">Install step 3 is agent-agnostic (Cursor, Claude Code, Codex, Windsurf, and others). A new Compatibility &amp; Requirements section under #install answers stack/agent/deploy questions with honest limits and inactive coming-soon badges.</p>
             <div class="badge-row">
-                <span class="badge badge--info">accepted</span>                                                <span class="badge badge--ok">Verified from source</span>            </div>
+                <span class="badge badge--info">implemented</span>                                                <span class="badge badge--ok">Verified from source</span>            </div>
         </header>
         <div class="detail-grid">
-            <div class="detail-main"><div class="prose reading-column"><h3>Context</h3>
-<p>VibeKB needs a live, always-current view for people working in the repo, and a
-publishable static site (GitHub Pages) that needs no PHP. The naive approach —
-two renderers — guarantees they drift.</p>
-<h3>Decision</h3>
-<p>One loader, one template set, one shared navigation/route/title definition
-(<code>nav.php</code>). The static generator swaps only the URL strategy (relative,
-subpath-safe links) and writes the rendered pages to disk. There is no second
-template system.</p>
-<h3>Alternatives considered</h3>
+            <div class="detail-main"><div class="prose reading-column"><h3>Before</h3>
+<p>Install step 3 and boundary copy named Cursor alone. Visitors had no immediate
+answer to “will this work with my stack?” after the three install steps.</p>
+<h3>After</h3>
 <ul>
-<li><strong>A separate static-site generator / different templates</strong> — rejected: two</li>
+<li>Step 3: <strong>Ask your coding agent</strong> — lists Cursor, Claude Code, Codex, Windsurf,</li>
 </ul>
-<p>renderers drift, and the public site would stop being a true demonstration of
-  the model.</p>
-<h3>Reason</h3>
-<p>If the public <code>/docs</code> site is literally the live guide frozen at a commit, it is
-honest proof of the product, and &quot;it works in the guide&quot; implies &quot;it works in
-/docs.&quot;</p>
-<h3>Consequences</h3>
+<p>and other capable agents; copy button says “Copy agent prompt.”</p>
 <ul>
-<li>Adding a view means editing <code>nav.php</code> once; both modes pick it up.</li>
-<li>The drift check can compare <code>/docs</code> to a fresh render to detect staleness.</li>
-<li>The search index is built by one function for both modes.</li>
-</ul></div></div>
+<li>New <code>#compatibility</code> section with four cards (install requirements, works-with</li>
+</ul>
+<p>stacks, named agents, deployment), a no-extra-infrastructure checklist, honest
+  current requirements (PHP 8.2+, a coding agent, a developer to initialize), and
+  inactive coming-soon badges.</p>
+<h3>Honesty preserved</h3>
+<p>Stack badges mean an agent can model those codebases — VibeKB does not parse the
+languages. Coming-soon items are labelled as not implemented. Installation still
+does not automatically analyze repositories.</p></div></div>
             <aside class="detail-rail" aria-label="Connections">
                 <div class="rail-card">
                     <h2>Affects functionality</h2>
-                    <p><a class="chip" href="../../functionality/render-guide.html">Render the dynamic guide</a> <a class="chip" href="../../functionality/generate-static-snapshot.html">Generate the static snapshot</a> <a class="chip" href="../../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a> <a class="chip" href="../../functionality/search-the-model.html">Search the model</a></p>
+                    <p><a class="chip" href="../../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a></p>
                 </div>
-                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">guide/lib/nav.php</code> <code class="chip chip--file">guide/lib/UrlStrategy.php</code> <code class="chip chip--file">tools/generate-static.php</code></p></div>
+                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">index.php</code> <code class="chip chip--file">assets/css/homepage.css</code></p></div>
                             </aside>
         </div>
     </article>
