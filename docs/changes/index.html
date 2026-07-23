@@ -141,6 +141,50 @@ does not automatically analyze repositories.</p></div>
                                     </li>
                             <li class="change-card">
                     <div class="change-card__head">
+                        <h2>Homepage copy matches the native Go installer</h2>
+                        <div class="badge-row">
+                            <span class="badge badge--info">implemented</span>                            <span class="badge badge--ok">Verified from source</span>                            <span class="muted">2026-07-23</span>
+                        </div>
+                    </div>
+                    <p>The public homepage now describes the real source-build Go CLI workflow (clone → go build → vibekb install → coding agent), splits install vs post-install requirements, drops Native CLI and Repository doctor from Coming soon, and removes em dashes from homepage marketing copy.</p>
+                    <div class="prose reading-column change-card__body"><h3>Before</h3>
+<p>The homepage still taught the old PHP installer path:</p>
+<ol>
+<li><code>git clone …</code></li>
+<li><code>php VibeKB/install.php /path/to/your/project</code> with “Requires PHP 8.2+”</li>
+<li>Coding-agent prompt</li>
+</ol>
+<p>Install Requirements and Current Requirements listed PHP as if it were needed to
+install. Coming soon still advertised Native CLI and Repository doctor, which
+are already implemented. Marketing copy used em dashes heavily.</p>
+<h3>After</h3>
+<p>Page flow is unchanged (hero → install → compatibility → what you get → proof).
+Commands match <code>INSTALLER.md</code> / <code>README.md</code> / <code>go.mod</code>:</p>
+<ol>
+<li>Clone + <code>go build -o vibekb ./cmd/vibekb</code> (Go 1.24+)</li>
+<li><code>./vibekb install /path/to/your/project</code> (native; no PHP required to install)</li>
+<li>Same integration prompt for the coding agent</li>
+</ol>
+<p>Requirements are split: Go/Git/write access to install from source today; PHP
+8.2+ and an AI coding agent after installation. Coming soon lists only Phase 2
+distribution items (prebuilt binaries, Homebrew, Winget, curl). The identity
+one_liner used on the hero card no longer uses em dashes.</p>
+<h3>Honesty preserved</h3>
+<p>Installation is native Go; the guide and model engine remain PHP. <code>docs/</code> is
+still generated with <code>php tools/vibekb.php generate</code>. No brew/winget/curl
+commands are shown as available. The installer still does not analyze the target
+application.</p>
+<h3>Verification note</h3>
+<p>Commands and rendered homepage HTML were checked against <code>INSTALLER.md</code>,
+<code>go.mod</code>, and <code>internal/installer</code> argument parsing. Old <code>install.php</code> /
+“Requires PHP 8.2+” install-card / Native CLI / Repository doctor strings are
+absent from the rendered homepage. Copy-button clicks were not exercised in a
+browser in this environment.</p></div>
+                                            <p class="change-card__links"><strong>Affected:</strong>
+                            <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a>                        </p>
+                                    </li>
+                            <li class="change-card">
+                    <div class="change-card__head">
                         <h2>Make installation native to the Go CLI (embedded payload, no PHP)</h2>
                         <div class="badge-row">
                             <span class="badge badge--info">implemented</span>                            <span class="badge badge--ok">Verified from source</span>                            <span class="muted">2026-07-23</span>
@@ -429,7 +473,7 @@ before/after, workflow timeline, repo map, and separate CTA. Accurate but too lo
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 02:00 UTC · source commit 3956dbc (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 02:34 UTC · source commit f1a8665 (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

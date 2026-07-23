@@ -327,10 +327,10 @@
                                                                                                                                                 <a class="chip" href="../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a>
                                                                                                                                                 <a class="chip" href="../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a>
                                                                                                 </dd></div>
-                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">guide/lib/Content.php</code> <code class="chip chip--file">guide/lib/helpers.php</code> <code class="chip chip--file">.vibekb/project/identity.md</code> <code class="chip chip--file">assets/css/homepage.css</code> <code class="chip chip--file">assets/js/homepage.js</code> <code class="chip chip--file">assets/images/homepage-developer-journey.webp</code> <code class="chip chip--file">assets/images/homepage-developer-journey.png</code> <code class="chip chip--file">install.php</code> <code class="chip chip--file">INSTALLER.md</code> <code class="chip chip--file">prompts/INTEGRATE_VIBEKB.md</code> <code class="chip chip--file">DEPLOYMENT.md</code> <code class="chip chip--file">PRODUCT.md</code></dd></div>
+                                                                            <div><dt>Depends on</dt><dd><code class="chip chip--file">guide/lib/Content.php</code> <code class="chip chip--file">guide/lib/helpers.php</code> <code class="chip chip--file">.vibekb/project/identity.md</code> <code class="chip chip--file">assets/css/homepage.css</code> <code class="chip chip--file">assets/js/homepage.js</code> <code class="chip chip--file">assets/images/homepage-developer-journey.webp</code> <code class="chip chip--file">assets/images/homepage-developer-journey.png</code> <code class="chip chip--file">cmd/vibekb/main.go</code> <code class="chip chip--file">internal/installer/installer.go</code> <code class="chip chip--file">INSTALLER.md</code> <code class="chip chip--file">prompts/INTEGRATE_VIBEKB.md</code> <code class="chip chip--file">DEPLOYMENT.md</code> <code class="chip chip--file">PRODUCT.md</code> <code class="chip chip--file">go.mod</code></dd></div>
                                                                             <div><dt>Depended on by</dt><dd>
                                 Public landing / Mode A deployment                            </dd></div>
-                                                                            <div><dt>Test after change</dt><dd>Load the homepage; confirm section order problem → install → compatibility → understanding → proof; verify install commands and compatibility claims against INSTALLER.md / PRODUCT.md / DEPLOYMENT.md; confirm no auto-analyze claims.</dd></div>
+                                                                            <div><dt>Test after change</dt><dd>Load the homepage; confirm section order problem → install → compatibility → understanding → proof; verify install commands and compatibility claims against INSTALLER.md / README.md / go.mod / PRODUCT.md / DEPLOYMENT.md (native Go install, no PHP required to install, PHP 8.2+ after); confirm Coming soon excludes Native CLI and Repository doctor; confirm no auto-analyze claims.</dd></div>
                                             </dl>
                 </section>
                             <section class="file-card" id="assets/css/homepage.css">
@@ -583,7 +583,7 @@
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 02:00 UTC · source commit 3956dbc (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 02:34 UTC · source commit f1a8665 (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

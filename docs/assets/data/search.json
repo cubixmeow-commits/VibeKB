@@ -46,7 +46,7 @@
         "summary": "A documented, project-agnostic process (INITIALIZE.md plus a paste-ready prompt) for an agent to build a fresh, honest `.vibekb/` model of another application read-only, then render it — the same process VibeKB used on itself, now started from an installed, scaffolded workspace.",
         "type": "functionality",
         "url": "../functionality/initialize-in-a-repository.html",
-        "body": "In one sentence Initialization is a repeatable agent workflow — inventory the target read only, trace functionality from source, record honest verification states, add only source grounded diagrams, validate, and generate — that produces a model of any app without modifying it. Current behavior INITIALIZE.md defines the step by step process and prompts/INTEGRATE VIBEKB.md is a project agnostic prompt that drives it. The workspace it starts from is now prepared by the installer install into a repository rather than a manual copy: php install.php installs the runtime and scaffolds an empty, valid .vibekb/ . The building of the model is still a documented process , not executable code — the quality depends on the agent following it. It is demonstrated by the bundled example models under examp"
+        "body": "In one sentence Initialization is a repeatable agent workflow — inventory the target read only, trace functionality from source, record honest verification states, add only source grounded diagrams, validate, and generate — that produces a model of any app without modifying it. Current behavior INITIALIZE.md defines the step by step process and prompts/INTEGRATE VIBEKB.md is a project agnostic prompt that drives it. The workspace it starts from is now prepared by the native installer install into a repository rather than a manual copy: vibekb install copies the runtime and scaffolds an empty, valid .vibekb/ no PHP required to install . The building of the model is still a documented process , not executable code — the quality depends on the agent following it. It is demonstrated by the bun"
     },
     {
         "title": "Install VibeKB into a repository",
@@ -532,6 +532,13 @@
         "body": "Before A short install block sat between \"What you get\" and live proof. It mixed a combined command block with a six step list that mentioned upgrades and bootstrap , burying the real public workflow. After Page flow is: hero/problem → Add VibeKB to your repository → what you get → live proof. The install section shows exactly three primary steps matching INSTALLER.md / install.php : 1. git clone https://github.com/cubixmeow commits/VibeKB.git 2. php VibeKB/install.php /path/to/your/project plus example path; PHP 8.2+ 3. A copyable Cursor prompt pointing at prompts/INTEGRATE VIBEKB.md Copy buttons live in homepage.js . The result strip distinguishes installed runtime .vibekb/ , guide/ , tools/ from docs/ generated later via php tools/vibekb.php generate . A disclosure covers what the insta"
     },
     {
+        "title": "Homepage copy matches the native Go installer",
+        "summary": "The public homepage now describes the real source-build Go CLI workflow (clone → go build → vibekb install → coding agent), splits install vs post-install requirements, drops Native CLI and Repository doctor from Coming soon, and removes em dashes from homepage marketing copy.",
+        "type": "change",
+        "url": "../why/changes/homepage-native-installer-copy.html",
+        "body": "Before The homepage still taught the old PHP installer path: 1. git clone … 2. php VibeKB/install.php /path/to/your/project with “Requires PHP 8.2+” 3. Coding agent prompt Install Requirements and Current Requirements listed PHP as if it were needed to install. Coming soon still advertised Native CLI and Repository doctor, which are already implemented. Marketing copy used em dashes heavily. After Page flow is unchanged hero → install → compatibility → what you get → proof . Commands match INSTALLER.md / README.md / go.mod : 1. Clone + go build o vibekb ./cmd/vibekb Go 1.24+ 2. ./vibekb install /path/to/your/project native; no PHP required to install 3. Same integration prompt for the coding agent Requirements are split: Go/Git/write access to install from source today; PHP 8.2+ and an AI "
+    },
+    {
         "title": "Replace leftover SousMeow homepage tagline with VibeKB self-hosting copy",
         "summary": "The homepage hero card no longer falls back to an old workflow-platform tagline; it uses VibeKB's identity one_liner/summary, and adjacent framing now describes VibeKB explaining itself.",
         "type": "change",
@@ -770,17 +777,17 @@
         "body": "Mode A — the dynamic guide on shared hosting .cpanel.yml rsyncs the runtime paths index.php , assets/ , guide/ , .vibekb/ into a cPanel public folder and excludes development only paths tools/ , prompts/ , docs/ , authoring docs, examples/ . Query string routing means no .htaccess rewrite rules are needed and the app runs in a subfolder. .vibekb/ must deploy — it is the content. Mode B — the static snapshot php tools/generate static.php builds /docs ; publish it via GitHub Pages Settings → Pages → branch → /docs or any static host. Relative links make it work at a web root or under a repository subpath. No PHP, database, CDN, or network required. Deployment is part of the application Whenever repository structure, runtime folders, or deployment requirements change, .cpanel.yml and DEPLOYME"
     },
     {
-        "title": "Make vibekb install truly native (no PHP required to install)",
-        "summary": "Complete — native Go installer with embedded payload; starter model turned into shared data (template/starter/); install.php is now a wrapper; model reconciled. See handoff.md.",
+        "title": "Update homepage for the native Go installer",
+        "summary": "Complete — homepage matches INSTALLER.md native Go flow; PHP required only after install; Native CLI / Repository doctor removed from Coming soon.",
         "type": "current work",
         "url": "../current-work/index.html",
-        "body": "Status Complete. See .vibekb/work/handoff.md . Decisions recorded decision:native installer embedded payload — installation is native to the Go binary, from an embedded payload; PHP is required only to run the guide. decision:installer template not duplicated tree updated for the embed + starter data mechanism. Full assessment in ARCHITECTURE.md ."
+        "body": "Status Complete. See .vibekb/work/handoff.md . Decisions / changes recorded change:homepage native installer copy — homepage install copy matches the native Go installer; requirements and Coming soon reconciled with ARCHITECTURE.md Phase 2."
     },
     {
         "title": "Current handoff",
-        "summary": "Installation is now fully native to the `vibekb` Go binary — it embeds the runtime payload and a canonical starter definition and installs with no PHP and no live clone. The starter model became shared data (template/starter/) read by both Go and PHP; install.php is a thin wrapper. Next: distribution (release binaries + brew/winget/curl).",
+        "summary": "Homepage install copy now matches the native Go CLI (clone → build → vibekb install → coding agent). PHP is not required to install; PHP 8.2+ remains the post-install runtime. Native CLI and Repository doctor are no longer listed as Coming soon. Next: Phase 2 distribution (release binaries + brew/winget/curl).",
         "type": "handoff",
         "url": "../handoff/index.html",
-        "body": "Current state vibekb install is native Go. It parses the embedded template/manifest.json , copies the runtime payload from the binary's embedded filesystem, and scaffolds a fresh .vibekb/ from the embedded template/starter/ definition — launching no PHP. The PHP runtime is unchanged: the model loader guide/lib , the dynamic guide Mode A , the static generator Mode B , bootstrap , and validation are exactly as before, and php tools/vibekb.php … still works. Completed this change Starter as data : template/starter/ a starter.json directory list + a files/ tree with {{DATE}} / {{PROJECT NAME JSON}} tokens is now the one canonical starter definition. Generated from the old Starter.php so output is byte identical. Starter.php refactored to read template/starter/ — bootstrap unchanged, no duplic"
+        "body": "Current state The public homepage index.php describes the real installation path from INSTALLER.md / README.md : build vibekb from Go source, run ./vibekb install /path/to/project no PHP , then ask a coding agent to build the model. Compatibility cards split “to install from source” Go 1.24+, Git, write access from “after installation” PHP 8.2+, AI coding agent . Coming soon lists only Phase 2 distribution items. Em dashes were removed from homepage marketing copy and the identity one liner shown on the hero card. The installer implementation itself is unchanged: native Go with embedded payload; PHP remains the guide and model engine runtime. Completed this change index.php : install command variables, three install cards, Install/Current Requirements, Coming soon, installer <details , and"
     }
 ]

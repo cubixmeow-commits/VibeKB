@@ -14,7 +14,7 @@ files: [.cpanel.yml, DEPLOYMENT.md, guide/lib/UrlStrategy.php, index.php]
 reads: []
 writes: []
 depends_on: [render-guide, generate-static-snapshot]
-related_memory: [constraint:no-build-step-portable, decision:two-modes-one-source, change:homepage-compatibility-section]
+related_memory: [constraint:no-build-step-portable, decision:two-modes-one-source, change:homepage-compatibility-section, change:homepage-native-installer-copy]
 ---
 
 ## In one sentence

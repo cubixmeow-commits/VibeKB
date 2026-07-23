@@ -1,34 +1,34 @@
 {
-  "vibekb_version": "1.0",
-  "content_model": "functionality-first",
-  "updated": "2026-07-23",
-  "installer_version": "1.0.0",
-  "self_hosted": true,
-  "example_project": {
-    "name": "VibeKB",
-    "is_sample": false,
-    "note": "This is VibeKB's own living software model \u2014 VibeKB explaining VibeKB. The source it describes is THIS repository (cubixmeow-commits/VibeKB). Bundled example models of other applications live under examples/ (see examples/sousmeow/.vibekb) and are NOT the active model; do not confuse them with the current state of VibeKB."
-  },
-  "provenance": {
-    "name": "VibeKB",
-    "source_repository": "https://github.com/cubixmeow-commits/VibeKB",
-    "source_subpath": "",
-    "source_branch": "main",
-    "source_commit": "3956dbc (2026-07-23)",
-    "analyzed": "2026-07-23",
-    "verification_scope": "The content loader, dynamic guide, static generator, validator, topology test, and self-maintenance CLI were traced from source in this repository. Diagram topology (architecture, content-load-flow) is verified-from-source. Homepage layout verified by rendering index. Homepage Compatibility & Requirements (#compatibility) verified by rendering index.php and checking claims against PRODUCT.md, INSTALLER.md, and DEPLOYMENT.md (PHP 8.2+, no Composer/DB/AI API; agent-maintained; static via generate; coming-soon badges labelled not implemented).php (section order problem \u2192 install \u2192 understanding \u2192 proof; install commands checked against install.php / INSTALLER.md / template/manifest.json; docs/ labelled as generated, not installed). Homepage copy-button click behaviour is inferred-from-source (Clipboard path reviewed; not clicked in a browser here). The interactive functionality map (overview first screen) was verified by rendering the overview in both modes and driving the map in a headless browser (expand, list toggle, double-click-to-docs, mobile fallback). The installer (install.php) and bootstrap command were traced from source and exercised end-to-end: dry-run and real install into a scratch repository, an upgrade run preserving .vibekb/, and bootstrap repairing a damaged workspace; the scaffolded starter model validates with 0 errors. The cPanel host and Cursor discovery are inferred/not-verified as noted per record. The Go developer CLI (cmd/vibekb, internal/*) was traced from source and exercised end-to-end: built and vetted (go build/vet), unit-tested (go test), and run against this repository — native version/doctor/help, repo-root and PHP discovery from a nested directory, delegation of validate/status/check with exit codes propagated, and the missing-PHP and outside-a-source-clone error paths. It delegates to the PHP core and does not re-implement the model loader (see decision:go-front-end-php-core, ARCHITECTURE.md). Installation is now native to the Go binary (embed.go + internal/installer): the payload and a canonical starter definition (template/starter/) are embedded, so `vibekb install` runs with NO PHP. Verified end-to-end: native install with PHP removed from PATH into a scratch repo, then PHP bootstrap ('Everything is in place') and validate (0 errors) on the installed target; the native scaffold is byte-identical to the PHP scaffold; dry-run, upgrade (preserve), --force reset, and self-hosted-repo refusal exercised. tools/lib/Starter.php now reads the same template/starter/ data (no duplicated starter definition), and install.php is a compatibility wrapper (see decision:native-installer-embedded-payload, change:native-go-installer).",
-    "last_verified": "2026-07-23",
-    "updates_automatically": false,
-    "model_maintenance": "agent-maintained",
-    "freshness_note": "VibeKB does not update this model on its own. An AI agent keeps it synchronized while developing VibeKB, following the workflow in CLAUDE.md. `source_commit` records the commit the model was last reconciled against; run `php tools/vibekb.php check` to see what has changed since \u2014 drift is detected mechanically, but interpreting a change into the model still requires an agent."
-  },
-  "structure": {
-    "project": "project/ \u2014 identity, intent, current state, constraints",
-    "functionality": "functionality/ \u2014 index.json + records/ (the primary unit)",
-    "system": "system/ \u2014 mental model, components, flows, storage, deployment",
-    "files": "files/important-files.json \u2014 curated important files",
-    "diagrams": "diagrams/ \u2014 index.json + records/ + assets/ (SVGs) + topology/ (explainable)",
-    "memory": "memory/ \u2014 decisions, constraints, assumptions, warnings, discoveries, changes",
-    "work": "work/ \u2014 current AI work, handoff, sessions"
-  }
+    "vibekb_version": "1.0",
+    "content_model": "functionality-first",
+    "updated": "2026-07-23",
+    "installer_version": "1.0.0",
+    "self_hosted": true,
+    "example_project": {
+        "name": "VibeKB",
+        "is_sample": false,
+        "note": "This is VibeKB's own living software model \u2014 VibeKB explaining VibeKB. The source it describes is THIS repository (cubixmeow-commits/VibeKB). Bundled example models of other applications live under examples/ (see examples/sousmeow/.vibekb) and are NOT the active model; do not confuse them with the current state of VibeKB."
+    },
+    "provenance": {
+        "name": "VibeKB",
+        "source_repository": "https://github.com/cubixmeow-commits/VibeKB",
+        "source_subpath": "",
+        "source_branch": "main",
+        "source_commit": "f1a8665 (2026-07-23)",
+        "analyzed": "2026-07-23",
+        "verification_scope": "The content loader, dynamic guide, static generator, validator, topology test, and self-maintenance CLI were traced from source in this repository. Diagram topology (architecture, content-load-flow) is verified-from-source. Homepage layout verified by rendering index.php (section order problem \u2192 install \u2192 compatibility \u2192 understanding \u2192 proof). Homepage install commands verified against INSTALLER.md, README.md, go.mod (Go 1.24+), and internal/installer argument parsing: clone \u2192 go build -o vibekb ./cmd/vibekb \u2192 ./vibekb install [options] [target]; dry-run uses ./vibekb install --dry-run; installation does not require PHP; PHP 8.2+ is required after install for the guide and model commands. Coming soon badges list only Phase 2 distribution items (prebuilt binaries, Homebrew, Winget, curl) and no longer claim Native CLI or Repository doctor. Homepage Compatibility & Requirements claims checked against PRODUCT.md, INSTALLER.md, DEPLOYMENT.md, and ARCHITECTURE.md. Homepage copy-button click behaviour is inferred-from-source (Clipboard path reviewed; not clicked in a browser here). docs/ labelled as generated via php tools/vibekb.php generate, not installed. The interactive functionality map (overview first screen) was verified previously by rendering the overview in both modes and driving the map in a headless browser. Installation is native to the Go binary (embed.go + internal/installer): verified previously end-to-end with PHP removed from PATH; tools/lib/Starter.php reads template/starter/; install.php is a compatibility wrapper (see decision:native-installer-embedded-payload, change:native-go-installer, change:homepage-native-installer-copy).",
+        "last_verified": "2026-07-23",
+        "updates_automatically": false,
+        "model_maintenance": "agent-maintained",
+        "freshness_note": "VibeKB does not update this model on its own. An AI agent keeps it synchronized while developing VibeKB, following the workflow in CLAUDE.md. `source_commit` records the commit the model was last reconciled against; run `php tools/vibekb.php check` to see what has changed since \u2014 drift is detected mechanically, but interpreting a change into the model still requires an agent."
+    },
+    "structure": {
+        "project": "project/ \u2014 identity, intent, current state, constraints",
+        "functionality": "functionality/ \u2014 index.json + records/ (the primary unit)",
+        "system": "system/ \u2014 mental model, components, flows, storage, deployment",
+        "files": "files/important-files.json \u2014 curated important files",
+        "diagrams": "diagrams/ \u2014 index.json + records/ + assets/ (SVGs) + topology/ (explainable)",
+        "memory": "memory/ \u2014 decisions, constraints, assumptions, warnings, discoveries, changes",
+        "work": "work/ \u2014 current AI work, handoff, sessions"
+    }
 }

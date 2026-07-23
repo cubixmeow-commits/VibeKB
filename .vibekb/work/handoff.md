@@ -2,67 +2,53 @@
 id: handoff
 type: handoff
 title: Current handoff
-summary: Installation is now fully native to the `vibekb` Go binary — it embeds the runtime payload and a canonical starter definition and installs with no PHP and no live clone. The starter model became shared data (template/starter/) read by both Go and PHP; install.php is a thin wrapper. Next: distribution (release binaries + brew/winget/curl).
+summary: Homepage install copy now matches the native Go CLI (clone → build → vibekb install → coding agent). PHP is not required to install; PHP 8.2+ remains the post-install runtime. Native CLI and Repository doctor are no longer listed as Coming soon. Next: Phase 2 distribution (release binaries + brew/winget/curl).
 updated: 2026-07-23
 verification_state: verified-from-source
 ---
 
 ## Current state
 
-`vibekb install` is native Go. It parses the embedded `template/manifest.json`,
-copies the runtime payload from the binary's embedded filesystem, and scaffolds a
-fresh `.vibekb/` from the embedded `template/starter/` definition — launching no
-PHP. The PHP runtime is unchanged: the model loader (`guide/lib`), the dynamic
-guide (Mode A), the static generator (Mode B), `bootstrap`, and validation are
-exactly as before, and `php tools/vibekb.php …` still works.
+The public homepage (`index.php`) describes the real installation path from
+`INSTALLER.md` / `README.md`: build `vibekb` from Go source, run
+`./vibekb install /path/to/project` (no PHP), then ask a coding agent to build
+the model. Compatibility cards split “to install from source” (Go 1.24+, Git,
+write access) from “after installation” (PHP 8.2+, AI coding agent). Coming soon
+lists only Phase 2 distribution items. Em dashes were removed from homepage
+marketing copy and the identity one_liner shown on the hero card.
+
+The installer implementation itself is unchanged: native Go with embedded
+payload; PHP remains the guide and model-engine runtime.
 
 ## Completed this change
 
-- **Starter as data**: `template/starter/` (a `starter.json` directory list + a
-  `files/` tree with `{{DATE}}` / `{{PROJECT_NAME_JSON}}` tokens) is now the one
-  canonical starter definition. Generated from the old `Starter.php` so output is
-  byte-identical.
-- **Starter.php refactored** to read `template/starter/` — `bootstrap` unchanged,
-  no duplicated starter content. `template/starter/` is installed into targets so
-  `bootstrap` keeps working there.
-- **Native installer**: `embed.go` (module root) embeds the manifest, payload, and
-  starter; `internal/installer` does manifest parsing, planning, embedded-FS copy,
-  native scaffold, native verify, and `.installer.json`.
-- **install.php → wrapper** that forwards to `vibekb install` (or prints how to
-  get the binary). One installer implementation.
-- **CLI**: `install` is native; obsolete source-clone/PHP delegation for install
-  removed from `internal/phpcore` and `doctor`.
-- **Model reconciled**: `install-into-a-repository`, `bootstrap-workspace`, and
-  `run-the-developer-cli` records; `decision:native-installer-embedded-payload`;
-  `change:native-go-installer`; the not-duplicated-tree decision updated;
-  provenance, current-work, handoff; `/docs` regenerated.
+- `index.php`: install command variables, three install cards, Install/Current
+  Requirements, Coming soon, installer `<details>`, and em-dash cleanup.
+- Self-model: `change:homepage-native-installer-copy`;
+  `initialize-in-a-repository` trigger/copy; `important-files.json` depends_on;
+  related_memory links; identity one_liner/summary; handoff + current work;
+  provenance.
 
 ## Verification completed
 
-- `go build/vet/test` pass; `gofmt` clean.
-- Native install with **PHP removed from PATH** into a scratch repo → success,
-  61 runtime files + 17 scaffold files, `.installer.json` written.
-- On that installed target (with PHP): `php tools/vibekb.php bootstrap` →
-  "Everything is in place"; `php tools/validate.php` → 0 errors.
-- Native scaffold is **byte-identical** to PHP's scaffold.
-- Installer paths exercised: dry-run (no writes), upgrade (preserve .vibekb/),
-  `--force` (resets a tampered model), self-hosted-repo refusal, install.php
-  wrapper (forwards when a binary is present; guidance when not).
-- `php tools/vibekb.php check --strict`; `test-topology.php`; `/docs` regenerated.
+- Homepage HTML rendered via PHP: no `install.php` / “Requires PHP 8.2+” install
+  card / “Native CLI” / “Repository doctor” strings; presents
+  `./vibekb install`, `go build -o vibekb`, “Native installer: no PHP required”,
+  Go 1.24+, and Phase 2 Coming soon badges.
+- Commands checked against `INSTALLER.md`, `go.mod`, and
+  `internal/installer` (`vibekb install [options] [target]`).
+- `php -l index.php`; `php tools/vibekb.php check --strict`;
+  `php tools/test-topology.php`; `go test ./...` (recorded in the session).
 
 ## Not done yet (roadmap)
 
 - **Phase 2 — distribution**: cross-compiled release binaries + checksums, a
-  `curl | sh` installer, a Homebrew tap, and a winget manifest, so
-  `brew install vibekb` becomes real. Now unblocked — install is self-contained.
+  `curl | sh` installer, a Homebrew tap, and a winget manifest.
 - **Phase 3 — shared core boundary**: lift the model core out of `guide/lib`.
-- **Phase 4 — evaluate a bundled PHP runtime** so the guide too needs nothing
-  preinstalled.
+- **Phase 4 — evaluate a bundled PHP runtime**.
 
 ## Exact next recommended action
 
-`vibekb status` (or `php tools/vibekb.php status`) before the next change. To
-continue, start Phase 2: add release automation (goreleaser-style cross-compiles)
-and a `curl | sh` script that fetches the right `vibekb` binary. Keep the
-boundaries: the installer stays PHP-free and embedded; the model loader/generator
-stay the single PHP implementation.
+`php tools/vibekb.php status` before the next change. To continue product work,
+start Phase 2 distribution. Keep boundaries: installer stays PHP-free and
+embedded; model loader/generator stay the single PHP implementation.

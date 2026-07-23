@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Provenance is objective and VibeKB never claims to auto-update · VibeKB — VibeKB</title>
+    <title>Homepage copy matches the native Go installer · VibeKB — VibeKB</title>
     <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -105,52 +105,52 @@
                 <article class="view view-doc">
         <p class="breadcrumb"><a href="../../why/index.html">← Decisions &amp; rationale</a></p>
         <header class="page-head reading-column">
-            <p class="eyebrow">Decisions</p>
-            <h1>Provenance is objective and VibeKB never claims to auto-update</h1>
-            <p class="lede">Every rendering states the source commit analyzed, when it was generated, and that it does not update itself; detection is separated from interpretation, and `updates_automatically` stays false.</p>
+            <p class="eyebrow">Changes</p>
+            <h1>Homepage copy matches the native Go installer</h1>
+            <p class="lede">The public homepage now describes the real source-build Go CLI workflow (clone → go build → vibekb install → coding agent), splits install vs post-install requirements, drops Native CLI and Repository doctor from Coming soon, and removes em dashes from homepage marketing copy.</p>
             <div class="badge-row">
-                <span class="badge badge--info">accepted</span>                                                <span class="badge badge--ok">Verified from source</span>            </div>
+                <span class="badge badge--info">implemented</span>                                                <span class="badge badge--ok">Verified from source</span>            </div>
         </header>
         <div class="detail-grid">
-            <div class="detail-main"><div class="prose reading-column"><h3>Context</h3>
-<p>The user wants VibeKB to &quot;run continuously.&quot; The dishonest way to satisfy that is
-to imply a file watcher understands code changes. It does not — understanding a
-change is analysis work.</p>
-<h3>Decision</h3>
-<p>Provenance uses objective labels only (source commit analyzed, analysis
-generated, verification scope, last verified) and always states that the output
-does not auto-update. <code>updates_automatically</code> is <code>false</code> unless a real, verified
-update mechanism exists. The maintenance CLI is explicit about the boundary
-between <em>detected</em> (mechanical: git diff, path existence, render diff) and
-<em>interpreted</em> (an agent deciding what a change means).</p>
-<h3>Alternatives considered</h3>
-<ul>
-<li><strong>A single boolean &quot;up to date&quot; flag</strong> — rejected: it cannot express &quot;code</li>
-</ul>
-<p>changed but no one has reconciled the model yet,&quot; which is the common and
-  important state.</p>
-<ul>
-<li><strong>Claiming automatic semantic updates</strong> — rejected: false. VibeKB is</li>
-</ul>
-<p>agent-maintained; the manifest says so (<code>model_maintenance: agent-maintained</code>).</p>
-<h3>Reason</h3>
-<p>VibeKB&#039;s entire value is trust. A single overstated freshness claim would poison
-it.</p>
-<h3>Consequences</h3>
-<ul>
-<li>The drift check reports facts and never silently &quot;fixes&quot; the model.</li>
-<li>Verification states must reflect real evidence (see the warning of the same</li>
-</ul>
-<p>name).</p>
-<ul>
-<li>The provenance panel never renders an undefined or flattering label.</li>
-</ul></div></div>
+            <div class="detail-main"><div class="prose reading-column"><h3>Before</h3>
+<p>The homepage still taught the old PHP installer path:</p>
+<ol>
+<li><code>git clone …</code></li>
+<li><code>php VibeKB/install.php /path/to/your/project</code> with “Requires PHP 8.2+”</li>
+<li>Coding-agent prompt</li>
+</ol>
+<p>Install Requirements and Current Requirements listed PHP as if it were needed to
+install. Coming soon still advertised Native CLI and Repository doctor, which
+are already implemented. Marketing copy used em dashes heavily.</p>
+<h3>After</h3>
+<p>Page flow is unchanged (hero → install → compatibility → what you get → proof).
+Commands match <code>INSTALLER.md</code> / <code>README.md</code> / <code>go.mod</code>:</p>
+<ol>
+<li>Clone + <code>go build -o vibekb ./cmd/vibekb</code> (Go 1.24+)</li>
+<li><code>./vibekb install /path/to/your/project</code> (native; no PHP required to install)</li>
+<li>Same integration prompt for the coding agent</li>
+</ol>
+<p>Requirements are split: Go/Git/write access to install from source today; PHP
+8.2+ and an AI coding agent after installation. Coming soon lists only Phase 2
+distribution items (prebuilt binaries, Homebrew, Winget, curl). The identity
+one_liner used on the hero card no longer uses em dashes.</p>
+<h3>Honesty preserved</h3>
+<p>Installation is native Go; the guide and model engine remain PHP. <code>docs/</code> is
+still generated with <code>php tools/vibekb.php generate</code>. No brew/winget/curl
+commands are shown as available. The installer still does not analyze the target
+application.</p>
+<h3>Verification note</h3>
+<p>Commands and rendered homepage HTML were checked against <code>INSTALLER.md</code>,
+<code>go.mod</code>, and <code>internal/installer</code> argument parsing. Old <code>install.php</code> /
+“Requires PHP 8.2+” install-card / Native CLI / Repository doctor strings are
+absent from the rendered homepage. Copy-button clicks were not exercised in a
+browser in this environment.</p></div></div>
             <aside class="detail-rail" aria-label="Connections">
                 <div class="rail-card">
                     <h2>Affects functionality</h2>
-                    <p><a class="chip" href="../../functionality/show-provenance.html">Show provenance and freshness</a> <a class="chip" href="../../functionality/validate-model.html">Validate the model</a> <a class="chip" href="../../functionality/detect-drift.html">Detect drift between code and model</a></p>
+                    <p><a class="chip" href="../../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a></p>
                 </div>
-                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">guide/lib/Provenance.php</code> <code class="chip chip--file">.vibekb/manifest.json</code></p></div>
+                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">index.php</code> <code class="chip chip--file">.vibekb/project/identity.md</code></p></div>
                             </aside>
         </div>
     </article>
