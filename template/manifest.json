@@ -35,7 +35,7 @@
     ]
   },
   "not_installed": {
-    "note": "Deliberately excluded from a target repository. The marketing homepage (index.php, assets/) would collide with the target application's own root; VibeKB's own model, examples, generated docs, and host-specific deploy config are VibeKB-repo-only.",
+    "note": "Deliberately excluded from a target repository. The marketing homepage (index.php, assets/) would collide with the target application's own root; VibeKB's own model, examples, generated docs, host-specific deploy config, and the Go developer CLI (a separately distributed binary, not per-repo runtime) are VibeKB-repo-only.",
     "paths": [
       "index.php",
       "assets",
@@ -46,9 +46,14 @@
       "DEPLOYMENT.md",
       "TOKEN_ECONOMICS.md",
       "BUILD_REPORT.md",
+      "ARCHITECTURE.md",
       ".github",
       "install.php",
-      "template"
+      "template",
+      "cmd",
+      "internal",
+      "go.mod",
+      "go.sum"
     ]
   },
   "starter_model": {

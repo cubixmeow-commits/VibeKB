@@ -11,6 +11,11 @@
       "description": "How a coding agent starts a session, finds what a change affects, detects drift, records active work, and hands off — the self-maintenance lifecycle."
     },
     {
+      "id": "developer-cli",
+      "title": "The developer CLI (Go front-end)",
+      "description": "A single `vibekb` binary that fronts the whole toolchain: native diagnostics that need no runtime, and honest delegation to the canonical PHP core for every command that touches the model."
+    },
+    {
       "id": "dynamic-guide",
       "title": "The dynamic guide (Mode A)",
       "description": "The live PHP app that renders the model in the browser: routing, provenance, and search."
@@ -55,6 +60,7 @@
     "validate-diagram-topology",
     "install-into-a-repository",
     "bootstrap-workspace",
+    "run-the-developer-cli",
     "initialize-in-a-repository",
     "deploy-and-stay-portable"
   ]

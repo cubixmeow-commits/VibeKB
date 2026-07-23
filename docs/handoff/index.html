@@ -113,41 +113,66 @@
             <div class="badge-row">
                                     <span class="badge badge--info">Verification: verified from source</span>                                <span class="muted">Updated 2026-07-23</span>
             </div>
-            <div class="prose reading-column"><h3>Completed this change</h3>
+            <div class="prose reading-column"><h3>Current state</h3>
+<p>VibeKB has a new developer front-end: a Go binary (<code>cmd/vibekb</code>, <code>internal/*</code>)
+that runs <code>doctor</code>/<code>version</code>/<code>help</code> natively and delegates <code>status</code>, <code>check</code>,
+<code>affected</code>, <code>bootstrap</code>, <code>validate</code>, <code>generate</code>, and <code>install</code> to the existing PHP
+tooling. Nothing in PHP changed — the model loader, the dynamic guide (Mode A),
+and the static generator (Mode B) are untouched, and <code>php tools/vibekb.php …</code>
+still works exactly as before.</p>
+<h3>Completed this change</h3>
 <ul>
-<li>Install step 3 generalized: <strong>Ask your coding agent</strong> (Cursor, Claude Code,</li>
+<li><strong>Assessment</strong> (<code>ARCHITECTURE.md</code>): responsibilities inventoried; the model</li>
 </ul>
-<p>Codex, Windsurf, and others); copy control is “Copy agent prompt.”</p>
+<p>loader identified as the crux; three architectures weighed; &quot;Go front-end, PHP
+  core&quot; chosen with a command-by-command verdict and a 4-phase roadmap.</p>
 <ul>
-<li>Boundary copy: installer prepares; coding agent understands.</li>
-<li>New <code>#compatibility</code> section: four cards, no-extra-infrastructure checklist,</li>
+<li><strong>Phase 1 CLI</strong>: native <code>doctor</code>/<code>version</code>/<code>help</code>; repo-root + PHP discovery</li>
 </ul>
-<p>honest current requirements, inactive coming-soon badges.</p>
+<p>(<code>internal/phpcore</code>); delegation with exit-code propagation; honest
+  missing-runtime and outside-a-source-clone errors; a unit test for the PHP
+  version floor.</p>
 <ul>
-<li>Nav link: Compatibility.</li>
-<li>Model reconciled: change memory, important-files, functionality links, handoff.</li>
+<li><strong>CI</strong>: a Go job (build + vet + test) added alongside the PHP job.</li>
+<li><strong>Model reconciled</strong>: new functionality <code>run-the-developer-cli</code> under a new</li>
 </ul>
+<p><code>developer-cli</code> area; <code>decision:go-front-end-php-core</code>; provenance scope,
+  current-work, and handoff updated; <code>/docs</code> regenerated.</p>
+<ul>
+<li><strong>Kept the runtime pure</strong>: Go excluded from the cPanel deploy (<code>.cpanel.yml</code>)</li>
+</ul>
+<p>and from the installer payload (<code>template/manifest.json</code> → <code>not_installed</code>);
+  <code>.gitignore</code> added for the Go binary and build cache.</p>
 <h3>Verification completed</h3>
 <ul>
-<li>Claims checked against PRODUCT.md (agents/audience, no DB/AI API), INSTALLER.md</li>
+<li><code>go build ./...</code>, <code>go vet ./...</code>, <code>go test ./...</code> — all pass; <code>gofmt</code> clean.</li>
+<li>Built the binary and ran it against this repo: <code>version</code>, <code>doctor</code>, delegated</li>
 </ul>
-<p>(PHP 8.2+, no Composer/network), DEPLOYMENT.md (cPanel / GitHub Pages / static).</p>
+<p><code>validate</code>/<code>status</code>/<code>check</code> (from a nested directory), unknown-command exit 2,
+  missing-PHP exit 1, <code>install</code> outside a clone reported.</p>
 <ul>
-<li>Rendered homepage section order: problem → install → compatibility →</li>
+<li><code>php tools/vibekb.php validate</code> — 0 errors; <code>check --strict</code>;</li>
 </ul>
-<p>understanding → proof.</p>
+<p><code>test-topology.php</code>; <code>/docs</code> regenerated.</p>
+<h3>Not done yet (roadmap)</h3>
 <ul>
-<li>Confirmed honesty lines: agent interprets source; no auto-analyze on install;</li>
+<li><strong>Phase 2 — distribution</strong>: cross-compiled release binaries + checksums, a</li>
 </ul>
-<p>coming soon labelled not implemented.</p>
+<p><code>curl | sh</code> installer, a Homebrew tap, and a winget manifest.</p>
 <ul>
-<li><code>php -l index.php</code>; <code>php tools/vibekb.php check</code>; <code>php tools/test-topology.php</code>;</li>
+<li><strong>Phase 3 — shared core boundary</strong>: lift the model core out of <code>guide/lib</code> into</li>
 </ul>
-<p><code>php tools/vibekb.php generate</code>.</p>
+<p>a shared location both the guide and tools import; turn the <code>Starter.php</code> starter
+  payload into data files.</p>
+<ul>
+<li><strong>Phase 4 — evaluate a bundled PHP runtime</strong> (FrankenPHP / static-php-cli) so</li>
+</ul>
+<p><code>vibekb</code> needs nothing preinstalled. A later decision with real trade-offs.</p>
 <h3>Exact next recommended action</h3>
-<p><code>php tools/vibekb.php status</code> before the next change. If install commands,
-supported agents, or deploy modes change, update <code>#install</code> and <code>#compatibility</code>
-in the same commit as the docs they mirror.</p></div>
+<p><code>php tools/vibekb.php status</code> (or <code>vibekb status</code>) before the next change. To
+continue the roadmap, start Phase 2: add release automation and a <code>curl | sh</code>
+installer that fetches the right <code>vibekb</code> binary. Keep the honesty boundary — the
+CLI must never grow a second model loader or overstate that PHP is unnecessary.</p></div>
         </section>
     
             <section class="doc-section">
@@ -180,7 +205,7 @@ in the same commit as the docs they mirror.</p></div>
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 00:09 UTC · source commit 11468c3 (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 00:29 UTC · source commit df4a682 (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

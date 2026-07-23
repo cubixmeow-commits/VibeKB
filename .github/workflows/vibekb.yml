@@ -44,3 +44,31 @@ jobs:
         # --strict fails the build if /docs is out of sync with a fresh render,
         # so a published snapshot can never lag the model on the default branch.
         run: php tools/vibekb.php check --strict
+
+  # The Go developer CLI (cmd/vibekb, internal/*) is a front-end that delegates to
+  # the PHP core; this job keeps it building, vetting, and testing on its own.
+  vibekb-cli:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+
+      - name: Build
+        run: go build ./...
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Test
+        run: go test ./...
+
+      - name: gofmt
+        run: |
+          unformatted="$(gofmt -l cmd internal)"
+          if [ -n "$unformatted" ]; then
+            echo "These files need gofmt:"; echo "$unformatted"; exit 1
+          fi
