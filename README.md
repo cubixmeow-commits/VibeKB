@@ -19,16 +19,18 @@ mental model. VibeKB keeps that mental model accurate — organized around
 
 ## Add VibeKB to your repository
 
-Download the `vibekb` executable from
-[GitHub Releases](https://github.com/cubixmeow-commits/VibeKB/releases), put it
-on your `PATH`, then install into your project — **no Go and no PHP required to
-install.** The installer prepares the workspace; your coding agent builds the
-model.
+Install the CLI from the website, then point it at your project:
 
 ```bash
-# After downloading and placing vibekb on your PATH:
-vibekb install /path/to/your/project
+curl -fsSL https://iainreid.dev/vibekb/install.sh | sh
+cd /path/to/your/project
+vibekb install .
 ```
+
+The website installer detects macOS/Linux and arm64/amd64, downloads the matching
+binary from GitHub Releases, and places `vibekb` on your `PATH`. Prefer to install
+manually? Download binaries from
+[GitHub Releases](https://github.com/cubixmeow-commits/VibeKB/releases/latest).
 
 The binary embeds the VibeKB runtime (`guide/`, `tools/`, `prompts/`, `.cursor/`,
 the VibeKB docs, and the starter definition). It copies that payload into your
@@ -38,7 +40,7 @@ without launching PHP.** Then open your project in a coding agent (Claude Code,
 Cursor, Codex, …) and ask it to *build the first VibeKB model using
 `prompts/INTEGRATE_VIBEKB.md`*.
 
-- Preview the plan first: `vibekb install --dry-run /path/to/your/project`
+- Preview the plan first: `vibekb install --dry-run .`
 - Upgrade later (refresh runtime, keep your model): re-run `vibekb install`.
 - Repair a workspace any time: `php tools/vibekb.php bootstrap`.
 - Legacy `php install.php` still works — it now forwards to `vibekb install`.
@@ -56,7 +58,7 @@ go build -o vibekb ./cmd/vibekb           # Go 1.24+
 ./vibekb install /path/to/your/project
 ```
 
-Homebrew, Winget, and curl installers are on the roadmap after signed releases.
+Homebrew and Winget installers are on the roadmap after signed releases.
 
 ## How V1 works
 

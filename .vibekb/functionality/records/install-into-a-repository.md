@@ -15,7 +15,7 @@ reads: [template/manifest.json, template/starter]
 writes: []
 config: []
 depends_on: [bootstrap-workspace, load-living-model, run-the-developer-cli]
-related_memory: [decision:native-installer-embedded-payload, decision:installer-template-not-duplicated-tree, decision:installer-prepares-agent-interprets, change:native-go-installer, change:homepage-native-installer-copy, change:release-binaries-pipeline, change:homepage-releases-install-copy, change:homepage-drop-no-go-php-claims]
+related_memory: [decision:native-installer-embedded-payload, decision:installer-template-not-duplicated-tree, decision:installer-prepares-agent-interprets, change:native-go-installer, change:homepage-native-installer-copy, change:release-binaries-pipeline, change:homepage-releases-install-copy, change:homepage-drop-no-go-php-claims, change:website-curl-installer]
 ---
 
 ## In one sentence
@@ -28,8 +28,9 @@ model.
 
 ## User experience
 
-A developer builds the binary once (`go build -o vibekb ./cmd/vibekb`) — or, in
-future, installs it via brew/winget/curl — and runs `vibekb install
+A developer installs the CLI via the website
+(`curl -fsSL https://iainreid.dev/vibekb/install.sh | sh`) — or builds with
+`go build -o vibekb ./cmd/vibekb` — and runs `vibekb install
 /path/to/your/project`. They see a plan (what will be created, replaced, skipped,
 and that `.vibekb/` is a fresh model), confirm, and get a verified installation
 with explicit next steps. `--dry-run` shows the full plan and changes nothing;

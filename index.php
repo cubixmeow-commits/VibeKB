@@ -6,7 +6,7 @@ declare(strict_types=1);
  * VibeKB homepage: hero/problem, install fast-start, what you get, live proof + CTA.
  * Copy follows the developer journey (build fast → lose understanding → fear change →
  * keep understanding in the repo). Section 1 includes a hero comic beside the copy.
- * The install section mirrors the real installer workflow (download release binary →
+ * The install section mirrors the real installer workflow (website curl | sh →
  * vibekb install → coding agent builds the model). Compatibility & Requirements sits
  * under install. The guide-preview carousel and hero metrics are driven by real
  * `.vibekb/` records (never invented).
@@ -69,6 +69,7 @@ function hp_status_tone(string $status): string
 
 $guideUrl = 'guide/';
 $repoUrl = 'https://github.com/cubixmeow-commits/VibeKB';
+$siteUrl = 'https://iainreid.dev/vibekb';
 $releasesUrl = $repoUrl . '/releases/latest';
 $installerGuideUrl = $repoUrl . '/blob/main/INSTALLER.md';
 $codingAgents = 'Cursor, Claude Code, Codex, Windsurf, Copilot, and others';
@@ -78,18 +79,10 @@ $stackBadges = [
     'Python', 'Django', 'Flask', 'FastAPI', 'Go', 'Rust', 'Java', 'Kotlin',
     'C#', 'Swift', 'Ruby', 'C++',
 ];
-// Asset names must match .github/workflows/release.yml.
-$releasePlatforms = [
-    ['label' => 'Windows 64-bit', 'asset' => 'vibekb-windows-amd64.exe'],
-    ['label' => 'Windows ARM64', 'asset' => 'vibekb-windows-arm64.exe'],
-    ['label' => 'macOS Apple Silicon', 'asset' => 'vibekb-darwin-arm64'],
-    ['label' => 'macOS Intel', 'asset' => 'vibekb-darwin-amd64'],
-    ['label' => 'Linux 64-bit', 'asset' => 'vibekb-linux-amd64'],
-    ['label' => 'Linux ARM64', 'asset' => 'vibekb-linux-arm64'],
-];
-$installCmd = 'vibekb install /path/to/your/project';
-$installExampleCmd = 'vibekb install ~/Projects/my-app';
-$dryRunCmd = 'vibekb install --dry-run /path/to/your/project';
+$curlInstallCmd = 'curl -fsSL https://iainreid.dev/vibekb/install.sh | sh';
+$installCmd = 'vibekb install .';
+$installExampleCmd = 'cd ~/Projects/my-app && vibekb install .';
+$dryRunCmd = 'vibekb install --dry-run .';
 $buildFromSourceCmd = "git clone https://github.com/cubixmeow-commits/VibeKB.git\ncd VibeKB\ngo build -o vibekb ./cmd/vibekb";
 $agentPrompt = "Build the first VibeKB model for this repository using prompts/INTEGRATE_VIBEKB.md.\n"
     . "Inspect the real source code, do not modify the application while initializing VibeKB, "
@@ -111,7 +104,6 @@ $comingSoonItems = [
     'Code signing and notarization',
     'Homebrew installation',
     'Winget installation',
-    'curl installation',
 ];
 
 $content = new Content(__DIR__ . '/.vibekb');
@@ -273,40 +265,37 @@ if ($loaded) {
             </div>
         </section>
 
-        <!-- 2. Install: three-step fast-start (download → install → coding agent) -->
+        <!-- 2. Install: three-step fast-start (curl | sh → vibekb install → coding agent) -->
         <section class="hp-section hp-install" id="install" aria-labelledby="install-title">
             <div class="hp-wrap">
                 <p class="hp-kicker">Install in three steps</p>
                 <h2 id="install-title">Add VibeKB to your repository</h2>
                 <p class="hp-lead hp-install-lead">
-                    Download the binary. Point it at your repo. VibeKB installs the knowledge
-                    layer and gives your coding agent a better place to start.
+                    Install the CLI from this site. Point it at your repo. Your coding agent
+                    builds the first model from source.
                 </p>
 
                 <ol class="hp-install-cards" aria-label="Install VibeKB in three steps">
                     <li class="hp-install-card">
                         <p class="hp-install-step-num" aria-hidden="true">1</p>
-                        <h3>Download the VibeKB CLI</h3>
+                        <h3>Install the VibeKB CLI</h3>
                         <p class="hp-install-card-copy">
-                            Get the executable for your operating system from GitHub Releases.
-                            Rename it to <code>vibekb</code> (or <code>vibekb.exe</code> on Windows),
-                            make it executable if needed, and put it on your <code>PATH</code>.
+                            One command detects your platform, downloads the right binary, and
+                            puts <code>vibekb</code> on your <code>PATH</code>. macOS and Linux.
                         </p>
-                        <div class="hp-actions">
-                            <a class="hp-btn hp-btn-primary" href="<?= hp_e($releasesUrl) ?>" rel="noopener noreferrer">Download latest release</a>
+                        <div class="hp-cmd-block">
+                            <pre class="hp-cmd" id="cmd-curl-install"><code><?= hp_e($curlInstallCmd) ?></code></pre>
+                            <button type="button" class="hp-copy-btn" data-copy-target="#cmd-curl-install">Copy</button>
                         </div>
-                        <p class="hp-install-example-label">Release binaries</p>
-                        <ul class="hp-compat-checks hp-compat-checks--tight">
-                            <?php foreach ($releasePlatforms as $platform): ?>
-                                <li><?= hp_e($platform['label']) ?>: <code><?= hp_e($platform['asset']) ?></code></li>
-                            <?php endforeach; ?>
-                        </ul>
+                        <p class="hp-install-manual">
+                            <a href="<?= hp_e($releasesUrl) ?>" rel="noopener noreferrer">Prefer to install manually? Download binaries from GitHub Releases.</a>
+                        </p>
                     </li>
                     <li class="hp-install-card">
                         <p class="hp-install-step-num" aria-hidden="true">2</p>
                         <h3>Install it into your project</h3>
                         <p class="hp-install-card-copy">
-                            Run the executable against the repository you want to understand.
+                            From the repository you want to understand, run:
                         </p>
                         <div class="hp-cmd-block">
                             <pre class="hp-cmd" id="cmd-install"><code><?= hp_e($installCmd) ?></code></pre>
@@ -322,7 +311,7 @@ if ($loaded) {
                         <p class="hp-install-step-num" aria-hidden="true">3</p>
                         <h3>Ask your coding agent</h3>
                         <p class="hp-install-card-copy">
-                            The installer only sets up the workspace. Open the project in Cursor, Claude Code,
+                            The CLI only sets up the workspace. Open the project in Cursor, Claude Code,
                             Codex, Windsurf, or another coding agent, then paste this prompt so the agent
                             builds the first model from source.
                         </p>
@@ -408,7 +397,7 @@ if ($loaded) {
                 <p class="hp-kicker">Will this work with my project?</p>
                 <h2 id="compatibility-title">Compatibility &amp; Requirements</h2>
                 <p class="hp-lead hp-compat-lead">
-                    Install with a downloaded executable. The installed guide and model engine stay PHP.
+                    Install the CLI from this website. The installed guide and model engine stay PHP.
                     Your coding agent builds the model by reading your source.
                 </p>
 
@@ -416,7 +405,8 @@ if ($loaded) {
                     <article class="hp-compat-card">
                         <h3>Installing VibeKB</h3>
                         <ul class="hp-compat-checks">
-                            <li>Download the correct executable for your operating system</li>
+                            <li>macOS or Linux (arm64 or amd64)</li>
+                            <li><code>curl</code> or <code>wget</code></li>
                             <li>Read/write access to the target repository</li>
                             <li>Git repository recommended</li>
                         </ul>
@@ -437,8 +427,9 @@ if ($loaded) {
                             <li>A developer working inside the repository</li>
                         </ul>
                         <p class="hp-compat-card-copy">
-                            The downloaded binary installs VibeKB. It does not replace PHP for the
-                            installed guide, <code>vibekb check</code>, or <code>vibekb generate</code>.
+                            The <code>vibekb</code> CLI installs VibeKB into a repository. It does not
+                            replace PHP for the installed guide, <code>vibekb check</code>, or
+                            <code>vibekb generate</code>.
                         </p>
                     </article>
 
@@ -513,7 +504,8 @@ if ($loaded) {
                     <h3 class="hp-compat-subhead">Current Requirements</h3>
                     <h4 class="hp-compat-subhead">Installation</h4>
                     <ul class="hp-compat-checks">
-                        <li>Downloadable executable from GitHub Releases</li>
+                        <li>Website installer: <code>curl -fsSL <?= hp_e($siteUrl) ?>/install.sh | sh</code></li>
+                        <li>macOS or Linux with network access to GitHub Releases</li>
                         <li>Read/write access to the target repository</li>
                     </ul>
                     <h4 class="hp-compat-subhead">Using VibeKB after installation</h4>
@@ -534,7 +526,7 @@ if ($loaded) {
                     <div class="hp-install-details-body">
                         <p class="hp-install-card-copy">
                             For contributors building VibeKB itself. Ordinary installs should use the
-                            release binary. You need Go 1.24+ (from <code>go.mod</code>) and Git.
+                            website curl installer. You need Go 1.24+ (from <code>go.mod</code>) and Git.
                         </p>
                         <div class="hp-cmd-block">
                             <pre class="hp-cmd" id="cmd-build-source"><code><?= hp_e($buildFromSourceCmd) ?></code></pre>

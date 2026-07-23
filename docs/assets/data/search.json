@@ -11,7 +11,7 @@
         "summary": "The guide deploys to plain PHP 8.2 shared hosting via `.cpanel.yml` with no build step, no database, and no rewrite rules; query-string routing and relative static links let it run at a web root or in a subfolder, and the deploy config is treated as part of the application.",
         "type": "functionality",
         "url": "../functionality/deploy-and-stay-portable.html",
-        "body": "In one sentence VibeKB ships as ordinary PHP plus generated static files, so it deploys by copying files — the deployment configuration is maintained alongside the code it deploys. Current behavior .cpanel.yml rsyncs the runtime paths index.php , assets/ , guide/ , .vibekb/ into a cPanel public folder, excluding development only paths tools/ , prompts/ , docs/ , authoring docs, examples . Query string routing means no rewrite rules are required and the guide works in a subfolder; StaticUrlStrategy emits relative links so /docs works at a web root or under a repository subpath GitHub Pages . .vibekb/ is the content and must deploy; examples/ and tooling need not. Implementation map .cpanel.yml — the deploy sync and exclusions. DEPLOYMENT.md — the deploy contract and persistent path rules. g"
+        "body": "In one sentence VibeKB ships as ordinary PHP plus generated static files, so it deploys by copying files — the deployment configuration is maintained alongside the code it deploys. The public site also serves install.sh and /install as the CLI acquisition endpoint. Current behavior .cpanel.yml rsyncs the runtime paths index.php , assets/ , guide/ , .vibekb/ into a cPanel public folder, excluding development only paths tools/ , prompts/ , docs/ , authoring docs, examples . Query string routing means no rewrite rules are required and the guide works in a subfolder; StaticUrlStrategy emits relative links so /docs works at a web root or under a repository subpath GitHub Pages . .vibekb/ is the content and must deploy; examples/ and tooling need not. Implementation map .cpanel.yml — the deploy "
     },
     {
         "title": "Detect drift between code and model",
@@ -53,7 +53,7 @@
         "summary": "A fully native installer built into the `vibekb` Go binary. `vibekb install /path/to/repo` copies the VibeKB runtime and scaffolds a fresh, empty-but-valid `.vibekb/` workspace from files embedded in the binary — without executing PHP, without analysing the application, and without needing the source repository to remain on disk. PHP is required only to run the installed guide.",
         "type": "functionality",
         "url": "../functionality/install-into-a-repository.html",
-        "body": "In one sentence vibekb install /path/to/repo prepares any repository for VibeKB — it copies the guide, the tools, the agent instructions, the VibeKB docs, and the starter definition, then lays down a fresh empty model — all from the binary's embedded payload, with no PHP process launched, and hands off to an AI agent to build the model. User experience A developer builds the binary once go build o vibekb ./cmd/vibekb — or, in future, installs it via brew/winget/curl — and runs vibekb install /path/to/your/project . They see a plan what will be created, replaced, skipped, and that .vibekb/ is a fresh model , confirm, and get a verified installation with explicit next steps. dry run shows the full plan and changes nothing; yes runs non interactively; force overwrites pre existing files inclu"
+        "body": "In one sentence vibekb install /path/to/repo prepares any repository for VibeKB — it copies the guide, the tools, the agent instructions, the VibeKB docs, and the starter definition, then lays down a fresh empty model — all from the binary's embedded payload, with no PHP process launched, and hands off to an AI agent to build the model. User experience A developer installs the CLI via the website curl fsSL https://iainreid.dev/vibekb/install.sh sh — or builds with go build o vibekb ./cmd/vibekb — and runs vibekb install /path/to/your/project . They see a plan what will be created, replaced, skipped, and that .vibekb/ is a fresh model , confirm, and get a verified installation with explicit next steps. dry run shows the full plan and changes nothing; yes runs non interactively; force overwr"
     },
     {
         "title": "Load the living model",
@@ -106,10 +106,10 @@
     },
     {
         "title": "Run VibeKB from one developer CLI",
-        "summary": "A single Go binary (`vibekb`) that is the developer's front door to VibeKB — downloadable from GitHub Releases, installs VibeKB natively (embedded payload, no PHP), runs environment diagnostics natively, and delegates every model-semantic command to the canonical PHP tooling it discovers, so there is exactly one model loader.",
+        "summary": "A single Go binary (`vibekb`) that is the developer's front door to VibeKB — installed primarily via the website curl script (which downloads from GitHub Releases), installs VibeKB natively (embedded payload, no PHP), runs environment diagnostics natively, and delegates every model-semantic command to the canonical PHP tooling it discovers, so there is exactly one model loader.",
         "type": "functionality",
         "url": "../functionality/run-the-developer-cli.html",
-        "body": "In one sentence vibekb gives developers one portable command for VibeKB: native diagnostics and help that need no runtime, and a thin, honest hand off to the existing PHP core for everything that touches the model — never a second implementation of it. User experience Primary distribution is a downloadable binary from GitHub Releases no Go required . vibekb version prints identity stamped at link time: plus detected PHP and repository when present. Release builds inject Version, Commit, and Built via ldflags see .github/workflows/release.yml and RELEASE.md . Development builds keep 0.1.0 dev / unknown / dev . A developer runs vibekb from anywhere inside a VibeKB repository. vibekb doctor reports whether PHP 8.2+, git, and a .vibekb/ workspace are present and ends with a clear OK or \"attent"
+        "body": "In one sentence vibekb gives developers one portable command for VibeKB: native diagnostics and help that need no runtime, and a thin, honest hand off to the existing PHP core for everything that touches the model — never a second implementation of it. User experience Primary distribution is the website installer curl fsSL https://iainreid.dev/vibekb/install.sh sh , which detects the platform and downloads the matching binary from GitHub Releases. Manual download from Releases remains a secondary path. vibekb version prints identity stamped at link time: plus detected PHP and repository when present. Release builds inject Version, Commit, and Built via ldflags see .github/workflows/release.yml and RELEASE.md . Development builds keep 0.1.0 dev / unknown / dev . A developer runs vibekb from"
     },
     {
         "title": "Search the model",
@@ -588,6 +588,13 @@
         "body": "Before Developers were told to clone VibeKB and go build to get vibekb . Version output was a one line vibekb 0.1.0 dev . No automated release workflow existed. After Pushing v tags runs .github/workflows/release.yml : test/vet, cross compile six GOOS/GOARCH pairs with CGO ENABLED=0 + trimpath + ldflags \" s w …\" , write checksums.txt , create a GitHub Release with notes and assets. vibekb version prints Version / Commit / Built / Platform. Docs and homepage lead with Downloads; source builds are Advanced. Next recommended hardening: code signing; then Homebrew/Winget/curl Phase 2b . Honesty preserved Installer and PHP model engine unchanged. PHP 8.2+ still required after install. No brew/winget/curl commands are presented as available. Verification note Local cross compile of all six artif"
     },
     {
+        "title": "Website curl installer as product CLI entry point",
+        "summary": "Added install.sh (and /install rewrite) on the VibeKB website so users install with curl | sh; homepage primary path updated; GitHub Releases is the download backend and manual fallback only.",
+        "type": "change",
+        "url": "../why/changes/website-curl-installer.html",
+        "body": "Before Ordinary users were told to open GitHub Releases, pick a platform asset, rename it, chmod it, and put it on PATH. The website was marketing only for CLI acquisition. curl installation was still listed under Coming soon. After install.sh at the site root: detect macOS/Linux + arm64/amd64, resolve the latest GitHub Release asset, install to /usr/local/bin or ~/.local/bin , chmod +x , run vibekb version .htaccess internal rewrite so /install serves the same script Homepage step 1 is curl fsSL https://iainreid.dev/vibekb/install.sh sh with a secondary “Prefer to install manually?” Releases link README / INSTALLER / RELEASE / DEPLOYMENT / ARCHITECTURE / install.php notice updated; Coming soon no longer lists curl installation Designed so checksums, signing checks, Homebrew/Winget can be "
+    },
+    {
         "title": "guide/lib/Content.php",
         "summary": "The content loader: reads .vibekb/, parses records, resolves relationships, loads/validates diagram topology, and validates the whole model. The spine everything else renders.",
         "type": "file",
@@ -666,7 +673,21 @@
     },
     {
         "title": "index.php",
-        "summary": "The public homepage: hero/problem, three-step install fast-start (#install), Compatibility & Requirements (#compatibility), what-you-get pillars, live preview card, and functionality carousel driven by the active .vibekb/ model.",
+        "summary": "The public homepage: hero/problem, three-step install fast-start (#install) with website curl | sh as the primary CLI acquisition path, Compatibility & Requirements (#compatibility), what-you-get pillars, live preview card, and functionality carousel driven by the active .vibekb/ model.",
+        "type": "file",
+        "url": "../files/index.html",
+        "body": ""
+    },
+    {
+        "title": "install.sh",
+        "summary": "Product-site CLI installer: curl | sh entry point that detects macOS/Linux + arm64/amd64, downloads the matching GitHub Releases asset, installs vibekb to /usr/local/bin or ~/.local/bin, and verifies with vibekb version.",
+        "type": "file",
+        "url": "../files/index.html",
+        "body": ""
+    },
+    {
+        "title": ".htaccess",
+        "summary": "Marketing-site Apache rules: internal rewrite so /install serves install.sh, and text/plain for .sh so curl | sh receives the script body.",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
@@ -819,17 +840,17 @@
         "body": "Mode A — the dynamic guide on shared hosting .cpanel.yml rsyncs the runtime paths index.php , assets/ , guide/ , .vibekb/ into a cPanel public folder and excludes development only paths tools/ , prompts/ , docs/ , authoring docs, examples/ . Query string routing means no .htaccess rewrite rules are needed and the app runs in a subfolder. .vibekb/ must deploy — it is the content. Mode B — the static snapshot php tools/generate static.php builds /docs ; publish it via GitHub Pages Settings → Pages → branch → /docs or any static host. Relative links make it work at a web root or under a repository subpath. No PHP, database, CDN, or network required. Deployment is part of the application Whenever repository structure, runtime folders, or deployment requirements change, .cpanel.yml and DEPLOYME"
     },
     {
-        "title": "Simplify homepage install requirements copy",
-        "summary": "Complete — removed negative Go/PHP requirement claims from install and compatibility sections.",
+        "title": "Website curl installer as product entry point",
+        "summary": "Complete — install.sh + /install rewrite, homepage/docs updated; smoke-tested against v0.1.0.",
         "type": "current work",
         "url": "../current-work/index.html",
         "body": "Status Complete. See handoff."
     },
     {
         "title": "Current handoff",
-        "summary": "Homepage no longer advertises that install does not require Go or PHP. Download → vibekb install → coding agent flow is unchanged; PHP 8.2+ remains the post-install runtime.",
+        "summary": "Product CLI install is now curl | sh from iainreid.dev/vibekb/install.sh (GitHub Releases behind the scenes). Homepage primary path updated. Next after deploy: confirm /install.sh and /install on the live host; then code signing.",
         "type": "handoff",
         "url": "../handoff/index.html",
-        "body": "Current state Install and Compatibility copy state positive requirements downloadable executable, write access, PHP 8.2+ after install without “No Go / no PHP required to install” marketing lines. Advanced build from source still mentions Go for contributors. Verification completed Grep of index.php : no “No Go”, “no PHP required”, “do not need Go” php l index.php Rendered homepage still has /releases/latest , six assets, vibekb install php tools/vibekb.php check + generate this commit Unresolved / next Tag v0.1.0 was already pushed earlier; next product work remains code signing and other Phase 2 distribution items when ready. Exact next recommended action Plan code signing / further Phase 2 distribution Homebrew, Winget, curl per RELEASE.md when ready."
+        "body": "Current state install.sh is the website installer macOS/Linux, arm64/amd64 → latest release asset → /usr/local/bin or ~/.local/bin → vibekb version . .htaccess rewrites /install to the same script. Homepage step 1 is the curl one liner; Releases is a secondary manual link. Docs README, INSTALLER, RELEASE, DEPLOYMENT, ARCHITECTURE match. Verification completed sh n install.sh End to end smoke against live v0.1.0 linux/amd64 into a temp dir; vibekb version OK Homepage render: curl command primary; no primary Download latest release CTA php tools/vibekb.php check + generate this commit Unresolved / next Live cPanel deploy must publish install.sh and .htaccess . Confirm both URLs on https://iainreid.dev/vibekb/ after deploy. Code signing remains the next hardening milestone; checksum verificat"
     }
 ]

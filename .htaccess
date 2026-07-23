@@ -1,0 +1,18 @@
+# VibeKB site root (deployed to /vibekb/ on cPanel).
+#
+# Convenience URL: /install → serve the same body as install.sh so either
+#   curl -fsSL https://iainreid.dev/vibekb/install.sh | sh
+#   curl -fsSL https://iainreid.dev/vibekb/install | sh
+# works. Internal rewrite (no redirect) so curl without following redirects
+# still receives the script. The Software Guide under guide/ does not need
+# rewrite rules; this rule is only for the marketing-site install endpoint.
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^install/?$ install.sh [L]
+</IfModule>
+
+# Prefer plain text for curl | sh (some hosts default .sh to octet-stream).
+<IfModule mod_mime.c>
+  AddType text/plain .sh
+</IfModule>

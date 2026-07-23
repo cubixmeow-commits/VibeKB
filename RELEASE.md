@@ -6,9 +6,11 @@ from GitHub Releases. Tagging a version runs
 cross-compiles six platforms with production ldflags, writes `checksums.txt`,
 and creates a GitHub Release with auto-generated notes.
 
-Homebrew, Winget, Scoop, and `curl | sh` installers are **not** part of this
-milestone. Code signing (Apple notarization, Windows Authenticode) is the
-recommended next step after the first public release.
+The **product install entry point** is the website script
+[`install.sh`](./install.sh) at `https://iainreid.dev/vibekb/install.sh` (also
+available as `/install`). It downloads the matching asset from the latest GitHub
+Release. Homebrew and Winget remain later milestones. Code signing (Apple
+notarization, Windows Authenticode) is the recommended next hardening step.
 
 ## Publish v0.1.0
 
@@ -54,13 +56,24 @@ so they are static where the Go toolchain allows, stripped, and stamped with
 
 ## End-user install (primary)
 
+```bash
+curl -fsSL https://iainreid.dev/vibekb/install.sh | sh
+cd /path/to/your/project
+vibekb install .
+```
+
+The website script detects macOS/Linux + arm64/amd64, downloads the matching
+asset from the latest GitHub Release, installs to `/usr/local/bin` or
+`~/.local/bin`, and runs `vibekb version`.
+
+### Manual install (secondary)
+
 1. Download the matching binary from the Release.
 2. Rename to `vibekb` (or `vibekb.exe` on Windows) and place it on your `PATH`.
 3. On macOS/Linux: `chmod +x vibekb`.
 4. Run `vibekb install /path/to/your/project`.
 
-No Go toolchain is required. PHP 8.2+ is required **after** install for the
-guide and model commands.
+PHP 8.2+ is required **after** install for the guide and model commands.
 
 Verify downloads:
 
@@ -73,9 +86,10 @@ sha256sum -c checksums.txt
 
 - **Code signing** (next recommended milestone): Apple notarization for macOS
   binaries; Authenticode for Windows. Without this, first launches may show OS
-  security prompts (Gatekeeper / SmartScreen).
-- **Package managers** (later): Homebrew tap, Winget manifest, optional
-  `curl | sh` helper — blocked on having signed release assets people trust.
+  security prompts (Gatekeeper / SmartScreen). Checksum verification can be
+  added to `install.sh` without changing the curl command users remember.
+- **Package managers** (later): Homebrew tap, Winget manifest — the website
+  install URL stays the default path.
 - First-time GitHub Actions release needs the default `GITHUB_TOKEN` write
   permission for `contents` (already set on the workflow). No extra secrets are
   required until code signing is added.

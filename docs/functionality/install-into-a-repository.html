@@ -122,8 +122,9 @@ definition, then lays down a fresh empty model — all from the binary&#039;s em
 payload, with no PHP process launched, and hands off to an AI agent to build the
 model.</p>
 <h3>User experience</h3>
-<p>A developer builds the binary once (<code>go build -o vibekb ./cmd/vibekb</code>) — or, in
-future, installs it via brew/winget/curl — and runs <code>vibekb install
+<p>A developer installs the CLI via the website
+(<code>curl -fsSL https://iainreid.dev/vibekb/install.sh | sh</code>) — or builds with
+<code>go build -o vibekb ./cmd/vibekb</code> — and runs <code>vibekb install
 /path/to/your/project</code>. They see a plan (what will be created, replaced, skipped,
 and that <code>.vibekb/</code> is a fresh model), confirm, and get a verified installation
 with explicit next steps. <code>--dry-run</code> shows the full plan and changes nothing;
@@ -268,6 +269,9 @@ nothing is duplicated or drift-prone.</p></div>
                                 <a href="../files/index.html#index.php"><code>index.php</code></a>
                                 <span class="badge badge--info">Moderate impact</span>                            </li>
                                                     <li>
+                                <a href="../files/index.html#install.sh"><code>install.sh</code></a>
+                                <span class="badge badge--danger">High impact</span>                            </li>
+                                                    <li>
                                 <a href="../files/index.html#assets%2Fcss%2Fhomepage.css"><code>assets/css/homepage.css</code></a>
                                 <span class="badge badge--ok">Low impact</span>                            </li>
                                                     <li>
@@ -295,8 +299,8 @@ nothing is duplicated or drift-prone.</p></div>
             <div class="rail-card metadata-group">
                 <h2>Related rationale</h2>
                                     <details class="rail-disclose">
-                        <summary>Memory links (8)</summary>
-                        <p><a class="chip" href="../why/decisions/native-installer-embedded-payload.html">Installation is native to the Go binary, from an embedded payload</a> <a class="chip" href="../why/decisions/installer-template-not-duplicated-tree.html">The template is a manifest plus a generator, not a duplicated file tree</a> <a class="chip" href="../why/decisions/installer-prepares-agent-interprets.html">The installer prepares the workspace; the agent interprets the software</a> <a class="chip" href="../why/changes/native-go-installer.html">Make installation native to the Go CLI (embedded payload, no PHP)</a> <a class="chip" href="../why/changes/homepage-native-installer-copy.html">Homepage copy matches the native Go installer</a> <a class="chip" href="../why/changes/release-binaries-pipeline.html">Downloadable cross-platform vibekb release binaries</a> <a class="chip" href="../why/changes/homepage-releases-install-copy.html">Homepage install copy for GitHub Releases download flow</a> <a class="chip" href="../why/changes/homepage-drop-no-go-php-claims.html">Simplify homepage install requirements copy</a></p>
+                        <summary>Memory links (9)</summary>
+                        <p><a class="chip" href="../why/decisions/native-installer-embedded-payload.html">Installation is native to the Go binary, from an embedded payload</a> <a class="chip" href="../why/decisions/installer-template-not-duplicated-tree.html">The template is a manifest plus a generator, not a duplicated file tree</a> <a class="chip" href="../why/decisions/installer-prepares-agent-interprets.html">The installer prepares the workspace; the agent interprets the software</a> <a class="chip" href="../why/changes/native-go-installer.html">Make installation native to the Go CLI (embedded payload, no PHP)</a> <a class="chip" href="../why/changes/homepage-native-installer-copy.html">Homepage copy matches the native Go installer</a> <a class="chip" href="../why/changes/release-binaries-pipeline.html">Downloadable cross-platform vibekb release binaries</a> <a class="chip" href="../why/changes/homepage-releases-install-copy.html">Homepage install copy for GitHub Releases download flow</a> <a class="chip" href="../why/changes/homepage-drop-no-go-php-claims.html">Simplify homepage install requirements copy</a> <a class="chip" href="../why/changes/website-curl-installer.html">Website curl installer as product CLI entry point</a></p>
                     </details>
                             </div>
         </aside>
@@ -311,7 +315,7 @@ nothing is duplicated or drift-prone.</p></div>
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 05:06 UTC · source commit 58a6d4f (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 05:48 UTC · source commit 58a6d4f (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

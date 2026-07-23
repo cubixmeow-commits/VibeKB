@@ -110,13 +110,13 @@
     </header>
 
             <section class="work-summary callout callout--work">
-            <h2>Simplify homepage install requirements copy</h2>
+            <h2>Website curl installer as product entry point</h2>
             <div class="badge-row">
                 <span class="badge badge--info">complete</span>                                    <span class="badge badge--ok">Verified from source</span>                            </div>
             <dl class="rail-dl work-meta">
-                <dt>Objective</dt><dd>Remove homepage copy that advertises installation as not requiring Go or PHP; keep factual install steps and post-install PHP requirements.</dd>                                    <dt>Affected functionality</dt><dd><a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a></dd>
-                                                    <dt>Expected files</dt><dd><code class="chip chip--file">index.php</code> <code class="chip chip--file">assets/css/homepage.css</code> <code class="chip chip--file">.vibekb/memory/changes/homepage-drop-no-go-php-claims.md</code></dd>
-                                <dt>Data impact</dt><dd>None. Homepage marketing copy only.</dd>                            </dl>
+                <dt>Objective</dt><dd>Make https://iainreid.dev/vibekb/ the official CLI install entry point via install.sh (curl | sh), with homepage primary path updated and GitHub Releases as the manual fallback only.</dd>                                    <dt>Affected functionality</dt><dd><a class="chip" href="../functionality/run-the-developer-cli.html">Run VibeKB from one developer CLI</a> <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a></dd>
+                                                    <dt>Expected files</dt><dd><code class="chip chip--file">install.sh</code> <code class="chip chip--file">.htaccess</code> <code class="chip chip--file">index.php</code> <code class="chip chip--file">assets/css/homepage.css</code> <code class="chip chip--file">.cpanel.yml</code> <code class="chip chip--file">DEPLOYMENT.md</code> <code class="chip chip--file">RELEASE.md</code> <code class="chip chip--file">README.md</code> <code class="chip chip--file">INSTALLER.md</code></dd>
+                                <dt>Data impact</dt><dd>None. Distribution UX and static website assets only.</dd>                            </dl>
         </section>
 
         <section class="doc-section content-section">
@@ -138,7 +138,7 @@
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 05:06 UTC · source commit 58a6d4f (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 05:48 UTC · source commit 58a6d4f (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

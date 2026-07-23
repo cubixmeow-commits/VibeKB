@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>The installer prepares the workspace; the agent interprets the software · VibeKB — VibeKB</title>
+    <title>Website curl installer as product CLI entry point · VibeKB — VibeKB</title>
     <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -105,49 +105,47 @@
                 <article class="view view-doc">
         <p class="breadcrumb"><a href="../../why/index.html">← Decisions &amp; rationale</a></p>
         <header class="page-head reading-column">
-            <p class="eyebrow">Decisions</p>
-            <h1>The installer prepares the workspace; the agent interprets the software</h1>
-            <p class="lede">install.php and bootstrap only scaffold an empty, valid VibeKB workspace and install the runtime — they never analyse, understand, or document the target application. Building the model is left to an AI agent following the integration prompt.</p>
+            <p class="eyebrow">Changes</p>
+            <h1>Website curl installer as product CLI entry point</h1>
+            <p class="lede">Added install.sh (and /install rewrite) on the VibeKB website so users install with curl | sh; homepage primary path updated; GitHub Releases is the download backend and manual fallback only.</p>
             <div class="badge-row">
-                <span class="badge badge--info">accepted</span>                                                <span class="badge badge--ok">Verified from source</span>            </div>
+                <span class="badge badge--info">implemented</span>                                                <span class="badge badge--ok">Verified from source</span>            </div>
         </header>
         <div class="detail-grid">
-            <div class="detail-main"><div class="prose reading-column"><h3>Context</h3>
-<p>The installer removes the friction of adopting VibeKB. The tempting next step is
-to have it also inspect the repository and pre-fill functionality — but that would
-fabricate understanding a script cannot honestly have, exactly the drift VibeKB
-exists to prevent.</p>
-<h3>Decision</h3>
-<p>The installer (and <code>bootstrap</code>) do only mechanical preparation: copy the runtime,
-create directories, and write empty starter placeholders. Every starter record is
-explicitly a placeholder that tells an agent what to write; none claims the
-software does anything. Provenance is left blank because no commit was analysed.
-An AI agent builds the model afterwards via <code>prompts/INTEGRATE_VIBEKB.md</code>.</p>
-<h3>Alternatives considered</h3>
+            <div class="detail-main"><div class="prose reading-column"><h3>Before</h3>
+<p>Ordinary users were told to open GitHub Releases, pick a platform asset, rename
+it, chmod it, and put it on PATH. The website was marketing only for CLI
+acquisition. curl installation was still listed under Coming soon.</p>
+<h3>After</h3>
 <ul>
-<li><strong>Auto-analyse the repo during install</strong> — rejected: it would produce</li>
+<li><code>install.sh</code> at the site root: detect macOS/Linux + arm64/amd64, resolve the</li>
 </ul>
-<p>unverified, fabricated functionality and undermine VibeKB&#039;s honesty guarantees.</p>
+<p>latest GitHub Release asset, install to <code>/usr/local/bin</code> or <code>~/.local/bin</code>,
+  <code>chmod +x</code>, run <code>vibekb version</code></p>
 <ul>
-<li><strong>Ship a pre-filled example model</strong> — rejected: it would describe some other</li>
+<li><code>.htaccess</code> internal rewrite so <code>/install</code> serves the same script</li>
+<li>Homepage step 1 is <code>curl -fsSL https://iainreid.dev/vibekb/install.sh | sh</code></li>
 </ul>
-<p>app, not the target, and invite confusion with the real model.</p>
-<h3>Reason</h3>
-<p>VibeKB&#039;s core promise is an honest explanation of what software actually does.
-A script cannot trace behaviour; only analysis can. Keeping that line bright is
-more valuable than a flashier one-command &quot;model.&quot;</p>
-<h3>Consequences</h3>
+<p>with a secondary “Prefer to install manually?” Releases link</p>
 <ul>
-<li>A fresh install has zero functionality records — valid but empty, by design.</li>
-<li>The verification step reports the empty model as OK, not as a failure.</li>
-<li>The hand-off to the agent is explicit in the installer&#039;s final output.</li>
-</ul></div></div>
+<li>README / INSTALLER / RELEASE / DEPLOYMENT / ARCHITECTURE / install.php notice</li>
+</ul>
+<p>updated; Coming soon no longer lists curl installation</p>
+<ul>
+<li>Designed so checksums, signing checks, Homebrew/Winget can be added later</li>
+</ul>
+<p>without changing the user-facing curl command</p>
+<h3>Verification note</h3>
+<p><code>sh -n install.sh</code> clean. End-to-end smoke against the live <code>v0.1.0</code> release
+installed <code>vibekb-linux-amd64</code> into a temp dir and <code>vibekb version</code> succeeded.
+Rendered homepage contains the curl one-liner as the primary install command and
+does not use “Download latest release” as the primary CTA.</p></div></div>
             <aside class="detail-rail" aria-label="Connections">
                 <div class="rail-card">
                     <h2>Affects functionality</h2>
-                    <p><a class="chip" href="../../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../../functionality/bootstrap-workspace.html">Bootstrap the VibeKB workspace</a></p>
+                    <p><a class="chip" href="../../functionality/run-the-developer-cli.html">Run VibeKB from one developer CLI</a> <a class="chip" href="../../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a></p>
                 </div>
-                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">internal/installer/installer.go</code> <code class="chip chip--file">tools/lib/Starter.php</code> <code class="chip chip--file">install.php</code></p></div>
+                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">install.sh</code> <code class="chip chip--file">.htaccess</code> <code class="chip chip--file">index.php</code> <code class="chip chip--file">assets/css/homepage.css</code> <code class="chip chip--file">.cpanel.yml</code> <code class="chip chip--file">DEPLOYMENT.md</code> <code class="chip chip--file">RELEASE.md</code> <code class="chip chip--file">README.md</code> <code class="chip chip--file">INSTALLER.md</code> <code class="chip chip--file">ARCHITECTURE.md</code> <code class="chip chip--file">install.php</code></p></div>
                             </aside>
         </div>
     </article>

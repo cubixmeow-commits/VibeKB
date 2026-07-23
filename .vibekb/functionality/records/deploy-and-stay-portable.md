@@ -10,18 +10,19 @@ user_facing: false
 trigger: A cPanel Git deploy runs the rsync task in .cpanel.yml; or a static host serves /docs.
 updated: 2026-07-22
 tags: [deployment, cpanel, portability]
-files: [.cpanel.yml, DEPLOYMENT.md, guide/lib/UrlStrategy.php, index.php]
+files: [.cpanel.yml, DEPLOYMENT.md, guide/lib/UrlStrategy.php, index.php, install.sh, .htaccess]
 reads: []
 writes: []
 depends_on: [render-guide, generate-static-snapshot]
-related_memory: [constraint:no-build-step-portable, decision:two-modes-one-source, change:homepage-compatibility-section, change:homepage-native-installer-copy, change:homepage-voice-pass, change:homepage-drop-no-go-php-claims]
+related_memory: [constraint:no-build-step-portable, decision:two-modes-one-source, change:homepage-compatibility-section, change:homepage-native-installer-copy, change:homepage-voice-pass, change:homepage-drop-no-go-php-claims, change:website-curl-installer]
 ---
 
 ## In one sentence
 
 VibeKB ships as ordinary PHP plus generated static files, so it deploys by
 copying files — the deployment configuration is maintained alongside the code it
-deploys.
+deploys. The public site also serves `install.sh` (and `/install`) as the CLI
+acquisition endpoint.
 
 ## Current behavior
 

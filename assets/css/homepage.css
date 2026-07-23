@@ -764,6 +764,22 @@ html.js .hp-journey-panel.is-active {
   font-size: 0.96rem;
 }
 
+.hp-install-manual {
+  margin: 0.85rem 0 0;
+  font-size: 0.88rem;
+}
+
+.hp-install-manual a {
+  color: var(--hp-ink-soft);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.hp-install-manual a:hover,
+.hp-install-manual a:focus-visible {
+  color: var(--hp-accent-deep);
+}
+
 .hp-install-example-label {
   margin: 0.75rem 0 0.35rem;
   color: var(--hp-muted);
