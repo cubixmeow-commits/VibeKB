@@ -553,6 +553,13 @@
         "body": "Before Eleven sections: six beat journey, uncertainty questions, gap, solution, tabs, carousel, before/after, workflow timeline, repo map, and separate CTA. Accurate but too long to scan. After Three sections: 1. The problem — thesis, recognition copy, three beat arc ship / lose plot / fear change , live metrics card. 2. What you get — understanding layer + four pillar cards linking to guide views. 3. See it work — functionality carousel + CTA. homepage.js trimmed to guide carousel only."
     },
     {
+        "title": "Homepage voice pass (indie-developer tone)",
+        "summary": "Rewrote homepage marketing prose to sound like an experienced indie developer explaining a tool they built, without changing layout, CSS, commands, installation instructions, or product claims.",
+        "type": "change",
+        "url": "../why/changes/homepage-voice-pass.html",
+        "body": "Before Homepage copy was accurate but read like software marketing: punchy arc labels “Lose the plot”, “Fear the next change” , “understanding layer”, and advertisement adjacent CTAs. After Same section order, commands, and claims. Prose uses shorter sentences and a calm developer voice README / indie launch post . Examples: the three beat arc became “You ship quickly / The app outgrows your map of it / Every change starts to feel like a guess”; the product headline became “A living knowledge base that stays with your repository.” Honesty preserved Install commands, Go vs PHP requirements, Coming soon items, and the installer does not analyze boundary are unchanged. Verification note Diffed index.php to confirm command variables and install command strings were unchanged. php l index.php p"
+    },
+    {
         "title": "Make installation native to the Go CLI (embedded payload, no PHP)",
         "summary": "Reimplemented installation inside the `vibekb` Go binary, which embeds the runtime payload and a canonical, language-neutral starter definition. `vibekb install` now copies files and scaffolds a fresh `.vibekb/` with no PHP process and no live source clone. install.php became a thin compatibility wrapper, and tools/lib/Starter.php now reads the same starter data so there is one definition, not two.",
         "type": "change",
@@ -777,17 +784,17 @@
         "body": "Mode A — the dynamic guide on shared hosting .cpanel.yml rsyncs the runtime paths index.php , assets/ , guide/ , .vibekb/ into a cPanel public folder and excludes development only paths tools/ , prompts/ , docs/ , authoring docs, examples/ . Query string routing means no .htaccess rewrite rules are needed and the app runs in a subfolder. .vibekb/ must deploy — it is the content. Mode B — the static snapshot php tools/generate static.php builds /docs ; publish it via GitHub Pages Settings → Pages → branch → /docs or any static host. Relative links make it work at a web root or under a repository subpath. No PHP, database, CDN, or network required. Deployment is part of the application Whenever repository structure, runtime folders, or deployment requirements change, .cpanel.yml and DEPLOYME"
     },
     {
-        "title": "Update homepage for the native Go installer",
-        "summary": "Complete — homepage matches INSTALLER.md native Go flow; PHP required only after install; Native CLI / Repository doctor removed from Coming soon.",
+        "title": "Homepage voice pass (copy only)",
+        "summary": "Complete — prose rewritten; commands and claims unchanged.",
         "type": "current work",
         "url": "../current-work/index.html",
-        "body": "Status Complete. See .vibekb/work/handoff.md . Decisions / changes recorded change:homepage native installer copy — homepage install copy matches the native Go installer; requirements and Coming soon reconciled with ARCHITECTURE.md Phase 2."
+        "body": "Status Complete. See .vibekb/work/handoff.md . Change recorded change:homepage voice pass"
     },
     {
         "title": "Current handoff",
-        "summary": "Homepage install copy now matches the native Go CLI (clone → build → vibekb install → coding agent). PHP is not required to install; PHP 8.2+ remains the post-install runtime. Native CLI and Repository doctor are no longer listed as Coming soon. Next: Phase 2 distribution (release binaries + brew/winget/curl).",
+        "summary": "Homepage install copy matches the native Go CLI, and a follow-up voice pass rewrote marketing prose into a calmer indie-developer tone without changing commands, layout, or claims. Next: Phase 2 distribution (release binaries + brew/winget/curl).",
         "type": "handoff",
         "url": "../handoff/index.html",
-        "body": "Current state The public homepage index.php describes the real installation path from INSTALLER.md / README.md : build vibekb from Go source, run ./vibekb install /path/to/project no PHP , then ask a coding agent to build the model. Compatibility cards split “to install from source” Go 1.24+, Git, write access from “after installation” PHP 8.2+, AI coding agent . Coming soon lists only Phase 2 distribution items. Em dashes were removed from homepage marketing copy and the identity one liner shown on the hero card. The installer implementation itself is unchanged: native Go with embedded payload; PHP remains the guide and model engine runtime. Completed this change index.php : install command variables, three install cards, Install/Current Requirements, Coming soon, installer <details , and"
+        "body": "Current state The homepage describes the real vibekb install path clone → go build → ./vibekb install → coding agent and reads in a plain developer voice. PHP is not required to install; PHP 8.2+ remains required afterward for the guide and model commands. Layout, CSS, and install commands were not changed by the voice pass. Completed this change index.php prose voice pass only hero, install blurbs, compatibility, what you get, proof, footer . change:homepage voice pass ; current work + handoff; provenance; /docs regenerated. Verification completed Command variables and rendered install/dry run strings unchanged vs prior commit. php l index.php php tools/vibekb.php check strict php tools/test topology.php go test ./... unchanged Go code; re run for safety Not done yet roadmap Phase 2 — dis"
     }
 ]

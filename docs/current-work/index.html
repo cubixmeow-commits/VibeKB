@@ -110,22 +110,20 @@
     </header>
 
             <section class="work-summary callout callout--work">
-            <h2>Update homepage for the native Go installer</h2>
+            <h2>Homepage voice pass (copy only)</h2>
             <div class="badge-row">
                 <span class="badge badge--info">complete</span>                                    <span class="badge badge--ok">Verified from source</span>                            </div>
             <dl class="rail-dl work-meta">
-                <dt>Objective</dt><dd>Make the public homepage accurately describe the native `vibekb install` workflow (clone → build Go CLI → install → coding agent), remove outdated PHP-install and Coming soon claims, strip em dashes from homepage copy, and keep the PHP post-install runtime distinction clear.</dd>                                    <dt>Affected functionality</dt><dd><a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a></dd>
-                                                    <dt>Expected files</dt><dd><code class="chip chip--file">index.php</code> <code class="chip chip--file">.vibekb/work/current.md</code> <code class="chip chip--file">.vibekb/work/handoff.md</code> <code class="chip chip--file">.vibekb/memory/changes/homepage-native-installer-copy.md</code> <code class="chip chip--file">.vibekb/files/important-files.json</code> <code class="chip chip--file">.vibekb/manifest.json</code> <code class="chip chip--file">.vibekb/project/identity.md</code> <code class="chip chip--file">.vibekb/functionality/records/initialize-in-a-repository.md</code></dd>
-                                <dt>Data impact</dt><dd>None to runtime behaviour. Homepage marketing copy and self-model records only; `/docs` regenerated.</dd>                <dt>Risks</dt><dd>Implying VibeKB is entirely Go (avoided — PHP kept as post-install runtime); inventing brew/winget/curl commands (avoided — Coming soon only).</dd>            </dl>
+                <dt>Objective</dt><dd>Rewrite homepage marketing prose so it reads like an experienced indie developer, without changing layout, CSS, commands, installation instructions, or claims.</dd>                                    <dt>Affected functionality</dt><dd><a class="chip" href="../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a> <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a></dd>
+                                                    <dt>Expected files</dt><dd><code class="chip chip--file">index.php</code> <code class="chip chip--file">.vibekb/memory/changes/homepage-voice-pass.md</code> <code class="chip chip--file">.vibekb/work/current.md</code> <code class="chip chip--file">.vibekb/work/handoff.md</code> <code class="chip chip--file">.vibekb/manifest.json</code></dd>
+                                <dt>Data impact</dt><dd>None. Homepage prose and self-model records only.</dd>                <dt>Risks</dt><dd>Accidentally changing install commands (avoided — verified identical).</dd>            </dl>
         </section>
 
         <section class="doc-section content-section">
             <div class="prose reading-column"><h3>Status</h3>
 <p>Complete. See <code>.vibekb/work/handoff.md</code>.</p>
-<h3>Decisions / changes recorded</h3>
-<p><code>change:homepage-native-installer-copy</code> — homepage install copy matches the
-native Go installer; requirements and Coming soon reconciled with ARCHITECTURE.md
-Phase 2.</p></div>
+<h3>Change recorded</h3>
+<p><code>change:homepage-voice-pass</code></p></div>
         </section>
     
     <nav class="cross-links" aria-label="Related views">
@@ -142,7 +140,7 @@ Phase 2.</p></div>
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 02:34 UTC · source commit f1a8665 (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 03:19 UTC · source commit 8707d5f (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

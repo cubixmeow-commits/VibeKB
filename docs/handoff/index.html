@@ -114,54 +114,40 @@
                                     <span class="badge badge--info">Verification: verified from source</span>                                <span class="muted">Updated 2026-07-23</span>
             </div>
             <div class="prose reading-column"><h3>Current state</h3>
-<p>The public homepage (<code>index.php</code>) describes the real installation path from
-<code>INSTALLER.md</code> / <code>README.md</code>: build <code>vibekb</code> from Go source, run
-<code>./vibekb install /path/to/project</code> (no PHP), then ask a coding agent to build
-the model. Compatibility cards split “to install from source” (Go 1.24+, Git,
-write access) from “after installation” (PHP 8.2+, AI coding agent). Coming soon
-lists only Phase 2 distribution items. Em dashes were removed from homepage
-marketing copy and the identity one_liner shown on the hero card.</p>
-<p>The installer implementation itself is unchanged: native Go with embedded
-payload; PHP remains the guide and model-engine runtime.</p>
+<p>The homepage describes the real <code>vibekb install</code> path (clone → <code>go build</code> →
+<code>./vibekb install</code> → coding agent) and reads in a plain developer voice. PHP is
+not required to install; PHP 8.2+ remains required afterward for the guide and
+model commands. Layout, CSS, and install commands were not changed by the voice
+pass.</p>
 <h3>Completed this change</h3>
 <ul>
-<li><code>index.php</code>: install command variables, three install cards, Install/Current</li>
+<li><code>index.php</code> prose voice pass only (hero, install blurbs, compatibility,</li>
 </ul>
-<p>Requirements, Coming soon, installer <code>&lt;details&gt;</code>, and em-dash cleanup.</p>
+<p>what-you-get, proof, footer).</p>
 <ul>
-<li>Self-model: <code>change:homepage-native-installer-copy</code>;</li>
+<li><code>change:homepage-voice-pass</code>; current work + handoff; provenance; <code>/docs</code></li>
 </ul>
-<p><code>initialize-in-a-repository</code> trigger/copy; <code>important-files.json</code> depends_on;
-  related_memory links; identity one_liner/summary; handoff + current work;
-  provenance.</p>
+<p>regenerated.</p>
 <h3>Verification completed</h3>
 <ul>
-<li>Homepage HTML rendered via PHP: no <code>install.php</code> / “Requires PHP 8.2+” install</li>
+<li>Command variables and rendered install/dry-run strings unchanged vs prior</li>
 </ul>
-<p>card / “Native CLI” / “Repository doctor” strings; presents
-  <code>./vibekb install</code>, <code>go build -o vibekb</code>, “Native installer: no PHP required”,
-  Go 1.24+, and Phase 2 Coming soon badges.</p>
+<p>commit.</p>
 <ul>
-<li>Commands checked against <code>INSTALLER.md</code>, <code>go.mod</code>, and</li>
+<li><code>php -l index.php</code></li>
+<li><code>php tools/vibekb.php check --strict</code></li>
+<li><code>php tools/test-topology.php</code></li>
+<li><code>go test ./...</code> (unchanged Go code; re-run for safety)</li>
 </ul>
-<p><code>internal/installer</code> (<code>vibekb install [options] [target]</code>).</p>
-<ul>
-<li><code>php -l index.php</code>; <code>php tools/vibekb.php check --strict</code>;</li>
-</ul>
-<p><code>php tools/test-topology.php</code>; <code>go test ./...</code> (recorded in the session).</p>
 <h3>Not done yet (roadmap)</h3>
 <ul>
-<li><strong>Phase 2 — distribution</strong>: cross-compiled release binaries + checksums, a</li>
-</ul>
-<p><code>curl | sh</code> installer, a Homebrew tap, and a winget manifest.</p>
-<ul>
-<li><strong>Phase 3 — shared core boundary</strong>: lift the model core out of <code>guide/lib</code>.</li>
-<li><strong>Phase 4 — evaluate a bundled PHP runtime</strong>.</li>
+<li><strong>Phase 2 — distribution</strong>: release binaries, <code>curl | sh</code>, Homebrew, winget.</li>
+<li><strong>Phase 3 — shared core boundary</strong></li>
+<li><strong>Phase 4 — evaluate a bundled PHP runtime</strong></li>
 </ul>
 <h3>Exact next recommended action</h3>
-<p><code>php tools/vibekb.php status</code> before the next change. To continue product work,
-start Phase 2 distribution. Keep boundaries: installer stays PHP-free and
-embedded; model loader/generator stay the single PHP implementation.</p></div>
+<p><code>php tools/vibekb.php status</code> before the next change. Continue with Phase 2
+distribution when ready.</p></div>
         </section>
     
             <section class="doc-section">
@@ -194,7 +180,7 @@ embedded; model loader/generator stay the single PHP implementation.</p></div>
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 02:34 UTC · source commit f1a8665 (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 03:19 UTC · source commit 8707d5f (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>
