@@ -10,11 +10,11 @@ user_facing: false
 trigger: A cPanel Git deploy runs the rsync task in .cpanel.yml; or a static host serves /docs.
 updated: 2026-07-22
 tags: [deployment, cpanel, portability]
-files: [.cpanel.yml, DEPLOYMENT.md, guide/lib/UrlStrategy.php]
+files: [.cpanel.yml, DEPLOYMENT.md, guide/lib/UrlStrategy.php, index.php]
 reads: []
 writes: []
 depends_on: [render-guide, generate-static-snapshot]
-related_memory: [constraint:no-build-step-portable, decision:two-modes-one-source]
+related_memory: [constraint:no-build-step-portable, decision:two-modes-one-source, change:homepage-compatibility-section]
 ---
 
 ## In one sentence

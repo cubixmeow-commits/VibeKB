@@ -123,24 +123,24 @@
     },
     {
       "path": "index.php",
-      "purpose": "The public homepage: hero/problem, three-step install fast-start (#install), what-you-get pillars, live preview card, and functionality carousel driven by the active .vibekb/ model.",
-      "functionality": ["load-living-model", "install-into-a-repository", "initialize-in-a-repository"],
+      "purpose": "The public homepage: hero/problem, three-step install fast-start (#install), Compatibility & Requirements (#compatibility), what-you-get pillars, live preview card, and functionality carousel driven by the active .vibekb/ model.",
+      "functionality": ["load-living-model", "install-into-a-repository", "initialize-in-a-repository", "deploy-and-stay-portable"],
       "runs_when": "Every browser request to the site root.",
       "depended_on_by": ["Public landing / Mode A deployment"],
-      "depends_on": ["guide/lib/Content.php", "guide/lib/helpers.php", ".vibekb/project/identity.md", "assets/css/homepage.css", "assets/js/homepage.js", "assets/images/homepage-developer-journey.webp", "assets/images/homepage-developer-journey.png", "install.php", "INSTALLER.md", "prompts/INTEGRATE_VIBEKB.md"],
+      "depends_on": ["guide/lib/Content.php", "guide/lib/helpers.php", ".vibekb/project/identity.md", "assets/css/homepage.css", "assets/js/homepage.js", "assets/images/homepage-developer-journey.webp", "assets/images/homepage-developer-journey.png", "install.php", "INSTALLER.md", "prompts/INTEGRATE_VIBEKB.md", "DEPLOYMENT.md", "PRODUCT.md"],
       "safety": "moderate-impact",
-      "test_after_change": "Load the homepage; confirm section order problem → install → understanding → proof; verify install commands match INSTALLER.md; confirm copy buttons and no-JS readability.",
+      "test_after_change": "Load the homepage; confirm section order problem → install → compatibility → understanding → proof; verify install commands and compatibility claims against INSTALLER.md / PRODUCT.md / DEPLOYMENT.md; confirm no auto-analyze claims.",
       "provenance": "verified-from-source"
     },
     {
       "path": "assets/css/homepage.css",
-      "purpose": "Homepage styling: hero, three-step install cards, pillars, guide carousel, shared hp-* chrome.",
-      "functionality": ["load-living-model", "install-into-a-repository"],
+      "purpose": "Homepage styling: hero, three-step install cards, compatibility cards/badges, pillars, guide carousel, shared hp-* chrome.",
+      "functionality": ["load-living-model", "install-into-a-repository", "deploy-and-stay-portable"],
       "runs_when": "Every homepage request.",
       "depended_on_by": ["index.php"],
       "depends_on": [],
       "safety": "low-impact",
-      "test_after_change": "Load the homepage at mobile and desktop widths; confirm install cards stack with connectors on narrow viewports and sit in one row on wide viewports; no horizontal overflow.",
+      "test_after_change": "Load the homepage at mobile and desktop widths; confirm install and compatibility grids stack cleanly; no horizontal overflow.",
       "provenance": "verified-from-source"
     },
     {

@@ -1,21 +1,19 @@
 ---
 id: current-work
 type: work
-title: Homepage install fast-start
-objective: Replace the homepage's buried install copy with a three-step fast-start section (clone → install → Cursor prompt) placed directly under the hero, matching the real installer workflow.
-summary: Complete — homepage #install redesigned and moved beneath the hero; model reconciled. See handoff.md.
+title: Homepage compatibility section and agent-agnostic install
+objective: Make the homepage install steps agent-agnostic (not Cursor-only) and add a Compatibility & Requirements section that answers “Will this work with my stack?” without false claims.
+summary: Complete — install copy generalized; Compatibility & Requirements added under #install. See handoff.md.
 requested_by: cubix.meow@gmail.com
 status: complete
 verification_state: verified-from-source
-updated: 2026-07-22
-affected_functionality: [install-into-a-repository, initialize-in-a-repository, load-living-model]
-expected_files: [index.php, assets/css/homepage.css, assets/js/homepage.js]
-data_impact: None — marketing homepage only. Does not change installer behaviour or the living model content of a target install.
-risks: [Homepage commands could drift from install.php / INSTALLER.md if not checked against the real installer; copy must not imply automatic repository understanding.]
+updated: 2026-07-23
+affected_functionality: [install-into-a-repository, initialize-in-a-repository, deploy-and-stay-portable]
+expected_files: [index.php, assets/css/homepage.css]
+data_impact: None — marketing homepage only.
+risks: [Over-claiming language support or agent compatibility; implying VibeKB parses languages directly; presenting roadmap items as shipped.]
 ---
 
 ## Status
 
-Complete. The homepage shows the real public install workflow under the hero
-without claiming the installer understands the application. See
-`.vibekb/work/handoff.md`.
+Complete. See `.vibekb/work/handoff.md`.

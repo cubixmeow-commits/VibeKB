@@ -1046,6 +1046,269 @@ html.js .hp-journey-panel.is-active {
   }
 }
 
+/* Compatibility & Requirements — lighter than install */
+
+.hp-compat {
+  padding-top: 1.75rem;
+  padding-bottom: 2.5rem;
+}
+
+.hp-compat-lead {
+  max-width: 42rem;
+}
+
+.hp-compat-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.hp-compat-card {
+  margin: 0;
+  padding: 1.2rem 1.25rem 1.3rem;
+  border-radius: var(--hp-radius);
+  border: 1px solid var(--hp-line);
+  background: rgba(255, 252, 247, 0.72);
+  min-width: 0;
+}
+
+.hp-compat-card h3 {
+  margin: 0 0 0.75rem;
+  font-family: var(--hp-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.hp-compat-card h4 {
+  margin: 0 0 0.45rem;
+  font-family: var(--hp-display);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--hp-accent-deep);
+}
+
+.hp-compat-card-copy {
+  margin: 0 0 0.85rem;
+  color: var(--hp-ink-soft);
+  font-size: 0.94rem;
+}
+
+.hp-compat-card-note {
+  margin: 0.85rem 0 0;
+  color: var(--hp-muted);
+  font-size: 0.86rem;
+}
+
+.hp-compat-card-note code {
+  font-size: 0.84em;
+}
+
+.hp-compat-checks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.hp-compat-checks li {
+  position: relative;
+  padding-left: 1.45rem;
+  color: var(--hp-ink-soft);
+  font-size: 0.95rem;
+}
+
+.hp-compat-checks li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--hp-accent);
+  font-weight: 700;
+}
+
+.hp-compat-checks--tight {
+  gap: 0.3rem;
+}
+
+.hp-compat-checks--tight li {
+  font-size: 0.9rem;
+}
+
+.hp-compat-none {
+  list-style: none;
+  margin: 0.95rem 0 0;
+  padding: 0.75rem 0 0;
+  border-top: 1px dashed var(--hp-line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.75rem;
+}
+
+.hp-compat-none li {
+  color: var(--hp-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.hp-badge-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.hp-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.7rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 0.45rem;
+  border: 1px solid rgba(12, 124, 108, 0.22);
+  background: rgba(213, 235, 229, 0.45);
+  color: var(--hp-accent-deep);
+  font-size: 0.78rem;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.hp-badge--more {
+  border-style: dashed;
+  background: transparent;
+  color: var(--hp-muted);
+}
+
+.hp-badge--agent {
+  background: var(--hp-accent-soft);
+  border-color: rgba(12, 124, 108, 0.35);
+  font-size: 0.84rem;
+  min-height: 1.9rem;
+  padding-inline: 0.7rem;
+}
+
+.hp-badge--soon {
+  border-style: dashed;
+  border-color: rgba(26, 36, 33, 0.18);
+  background: rgba(230, 237, 230, 0.55);
+  color: var(--hp-muted);
+  font-weight: 600;
+}
+
+.hp-compat-deploy {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.hp-compat-subhead {
+  margin: 0 0 0.85rem;
+  font-family: var(--hp-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.hp-compat-noneed {
+  margin-top: 1.75rem;
+  padding: 1.2rem 1.25rem;
+  border-radius: var(--hp-radius);
+  border: 1px solid rgba(12, 124, 108, 0.22);
+  background: linear-gradient(160deg, rgba(213, 235, 229, 0.4), rgba(255, 252, 247, 0.85));
+}
+
+.hp-compat-noneed-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem 1rem;
+}
+
+.hp-compat-noneed-grid li {
+  position: relative;
+  padding-left: 1.4rem;
+  color: var(--hp-ink-soft);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.hp-compat-noneed-grid li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--hp-accent);
+  font-weight: 700;
+}
+
+.hp-compat-limits {
+  margin-top: 1.5rem;
+  padding: 1.2rem 1.25rem;
+  border-radius: var(--hp-radius);
+  border: 1px solid var(--hp-line);
+  background: rgba(255, 252, 247, 0.65);
+}
+
+.hp-compat-limits .hp-compat-checks {
+  margin-bottom: 0.85rem;
+}
+
+.hp-compat-limits .hp-compat-card-copy {
+  margin-bottom: 0;
+}
+
+.hp-compat-soon {
+  margin-top: 1.5rem;
+}
+
+.hp-compat-soon-label {
+  margin: 0 0 0.55rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--hp-muted);
+}
+
+.hp-badge-grid--soon {
+  margin-bottom: 0.45rem;
+}
+
+@media (min-width: 48rem) {
+  .hp-compat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.1rem;
+  }
+
+  .hp-compat-noneed-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .hp-compat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .hp-compat-noneed-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 30rem) {
+  .hp-compat-deploy {
+    grid-template-columns: 1fr;
+  }
+
+  .hp-compat-noneed-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Four pillars (what you get) */
 
 .hp-pillars {

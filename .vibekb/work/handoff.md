@@ -2,44 +2,34 @@
 id: handoff
 type: handoff
 title: Current handoff
-summary: The homepage now leads with a three-step install fast-start (clone → install.php → Cursor prompt) under the hero, matching the real installer. Next: keep the model reconciled as VibeKB changes.
-updated: 2026-07-22
+summary: Homepage install is agent-agnostic and followed by Compatibility & Requirements. Next: keep homepage claims aligned with INSTALLER.md / PRODUCT.md / DEPLOYMENT.md.
+updated: 2026-07-23
 verification_state: verified-from-source
 ---
 
 ## Completed this change
 
-- Homepage `#install` moved directly under the hero (before “What you get”).
-- Three primary steps with working copy buttons: clone command, install command
-  (+ example), and a Cursor prompt pointing at `prompts/INTEGRATE_VIBEKB.md`.
-- Result strip distinguishes installed runtime from `docs/` (generated later).
-- Expandable “What does the installer do?” disclosure with payload list and
-  optional `--dry-run`.
-- Nav order: The problem → Install → What you get → See it work.
-- Model reconciled: important-files for homepage assets, new change record
-  `homepage-install-fast-start`, installer/initialize records linked, provenance
-  and work records updated.
+- Install step 3 generalized: **Ask your coding agent** (Cursor, Claude Code,
+  Codex, Windsurf, and others); copy control is “Copy agent prompt.”
+- Boundary copy: installer prepares; coding agent understands.
+- New `#compatibility` section: four cards, no-extra-infrastructure checklist,
+  honest current requirements, inactive coming-soon badges.
+- Nav link: Compatibility.
+- Model reconciled: change memory, important-files, functionality links, handoff.
 
 ## Verification completed
 
-- Displayed commands checked against `install.php` / `INSTALLER.md` /
-  `template/manifest.json` (no fabricated commands).
-- `php -l index.php`, `php -l install.php`.
-- Rendered `index.php`: section order problem → install → understanding → proof;
-  GitHub + INSTALLER.md links present; honesty phrases present; no auto-understand
-  claims.
-- `php tools/vibekb.php check`, `php tools/test-topology.php`,
-  `php tools/vibekb.php generate` (run before commit).
-
-## Unresolved / active warnings
-
-None introduced by this change. Homepage copy-button click behaviour was not
-exercised in a real browser in this environment (Clipboard API) — the JS path
-and no-JS readability were reviewed from source; treat interactive copy as
-`inferred-from-source` until manually clicked.
+- Claims checked against PRODUCT.md (agents/audience, no DB/AI API), INSTALLER.md
+  (PHP 8.2+, no Composer/network), DEPLOYMENT.md (cPanel / GitHub Pages / static).
+- Rendered homepage section order: problem → install → compatibility →
+  understanding → proof.
+- Confirmed honesty lines: agent interprets source; no auto-analyze on install;
+  coming soon labelled not implemented.
+- `php -l index.php`; `php tools/vibekb.php check`; `php tools/test-topology.php`;
+  `php tools/vibekb.php generate`.
 
 ## Exact next recommended action
 
-`php tools/vibekb.php status` before the next change. If install commands or the
-integration prompt change, update the homepage `#install` section in the same
-commit as `INSTALLER.md` / `install.php` / `prompts/INTEGRATE_VIBEKB.md`.
+`php tools/vibekb.php status` before the next change. If install commands,
+supported agents, or deploy modes change, update `#install` and `#compatibility`
+in the same commit as the docs they mirror.

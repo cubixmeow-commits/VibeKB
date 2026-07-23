@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>The model drifts from the code unless an agent reconciles it · VibeKB — VibeKB</title>
+    <title>Homepage Compatibility &amp; Requirements under install · VibeKB — VibeKB</title>
     <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -105,45 +105,37 @@
                 <article class="view view-doc">
         <p class="breadcrumb"><a href="../../why/index.html">← Decisions &amp; rationale</a></p>
         <header class="page-head reading-column">
-            <p class="eyebrow">Warnings</p>
-            <h1>The model drifts from the code unless an agent reconciles it</h1>
-            <p class="lede">VibeKB detects that files changed but cannot interpret what a change means; if an agent edits code without updating the affected records, the model silently goes stale.</p>
+            <p class="eyebrow">Changes</p>
+            <h1>Homepage Compatibility &amp; Requirements under install</h1>
+            <p class="lede">Install step 3 is agent-agnostic (Cursor, Claude Code, Codex, Windsurf, and others). A new Compatibility &amp; Requirements section under #install answers stack/agent/deploy questions with honest limits and inactive coming-soon badges.</p>
             <div class="badge-row">
-                <span class="badge badge--info">active</span>                <span class="badge badge--danger">Severity: high</span>                                <span class="badge badge--ok">Verified from source</span>            </div>
+                <span class="badge badge--info">implemented</span>                                                <span class="badge badge--ok">Verified from source</span>            </div>
         </header>
         <div class="detail-grid">
-            <div class="detail-main"><div class="prose reading-column"><h3>What can go wrong</h3>
-<p>An agent changes <code>guide/lib/Content.php</code> behaviour but leaves <code>load-living-model</code>
-and <code>validate-model</code> describing the old behaviour. The model now claims something
-the code no longer does — the exact failure VibeKB exists to prevent.</p>
-<h3>Cause</h3>
-<p>Reconciling a code change into the model is interpretation work; it cannot be
-fully automated. The tooling can detect that a file changed and which records
-reference it, but not what the change <em>means</em>.</p>
-<h3>What not to do</h3>
-<p>Do not treat a green <code>vibekb check</code> as proof the model is correct — it proves
-nothing is <em>mechanically</em> inconsistent (no missing files, valid structure), not
-that the prose still matches behaviour. Do not skip step 5 of the lifecycle
-(update the affected records) because the code &quot;already works.&quot;</p>
-<h3>Safe procedure</h3>
-<ol>
-<li>Run <code>php tools/vibekb.php affected --since &lt;base&gt;</code> to see likely-affected</li>
-</ol>
-<p>records.</p>
-<ol>
-<li>For each, re-read the code and update the record&#039;s behaviour and verification</li>
-</ol>
-<p>state honestly.</p>
-<ol>
-<li>Update memory, diagrams, provenance, and the handoff.</li>
-<li>Run <code>php tools/vibekb.php check</code> and regenerate <code>/docs</code>.</li>
-</ol></div></div>
+            <div class="detail-main"><div class="prose reading-column"><h3>Before</h3>
+<p>Install step 3 and boundary copy named Cursor alone. Visitors had no immediate
+answer to “will this work with my stack?” after the three install steps.</p>
+<h3>After</h3>
+<ul>
+<li>Step 3: <strong>Ask your coding agent</strong> — lists Cursor, Claude Code, Codex, Windsurf,</li>
+</ul>
+<p>and other capable agents; copy button says “Copy agent prompt.”</p>
+<ul>
+<li>New <code>#compatibility</code> section with four cards (install requirements, works-with</li>
+</ul>
+<p>stacks, named agents, deployment), a no-extra-infrastructure checklist, honest
+  current requirements (PHP 8.2+, a coding agent, a developer to initialize), and
+  inactive coming-soon badges.</p>
+<h3>Honesty preserved</h3>
+<p>Stack badges mean an agent can model those codebases — VibeKB does not parse the
+languages. Coming-soon items are labelled as not implemented. Installation still
+does not automatically analyze repositories.</p></div></div>
             <aside class="detail-rail" aria-label="Connections">
                 <div class="rail-card">
                     <h2>Affects functionality</h2>
-                    <p><a class="chip" href="../../functionality/detect-drift.html">Detect drift between code and model</a> <a class="chip" href="../../functionality/find-affected-functionality.html">Find affected functionality</a></p>
+                    <p><a class="chip" href="../../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a></p>
                 </div>
-                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">tools/vibekb.php</code> <code class="chip chip--file">guide/lib/Content.php</code></p></div>
+                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">index.php</code> <code class="chip chip--file">assets/css/homepage.css</code></p></div>
                             </aside>
         </div>
     </article>
