@@ -1,23 +1,19 @@
 ---
 id: current-work
 type: work
-title: Release binaries pipeline (Phase 2a)
-objective: Add a tag-triggered GitHub Actions release that cross-compiles vibekb for six platforms with checksums and version ldflags, and present Downloads as the primary install path on the homepage and docs — without Homebrew/Winget/curl yet, and without changing the installer or PHP runtime.
-summary: Complete — release workflow, buildinfo Version/Commit/Built, docs + homepage Downloads-first.
-requested_by: Cursor cloud agent task
+title: Homepage install copy for Releases download flow
+objective: Align homepage install section and requirements with the downloadable-binary workflow (releases/latest, platform assets, clear install vs runtime vs build-from-source) without redesign or command invention.
+summary: Complete — homepage matches release.yml download flow; PHP still post-install.
+requested_by: Cursor cloud agent follow-up
 status: complete
 verification_state: verified-from-source
 updated: 2026-07-23
-affected_functionality: [run-the-developer-cli, install-into-a-repository, initialize-in-a-repository, deploy-and-stay-portable]
-expected_files: [.github/workflows/release.yml, internal/buildinfo/buildinfo.go, internal/cli/version.go, RELEASE.md, README.md, INSTALLER.md, ARCHITECTURE.md, index.php, install.php, template/manifest.json]
-data_impact: None to install/runtime behaviour. Packaging, docs, and homepage only.
-risks: [Implying Go still required for normal install (avoided); inventing brew/winget (avoided).]
+affected_functionality: [install-into-a-repository, initialize-in-a-repository, deploy-and-stay-portable]
+expected_files: [index.php, .vibekb/memory/changes/homepage-releases-install-copy.md]
+data_impact: None. Homepage copy and self-model only.
+risks: []
 ---
 
 ## Status
 
-Complete. See `.vibekb/work/handoff.md`.
-
-## Change recorded
-
-`change:release-binaries-pipeline`
+Complete. See handoff.

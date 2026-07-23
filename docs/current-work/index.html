@@ -110,20 +110,18 @@
     </header>
 
             <section class="work-summary callout callout--work">
-            <h2>Release binaries pipeline (Phase 2a)</h2>
+            <h2>Homepage install copy for Releases download flow</h2>
             <div class="badge-row">
                 <span class="badge badge--info">complete</span>                                    <span class="badge badge--ok">Verified from source</span>                            </div>
             <dl class="rail-dl work-meta">
-                <dt>Objective</dt><dd>Add a tag-triggered GitHub Actions release that cross-compiles vibekb for six platforms with checksums and version ldflags, and present Downloads as the primary install path on the homepage and docs — without Homebrew/Winget/curl yet, and without changing the installer or PHP runtime.</dd>                                    <dt>Affected functionality</dt><dd><a class="chip" href="../functionality/run-the-developer-cli.html">Run VibeKB from one developer CLI</a> <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a></dd>
-                                                    <dt>Expected files</dt><dd><code class="chip chip--file">.github/workflows/release.yml</code> <code class="chip chip--file">internal/buildinfo/buildinfo.go</code> <code class="chip chip--file">internal/cli/version.go</code> <code class="chip chip--file">RELEASE.md</code> <code class="chip chip--file">README.md</code> <code class="chip chip--file">INSTALLER.md</code> <code class="chip chip--file">ARCHITECTURE.md</code> <code class="chip chip--file">index.php</code> <code class="chip chip--file">install.php</code> <code class="chip chip--file">template/manifest.json</code></dd>
-                                <dt>Data impact</dt><dd>None to install/runtime behaviour. Packaging, docs, and homepage only.</dd>                <dt>Risks</dt><dd>Implying Go still required for normal install (avoided); inventing brew/winget (avoided).</dd>            </dl>
+                <dt>Objective</dt><dd>Align homepage install section and requirements with the downloadable-binary workflow (releases/latest, platform assets, clear install vs runtime vs build-from-source) without redesign or command invention.</dd>                                    <dt>Affected functionality</dt><dd><a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a></dd>
+                                                    <dt>Expected files</dt><dd><code class="chip chip--file">index.php</code> <code class="chip chip--file">.vibekb/memory/changes/homepage-releases-install-copy.md</code></dd>
+                                <dt>Data impact</dt><dd>None. Homepage copy and self-model only.</dd>                            </dl>
         </section>
 
         <section class="doc-section content-section">
             <div class="prose reading-column"><h3>Status</h3>
-<p>Complete. See <code>.vibekb/work/handoff.md</code>.</p>
-<h3>Change recorded</h3>
-<p><code>change:release-binaries-pipeline</code></p></div>
+<p>Complete. See handoff.</p></div>
         </section>
     
     <nav class="cross-links" aria-label="Related views">
@@ -140,7 +138,7 @@
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 03:30 UTC · source commit fdd0a59 (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 03:49 UTC · source commit 4de3ea9 (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

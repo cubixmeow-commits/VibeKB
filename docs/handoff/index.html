@@ -114,39 +114,18 @@
                                     <span class="badge badge--info">Verification: verified from source</span>                                <span class="muted">Updated 2026-07-23</span>
             </div>
             <div class="prose reading-column"><h3>Current state</h3>
-<p><code>vibekb</code> is packaged as a downloadable cross-platform CLI. Pushing a <code>v*</code> tag
-runs <code>.github/workflows/release.yml</code> (test, vet, cross-compile, checksums,
-GitHub Release). <code>vibekb version</code> reports Version / Commit / Built / Platform.
-README, INSTALLER.md, and the homepage present Downloads as the primary path;
-build-from-source is Advanced. The installer and PHP model engine are unchanged.</p>
-<h3>Completed this change</h3>
-<ul>
-<li><code>internal/buildinfo</code>: Version, Commit, Built (ldflags overrides)</li>
-<li><code>internal/cli/version.go</code> + test: identity block output</li>
-<li><code>.github/workflows/release.yml</code>: six GOOS/GOARCH artifacts + <code>checksums.txt</code></li>
-<li><code>RELEASE.md</code>: publish commands and remaining signing notes</li>
-<li>README / INSTALLER / ARCHITECTURE Phase 2a/2b split</li>
-<li>Homepage: download → <code>vibekb install</code> → coding agent</li>
-<li><code>install.php</code> migration notice points at Releases</li>
-<li>Self-model + <code>/docs</code> regenerated</li>
-</ul>
+<p>Ordinary users are told to download from GitHub Releases (<code>/releases/latest</code>),
+pick the correct <code>vibekb-*</code> asset, run <code>vibekb install</code>, then use a coding agent.
+Go appears only under Advanced. PHP 8.2+ is clearly a post-install requirement.</p>
 <h3>Verification completed</h3>
 <ul>
-<li><code>go test ./...</code>, <code>go vet</code>, gofmt clean</li>
-<li>Local cross-compile of all six artifact names + sha256sum</li>
-<li>ldflags smoke: <code>vibekb version</code> shows injected fields</li>
-<li>Homepage HTML: no primary <code>go build</code>; GitHub Releases + <code>vibekb install</code></li>
-<li><code>php tools/vibekb.php check --strict</code>; <code>test-topology.php</code></li>
-</ul>
-<h3>Not done yet</h3>
-<ul>
-<li><strong>Code signing / notarization</strong> (recommended next)</li>
-<li><strong>Phase 2b</strong>: Homebrew, Winget, curl installer</li>
-<li><strong>Actually tagging <code>v0.1.0</code></strong> after this merges (manual maintainer step)</li>
+<li>Asset names on homepage match <code>.github/workflows/release.yml</code> exactly</li>
+<li><code>php -l index.php</code>; rendered checks for install.php / Native CLI / doctor absent</li>
+<li><code>go test ./...</code>, <code>go vet ./...</code></li>
+<li><code>php tools/vibekb.php check --strict</code> (after generate)</li>
 </ul>
 <h3>Exact next recommended action</h3>
-<p>After merge: tag and push <code>v0.1.0</code> per <code>RELEASE.md</code>. Then plan Apple
-notarization and Windows Authenticode before package-manager distribution.</p></div>
+<p>Tag <code>v0.1.0</code> per <code>RELEASE.md</code> when ready, then plan code signing.</p></div>
         </section>
     
             <section class="doc-section">
@@ -179,7 +158,7 @@ notarization and Windows Authenticode before package-manager distribution.</p></
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 03:30 UTC · source commit fdd0a59 (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 03:49 UTC · source commit 4de3ea9 (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

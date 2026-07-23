@@ -6,7 +6,7 @@ declare(strict_types=1);
  * VibeKB homepage: hero/problem, install fast-start, what you get, live proof + CTA.
  * Copy follows the developer journey (build fast → lose understanding → fear change →
  * keep understanding in the repo). Section 1 includes a hero comic beside the copy.
- * The install section mirrors the real installer workflow (clone → build native CLI →
+ * The install section mirrors the real installer workflow (download release binary →
  * vibekb install → coding agent builds the model). Compatibility & Requirements sits
  * under install. The guide-preview carousel and hero metrics are driven by real
  * `.vibekb/` records (never invented).
@@ -69,7 +69,7 @@ function hp_status_tone(string $status): string
 
 $guideUrl = 'guide/';
 $repoUrl = 'https://github.com/cubixmeow-commits/VibeKB';
-$releasesUrl = $repoUrl . '/releases';
+$releasesUrl = $repoUrl . '/releases/latest';
 $installerGuideUrl = $repoUrl . '/blob/main/INSTALLER.md';
 $codingAgents = 'Cursor, Claude Code, Codex, Windsurf, Copilot, and others';
 $namedAgents = ['Cursor', 'Claude Code', 'Codex', 'Windsurf'];
@@ -78,9 +78,19 @@ $stackBadges = [
     'Python', 'Django', 'Flask', 'FastAPI', 'Go', 'Rust', 'Java', 'Kotlin',
     'C#', 'Swift', 'Ruby', 'C++',
 ];
+// Asset names must match .github/workflows/release.yml.
+$releasePlatforms = [
+    ['label' => 'Windows 64-bit', 'asset' => 'vibekb-windows-amd64.exe'],
+    ['label' => 'Windows ARM64', 'asset' => 'vibekb-windows-arm64.exe'],
+    ['label' => 'macOS Apple Silicon', 'asset' => 'vibekb-darwin-arm64'],
+    ['label' => 'macOS Intel', 'asset' => 'vibekb-darwin-amd64'],
+    ['label' => 'Linux 64-bit', 'asset' => 'vibekb-linux-amd64'],
+    ['label' => 'Linux ARM64', 'asset' => 'vibekb-linux-arm64'],
+];
 $installCmd = 'vibekb install /path/to/your/project';
 $installExampleCmd = 'vibekb install ~/Projects/my-app';
 $dryRunCmd = 'vibekb install --dry-run /path/to/your/project';
+$buildFromSourceCmd = "git clone https://github.com/cubixmeow-commits/VibeKB.git\ncd VibeKB\ngo build -o vibekb ./cmd/vibekb";
 $agentPrompt = "Build the first VibeKB model for this repository using prompts/INTEGRATE_VIBEKB.md.\n"
     . "Inspect the real source code, do not modify the application while initializing VibeKB, "
     . "distinguish implemented behaviour from inferred or unverified behaviour, run all VibeKB checks, "
@@ -269,9 +279,9 @@ if ($loaded) {
                 <p class="hp-kicker">Install in three steps</p>
                 <h2 id="install-title">Add VibeKB to your repository</h2>
                 <p class="hp-lead hp-install-lead">
-                    Download the CLI, install it into your project
-                    (no Go and no PHP required for install), then ask your coding agent
-                    to build the first model from the real source.
+                    Download the binary. Point it at your repo. VibeKB installs the knowledge
+                    layer and gives your coding agent a better place to start.
+                    You do not need Go to install. PHP is only needed afterward for the guide.
                 </p>
 
                 <ol class="hp-install-cards" aria-label="Install VibeKB in three steps">
@@ -279,21 +289,28 @@ if ($loaded) {
                         <p class="hp-install-step-num" aria-hidden="true">1</p>
                         <h3>Download the VibeKB CLI</h3>
                         <p class="hp-install-card-copy">
-                            Get the executable for your platform from GitHub Releases.
-                            Put it on your <code>PATH</code> as <code>vibekb</code>.
-                            You do not need to install Go.
+                            Get the executable for your operating system from GitHub Releases.
+                            Rename it to <code>vibekb</code> (or <code>vibekb.exe</code> on Windows),
+                            make it executable if needed, and put it on your <code>PATH</code>.
+                            Ordinary users do not need to install Go.
                         </p>
                         <div class="hp-actions">
-                            <a class="hp-btn hp-btn-primary" href="<?= hp_e($releasesUrl) ?>" rel="noopener noreferrer">GitHub Releases</a>
+                            <a class="hp-btn hp-btn-primary" href="<?= hp_e($releasesUrl) ?>" rel="noopener noreferrer">Download latest release</a>
                         </div>
+                        <p class="hp-install-example-label">Release binaries</p>
+                        <ul class="hp-compat-checks hp-compat-checks--tight">
+                            <?php foreach ($releasePlatforms as $platform): ?>
+                                <li><?= hp_e($platform['label']) ?>: <code><?= hp_e($platform['asset']) ?></code></li>
+                            <?php endforeach; ?>
+                        </ul>
                     </li>
                     <li class="hp-install-card">
                         <p class="hp-install-step-num" aria-hidden="true">2</p>
                         <h3>Install it into your project</h3>
                         <p class="hp-install-card-copy">
-                            Point install at the project you want to understand.
+                            Run the executable against the repository you want to understand.
                         </p>
-                        <p class="hp-install-req"><span>Native installer: no PHP required</span></p>
+                        <p class="hp-install-req"><span>No Go and no PHP required to install</span></p>
                         <div class="hp-cmd-block">
                             <pre class="hp-cmd" id="cmd-install"><code><?= hp_e($installCmd) ?></code></pre>
                             <button type="button" class="hp-copy-btn" data-copy-target="#cmd-install">Copy</button>
@@ -304,7 +321,7 @@ if ($loaded) {
                             <button type="button" class="hp-copy-btn" data-copy-target="#cmd-install-example">Copy</button>
                         </div>
                         <p class="hp-install-card-copy">
-                            You will need PHP 8.2+ later for the guide and model commands.
+                            PHP 8.2+ is required later for the guide and model commands.
                             You do not need it to run <code>vibekb install</code>.
                         </p>
                     </li>
@@ -398,31 +415,39 @@ if ($loaded) {
                 <p class="hp-kicker">Will this work with my project?</p>
                 <h2 id="compatibility-title">Compatibility &amp; Requirements</h2>
                 <p class="hp-lead hp-compat-lead">
-                    Install with a downloaded native CLI. The guide and model tooling stay PHP.
+                    Install with a downloaded executable. The installed guide and model engine stay PHP.
                     Your coding agent builds the model by reading your source.
                 </p>
 
                 <div class="hp-compat-grid">
                     <article class="hp-compat-card">
-                        <h3>Install Requirements</h3>
-                        <h4 class="hp-compat-subhead">To install today</h4>
+                        <h3>Installing VibeKB</h3>
                         <ul class="hp-compat-checks">
-                            <li>A <code>vibekb</code> binary from GitHub Releases</li>
+                            <li>Download the correct executable for your operating system</li>
                             <li>Read/write access to the target repository</li>
+                            <li>Git repository recommended</li>
+                            <li>No Go installation required</li>
                         </ul>
-                        <h4 class="hp-compat-subhead">After installation</h4>
-                        <ul class="hp-compat-checks">
-                            <li>PHP 8.2+ for model commands and the dynamic guide</li>
-                            <li>An AI coding agent to build the first model</li>
-                        </ul>
-                        <ul class="hp-compat-none" aria-label="Not required">
-                            <li>No Go toolchain</li>
+                        <ul class="hp-compat-none" aria-label="Not required for installation">
                             <li>No Composer</li>
                             <li>No Node</li>
                             <li>No npm</li>
                             <li>No Python</li>
                             <li>No database</li>
                         </ul>
+                    </article>
+
+                    <article class="hp-compat-card">
+                        <h3>Running VibeKB after installation</h3>
+                        <ul class="hp-compat-checks">
+                            <li>PHP 8.2+ for the dynamic guide and model commands</li>
+                            <li>An AI coding agent such as Cursor, Claude Code, Codex, or similar</li>
+                            <li>A developer working inside the repository</li>
+                        </ul>
+                        <p class="hp-compat-card-copy">
+                            The downloaded binary installs VibeKB. It does not replace PHP for the
+                            installed guide, <code>vibekb check</code>, or <code>vibekb generate</code>.
+                        </p>
                     </article>
 
                     <article class="hp-compat-card">
@@ -496,15 +521,15 @@ if ($loaded) {
                     <h3 class="hp-compat-subhead">Current Requirements</h3>
                     <h4 class="hp-compat-subhead">Installation</h4>
                     <ul class="hp-compat-checks">
-                        <li>Downloadable native CLI from GitHub Releases</li>
+                        <li>Downloadable executable from GitHub Releases</li>
                         <li>No Go toolchain required</li>
-                        <li>No PHP process required</li>
+                        <li>No PHP process required to install</li>
                     </ul>
                     <h4 class="hp-compat-subhead">Using VibeKB after installation</h4>
                     <ul class="hp-compat-checks">
                         <li>PHP 8.2+</li>
                         <li>A capable AI coding agent</li>
-                        <li>A developer to initialize the first model</li>
+                        <li>A developer working inside the repository</li>
                     </ul>
                     <p class="hp-compat-card-copy">
                         The installer only prepares the workspace.
@@ -512,6 +537,23 @@ if ($loaded) {
                         VibeKB does not analyze your repository during install.
                     </p>
                 </div>
+
+                <details class="hp-install-details">
+                    <summary>Advanced: build VibeKB from source</summary>
+                    <div class="hp-install-details-body">
+                        <p class="hp-install-card-copy">
+                            For contributors building VibeKB itself. Ordinary installs should use the
+                            release binary. You need Go 1.24+ (from <code>go.mod</code>) and Git.
+                        </p>
+                        <div class="hp-cmd-block">
+                            <pre class="hp-cmd" id="cmd-build-source"><code><?= hp_e($buildFromSourceCmd) ?></code></pre>
+                            <button type="button" class="hp-copy-btn" data-copy-target="#cmd-build-source">Copy</button>
+                        </div>
+                        <p class="hp-install-card-copy">
+                            Then run <code>./vibekb install /path/to/your/project</code>.
+                        </p>
+                    </div>
+                </details>
 
                 <div class="hp-compat-soon">
                     <p class="hp-compat-soon-label">Coming soon</p>
