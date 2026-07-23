@@ -281,7 +281,6 @@ if ($loaded) {
                 <p class="hp-lead hp-install-lead">
                     Download the binary. Point it at your repo. VibeKB installs the knowledge
                     layer and gives your coding agent a better place to start.
-                    You do not need Go to install. PHP is only needed afterward for the guide.
                 </p>
 
                 <ol class="hp-install-cards" aria-label="Install VibeKB in three steps">
@@ -292,7 +291,6 @@ if ($loaded) {
                             Get the executable for your operating system from GitHub Releases.
                             Rename it to <code>vibekb</code> (or <code>vibekb.exe</code> on Windows),
                             make it executable if needed, and put it on your <code>PATH</code>.
-                            Ordinary users do not need to install Go.
                         </p>
                         <div class="hp-actions">
                             <a class="hp-btn hp-btn-primary" href="<?= hp_e($releasesUrl) ?>" rel="noopener noreferrer">Download latest release</a>
@@ -310,7 +308,6 @@ if ($loaded) {
                         <p class="hp-install-card-copy">
                             Run the executable against the repository you want to understand.
                         </p>
-                        <p class="hp-install-req"><span>No Go and no PHP required to install</span></p>
                         <div class="hp-cmd-block">
                             <pre class="hp-cmd" id="cmd-install"><code><?= hp_e($installCmd) ?></code></pre>
                             <button type="button" class="hp-copy-btn" data-copy-target="#cmd-install">Copy</button>
@@ -320,10 +317,6 @@ if ($loaded) {
                             <pre class="hp-cmd hp-cmd--example" id="cmd-install-example"><code><?= hp_e($installExampleCmd) ?></code></pre>
                             <button type="button" class="hp-copy-btn" data-copy-target="#cmd-install-example">Copy</button>
                         </div>
-                        <p class="hp-install-card-copy">
-                            PHP 8.2+ is required later for the guide and model commands.
-                            You do not need it to run <code>vibekb install</code>.
-                        </p>
                     </li>
                     <li class="hp-install-card">
                         <p class="hp-install-step-num" aria-hidden="true">3</p>
@@ -426,7 +419,6 @@ if ($loaded) {
                             <li>Download the correct executable for your operating system</li>
                             <li>Read/write access to the target repository</li>
                             <li>Git repository recommended</li>
-                            <li>No Go installation required</li>
                         </ul>
                         <ul class="hp-compat-none" aria-label="Not required for installation">
                             <li>No Composer</li>
@@ -522,8 +514,7 @@ if ($loaded) {
                     <h4 class="hp-compat-subhead">Installation</h4>
                     <ul class="hp-compat-checks">
                         <li>Downloadable executable from GitHub Releases</li>
-                        <li>No Go toolchain required</li>
-                        <li>No PHP process required to install</li>
+                        <li>Read/write access to the target repository</li>
                     </ul>
                     <h4 class="hp-compat-subhead">Using VibeKB after installation</h4>
                     <ul class="hp-compat-checks">

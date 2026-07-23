@@ -15,7 +15,7 @@ reads: [template/manifest.json, template/starter]
 writes: []
 config: []
 depends_on: [bootstrap-workspace, load-living-model, run-the-developer-cli]
-related_memory: [decision:native-installer-embedded-payload, decision:installer-template-not-duplicated-tree, decision:installer-prepares-agent-interprets, change:native-go-installer, change:homepage-native-installer-copy, change:release-binaries-pipeline, change:homepage-releases-install-copy]
+related_memory: [decision:native-installer-embedded-payload, decision:installer-template-not-duplicated-tree, decision:installer-prepares-agent-interprets, change:native-go-installer, change:homepage-native-installer-copy, change:release-binaries-pipeline, change:homepage-releases-install-copy, change:homepage-drop-no-go-php-claims]
 ---
 
 ## In one sentence

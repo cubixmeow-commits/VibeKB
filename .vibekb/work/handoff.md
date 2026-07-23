@@ -2,24 +2,31 @@
 id: handoff
 type: handoff
 title: Current handoff
-summary: Homepage install copy now matches the downloadable release workflow (releases/latest, six platform assets, Installing vs Running after vs Advanced source build). PHP 8.2+ remains the post-install runtime. Next: tag v0.1.0, then code signing.
+summary: Homepage no longer advertises that install does not require Go or PHP. Download → vibekb install → coding agent flow is unchanged; PHP 8.2+ remains the post-install runtime.
 updated: 2026-07-23
 verification_state: verified-from-source
 ---
 
 ## Current state
 
-Ordinary users are told to download from GitHub Releases (`/releases/latest`),
-pick the correct `vibekb-*` asset, run `vibekb install`, then use a coding agent.
-Go appears only under Advanced. PHP 8.2+ is clearly a post-install requirement.
+Install and Compatibility copy state positive requirements (downloadable
+executable, write access, PHP 8.2+ after install) without “No Go / no PHP
+required to install” marketing lines. Advanced build-from-source still mentions
+Go for contributors.
 
 ## Verification completed
 
-- Asset names on homepage match `.github/workflows/release.yml` exactly
-- `php -l index.php`; rendered checks for install.php / Native CLI / doctor absent
-- `go test ./...`, `go vet ./...`
-- `php tools/vibekb.php check --strict` (after generate)
+- Grep of `index.php`: no “No Go”, “no PHP required”, “do not need Go”
+- `php -l index.php`
+- Rendered homepage still has `/releases/latest`, six assets, `vibekb install`
+- `php tools/vibekb.php check` + generate (this commit)
+
+## Unresolved / next
+
+Tag `v0.1.0` was already pushed earlier; next product work remains code signing
+(and other Phase 2 distribution items) when ready.
 
 ## Exact next recommended action
 
-Tag `v0.1.0` per `RELEASE.md` when ready, then plan code signing.
+Plan code signing / further Phase 2 distribution (Homebrew, Winget, curl) per
+RELEASE.md when ready.

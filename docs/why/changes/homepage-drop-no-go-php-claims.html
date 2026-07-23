@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Runs on PHP 8.2 shared hosting with no build step · VibeKB — VibeKB</title>
+    <title>Simplify homepage install requirements copy · VibeKB — VibeKB</title>
     <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -105,41 +105,40 @@
                 <article class="view view-doc">
         <p class="breadcrumb"><a href="../../why/index.html">← Decisions &amp; rationale</a></p>
         <header class="page-head reading-column">
-            <p class="eyebrow">Constraints</p>
-            <h1>Runs on PHP 8.2 shared hosting with no build step</h1>
-            <p class="lede">No framework, SPA, bundler, database, external/AI API, or JavaScript build; the guide must run by copying files and work in a subfolder without JavaScript.</p>
+            <p class="eyebrow">Changes</p>
+            <h1>Simplify homepage install requirements copy</h1>
+            <p class="lede">Homepage install and compatibility copy no longer advertise that installation does not require Go or PHP; download → install → agent steps and post-install PHP 8.2+ requirements remain.</p>
             <div class="badge-row">
-                <span class="badge badge--info">active</span>                                                <span class="badge badge--ok">Verified from source</span>            </div>
+                <span class="badge badge--info">implemented</span>                                                <span class="badge badge--ok">Verified from source</span>            </div>
         </header>
         <div class="detail-grid">
-            <div class="detail-main"><div class="prose reading-column"><h3>The constraint</h3>
-<p>The dynamic guide must run on ordinary PHP 8.2 shared hosting: no Composer
-install, no Node/bundler, no SQL database, no external or AI API, no network at
-render time, and no rewrite rules. It must work without JavaScript (JS only
-enhances) and deploy into a subfolder.</p>
-<h3>Where it bites</h3>
+            <div class="detail-main"><div class="prose reading-column"><h3>Before</h3>
+<p>Install lead, step cards, a badge (“No Go and no PHP required to install”), and
+Compatibility / Current Requirements listed negative “does not require Go/PHP”
+claims alongside the real downloadable-binary workflow.</p>
+<h3>After</h3>
 <ul>
-<li>The Markdown renderer is a hand-written subset, not a library, so there is no</li>
+<li>Removed lead sentences about not needing Go / PHP-only-afterward</li>
+<li>Removed “Ordinary users do not need to install Go” from step 1</li>
+<li>Removed the install-step badge and unused <code>.hp-install-req</code> CSS</li>
+<li>Removed step-2 “You do not need it to run vibekb install”</li>
+<li>Compatibility Installing and Current Requirements Installation no longer list</li>
 </ul>
-<p><code>composer install</code>.</p>
+<p>“No Go…” / “No PHP process required to install”</p>
 <ul>
-<li>Routing is query-string based, so no <code>.htaccess</code> rewrites are required.</li>
-<li>The static snapshot uses relative links so it works under a repository subpath.</li>
-<li>Search runs client-side against a static JSON index — no server, no CDN.</li>
+<li>Positive post-install PHP 8.2+ requirements under Running / Using after</li>
 </ul>
-<h3>What not to do</h3>
-<p>Do not introduce a framework, SPA, bundler, SQL database, external/AI API, or a
-required build step. Any AI analysis is performed by the coding agent already in
-the repository — never by a service VibeKB calls at runtime.</p>
-<h3>Consequences</h3>
-<p>This constraint is why VibeKB can be reviewed in a pull request and deployed by
-copying files — and why the model must stay plain files, not a database.</p></div></div>
+<p>installation are unchanged</p>
+<h3>Verification note</h3>
+<p>Grep of <code>index.php</code> found no remaining “No Go”, “no PHP required”, or
+“do not need Go” phrasing. <code>php -l index.php</code> clean. Rendered HTML still shows
+releases/latest, six platform assets, and <code>vibekb install</code>.</p></div></div>
             <aside class="detail-rail" aria-label="Connections">
                 <div class="rail-card">
                     <h2>Affects functionality</h2>
-                    <p><a class="chip" href="../../functionality/parse-records.html">Parse records (front matter + Markdown)</a> <a class="chip" href="../../functionality/render-guide.html">Render the dynamic guide</a> <a class="chip" href="../../functionality/search-the-model.html">Search the model</a> <a class="chip" href="../../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a></p>
+                    <p><a class="chip" href="../../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a></p>
                 </div>
-                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">guide/lib/Markdown.php</code> <code class="chip chip--file">guide/lib/UrlStrategy.php</code> <code class="chip chip--file">.cpanel.yml</code></p></div>
+                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">index.php</code> <code class="chip chip--file">assets/css/homepage.css</code></p></div>
                             </aside>
         </div>
     </article>
