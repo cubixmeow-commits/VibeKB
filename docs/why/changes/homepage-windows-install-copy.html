@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Installation is native to the Go binary, from an embedded payload · VibeKB — VibeKB</title>
+    <title>Homepage names Windows as a manual install path · VibeKB — VibeKB</title>
     <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -105,72 +105,35 @@
                 <article class="view view-doc">
         <p class="breadcrumb"><a href="../../why/index.html">← Decisions &amp; rationale</a></p>
         <header class="page-head reading-column">
-            <p class="eyebrow">Decisions</p>
-            <h1>Installation is native to the Go binary, from an embedded payload</h1>
-            <p class="lede">The installer is implemented in Go and embeds the runtime payload and a canonical starter definition, so `vibekb install` runs without PHP and without the source repository. PHP is required only to run the installed guide. install.php becomes a compatibility wrapper; the starter model becomes shared data.</p>
+            <p class="eyebrow">Changes</p>
+            <h1>Homepage names Windows as a manual install path</h1>
+            <p class="lede">Compatibility and install copy now list Windows alongside macOS/Linux. The curl | sh installer remains macOS/Linux; Windows users download vibekb-windows-*.exe from GitHub Releases.</p>
             <div class="badge-row">
-                <span class="badge badge--info">accepted</span>                                                <span class="badge badge--ok">Verified from source</span>            </div>
+                <span class="badge badge--info">implemented</span>                                                <span class="badge badge--ok">Verified from source</span>            </div>
         </header>
         <div class="detail-grid">
-            <div class="detail-main"><div class="prose reading-column"><h3>Context</h3>
-<p>Under &quot;Go front-end, PHP core&quot;, installation was still <code>php install.php</code>. But
-installing is almost entirely filesystem work — copying a declared payload and
-writing starter files — and requiring PHP just to <em>install</em> is the opposite of
-the desired experience (<code>brew install vibekb &amp;&amp; vibekb install …</code>). Installing a
-runtime and requiring that runtime are different responsibilities.</p>
-<h3>Decision</h3>
-<p>Move installation into the Go binary and embed everything it needs:</p>
+            <div class="detail-main"><div class="prose reading-column"><h3>Before</h3>
+<p>The Installing VibeKB card and Current Requirements listed only macOS or Linux,
+even though release.yml already publishes <code>vibekb-windows-amd64.exe</code> and
+<code>vibekb-windows-arm64.exe</code> for manual download. Visitors inferred Windows was
+unsupported.</p>
+<h3>After</h3>
 <ul>
-<li><code>embed.go</code> (at the module root, because embed patterns cannot escape their</li>
+<li>Platforms: macOS, Linux, or Windows (arm64 or amd64).</li>
+<li>Website curl installer: still macOS/Linux (<code>curl</code>/<code>wget</code>).</li>
+<li>Windows: download the <code>.exe</code> from GitHub Releases, rename to <code>vibekb.exe</code>, PATH.</li>
+<li>Install step 1 manual link text names Windows explicitly.</li>
+<li>README notes Windows binaries are manual-download only.</li>
 </ul>
-<p>directory) embeds <code>template/manifest.json</code>, the runtime payload (<code>guide/</code>,
-  <code>tools/</code>, <code>prompts/</code>, <code>.cursor/</code>, the docs), and <code>template/starter/</code>.</p>
-<ul>
-<li><code>internal/installer</code> parses the embedded manifest (the single source of truth</li>
-</ul>
-<p>for the file set — no second manifest format), copies from the embedded FS,
-  scaffolds <code>.vibekb/</code> from the embedded starter definition, and verifies
-  natively. No PHP process is launched at any point.</p>
-<ul>
-<li>The starter model becomes language-neutral <strong>data</strong> under <code>template/starter/</code></li>
-</ul>
-<p>(<code>starter.json</code> + a <code>files/</code> tree with <code>{{DATE}}</code> / <code>{{PROJECT_NAME_JSON}}</code>
-  tokens), read by both the Go installer (embedded) and <code>tools/lib/Starter.php</code>
-  (on disk, for <code>bootstrap</code>). <code>template/starter/</code> is installed into targets so
-  <code>bootstrap</code> keeps working there.</p>
-<ul>
-<li><code>install.php</code> becomes a thin wrapper that forwards to <code>vibekb install</code>, so there</li>
-</ul>
-<p>is only one installer implementation.</p>
-<h3>Alternatives considered</h3>
-<ul>
-<li><strong>Keep delegating to install.php</strong> — rejected: installation would still require</li>
-</ul>
-<p>PHP and a live clone, blocking the single-binary distribution goal.</p>
-<ul>
-<li><strong>Reimplement the starter as Go code</strong> — rejected: it would duplicate the</li>
-</ul>
-<p>starter content (Go copy + PHP copy) and drift. Making it shared data keeps one
-  definition.</p>
-<ul>
-<li><strong>Embed by duplicating the runtime under template/</strong> — rejected: a second</li>
-</ul>
-<p>physical copy of <code>guide/</code>/<code>tools/</code> would drift (the very thing
-  <code>installer-template-not-duplicated-tree</code> avoids). <code>embed.go</code> embeds the
-  canonical files directly at build time.</p>
-<h3>Reason</h3>
-<p>Installing should be one self-contained, PHP-free step, while the model loader,
-generator, and guide stay PHP (unchanged). Embedding the canonical payload and a
-single shared starter definition achieves that with no duplication and no second
-source of truth. It is verified: a native install with PHP removed from PATH
-produces a workspace that PHP <code>bootstrap</code> and <code>validate</code> then accept, byte-identical
-to PHP&#039;s own scaffold.</p></div></div>
+<h3>Honesty preserved</h3>
+<p>No Windows <code>install.sh</code>, PowerShell installer, Winget, or Authenticode claim.
+<code>install.sh</code> still dies on Windows with a Releases pointer.</p></div></div>
             <aside class="detail-rail" aria-label="Connections">
                 <div class="rail-card">
                     <h2>Affects functionality</h2>
-                    <p><a class="chip" href="../../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../../functionality/bootstrap-workspace.html">Bootstrap the VibeKB workspace</a></p>
+                    <p><a class="chip" href="../../functionality/run-the-developer-cli.html">Run VibeKB from one developer CLI</a> <a class="chip" href="../../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a></p>
                 </div>
-                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">embed.go</code> <code class="chip chip--file">internal/installer/installer.go</code> <code class="chip chip--file">template/starter/starter.json</code> <code class="chip chip--file">install.php</code></p></div>
+                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">index.php</code> <code class="chip chip--file">README.md</code></p></div>
                             </aside>
         </div>
     </article>

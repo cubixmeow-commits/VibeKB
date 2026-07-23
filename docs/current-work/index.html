@@ -110,19 +110,20 @@
     </header>
 
             <section class="work-summary callout callout--work">
-            <h2>Final release audit for VibeKB 0.2.0</h2>
+            <h2>Homepage Windows install requirements honesty</h2>
             <div class="badge-row">
                 <span class="badge badge--info">complete</span>                                    <span class="badge badge--ok">Verified from source</span>                            </div>
             <dl class="rail-dl work-meta">
-                <dt>Objective</dt><dd>Complete the final release audit for NEXT_VERSION (0.2.0) and leave the tree READY TO RELEASE without tagging.</dd>                                    <dt>Affected functionality</dt><dd><a class="chip" href="../functionality/run-the-developer-cli.html">Run VibeKB from one developer CLI</a> <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/migrate-legacy-install.html">Migrate a legacy root-level install</a> <a class="chip" href="../functionality/uninstall-from-a-repository.html">Uninstall VibeKB from a repository</a> <a class="chip" href="../functionality/generate-static-snapshot.html">Generate the static snapshot</a></dd>
-                                                    <dt>Expected files</dt><dd><code class="chip chip--file">CHANGELOG.md</code> <code class="chip chip--file">docs/RELEASE_NOTES_0.2.0.md</code> <code class="chip chip--file">RELEASE.md</code> <code class="chip chip--file">.github/workflows/release.yml</code> <code class="chip chip--file">internal/installer/uninstall.go</code></dd>
-                                <dt>Data impact</dt><dd>None until a tagged release ships.</dd>                <dt>Risks</dt><dd>Do not tag v0.2.0 or push a release tag until the user explicitly asks.</dd>            </dl>
+                <dt>Objective</dt><dd>Stop implying Windows is unsupported when release binaries already ship; clarify curl installer is macOS/Linux while Windows installs via GitHub Releases.</dd>                                    <dt>Affected functionality</dt><dd><a class="chip" href="../functionality/run-the-developer-cli.html">Run VibeKB from one developer CLI</a> <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a></dd>
+                                                    <dt>Expected files</dt><dd><code class="chip chip--file">index.php</code> <code class="chip chip--file">README.md</code> <code class="chip chip--file">.vibekb/memory/changes/homepage-windows-install-copy.md</code> <code class="chip chip--file">.vibekb/functionality/records/run-the-developer-cli.md</code> <code class="chip chip--file">.vibekb/functionality/records/install-into-a-repository.md</code> <code class="chip chip--file">.vibekb/functionality/records/initialize-in-a-repository.md</code> <code class="chip chip--file">.vibekb/functionality/records/deploy-and-stay-portable.md</code> <code class="chip chip--file">.vibekb/files/important-files.json</code> <code class="chip chip--file">.vibekb/work/handoff.md</code> <code class="chip chip--file">.vibekb/work/current.md</code></dd>
+                                <dt>Data impact</dt><dd>None — marketing/onboarding copy only; installer and release assets unchanged.</dd>                <dt>Risks</dt><dd>Do not claim a Windows curl/PowerShell installer exists; only manual .exe download is supported. Do not imply Winget or Authenticode signing.</dd>            </dl>
         </section>
 
         <section class="doc-section content-section">
             <div class="prose reading-column"><h3>Status</h3>
-<p>Final release audit complete — <strong>READY TO RELEASE</strong>. Do not tag/push <code>v0.2.0</code>
-until asked.</p></div>
+<p>Complete. Homepage Compatibility &amp; Requirements list Windows; install step 1
+points Windows users at GitHub Releases. Verified by rendering <code>index.php</code> and
+checking for the new strings.</p></div>
         </section>
     
     <nav class="cross-links" aria-label="Related views">
@@ -139,7 +140,7 @@ until asked.</p></div>
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 08:00 UTC · source commit 803d976 (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 08:31 UTC · source commit 683df05 (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

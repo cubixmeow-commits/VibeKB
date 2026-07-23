@@ -14,7 +14,7 @@ files: [INITIALIZE.md, prompts/INTEGRATE_VIBEKB.md, index.php]
 reads: []
 writes: []
 depends_on: [install-into-a-repository, load-living-model, validate-model, generate-static-snapshot]
-related_memory: [assumption:agents-follow-session-workflow, change:homepage-install-fast-start, change:homepage-compatibility-section, change:homepage-native-installer-copy, change:homepage-voice-pass, change:release-binaries-pipeline, change:homepage-releases-install-copy, change:homepage-drop-no-go-php-claims, change:website-curl-installer]
+related_memory: [assumption:agents-follow-session-workflow, change:homepage-install-fast-start, change:homepage-compatibility-section, change:homepage-native-installer-copy, change:homepage-voice-pass, change:release-binaries-pipeline, change:homepage-releases-install-copy, change:homepage-drop-no-go-php-claims, change:website-curl-installer, change:homepage-windows-install-copy]
 ---
 
 ## In one sentence

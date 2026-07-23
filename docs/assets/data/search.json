@@ -53,7 +53,7 @@
         "summary": "A fully native, repository-safe installer built into the `vibekb` Go binary. `vibekb install /path/to/repo` consolidates everything VibeKB owns under the target's `.vibekb/` (runtime, reference docs, prompts, and a fresh empty model) and integrates with shared files (AGENTS.md, CLAUDE.md) only through namespaced adapters or a single clearly marked managed block — nothing is written at the repository root by default. It runs from the binary's embedded payload without executing PHP; PHP is required only to run the installed guide.",
         "type": "functionality",
         "url": "../functionality/install-into-a-repository.html",
-        "body": "In one sentence vibekb install /path/to/repo prepares any repository for VibeKB by writing everything VibeKB owns under .vibekb/ — the guide, the tools, the reference docs, the integration prompt, and a fresh empty model — from the binary's embedded payload, integrating with shared files only through namespaced adapters or a marked managed block, and never touching the repository root by default. User experience A developer installs the CLI via the website curl fsSL https://iainreid.dev/vibekb/install.sh sh — or builds with go build o vibekb ./cmd/vibekb — and runs vibekb install /path/to/your/project . They see a plan what VibeKB owned files go under .vibekb/ , whether the model is created fresh or preserved, and which optional adapters apply , confirm, and get a verified installation wit"
+        "body": "In one sentence vibekb install /path/to/repo prepares any repository for VibeKB by writing everything VibeKB owns under .vibekb/ — the guide, the tools, the reference docs, the integration prompt, and a fresh empty model — from the binary's embedded payload, integrating with shared files only through namespaced adapters or a marked managed block, and never touching the repository root by default. User experience A developer installs the CLI via the website curl fsSL https://iainreid.dev/vibekb/install.sh sh on macOS/Linux , downloads a Windows .exe from GitHub Releases, or builds with go build o vibekb ./cmd/vibekb — and runs vibekb install /path/to/your/project . They see a plan what VibeKB owned files go under .vibekb/ , whether the model is created fresh or preserved, and which optional"
     },
     {
         "title": "Load the living model",
@@ -116,7 +116,7 @@
         "summary": "A single Go binary (`vibekb`) that is the developer's front door to VibeKB — installed primarily via the website curl script (which downloads from GitHub Releases), installs VibeKB natively (embedded payload, no PHP), runs environment diagnostics natively, and delegates every model-semantic command to the canonical PHP tooling it discovers, so there is exactly one model loader.",
         "type": "functionality",
         "url": "../functionality/run-the-developer-cli.html",
-        "body": "In one sentence vibekb gives developers one portable command for VibeKB: native diagnostics and help that need no runtime, and a thin, honest hand off to the existing PHP core for everything that touches the model — never a second implementation of it. User experience Primary distribution is the website installer curl fsSL https://iainreid.dev/vibekb/install.sh sh , which detects the platform and downloads the matching binary from GitHub Releases. Manual download from Releases remains a secondary path. vibekb version prints identity stamped at link time: plus detected PHP and repository when present. Release builds inject Version, Commit, and Built via ldflags see .github/workflows/release.yml and RELEASE.md . Development builds keep 0.2.0 dev / unknown / dev . A developer runs vibekb from"
+        "body": "In one sentence vibekb gives developers one portable command for VibeKB: native diagnostics and help that need no runtime, and a thin, honest hand off to the existing PHP core for everything that touches the model — never a second implementation of it. User experience Primary distribution on macOS/Linux is the website installer curl fsSL https://iainreid.dev/vibekb/install.sh sh , which detects the platform and downloads the matching binary from GitHub Releases. Windows binaries vibekb windows amd64.exe , vibekb windows arm64.exe ship in the same release for manual download — rename to vibekb.exe and put on PATH . Manual download remains the path for Windows and a secondary path elsewhere. vibekb version prints identity stamped at link time: plus detected PHP and repository when present. R"
     },
     {
         "title": "Search the model",
@@ -595,6 +595,13 @@
         "body": "Before Homepage copy was accurate but read like software marketing: punchy arc labels “Lose the plot”, “Fear the next change” , “understanding layer”, and advertisement adjacent CTAs. After Same section order, commands, and claims. Prose uses shorter sentences and a calm developer voice README / indie launch post . Examples: the three beat arc became “You ship quickly / The app outgrows your map of it / Every change starts to feel like a guess”; the product headline became “A living knowledge base that stays with your repository.” Honesty preserved Install commands, Go vs PHP requirements, Coming soon items, and the installer does not analyze boundary are unchanged. Verification note Diffed index.php to confirm command variables and install command strings were unchanged. php l index.php p"
     },
     {
+        "title": "Homepage names Windows as a manual install path",
+        "summary": "Compatibility and install copy now list Windows alongside macOS/Linux. The curl | sh installer remains macOS/Linux; Windows users download vibekb-windows-*.exe from GitHub Releases.",
+        "type": "change",
+        "url": "../why/changes/homepage-windows-install-copy.html",
+        "body": "Before The Installing VibeKB card and Current Requirements listed only macOS or Linux, even though release.yml already publishes vibekb windows amd64.exe and vibekb windows arm64.exe for manual download. Visitors inferred Windows was unsupported. After Platforms: macOS, Linux, or Windows arm64 or amd64 . Website curl installer: still macOS/Linux curl / wget . Windows: download the .exe from GitHub Releases, rename to vibekb.exe , PATH. Install step 1 manual link text names Windows explicitly. README notes Windows binaries are manual download only. Honesty preserved No Windows install.sh , PowerShell installer, Winget, or Authenticode claim. install.sh still dies on Windows with a Releases pointer."
+    },
+    {
         "title": "Make installation native to the Go CLI (embedded payload, no PHP)",
         "summary": "Reimplemented installation inside the `vibekb` Go binary, which embeds the runtime payload and a canonical, language-neutral starter definition. `vibekb install` now copies files and scaffolds a fresh `.vibekb/` with no PHP process and no live source clone. install.php became a thin compatibility wrapper, and tools/lib/Starter.php now reads the same starter data so there is one definition, not two.",
         "type": "change",
@@ -701,7 +708,7 @@
     },
     {
         "title": "index.php",
-        "summary": "The public homepage: hero/problem, three-step install fast-start (#install) with website curl | sh as the primary CLI acquisition path, Compatibility & Requirements (#compatibility), what-you-get pillars, live preview card, and functionality carousel driven by the active .vibekb/ model.",
+        "summary": "The public homepage: hero/problem, three-step install fast-start (#install) with website curl | sh as the primary CLI acquisition path on macOS/Linux, Windows named as a manual GitHub Releases download, Compatibility & Requirements (#compatibility), what-you-get pillars, live preview card, and functionality carousel driven by the active .vibekb/ model.",
         "type": "file",
         "url": "../files/index.html",
         "body": ""
@@ -868,17 +875,17 @@
         "body": "Mode A — the dynamic guide on shared hosting .cpanel.yml rsyncs the runtime paths index.php , assets/ , guide/ , .vibekb/ into a cPanel public folder and excludes development only paths tools/ , prompts/ , docs/ , authoring docs, examples/ . Query string routing means no .htaccess rewrite rules are needed and the app runs in a subfolder. .vibekb/ must deploy — it is the content. Mode B — the static snapshot php tools/generate static.php builds /docs ; publish it via GitHub Pages Settings → Pages → branch → /docs or any static host. Relative links make it work at a web root or under a repository subpath. No PHP, database, CDN, or network required. Deployment is part of the application Whenever repository structure, runtime folders, or deployment requirements change, .cpanel.yml and DEPLOYME"
     },
     {
-        "title": "Final release audit for VibeKB 0.2.0",
-        "summary": "Complete. Audit passed — READY TO RELEASE. Fixes applied during audit: RELEASE.md heading spacing, CHANGELOG trailing whitespace, RELEASE_NOTES absolute links, uninstall backup-preserve error message, /docs regenerated.",
+        "title": "Homepage Windows install requirements honesty",
+        "summary": "Complete. Homepage and README name Windows as a manual Releases download path; curl | sh remains macOS/Linux-only. install.sh unchanged.",
         "type": "current work",
         "url": "../current-work/index.html",
-        "body": "Status Final release audit complete — READY TO RELEASE . Do not tag/push v0.2.0 until asked."
+        "body": "Status Complete. Homepage Compatibility & Requirements list Windows; install step 1 points Windows users at GitHub Releases. Verified by rendering index.php and checking for the new strings."
     },
     {
         "title": "Current handoff",
-        "summary": "Final release audit for VibeKB 0.2.0 passed — READY TO RELEASE. Safety fixes, version bump, changelog, release notes, and hardened release workflow are on branch cursor/fix-installer-safety-review-b412. Do not tag or cut the GitHub Release until asked.",
+        "summary": "Homepage install/compatibility copy now names Windows as a manual GitHub Releases path; curl | sh remains macOS/Linux-only. Ready for review/merge.",
         "type": "handoff",
         "url": "../handoff/index.html",
-        "body": "Current state READY TO RELEASE for product version 0.2.0 Safe Repository Integration . internal/buildinfo.Version = \"0.2.0 dev\" ; release tags stamp 0.2.0 via ldflags. Installer template version remains 2.0.0 separate namespace . Content vibekb version remains 1.0 . Authoritative materials: CHANGELOG.md , docs/RELEASE NOTES 0.2.0.md , RELEASE.md , hardened .github/workflows/release.yml , buildinfo + tests. Verification completed final release audit Full diff vs origin/main reviewed safety review fixes + 0.2.0 prep only . Install write classes: payload under .vibekb/ ; namespaced adapters; managed blocks only; no wholesale shared file overwrite; migrate title+signature gated. Embedded payload matches template/manifest.json ; no secrets in embed tree. Unix release assets lockstep with instal"
+        "body": "Current state Homepage install and compatibility no longer imply Windows is unsupported. Windows binaries remain release assets for manual download only vibekb windows amd64.exe / vibekb windows arm64.exe . install.sh is unchanged still refuses Windows and points at Releases . Product version remains 0.2.0 already released on main ; this is a copy fix. Completed work Updated index.php Installing / Current Requirements / step 1 manual link. README notes Windows manual binaries. Model: change record homepage windows install copy , functionality UX text, important files purpose/test hint, handoff/current. Verification Rendered homepage HTML contains Windows platform line, .exe download instructions, and updated manual link; old “macOS or Linux arm64…” install card line removed. php l index.ph"
     }
 ]

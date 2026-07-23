@@ -10,12 +10,12 @@ user_facing: true
 trigger: A developer runs `vibekb <command>` (e.g. `vibekb install`, `vibekb doctor`, `vibekb check`) — install from anywhere, model commands from inside a VibeKB repository.
 updated: 2026-07-23
 tags: [cli, go, developer-tool, delegation, native-install, distribution]
-files: [cmd/vibekb/main.go, internal/cli/cli.go, internal/cli/doctor.go, internal/cli/version.go, internal/installer/doctor.go, internal/phpcore/phpcore.go, internal/buildinfo/buildinfo.go, internal/buildinfo/buildinfo_test.go, go.mod, .github/workflows/release.yml, RELEASE.md, install.sh, .htaccess]
+files: [cmd/vibekb/main.go, internal/cli/cli.go, internal/cli/doctor.go, internal/cli/version.go, internal/installer/doctor.go, internal/phpcore/phpcore.go, internal/buildinfo/buildinfo.go, internal/buildinfo/buildinfo_test.go, go.mod, .github/workflows/release.yml, RELEASE.md, README.md, install.sh, .htaccess]
 reads: [tools/vibekb.php]
 writes: []
 config: []
 depends_on: [install-into-a-repository, migrate-legacy-install, uninstall-from-a-repository, bootstrap-workspace, validate-model, detect-drift, generate-static-snapshot]
-related_memory: [decision:go-front-end-php-core, decision:native-installer-embedded-payload, decision:two-modes-one-source, change:release-binaries-pipeline, change:website-curl-installer, change:prepare-version-0-2-0]
+related_memory: [decision:go-front-end-php-core, decision:native-installer-embedded-payload, decision:two-modes-one-source, change:release-binaries-pipeline, change:website-curl-installer, change:homepage-windows-install-copy, change:prepare-version-0-2-0]
 ---
 
 ## In one sentence
@@ -26,11 +26,13 @@ for everything that touches the model — never a second implementation of it.
 
 ## User experience
 
-Primary distribution is the website installer
+Primary distribution on macOS/Linux is the website installer
 (`curl -fsSL https://iainreid.dev/vibekb/install.sh | sh`), which detects the
-platform and downloads the matching binary from GitHub Releases. Manual download
-from Releases remains a secondary path. `vibekb version` prints identity stamped
-at link time:
+platform and downloads the matching binary from GitHub Releases. Windows
+binaries (`vibekb-windows-amd64.exe`, `vibekb-windows-arm64.exe`) ship in the
+same release for manual download — rename to `vibekb.exe` and put on `PATH`.
+Manual download remains the path for Windows and a secondary path elsewhere.
+`vibekb version` prints identity stamped at link time:
 
 ```
 VibeKB

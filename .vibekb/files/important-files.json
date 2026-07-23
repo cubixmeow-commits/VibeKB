@@ -123,13 +123,13 @@
     },
     {
       "path": "index.php",
-      "purpose": "The public homepage: hero/problem, three-step install fast-start (#install) with website curl | sh as the primary CLI acquisition path, Compatibility & Requirements (#compatibility), what-you-get pillars, live preview card, and functionality carousel driven by the active .vibekb/ model.",
+      "purpose": "The public homepage: hero/problem, three-step install fast-start (#install) with website curl | sh as the primary CLI acquisition path on macOS/Linux, Windows named as a manual GitHub Releases download, Compatibility & Requirements (#compatibility), what-you-get pillars, live preview card, and functionality carousel driven by the active .vibekb/ model.",
       "functionality": ["load-living-model", "install-into-a-repository", "initialize-in-a-repository", "deploy-and-stay-portable", "run-the-developer-cli"],
       "runs_when": "Every browser request to the site root.",
       "depended_on_by": ["Public landing / Mode A deployment"],
       "depends_on": ["guide/lib/Content.php", "guide/lib/helpers.php", ".vibekb/project/identity.md", "assets/css/homepage.css", "assets/js/homepage.js", "assets/images/homepage-developer-journey.webp", "assets/images/homepage-developer-journey.png", "install.sh", "cmd/vibekb/main.go", "internal/installer/installer.go", "INSTALLER.md", "RELEASE.md", "prompts/INTEGRATE_VIBEKB.md", "DEPLOYMENT.md", "PRODUCT.md"],
       "safety": "moderate-impact",
-      "test_after_change": "Load the homepage; confirm primary install is curl -fsSL https://iainreid.dev/vibekb/install.sh | sh; manual Releases link is secondary; step 2 is vibekb install .; PHP 8.2+ only under after-install; Advanced build-from-source is secondary; no primary Download-latest-release CTA.",
+      "test_after_change": "Load the homepage; confirm primary install is curl -fsSL https://iainreid.dev/vibekb/install.sh | sh (macOS/Linux); Windows named under Installing VibeKB and Current Requirements with Releases .exe path; manual Releases link secondary; step 2 is vibekb install .; PHP 8.2+ only under after-install; Advanced build-from-source is secondary; no Windows curl installer claim.",
       "provenance": "verified-from-source"
     },
     {

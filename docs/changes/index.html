@@ -271,6 +271,33 @@ exercised in a browser here.</p></div>
                                     </li>
                             <li class="change-card">
                     <div class="change-card__head">
+                        <h2>Homepage names Windows as a manual install path</h2>
+                        <div class="badge-row">
+                            <span class="badge badge--info">implemented</span>                            <span class="badge badge--ok">Verified from source</span>                            <span class="muted">2026-07-23</span>
+                        </div>
+                    </div>
+                    <p>Compatibility and install copy now list Windows alongside macOS/Linux. The curl | sh installer remains macOS/Linux; Windows users download vibekb-windows-*.exe from GitHub Releases.</p>
+                    <div class="prose reading-column change-card__body"><h3>Before</h3>
+<p>The Installing VibeKB card and Current Requirements listed only macOS or Linux,
+even though release.yml already publishes <code>vibekb-windows-amd64.exe</code> and
+<code>vibekb-windows-arm64.exe</code> for manual download. Visitors inferred Windows was
+unsupported.</p>
+<h3>After</h3>
+<ul>
+<li>Platforms: macOS, Linux, or Windows (arm64 or amd64).</li>
+<li>Website curl installer: still macOS/Linux (<code>curl</code>/<code>wget</code>).</li>
+<li>Windows: download the <code>.exe</code> from GitHub Releases, rename to <code>vibekb.exe</code>, PATH.</li>
+<li>Install step 1 manual link text names Windows explicitly.</li>
+<li>README notes Windows binaries are manual-download only.</li>
+</ul>
+<h3>Honesty preserved</h3>
+<p>No Windows <code>install.sh</code>, PowerShell installer, Winget, or Authenticode claim.
+<code>install.sh</code> still dies on Windows with a Releases pointer.</p></div>
+                                            <p class="change-card__links"><strong>Affected:</strong>
+                            <a class="chip" href="../functionality/run-the-developer-cli.html">Run VibeKB from one developer CLI</a> <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a>                        </p>
+                                    </li>
+                            <li class="change-card">
+                    <div class="change-card__head">
                         <h2>Make installation native to the Go CLI (embedded payload, no PHP)</h2>
                         <div class="badge-row">
                             <span class="badge badge--info">implemented</span>                            <span class="badge badge--ok">Verified from source</span>                            <span class="muted">2026-07-23</span>
@@ -659,7 +686,7 @@ before/after, workflow timeline, repo map, and separate CTA. Accurate but too lo
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 08:00 UTC · source commit 803d976 (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 08:31 UTC · source commit 683df05 (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>
