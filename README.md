@@ -28,8 +28,10 @@ vibekb install .
 ```
 
 The website installer detects macOS/Linux and arm64/amd64, downloads the matching
-binary from GitHub Releases, and places `vibekb` on your `PATH`. Prefer to install
-manually? Download binaries from
+binary from GitHub Releases, and places `vibekb` on your `PATH`. Windows binaries
+ship in the same release for manual download (`vibekb-windows-amd64.exe` /
+`vibekb-windows-arm64.exe` — rename to `vibekb.exe` and put on your `PATH`). Prefer
+to install manually on any platform? Download from
 [GitHub Releases](https://github.com/cubixmeow-commits/VibeKB/releases/latest).
 
 The binary embeds the VibeKB runtime (guide, CLI, reference docs, prompt, and the

@@ -14,7 +14,7 @@ files: [.cpanel.yml, DEPLOYMENT.md, guide/lib/UrlStrategy.php, index.php, instal
 reads: []
 writes: []
 depends_on: [render-guide, generate-static-snapshot]
-related_memory: [constraint:no-build-step-portable, decision:two-modes-one-source, change:homepage-compatibility-section, change:homepage-native-installer-copy, change:homepage-voice-pass, change:homepage-drop-no-go-php-claims, change:website-curl-installer]
+related_memory: [constraint:no-build-step-portable, decision:two-modes-one-source, change:homepage-compatibility-section, change:homepage-native-installer-copy, change:homepage-voice-pass, change:homepage-drop-no-go-php-claims, change:website-curl-installer, change:homepage-windows-install-copy]
 ---
 
 ## In one sentence

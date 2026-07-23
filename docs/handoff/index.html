@@ -115,50 +115,38 @@
             </div>
             <div class="prose reading-column"><h3>Current state</h3>
 <ul>
-<li><strong>READY TO RELEASE</strong> for product version <strong>0.2.0</strong> (Safe Repository Integration).</li>
-<li><code>internal/buildinfo.Version = &quot;0.2.0-dev&quot;</code>; release tags stamp <code>0.2.0</code> via ldflags.</li>
-<li>Installer <code>template_version</code> remains <strong>2.0.0</strong> (separate namespace). Content</li>
+<li>Homepage <code>#install</code> and <code>#compatibility</code> no longer imply Windows is unsupported.</li>
+<li>Windows binaries remain release assets for <strong>manual</strong> download only</li>
 </ul>
-<p><code>vibekb_version</code> remains <strong>1.0</strong>.</p>
+<p>(<code>vibekb-windows-amd64.exe</code> / <code>vibekb-windows-arm64.exe</code>).</p>
 <ul>
-<li>Authoritative materials: <code>CHANGELOG.md</code>, <code>docs/RELEASE_NOTES_0.2.0.md</code>,</li>
+<li><code>install.sh</code> is unchanged (still refuses Windows and points at Releases).</li>
+<li>Product version remains <strong>0.2.0</strong> (already released on main); this is a copy fix.</li>
 </ul>
-<p><code>RELEASE.md</code>, hardened <code>.github/workflows/release.yml</code>, buildinfo + tests.</p>
-<h3>Verification completed (final release audit)</h3>
+<h3>Completed work</h3>
 <ul>
-<li>Full diff vs <code>origin/main</code> reviewed (safety review fixes + 0.2.0 prep only).</li>
-<li>Install write classes: payload under <code>.vibekb/</code>; namespaced adapters; managed</li>
+<li>Updated <code>index.php</code> Installing / Current Requirements / step-1 manual link.</li>
+<li>README notes Windows manual binaries.</li>
+<li>Model: change record <code>homepage-windows-install-copy</code>, functionality UX text,</li>
 </ul>
-<p>blocks only; no wholesale shared-file overwrite; migrate title+signature gated.</p>
+<p>important-files purpose/test hint, handoff/current.</p>
+<h3>Verification</h3>
 <ul>
-<li>Embedded payload matches <code>template/manifest.json</code>; no secrets in embed tree.</li>
-<li>Unix release assets lockstep with <code>install.sh</code>; workflow verifies assets and</li>
+<li>Rendered homepage HTML contains Windows platform line, <code>.exe</code> download</li>
 </ul>
-<p>sorted checksums; <code>fail_on_unmatched_files: true</code>.</p>
+<p>instructions, and updated manual link; old “macOS or Linux (arm64…” install
+  card line removed.</p>
 <ul>
-<li>Version consistency: product <code>0.2.0</code> / <code>0.2.0-dev</code>; no accidental duplicate of</li>
+<li><code>php -l index.php</code> clean; no claim of a Windows curl/PowerShell/Winget installer.</li>
 </ul>
-<p>product version into <code>template_version</code> or content <code>vibekb_version</code>.</p>
-<ul>
-<li>Changelog + release notes accurate vs implemented behaviour.</li>
-<li><code>gofmt</code>/<code>go vet</code>/<code>go test ./...</code>, PHP lint, <code>validate</code>, <code>test-topology</code>,</li>
-</ul>
-<p><code>php tools/vibekb.php check --strict</code> clean after regenerate.</p>
-<ul>
-<li>No tracked secrets, credentials, temp/backup binaries, or compiled CLI</li>
-</ul>
-<p>artifacts; <code>/tmp</code> pre-release fixtures are outside the repo.</p>
 <h3>Unresolved / next</h3>
 <ul>
-<li>Merge this branch to <code>main</code> when accepted.</li>
-<li><strong>Do not</strong> tag until explicitly asked. When cutting the release: tag</li>
+<li>Optional later: Windows PowerShell installer or Winget (roadmap; not this change).</li>
+<li>Authenticode signing still not done (release hardening).</li>
 </ul>
-<p><code>v0.2.0</code>, push the tag, and paste <code>docs/RELEASE_NOTES_0.2.0.md</code> as the GitHub
-  Release body (see <code>RELEASE.md</code>).</p>
 <h3>Exact next recommended action</h3>
-<p>Merge PR → on <code>main</code>, when asked, tag <code>v0.2.0</code> and push to trigger
-<code>.github/workflows/release.yml</code>; paste <code>docs/RELEASE_NOTES_0.2.0.md</code> into the
-Release body.</p></div>
+<p>Review and merge this PR so the live site stops omitting Windows from install
+requirements.</p></div>
         </section>
     
             <section class="doc-section">
@@ -191,7 +179,7 @@ Release body.</p></div>
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 08:00 UTC · source commit 803d976 (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 08:31 UTC · source commit fd08afa (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

@@ -123,7 +123,8 @@ embedded payload, integrating with shared files only through namespaced adapters
 or a marked managed block, and never touching the repository root by default.</p>
 <h3>User experience</h3>
 <p>A developer installs the CLI via the website
-(<code>curl -fsSL https://iainreid.dev/vibekb/install.sh | sh</code>) — or builds with
+(<code>curl -fsSL https://iainreid.dev/vibekb/install.sh | sh</code> on macOS/Linux),
+downloads a Windows <code>.exe</code> from GitHub Releases, or builds with
 <code>go build -o vibekb ./cmd/vibekb</code> — and runs <code>vibekb install
 /path/to/your/project</code>. They see a plan (what VibeKB-owned files go under
 <code>.vibekb/</code>, whether the model is created fresh or preserved, and which optional
@@ -331,7 +332,10 @@ definition feeds both the Go installer and PHP <code>bootstrap</code>, so nothin
             
             <div class="rail-card metadata-group">
                 <h2>Related rationale</h2>
-                                    <p><a class="chip" href="../why/decisions/repository-safety-consolidation.html">VibeKB owns only .vibekb/; everything else is an adapter or managed block</a> <a class="chip" href="../why/decisions/native-installer-embedded-payload.html">Installation is native to the Go binary, from an embedded payload</a> <a class="chip" href="../why/decisions/installer-template-not-duplicated-tree.html">The template is a manifest plus a generator, not a duplicated file tree</a> <a class="chip" href="../why/decisions/installer-prepares-agent-interprets.html">The installer prepares the workspace; the agent interprets the software</a> <a class="chip" href="../why/changes/native-go-installer.html">Make installation native to the Go CLI (embedded payload, no PHP)</a> <a class="chip" href="../why/changes/website-curl-installer.html">Website curl installer as product CLI entry point</a></p>
+                                    <details class="rail-disclose">
+                        <summary>Memory links (7)</summary>
+                        <p><a class="chip" href="../why/decisions/repository-safety-consolidation.html">VibeKB owns only .vibekb/; everything else is an adapter or managed block</a> <a class="chip" href="../why/decisions/native-installer-embedded-payload.html">Installation is native to the Go binary, from an embedded payload</a> <a class="chip" href="../why/decisions/installer-template-not-duplicated-tree.html">The template is a manifest plus a generator, not a duplicated file tree</a> <a class="chip" href="../why/decisions/installer-prepares-agent-interprets.html">The installer prepares the workspace; the agent interprets the software</a> <a class="chip" href="../why/changes/native-go-installer.html">Make installation native to the Go CLI (embedded payload, no PHP)</a> <a class="chip" href="../why/changes/website-curl-installer.html">Website curl installer as product CLI entry point</a> <a class="chip" href="../why/changes/homepage-windows-install-copy.html">Homepage names Windows as a manual install path</a></p>
+                    </details>
                             </div>
         </aside>
     </div>
@@ -345,7 +349,7 @@ definition feeds both the Go installer and PHP <code>bootstrap</code>, so nothin
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 08:00 UTC · source commit 803d976 (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 08:31 UTC · source commit fd08afa (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

@@ -15,7 +15,7 @@ reads: [template/manifest.json, template/starter, template/integrations]
 writes: []
 config: []
 depends_on: [bootstrap-workspace, load-living-model, run-the-developer-cli]
-related_memory: [decision:repository-safety-consolidation, decision:native-installer-embedded-payload, decision:installer-template-not-duplicated-tree, decision:installer-prepares-agent-interprets, change:native-go-installer, change:website-curl-installer]
+related_memory: [decision:repository-safety-consolidation, decision:native-installer-embedded-payload, decision:installer-template-not-duplicated-tree, decision:installer-prepares-agent-interprets, change:native-go-installer, change:website-curl-installer, change:homepage-windows-install-copy]
 ---
 
 ## In one sentence
@@ -29,7 +29,8 @@ or a marked managed block, and never touching the repository root by default.
 ## User experience
 
 A developer installs the CLI via the website
-(`curl -fsSL https://iainreid.dev/vibekb/install.sh | sh`) — or builds with
+(`curl -fsSL https://iainreid.dev/vibekb/install.sh | sh` on macOS/Linux),
+downloads a Windows `.exe` from GitHub Releases, or builds with
 `go build -o vibekb ./cmd/vibekb` — and runs `vibekb install
 /path/to/your/project`. They see a plan (what VibeKB-owned files go under
 `.vibekb/`, whether the model is created fresh or preserved, and which optional

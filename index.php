@@ -282,13 +282,14 @@ if ($loaded) {
                         <p class="hp-install-card-copy">
                             One command detects your platform, downloads the right binary, and
                             puts <code>vibekb</code> on your <code>PATH</code>. macOS and Linux.
+                            Windows uses a manual download from GitHub Releases.
                         </p>
                         <div class="hp-cmd-block">
                             <pre class="hp-cmd" id="cmd-curl-install"><code><?= hp_e($curlInstallCmd) ?></code></pre>
                             <button type="button" class="hp-copy-btn" data-copy-target="#cmd-curl-install">Copy</button>
                         </div>
                         <p class="hp-install-manual">
-                            <a href="<?= hp_e($releasesUrl) ?>" rel="noopener noreferrer">Prefer to install manually? Download binaries from GitHub Releases.</a>
+                            <a href="<?= hp_e($releasesUrl) ?>" rel="noopener noreferrer">Windows or prefer manual install? Download binaries from GitHub Releases.</a>
                         </p>
                     </li>
                     <li class="hp-install-card">
@@ -405,8 +406,9 @@ if ($loaded) {
                     <article class="hp-compat-card">
                         <h3>Installing VibeKB</h3>
                         <ul class="hp-compat-checks">
-                            <li>macOS or Linux (arm64 or amd64)</li>
-                            <li><code>curl</code> or <code>wget</code></li>
+                            <li>macOS, Linux, or Windows (arm64 or amd64)</li>
+                            <li>Website installer: <code>curl</code> or <code>wget</code> (macOS/Linux)</li>
+                            <li>Windows: download the <code>.exe</code> from GitHub Releases</li>
                             <li>Read/write access to the target repository</li>
                             <li>Git repository recommended</li>
                         </ul>
@@ -504,8 +506,9 @@ if ($loaded) {
                     <h3 class="hp-compat-subhead">Current Requirements</h3>
                     <h4 class="hp-compat-subhead">Installation</h4>
                     <ul class="hp-compat-checks">
-                        <li>Website installer: <code>curl -fsSL <?= hp_e($siteUrl) ?>/install.sh | sh</code></li>
-                        <li>macOS or Linux with network access to GitHub Releases</li>
+                        <li>Website installer (macOS/Linux): <code>curl -fsSL <?= hp_e($siteUrl) ?>/install.sh | sh</code></li>
+                        <li>Windows: download <code>vibekb-windows-amd64.exe</code> or <code>vibekb-windows-arm64.exe</code> from GitHub Releases, rename to <code>vibekb.exe</code>, and put it on your <code>PATH</code></li>
+                        <li>Network access to GitHub Releases</li>
                         <li>Read/write access to the target repository</li>
                     </ul>
                     <h4 class="hp-compat-subhead">Using VibeKB after installation</h4>
