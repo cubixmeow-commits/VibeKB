@@ -281,25 +281,34 @@
         <p class="kicker">Real proof, not a demo script</p>
         <h2 id="proof-title">A real AI-built app, made understandable.</h2>
         <p class="lead">
-          <strong>Stoppr</strong> is a production Flutter&nbsp;+&nbsp;Firebase app. VibeKB was installed into it
-          and a coding agent modelled the codebase <em>read-only</em> &mdash; no app code changed.
-          The result is a guide that explains what the software does.
+          <strong>Stoppr</strong> is a production Flutter app (iOS &amp; Android) &mdash; a sugar-reduction
+          companion with streaks, panic interventions, nutrition tools, and subscription gating.
+          VibeKB was installed into it and a coding agent modelled the codebase <em>read-only</em>
+          &mdash; no app code changed. The result is a guide that explains what the software does,
+          with every claim <strong>verified from source</strong>.
         </p>
 
         <div class="metrics" role="list" aria-label="Stoppr model, measured facts">
-          <div class="metric" role="listitem"><span class="metric-n">30</span><span class="metric-l">functionality records</span></div>
+          <div class="metric" role="listitem"><span class="metric-n">35</span><span class="metric-l">functionality records</span></div>
           <div class="metric" role="listitem"><span class="metric-n">10</span><span class="metric-l">functional areas</span></div>
-          <div class="metric" role="listitem"><span class="metric-n">21</span><span class="metric-l">repository-owned diagrams</span></div>
-          <div class="metric" role="listitem"><span class="metric-n">6</span><span class="metric-l">system views</span></div>
-          <div class="metric" role="listitem"><span class="metric-n"><code>d5fc37c</code></span><span class="metric-l">commit analysed</span></div>
+          <div class="metric" role="listitem"><span class="metric-n">31</span><span class="metric-l">files that matter</span></div>
+          <div class="metric" role="listitem"><span class="metric-n">6</span><span class="metric-l">landmines surfaced</span></div>
+          <div class="metric" role="listitem"><span class="metric-n"><code>2edc099</code></span><span class="metric-l">commit analysed</span></div>
         </div>
 
         <div class="proof-story">
-          <p class="proof-quote">AI helped rebuild the app. VibeKB made the resulting codebase understandable.</p>
+          <p class="proof-quote">AI helped build the app. VibeKB made the resulting codebase understandable &mdash; and flagged what&rsquo;s unfinished.</p>
+          <p class="proof-lead">
+            All 35 records are verified from source (31 implemented, 4 partial). Just as useful, VibeKB
+            surfaced the real landmines already in the code before anyone edits it &mdash; placeholder
+            OAuth client IDs and API keys, placeholder Superwall placement IDs, an <code>.env.local</code>
+            the app doesn&rsquo;t load, incomplete Android purchase wiring, and a placeholder iOS widget
+            app-group ID.
+          </p>
           <p class="proof-note">
-            Figures are transcribed from the in-repository integration audit
-            (<code>examples/field-tests/STOPPR_INTEGRATION_AUDIT.md</code>), which analysed Stoppr at commit
-            <code>d5fc37c</code>. The bundled example is a read-only snapshot and can drift from the live app over time.
+            Figures are read from Stoppr&rsquo;s live VibeKB model &mdash; a clean VibeKB&nbsp;0.2.0
+            re-analysis at commit <code>2edc099</code> (analysed 2026-07-23). It&rsquo;s a static snapshot
+            that does not update itself; re-verify against source before changing claims.
           </p>
           <div class="proof-actions">
             <a class="btn btn-primary" href="https://cubixmeow-commits.github.io/VibeKB-stoppr/" rel="noopener">See the published guide</a>

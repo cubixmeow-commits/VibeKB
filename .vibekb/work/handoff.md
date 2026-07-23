@@ -32,8 +32,9 @@ verification_state: verified-from-source
 - Rendered in headless Chromium at 390 / 860 / 1280px: map builds and is
   interactive ≥ 720px, the accessible fallback shows below that and with JS off,
   no horizontal overflow at any width, side panel populates with real record data.
-- Proof figures (Stoppr 30 records / 10 areas / 21 diagrams / 6 systems / commit
-  `d5fc37c`) are transcribed from `examples/field-tests/STOPPR_INTEGRATION_AUDIT.md`.
+- Proof figures (Stoppr 35 records / 10 areas / 31 files / 6 warnings, all
+  verified-from-source, commit `2edc099`) are read from Stoppr's live VibeKB
+  model (clean VibeKB 0.2.0 re-analysis), not the older in-repo audit.
 - Map/stat totals (23 functionalities, 8 areas, 6 systems, 29 files, 45
   relationships, 3 diagrams) are the real current totals of this model.
 - `php tools/vibekb.php check` → OK (0 errors). `website/` is reported as an
