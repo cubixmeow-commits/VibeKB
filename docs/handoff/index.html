@@ -115,38 +115,65 @@
             </div>
             <div class="prose reading-column"><h3>Current state</h3>
 <ul>
-<li>Homepage <code>#install</code> and <code>#compatibility</code> no longer imply Windows is unsupported.</li>
-<li>Windows binaries remain release assets for <strong>manual</strong> download only</li>
+<li>New static site at <code>/website/</code> (<code>index.html</code> + <code>assets/{css,js,data}</code>). Plain</li>
 </ul>
-<p>(<code>vibekb-windows-amd64.exe</code> / <code>vibekb-windows-arm64.exe</code>).</p>
+<p>HTML/CSS/vanilla JS, no build step, subpath-safe, works without JavaScript.</p>
 <ul>
-<li><code>install.sh</code> is unchanged (still refuses Windows and points at Releases).</li>
-<li>Product version remains <strong>0.2.0</strong> (already released on main); this is a copy fix.</li>
+<li>Its hero centrepiece is the <strong>Live Repository Map</strong>: an interactive SVG of</li>
 </ul>
+<p>VibeKB&#039;s own 8 functional areas and their relationships, drawn from real model
+  data in <code>website/assets/data/model.js</code>.</p>
+<ul>
+<li>The existing PHP homepage (<code>index.php</code>) is unchanged. <code>/website/</code> is a parallel,</li>
+</ul>
+<p>fully static presentation of the product; it does not replace <code>index.php</code>.</p>
 <h3>Completed work</h3>
 <ul>
-<li>Updated <code>index.php</code> Installing / Current Requirements / step-1 manual link.</li>
-<li>README notes Windows manual binaries.</li>
-<li>Model: change record <code>homepage-windows-install-copy</code>, functionality UX text,</li>
+<li><code>website/assets/data/model.js</code> — real areas/capabilities transcribed from</li>
 </ul>
-<p>important-files purpose/test hint, handoff/current.</p>
+<p><code>.vibekb/functionality/</code> and the <code>vibekb-architecture</code> topology; cross-area
+  edges derived from record <code>depends_on</code> links.</p>
+<ul>
+<li><code>website/assets/js/map.js</code> — the map (progressive enhancement over an accessible</li>
+</ul>
+<p>fallback list), <code>website/assets/js/site.js</code> — copy buttons.</p>
+<ul>
+<li><code>website/index.html</code> + <code>website/assets/css/site.css</code> — the full homepage.</li>
+<li><code>website/README.md</code> — deployment and honesty notes.</li>
+</ul>
 <h3>Verification</h3>
 <ul>
-<li>Rendered homepage HTML contains Windows platform line, <code>.exe</code> download</li>
+<li>Rendered in headless Chromium at 390 / 860 / 1280px: map builds and is</li>
 </ul>
-<p>instructions, and updated manual link; old “macOS or Linux (arm64…” install
-  card line removed.</p>
+<p>interactive ≥ 720px, the accessible fallback shows below that and with JS off,
+  no horizontal overflow at any width, side panel populates with real record data.</p>
 <ul>
-<li><code>php -l index.php</code> clean; no claim of a Windows curl/PowerShell/Winget installer.</li>
+<li>Proof figures (Stoppr 35 records / 10 areas / 31 files / 6 warnings, all</li>
 </ul>
+<p>verified-from-source, commit <code>2edc099</code>) are read from Stoppr&#039;s live VibeKB
+  model (clean VibeKB 0.2.0 re-analysis), not the older in-repo audit.</p>
+<ul>
+<li>Map/stat totals (23 functionalities, 8 areas, 6 systems, 29 files, 45</li>
+</ul>
+<p>relationships, 3 diagrams) are the real current totals of this model.</p>
+<ul>
+<li><code>php tools/vibekb.php check</code> → OK (0 errors). <code>website/</code> is reported as an</li>
+</ul>
+<p>unmapped changed path — see decision below.</p>
+<h3>Decision: <code>/website/</code> is intentionally not a functionality record</h3>
+<p>Like <code>index.php</code>, the marketing site is a <em>presentation surface</em>, not application
+functionality VibeKB models. Adding it to the functionality model would push
+VibeKB toward being a website builder, against the locked product definition. The
+<code>check</code> &quot;unmapped changed source&quot; note for <code>website/</code> is expected and reviewed,
+not an omission. If the site later grows genuinely new <em>product</em> behaviour, revisit.</p>
 <h3>Unresolved / next</h3>
 <ul>
-<li>Optional later: Windows PowerShell installer or Winget (roadmap; not this change).</li>
-<li>Authenticode signing still not done (release hardening).</li>
+<li><code>website/assets/data/model.js</code> is a hand-maintained snapshot of the model.</li>
 </ul>
+<p>Refresh it (and the figures in <code>index.html</code>) whenever VibeKB&#039;s own areas,
+  capabilities, files, or verification states change.</p>
 <h3>Exact next recommended action</h3>
-<p>Review and merge this PR so the live site stops omitting Windows from install
-requirements.</p></div>
+<p>Review the <code>/website/</code> site (open <code>website/index.html</code>), then merge.</p></div>
         </section>
     
             <section class="doc-section">
@@ -179,7 +206,7 @@ requirements.</p></div>
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 08:31 UTC · source commit fd08afa (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 19:58 UTC · source commit fd08afa (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>
