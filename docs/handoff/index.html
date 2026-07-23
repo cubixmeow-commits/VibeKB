@@ -111,42 +111,74 @@
 
             <section class="doc-section callout callout--work">
             <div class="badge-row">
-                                    <span class="badge badge--info">Verification: verified from source</span>                                <span class="muted">Updated 2026-07-23</span>
+                                    <span class="badge badge--info">Verification: verified manually</span>                                <span class="muted">Updated 2026-07-23</span>
             </div>
             <div class="prose reading-column"><h3>Current state</h3>
 <ul>
-<li>Homepage <code>#install</code> and <code>#compatibility</code> no longer imply Windows is unsupported.</li>
-<li>Windows binaries remain release assets for <strong>manual</strong> download only</li>
+<li><code>check</code> has a fifth section, <strong>[5] Documentation claims</strong>, that lints the</li>
 </ul>
-<p>(<code>vibekb-windows-amd64.exe</code> / <code>vibekb-windows-arm64.exe</code>).</p>
+<p>repository&#039;s root-level narrative docs (README.md, CLAUDE.md, …).</p>
 <ul>
-<li><code>install.sh</code> is unchanged (still refuses Windows and points at Releases).</li>
-<li>Product version remains <strong>0.2.0</strong> (already released on main); this is a copy fix.</li>
+<li>It closes the gap a prior README audit surfaced: the drift-detection tool did</li>
 </ul>
+<p>not watch its own front door, so a renamed command, a moved file, or a stale
+  structure block in the docs could drift with nothing to catch it.</p>
+<ul>
+<li>Definite doc contradictions now fail <code>check</code>; softer signals are warnings; and</li>
+</ul>
+<p>each sub-check degrades to a &quot;skipped&quot; note when its source of truth is absent.</p>
 <h3>Completed work</h3>
 <ul>
-<li>Updated <code>index.php</code> Installing / Current Requirements / step-1 manual link.</li>
-<li>README notes Windows manual binaries.</li>
-<li>Model: change record <code>homepage-windows-install-copy</code>, functionality UX text,</li>
+<li><code>tools/vibekb.php</code>: added <code>vibekb_check_docs_claims()</code> and helpers</li>
 </ul>
-<p>important-files purpose/test hint, handoff/current.</p>
+<p>(<code>vibekb_known_php_subcommands</code>, <code>vibekb_known_go_commands</code>,
+  <code>vibekb_fenced_blocks</code>, <code>vibekb_markdown_links</code>, <code>vibekb_parse_vibekb_tree</code>,
+  <code>vibekb_vibekb_toplevel</code>); wired section [5] into <code>check</code>; updated the header
+  docblock and <code>help</code> text.</p>
+<ul>
+<li>Model: updated <code>detect-drift</code> functionality (four → five sections, flow,</li>
+</ul>
+<p>implementation map, rationale); added change record
+  <code>check-watches-front-door-docs</code>.</p>
+<ul>
+<li>Regenerated <code>/docs</code>.</li>
+</ul>
 <h3>Verification</h3>
 <ul>
-<li>Rendered homepage HTML contains Windows platform line, <code>.exe</code> download</li>
+<li><code>php tools/vibekb.php check</code> → RESULT OK; section [5] clean across 14 root docs.</li>
+<li>Negative tests (throwaway inputs): flagged a bogus <code>php tools/vibekb.php</code></li>
 </ul>
-<p>instructions, and updated manual link; old “macOS or Linux (arm64…” install
-  card line removed.</p>
+<p>subcommand, a bogus <code>vibekb</code> command, a broken link, and a bogus <code>.vibekb/</code>
+  structure entry — each fails <code>check</code> — then confirmed clean after revert.</p>
 <ul>
-<li><code>php -l index.php</code> clean; no claim of a Windows curl/PowerShell/Winget installer.</li>
+<li>Degrade path: with <code>internal/cli/cli.go</code> hidden, Go-command checks print a</li>
 </ul>
+<p>skip note and raise no false errors.</p>
+<ul>
+<li>First run caught a real bug in the link resolver (<code>ltrim($t, &#039;./&#039;)</code> mangled</li>
+</ul>
+<p><code>./.github/...</code>); fixed to strip the <code>./</code> prefix once.</p>
+<ul>
+<li><code>php -l tools/vibekb.php</code> clean; <code>php tools/vibekb.php validate</code> 0 errors;</li>
+</ul>
+<p><code>php tools/test-topology.php</code> OK.</p>
 <h3>Unresolved / next</h3>
 <ul>
-<li>Optional later: Windows PowerShell installer or Winget (roadmap; not this change).</li>
-<li>Authenticode signing still not done (release hardening).</li>
+<li>The lint checks the three mechanical drift classes only; it deliberately does</li>
 </ul>
+<p>not judge prose meaning (that stays an agent&#039;s job).</p>
+<ul>
+<li>Structure parity is README-only by design (INSTALLER&#039;s tree is a target-install</li>
+</ul>
+<p>layout, SCHEMA&#039;s is the schema reference). Extending parity to those would need
+  per-doc &quot;what tree is this&quot; context — not worth the false-positive risk now.</p>
+<ul>
+<li>Pre-existing, unrelated: diagram <code>self-maintenance-loop</code> still has no</li>
+</ul>
+<p>explainable topology (validation warning).</p>
 <h3>Exact next recommended action</h3>
-<p>Review and merge this PR so the live site stops omitting Windows from install
-requirements.</p></div>
+<p>Review and merge. Optionally wire <code>php tools/vibekb.php check</code> into CI (the
+<code>.github/workflows/vibekb.yml</code> workflow) so the front-door lint runs on every PR.</p></div>
         </section>
     
             <section class="doc-section">
@@ -179,7 +211,7 @@ requirements.</p></div>
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 08:31 UTC · source commit fd08afa (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 09:30 UTC · source commit fd08afa (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

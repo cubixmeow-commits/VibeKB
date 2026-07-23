@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>The model drifts from the code unless an agent reconciles it · VibeKB — VibeKB</title>
+    <title>check gains a documentation-claims lint for the front-door docs · VibeKB — VibeKB</title>
     <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -105,45 +105,60 @@
                 <article class="view view-doc">
         <p class="breadcrumb"><a href="../../why/index.html">← Decisions &amp; rationale</a></p>
         <header class="page-head reading-column">
-            <p class="eyebrow">Warnings</p>
-            <h1>The model drifts from the code unless an agent reconciles it</h1>
-            <p class="lede">VibeKB detects that files changed but cannot interpret what a change means; if an agent edits code without updating the affected records, the model silently goes stale.</p>
+            <p class="eyebrow">Changes</p>
+            <h1>check gains a documentation-claims lint for the front-door docs</h1>
+            <p class="lede">`php tools/vibekb.php check` now has a fifth section that lints the repository&#039;s root narrative docs (README.md, CLAUDE.md, …) for three mechanical drift classes — dead CLI commands, unresolved internal links, and a stale README `.vibekb/` structure block — turning front-door drift into a definite error instead of a silent gap.</p>
             <div class="badge-row">
-                <span class="badge badge--info">active</span>                <span class="badge badge--danger">Severity: high</span>                                <span class="badge badge--ok">Verified from source</span>            </div>
+                <span class="badge badge--info">implemented</span>                                                <span class="badge badge--ok">Verified manually</span>            </div>
         </header>
         <div class="detail-grid">
-            <div class="detail-main"><div class="prose reading-column"><h3>What can go wrong</h3>
-<p>An agent changes <code>guide/lib/Content.php</code> behaviour but leaves <code>load-living-model</code>
-and <code>validate-model</code> describing the old behaviour. The model now claims something
-the code no longer does — the exact failure VibeKB exists to prevent.</p>
-<h3>Cause</h3>
-<p>Reconciling a code change into the model is interpretation work; it cannot be
-fully automated. The tooling can detect that a file changed and which records
-reference it, but not what the change <em>means</em>.</p>
-<h3>What not to do</h3>
-<p>Do not treat a green <code>vibekb check</code> as proof the model is correct — it proves
-nothing is <em>mechanically</em> inconsistent (no missing files, valid structure), not
-that the prose still matches behaviour. Do not skip step 5 of the lifecycle
-(update the affected records) because the code &quot;already works.&quot;</p>
-<h3>Safe procedure</h3>
-<ol>
-<li>Run <code>php tools/vibekb.php affected --since &lt;base&gt;</code> to see likely-affected</li>
-</ol>
-<p>records.</p>
-<ol>
-<li>For each, re-read the code and update the record&#039;s behaviour and verification</li>
-</ol>
-<p>state honestly.</p>
-<ol>
-<li>Update memory, diagrams, provenance, and the handoff.</li>
-<li>Run <code>php tools/vibekb.php check</code> and regenerate <code>/docs</code>.</li>
-</ol></div></div>
+            <div class="detail-main"><div class="prose reading-column"><h3>Before</h3>
+<p><code>check</code> validated the <code>.vibekb/</code> model against source (validation, broken file
+references, source drift, <code>/docs</code> sync) but nothing watched the root-level
+narrative docs. A README audit found that the front door had drifted in the past
+(a superseded architecture, commands that had been renamed) with no mechanism in
+the repository that would have caught it. The drift-detection tool did not watch
+its own front door.</p>
+<h3>After</h3>
+<p>A new <code>vibekb_check_docs_claims()</code> runs as section <strong>[5] Documentation claims</strong>.
+Over every root-level <code>*.md</code> it performs three deterministic, token-free checks:</p>
+<ul>
+<li><strong>Command existence.</strong> Every <code>php …/vibekb.php &lt;sub&gt;</code> and <code>vibekb &lt;sub&gt;</code></li>
+</ul>
+<p>invocation inside a fenced code block must name a real subcommand. The valid
+  sets are parsed from the actual dispatch — this script&#039;s <code>switch</code>, and
+  <code>internal/cli/cli.go</code> (native + delegated) — so the lint cannot disagree with
+  the code it checks.</p>
+<ul>
+<li><strong>Internal links.</strong> Every relative Markdown link target must resolve on disk.</li>
+<li><strong>Structure parity.</strong> README&#039;s <code>.vibekb/</code> tree block must match the real</li>
+</ul>
+<p>top-level of <code>.vibekb/</code> (README only — INSTALLER&#039;s tree describes a <em>target</em>
+  install and SCHEMA&#039;s the schema, so neither is compared to this repo).</p>
+<p>Definite contradictions (dead command, dead link, a block naming a directory
+that is gone) fail <code>check</code> like a broken file reference. A real directory the
+block merely omits is a warning. When a check&#039;s source of truth is absent — e.g.
+<code>internal/cli/cli.go</code> in a downstream install — that sub-check prints a &quot;skipped&quot;
+note rather than emitting a false error.</p>
+<h3>Verification</h3>
+<p>Manually exercised on 2026-07-23: clean pass on the real repo (14 root docs);
+negative tests confirmed each check fails on injected drift (a bogus
+<code>vibekb.php</code> subcommand, a bogus <code>vibekb</code> command, a broken link, and a bogus
+<code>.vibekb/</code> structure entry); and the Go-source-absent path confirmed to skip
+rather than false-flag. The first run also caught and drove the fix of a real
+<code>ltrim($t, &#039;./&#039;)</code> bug that had mangled <code>./.github/...</code> link targets — a reminder
+that the lint&#039;s own correctness matters as much as its coverage.</p>
+<h3>Honesty preserved</h3>
+<p>The check stays strictly on the <em>detected</em> side of VibeKB&#039;s detection/interpretation
+boundary: it proves mechanical contradictions in the docs but never judges whether
+prose is accurate in meaning. It does not rewrite docs or claim to. <code>updates_automatically</code>
+is unchanged.</p></div></div>
             <aside class="detail-rail" aria-label="Connections">
                 <div class="rail-card">
                     <h2>Affects functionality</h2>
-                    <p><a class="chip" href="../../functionality/detect-drift.html">Detect drift between code and model</a> <a class="chip" href="../../functionality/find-affected-functionality.html">Find affected functionality</a></p>
+                    <p><a class="chip" href="../../functionality/detect-drift.html">Detect drift between code and model</a></p>
                 </div>
-                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">tools/vibekb.php</code> <code class="chip chip--file">guide/lib/Content.php</code></p></div>
+                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">tools/vibekb.php</code></p></div>
                             </aside>
         </div>
     </article>

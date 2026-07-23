@@ -110,20 +110,35 @@
     </header>
 
             <section class="work-summary callout callout--work">
-            <h2>Homepage Windows install requirements honesty</h2>
+            <h2>check watches VibeKB&#039;s own front-door docs (documentation-claims lint)</h2>
             <div class="badge-row">
-                <span class="badge badge--info">complete</span>                                    <span class="badge badge--ok">Verified from source</span>                            </div>
+                <span class="badge badge--info">complete</span>                                    <span class="badge badge--ok">Verified manually</span>                            </div>
             <dl class="rail-dl work-meta">
-                <dt>Objective</dt><dd>Stop implying Windows is unsupported when release binaries already ship; clarify curl installer is macOS/Linux while Windows installs via GitHub Releases.</dd>                                    <dt>Affected functionality</dt><dd><a class="chip" href="../functionality/run-the-developer-cli.html">Run VibeKB from one developer CLI</a> <a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/initialize-in-a-repository.html">Initialize VibeKB in a repository</a> <a class="chip" href="../functionality/deploy-and-stay-portable.html">Deploy and stay portable</a></dd>
-                                                    <dt>Expected files</dt><dd><code class="chip chip--file">index.php</code> <code class="chip chip--file">README.md</code> <code class="chip chip--file">.vibekb/memory/changes/homepage-windows-install-copy.md</code> <code class="chip chip--file">.vibekb/functionality/records/run-the-developer-cli.md</code> <code class="chip chip--file">.vibekb/functionality/records/install-into-a-repository.md</code> <code class="chip chip--file">.vibekb/functionality/records/initialize-in-a-repository.md</code> <code class="chip chip--file">.vibekb/functionality/records/deploy-and-stay-portable.md</code> <code class="chip chip--file">.vibekb/files/important-files.json</code> <code class="chip chip--file">.vibekb/work/handoff.md</code> <code class="chip chip--file">.vibekb/work/current.md</code></dd>
-                                <dt>Data impact</dt><dd>None — marketing/onboarding copy only; installer and release assets unchanged.</dd>                <dt>Risks</dt><dd>Do not claim a Windows curl/PowerShell installer exists; only manual .exe download is supported. Do not imply Winget or Authenticode signing.</dd>            </dl>
+                <dt>Objective</dt><dd>Close the gap where `check` validates the .vibekb/ model against source but never verifies the repository&#039;s root narrative docs (README, CLAUDE, etc.). Add a deterministic documentation-claims section so dead CLI commands, unresolved internal links, and a stale .vibekb/ structure block in those docs become definite errors instead of silent drift.</dd>                                    <dt>Affected functionality</dt><dd><a class="chip" href="../functionality/detect-drift.html">Detect drift between code and model</a></dd>
+                                                    <dt>Expected files</dt><dd><code class="chip chip--file">tools/vibekb.php</code> <code class="chip chip--file">.vibekb/functionality/records/detect-drift.md</code> <code class="chip chip--file">.vibekb/memory/changes/check-watches-front-door-docs.md</code> <code class="chip chip--file">.vibekb/work/handoff.md</code> <code class="chip chip--file">.vibekb/work/current.md</code></dd>
+                                <dt>Data impact</dt><dd>None — adds a read-only static check to the CLI. No model data or runtime data written.</dd>                <dt>Risks</dt><dd>A lint that emits false positives is worse than none; each sub-check must degrade to &quot;skipped&quot; when its reference source is absent (e.g. the Go CLI source in a downstream install) rather than falsely flag. Only root-level *.md are scanned; generated /docs and examples/ must stay out of scope. Command-existence checks must derive the valid command set from the actual dispatch (this script + internal/cli/cli.go), never a hardcoded list that can itself drift.</dd>            </dl>
         </section>
 
         <section class="doc-section content-section">
             <div class="prose reading-column"><h3>Status</h3>
-<p>Complete. Homepage Compatibility &amp; Requirements list Windows; install step 1
-points Windows users at GitHub Releases. Verified by rendering <code>index.php</code> and
-checking for the new strings.</p></div>
+<p>Complete and verified manually. Three checks over root <code>*.md</code>:</p>
+<ol>
+<li><strong>Command existence</strong> — CLI invocations in fenced code blocks</li>
+</ol>
+<p>(<code>php …/vibekb.php &lt;sub&gt;</code> and <code>vibekb &lt;sub&gt;</code>) must name a real subcommand.
+   PHP subs are parsed from this script&#039;s dispatch; Go subs from
+   <code>internal/cli/cli.go</code> (skipped if that source is absent).</p>
+<ol>
+<li><strong>Internal link resolution</strong> — every relative <code>](target.md)</code> /</li>
+</ol>
+<p><code>](dir/)</code> link must resolve on disk.</p>
+<ol>
+<li><strong>Structure-block parity</strong> — a fenced <code>.vibekb/</code> tree must match the real</li>
+</ol>
+<p>top-level of <code>.vibekb/</code>.</p>
+<p>Definite errors (dead command, dead link, doc claims a dir that is gone) fail
+<code>check</code>, like broken file references. Softer signals (a real dir the doc omits)
+are warnings.</p></div>
         </section>
     
     <nav class="cross-links" aria-label="Related views">
@@ -140,7 +155,7 @@ checking for the new strings.</p></div>
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 08:31 UTC · source commit fd08afa (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 09:30 UTC · source commit fd08afa (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

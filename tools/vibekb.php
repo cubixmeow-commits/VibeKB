@@ -13,7 +13,8 @@ declare(strict_types=1);
  *                                            one-line validation + drift summary.
  *   php tools/vibekb.php check [--strict]     Consistency gate: validation,
  *                                            broken file references, drift since
- *                                            the recorded commit, and /docs sync.
+ *                                            the recorded commit, /docs sync, and
+ *                                            front-door documentation claims.
  *   php tools/vibekb.php affected <file>...    Map files to the functionality they
  *   php tools/vibekb.php affected --since REF  likely affect (via files[] links).
  *   php tools/vibekb.php bootstrap [--dry-run] Verify/repair the .vibekb/ workspace
@@ -451,6 +452,26 @@ function vibekb_cmd_check(string $repoRoot, bool $strict): int
         }
     }
 
+    // 5. Documentation claims (detected) — the front-door docs vs the repository.
+    echo "\n[5] Documentation claims — front-door docs vs the repository (detected)\n" . str_repeat('-', 60) . "\n";
+    $docs = vibekb_check_docs_claims($repoRoot, $GLOBALS['runtimeRoot']);
+    if ($docs['errors'] === [] && $docs['warnings'] === []) {
+        echo '  ' . $docs['files'] . " root doc(s): every documented command, link, and structure block checks out.\n";
+    } else {
+        foreach ($docs['errors'] as $e) {
+            echo "  ERROR  {$e}\n";
+        }
+        foreach ($docs['warnings'] as $w) {
+            echo "  warn   {$w}\n";
+        }
+    }
+    foreach ($docs['notes'] as $n) {
+        echo "  note   {$n}\n";
+    }
+    if ($docs['errors'] !== []) {
+        $failed = true;
+    }
+
     echo "\n" . str_repeat('=', 60) . "\n";
     echo $failed ? "RESULT: FAILED (definite errors above)\n" : "RESULT: OK (no definite errors)\n";
     return $failed ? 1 : 0;
@@ -507,6 +528,235 @@ function vibekb_check_snapshot(string $repoRoot, string $runtimeRoot): array
 
     vibekb_rrmdir($tmp);
     return ['status' => $diffs === [] ? 'in-sync' : 'stale', 'diffs' => $diffs, 'message' => ''];
+}
+
+/**
+ * Documentation-claims lint: verify VibeKB's own front-door narrative docs (the
+ * root-level *.md files) still match the repository they describe. This is the
+ * doc-side counterpart to the broken-file-references check. `check` already
+ * validates the .vibekb/ model against source, but nothing watched README.md,
+ * CLAUDE.md, and the other root docs — so a renamed CLI command, a moved file, or
+ * a stale structure block could drift silently on the front door. Three
+ * mechanical, token-free checks close that gap:
+ *
+ *   A. Command existence — every `php …/vibekb.php <sub>` and `vibekb <sub>`
+ *      invocation shown in a fenced code block must name a real subcommand.
+ *   B. Internal links   — every relative Markdown link must resolve on disk.
+ *   C. Structure parity — README's fenced `.vibekb/` tree must match the real
+ *      top-level of `.vibekb/` (README only: other docs' trees describe a target
+ *      install or the schema, not this repository's own model).
+ *
+ * Each check degrades to "skipped" (never a false error) when its source of truth
+ * is absent — e.g. the Go command set when internal/cli/cli.go is not present in a
+ * downstream install. Only definite, mechanical contradictions are errors; a real
+ * directory a doc merely omits is a warning.
+ *
+ * @return array{errors: list<string>, warnings: list<string>, files: int, notes: list<string>}
+ */
+function vibekb_check_docs_claims(string $repoRoot, string $runtimeRoot): array
+{
+    $errors = [];
+    $warnings = [];
+    $notes = [];
+
+    $docs = glob($repoRoot . '/*.md') ?: [];
+    sort($docs);
+    if ($docs === []) {
+        return ['errors' => [], 'warnings' => [], 'files' => 0, 'notes' => ['no root-level *.md documents to check']];
+    }
+
+    // Valid command sets, derived from the actual dispatch so the lint can never
+    // disagree with the code it checks.
+    $phpSubs = vibekb_known_php_subcommands($runtimeRoot . '/tools/vibekb.php');
+    $goCmds  = vibekb_known_go_commands($runtimeRoot . '/internal/cli/cli.go');
+    // `vibekb <sub>` is valid if it is a native Go command or a delegated PHP one.
+    $vibekbSubs = $goCmds === null ? null : array_values(array_unique(array_merge($goCmds, $phpSubs)));
+    if ($goCmds === null) {
+        $notes[] = 'vibekb (Go) command checks skipped — internal/cli/cli.go not present';
+    }
+    if ($phpSubs === []) {
+        $notes[] = 'php command checks skipped — could not parse the CLI dispatch';
+    }
+
+    foreach ($docs as $path) {
+        $rel = basename($path);
+        $text = (string) @file_get_contents($path);
+        if ($text === '') {
+            continue;
+        }
+
+        // A. Command existence — only inside fenced code blocks (runnable examples).
+        foreach (vibekb_fenced_blocks($text) as $block) {
+            if ($phpSubs !== [] && preg_match_all('/php\s+\S*vibekb\.php\s+([a-z][a-z-]*)/', $block, $m)) {
+                foreach ($m[1] as $sub) {
+                    if (!in_array($sub, $phpSubs, true)) {
+                        $errors[] = "{$rel}: documents `php tools/vibekb.php {$sub}`, but no such subcommand exists";
+                    }
+                }
+            }
+            // `vibekb <sub>`. The required whitespace after `vibekb` excludes
+            // `vibekb.php`, `vibekb-windows-*.exe`, and `vibekb.exe` (no space).
+            if ($vibekbSubs !== null && preg_match_all('/(?<![\w.-])\.?\/?vibekb\s+([a-z][a-z-]+)/', $block, $m)) {
+                foreach ($m[1] as $sub) {
+                    if (!in_array($sub, $vibekbSubs, true)) {
+                        $errors[] = "{$rel}: documents `vibekb {$sub}`, but that is not a vibekb command";
+                    }
+                }
+            }
+        }
+
+        // B. Internal link resolution.
+        foreach (vibekb_markdown_links($text) as $target) {
+            $t = $target;
+            if (($hash = strpos($t, '#')) !== false) {
+                $t = substr($t, 0, $hash); // drop an anchor fragment
+            }
+            if ($t === '' || str_starts_with($t, '/') || str_contains($t, '://') || str_starts_with($t, 'mailto:')) {
+                continue; // in-page anchor, site-absolute, external URL, or mail link
+            }
+            if (str_starts_with($t, './')) {
+                $t = substr($t, 2); // strip a leading "./" prefix once (not every . or /)
+            }
+            if ($t === '' || str_contains($t, '..')) {
+                continue;
+            }
+            if (!file_exists($repoRoot . '/' . $t)) {
+                $errors[] = "{$rel}: link target does not exist: {$target}";
+            }
+        }
+
+        // C. Structure-block parity — README's own `.vibekb/` overview only.
+        if ($rel === 'README.md') {
+            foreach (vibekb_fenced_blocks($text) as $block) {
+                $claimed = vibekb_parse_vibekb_tree($block);
+                if ($claimed === null) {
+                    continue;
+                }
+                $actual = vibekb_vibekb_toplevel($repoRoot . '/.vibekb');
+                foreach ($claimed as $name) {
+                    if (!in_array($name, $actual, true)) {
+                        $errors[] = "{$rel}: .vibekb/ structure block lists `{$name}`, which is not in the real .vibekb/";
+                    }
+                }
+                foreach ($actual as $name) {
+                    if (!in_array($name, $claimed, true)) {
+                        $warnings[] = "{$rel}: .vibekb/ structure block omits `{$name}`, which exists in the real .vibekb/";
+                    }
+                }
+            }
+        }
+    }
+
+    return [
+        'errors'   => array_values(array_unique($errors)),
+        'warnings' => array_values(array_unique($warnings)),
+        'files'    => count($docs),
+        'notes'    => $notes,
+    ];
+}
+
+/** Subcommand names dispatched by the PHP CLI, parsed from its own switch. @return list<string> */
+function vibekb_known_php_subcommands(string $scriptPath): array
+{
+    $src = (string) @file_get_contents($scriptPath);
+    if ($src === '' || !preg_match('/---- dispatch.*$/s', $src, $mm)) {
+        return [];
+    }
+    $subs = preg_match_all("/case\s+'([a-z][a-z-]*)'\s*:/", $mm[0], $m) ? $m[1] : [];
+    return array_values(array_unique($subs));
+}
+
+/**
+ * Subcommand names the vibekb Go CLI accepts (native + delegated), parsed from
+ * internal/cli/cli.go. Returns null when that source is not present so the caller
+ * can skip Go-command checks rather than emit false positives.
+ *
+ * @return list<string>|null
+ */
+function vibekb_known_go_commands(string $cliPath): ?array
+{
+    $src = @file_get_contents($cliPath);
+    if (!is_string($src) || $src === '') {
+        return null;
+    }
+    $cmds = [];
+    if (preg_match_all('/case\s+"([a-z][a-z-]*)"/', $src, $m)) { // native: case "install":
+        $cmds = array_merge($cmds, $m[1]);
+    }
+    if (preg_match_all('/"([a-z][a-z-]*)"\s*:\s*true/', $src, $m)) { // delegated map keys
+        $cmds = array_merge($cmds, $m[1]);
+    }
+    return array_values(array_unique($cmds));
+}
+
+/** Contents of each ```-fenced code block in a Markdown string. @return list<string> */
+function vibekb_fenced_blocks(string $text): array
+{
+    $blocks = [];
+    $in = false;
+    $buf = [];
+    foreach (explode("\n", $text) as $line) {
+        if (preg_match('/^\s*```/', $line)) {
+            if ($in) {
+                $blocks[] = implode("\n", $buf);
+                $buf = [];
+            }
+            $in = !$in;
+            continue;
+        }
+        if ($in) {
+            $buf[] = $line;
+        }
+    }
+    return $blocks;
+}
+
+/** Relative + absolute link targets from `[text](target)` spans, ignoring code. @return list<string> */
+function vibekb_markdown_links(string $text): array
+{
+    $text = (string) preg_replace('/```.*?```/s', '', $text); // drop fenced code
+    return preg_match_all('/\]\(([^)\s]+)(?:\s+"[^"]*")?\)/', $text, $m) ? $m[1] : [];
+}
+
+/**
+ * Top-level entries claimed by a fenced `.vibekb/` tree block, or null if the
+ * block is not such a tree. Recognises both the README 2-space-indent style and
+ * the box-drawing style; nested (deeper-indented) lines are ignored.
+ *
+ * @return list<string>|null
+ */
+function vibekb_parse_vibekb_tree(string $block): ?array
+{
+    $lines = explode("\n", $block);
+    $i = 0;
+    while ($i < count($lines) && trim($lines[$i]) === '') {
+        $i++;
+    }
+    if ($i >= count($lines) || !preg_match('#^\.vibekb/\s*$#', trim($lines[$i]))) {
+        return null;
+    }
+    $entries = [];
+    for ($j = $i + 1; $j < count($lines); $j++) {
+        // Top level = exactly two leading spaces, or a `├──`/`└──` branch at col 0.
+        if (preg_match('/^(?:  |├── |└── )(\S+)/u', $lines[$j], $m)) {
+            $entries[] = rtrim($m[1], '/');
+        }
+    }
+    return array_values(array_unique($entries));
+}
+
+/** Real top-level entries of the .vibekb/ dir, hidden files excluded. @return list<string> */
+function vibekb_vibekb_toplevel(string $vibekbDir): array
+{
+    $out = [];
+    foreach (scandir($vibekbDir) ?: [] as $e) {
+        if ($e === '.' || $e === '..' || str_starts_with($e, '.')) {
+            continue;
+        }
+        $out[] = $e;
+    }
+    sort($out);
+    return $out;
 }
 
 /** affected <file>... | --since REF */
@@ -707,7 +957,8 @@ VibeKB self-maintenance CLI
   php tools/vibekb.php status              Session start: provenance, current work,
                                            handoff next-action, validation + drift.
   php tools/vibekb.php check [--strict]    Validation + broken references + drift
-                                           since the recorded commit + /docs sync.
+                                           since the recorded commit + /docs sync
+                                           + front-door documentation claims.
   php tools/vibekb.php affected <file>...   Map files to likely functionality.
   php tools/vibekb.php affected --since REF  ...for everything changed since REF.
   php tools/vibekb.php bootstrap [--dry-run] Verify and repair the .vibekb/

@@ -108,7 +108,7 @@
     <header class="page-head reading-column">
         <p class="eyebrow">Agent workflow</p>
         <h1>Detect drift between code and model</h1>
-        <p class="lede">`php tools/vibekb.php check` reports where the model and the repository have diverged — model references to files that no longer exist, source files changed since the recorded commit, functionality those changes likely affect, and whether the /docs snapshot is stale — separating what was detected mechanically from what still needs an agent to interpret.</p>
+        <p class="lede">`php tools/vibekb.php check` reports where the model, the repository, and the front-door docs have diverged — model references to files that no longer exist, source files changed since the recorded commit, functionality those changes likely affect, whether the /docs snapshot is stale, and whether the root narrative docs still name real CLI commands, resolvable links, and an accurate .vibekb/ structure block — separating what was detected mechanically from what still needs an agent to interpret.</p>
         <div class="badge-row">
             <span class="badge badge--ok">Implemented</span>            <span class="badge badge--ok">Verified manually</span>            <span class="badge badge--info">User-facing</span>        </div>
     </header>
@@ -121,7 +121,7 @@ model points at still exists, lists source changes since the model&#039;s record
 commit and the functionality they likely touch, and confirms <code>/docs</code> still
 matches a fresh render.</p>
 <h3>Current behavior</h3>
-<p><code>check</code> produces four sections:</p>
+<p><code>check</code> produces five sections:</p>
 <ol>
 <li><strong>Model validation</strong> — the same errors/warnings as <code>validate</code> (definite</li>
 </ol>
@@ -145,10 +145,25 @@ matches a fresh render.</p>
 </ol>
 <p>directory and compares it (ignoring the volatile generation timestamp) against
    <code>/docs</code>; a difference means <code>/docs</code> is stale and should be regenerated.</p>
-<p>Exit code is non-zero only on <strong>definite errors</strong> (validation errors or broken
-file references). Drift and snapshot staleness are reported as warnings so a
-harmless code change is never blocked; <code>--strict</code> promotes snapshot staleness to
-a failure for CI that publishes <code>/docs</code>.</p>
+<ol>
+<li><strong>Documentation claims (detected)</strong> — the doc-side counterpart to broken file</li>
+</ol>
+<p>references: it lints the repository&#039;s root-level narrative docs (<code>README.md</code>,
+   <code>CLAUDE.md</code>, and the rest) so VibeKB watches its own front door. Three
+   mechanical checks: (a) every <code>php …/vibekb.php &lt;sub&gt;</code> and <code>vibekb &lt;sub&gt;</code>
+   invocation shown in a fenced code block must name a real subcommand — the valid
+   sets are parsed from the actual dispatch (this script + <code>internal/cli/cli.go</code>)
+   so the lint can never disagree with the code; (b) every relative Markdown link
+   must resolve on disk; (c) README&#039;s <code>.vibekb/</code> structure block must match the
+   real top-level of <code>.vibekb/</code>. A dead command, a dead link, or a structure block
+   naming a directory that is gone is a <strong>definite error</strong>; a real directory the
+   block merely omits is a warning. Each check degrades to a printed &quot;skipped&quot;
+   note — never a false error — when its source of truth is absent (e.g. the Go
+   command set in a downstream install with no <code>internal/cli/cli.go</code>).</p>
+<p>Exit code is non-zero only on <strong>definite errors</strong> (validation errors, broken file
+references, or a documentation-claims error). Drift and snapshot staleness are
+reported as warnings so a harmless code change is never blocked; <code>--strict</code>
+promotes snapshot staleness to a failure for CI that publishes <code>/docs</code>.</p>
 <h3>Step-by-step flow</h3>
 <ol>
 <li>Load and validate the model.</li>
@@ -158,15 +173,30 @@ a failure for CI that publishes <code>/docs</code>.</p>
 <p>to modelled source areas, map each to functionality.</p>
 <ol>
 <li>Regenerate into a temp dir and diff against <code>/docs</code>.</li>
+<li>Lint the root <code>*.md</code> docs: extract fenced-block CLI invocations and Markdown</li>
+</ol>
+<p>links, resolve them against the parsed command sets and the filesystem, and
+   compare README&#039;s <code>.vibekb/</code> tree to the real directory.</p>
+<ol>
 <li>Print sections; exit non-zero on definite errors (or on stale <code>/docs</code> under</li>
 </ol>
 <p><code>--strict</code>).</p>
 <h3>Implementation map</h3>
 <ul>
-<li><code>tools/vibekb.php</code> — the <code>check</code> subcommand and the drift/sync logic.</li>
+<li><code>tools/vibekb.php</code> — the <code>check</code> subcommand, the drift/sync logic, and</li>
+</ul>
+<p><code>vibekb_check_docs_claims()</code> plus its helpers (<code>vibekb_known_php_subcommands</code>,
+  <code>vibekb_known_go_commands</code>, <code>vibekb_fenced_blocks</code>, <code>vibekb_markdown_links</code>,
+  <code>vibekb_parse_vibekb_tree</code>, <code>vibekb_vibekb_toplevel</code>).</p>
+<ul>
 <li><code>tools/generate-static.php</code> — invoked (into a temp dir via <code>VIBEKB_DOCS_OUT</code>)</li>
 </ul>
 <p>for the sync comparison.</p>
+<ul>
+<li><code>internal/cli/cli.go</code> — read (not modified) to derive the valid <code>vibekb</code></li>
+</ul>
+<p>command set for the documentation-claims check; absent in a downstream install,
+  where that sub-check degrades to a skip.</p>
 <h3>Failure cases</h3>
 <ul>
 <li>Not a git repository, or the recorded commit is unknown → the change section</li>
@@ -182,7 +212,15 @@ as proof the model is correct — only that nothing mechanical is inconsistent.<
 <p>Honest automation means being explicit about the boundary between <em>detected</em>
 (mechanical: git diff, path existence, render diff) and <em>interpreted</em> (an agent
 deciding what a change means for the model). <code>check</code> never crosses that line on
-its own.</p></div>
+its own.</p>
+<p>The documentation-claims section extends drift detection to the docs that
+introduce VibeKB — the exact place a drift-detection tool is least expected to
+watch, and where drift is most embarrassing. It stays on the <em>detected</em> side of
+the line: it can prove a documented command no longer exists, a link is dead, or
+a structure block names a directory that is gone, but it never judges whether the
+prose is accurate in meaning — that remains an agent&#039;s job. Deriving the valid
+command sets from the real dispatch (rather than a hardcoded list) is what keeps
+the lint itself from becoming a second thing that can drift.</p></div>
                     </div>
 
         <aside class="detail-rail" aria-label="Record metadata">
@@ -194,7 +232,7 @@ its own.</p></div>
                                             <dt>Verification</dt>
                         <dd><span class="badge badge--ok">Verified manually</span></dd>
                                         <dt>Updated</dt>
-                    <dd>2026-07-22</dd>
+                    <dd>2026-07-23</dd>
                     <dt>Facing</dt>
                     <dd>User-facing</dd>
                 </dl>
@@ -207,7 +245,7 @@ its own.</p></div>
             
             <div class="rail-card metadata-group">
                 <h2>Data read or written</h2>
-                <p><strong>Reads:</strong> <code class="chip chip--file">.vibekb</code> <code class="chip chip--file">guide</code> <code class="chip chip--file">tools</code> <code class="chip chip--file">docs</code></p>
+                <p><strong>Reads:</strong> <code class="chip chip--file">.vibekb</code> <code class="chip chip--file">guide</code> <code class="chip chip--file">tools</code> <code class="chip chip--file">docs</code> <code class="chip chip--file">internal</code></p>
                 <p><strong>Writes:</strong> <span class="muted">None.</span></p>
                             </div>
 
@@ -257,7 +295,7 @@ its own.</p></div>
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 08:31 UTC · source commit fd08afa (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 09:30 UTC · source commit fd08afa (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

@@ -1,23 +1,35 @@
 ---
 id: current-work
 type: work
-title: Homepage Windows install requirements honesty
-objective: Stop implying Windows is unsupported when release binaries already ship; clarify curl installer is macOS/Linux while Windows installs via GitHub Releases.
-summary: Complete. Homepage and README name Windows as a manual Releases download path; curl | sh remains macOS/Linux-only. install.sh unchanged.
-requested_by: User (mobile screenshot of #compatibility)
+title: check watches VibeKB's own front-door docs (documentation-claims lint)
+objective: Close the gap where `check` validates the .vibekb/ model against source but never verifies the repository's root narrative docs (README, CLAUDE, etc.). Add a deterministic documentation-claims section so dead CLI commands, unresolved internal links, and a stale .vibekb/ structure block in those docs become definite errors instead of silent drift.
+summary: Complete. Added a `[5] Documentation claims` section to `php tools/vibekb.php check`. It scans root *.md files for three mechanical drift classes (dead CLI commands, unresolved links, stale README structure block) and fails on definite errors, matching the honesty model of the broken-file-references section. Verified clean on the repo and failing on injected drift.
+requested_by: User (follow-up to the README audit: "the tool doesn't watch its own front door")
 status: complete
-verification_state: verified-from-source
+verification_state: verified-manually
 updated: 2026-07-23
-affected_functionality: [run-the-developer-cli, install-into-a-repository, initialize-in-a-repository, deploy-and-stay-portable]
-expected_files: [index.php, README.md, .vibekb/memory/changes/homepage-windows-install-copy.md, .vibekb/functionality/records/run-the-developer-cli.md, .vibekb/functionality/records/install-into-a-repository.md, .vibekb/functionality/records/initialize-in-a-repository.md, .vibekb/functionality/records/deploy-and-stay-portable.md, .vibekb/files/important-files.json, .vibekb/work/handoff.md, .vibekb/work/current.md]
-data_impact: None — marketing/onboarding copy only; installer and release assets unchanged.
+affected_functionality: [detect-drift]
+expected_files: [tools/vibekb.php, .vibekb/functionality/records/detect-drift.md, .vibekb/memory/changes/check-watches-front-door-docs.md, .vibekb/work/handoff.md, .vibekb/work/current.md]
+data_impact: None — adds a read-only static check to the CLI. No model data or runtime data written.
 risks:
-  - Do not claim a Windows curl/PowerShell installer exists; only manual .exe download is supported.
-  - Do not imply Winget or Authenticode signing.
+  - A lint that emits false positives is worse than none; each sub-check must degrade to "skipped" when its reference source is absent (e.g. the Go CLI source in a downstream install) rather than falsely flag.
+  - Only root-level *.md are scanned; generated /docs and examples/ must stay out of scope.
+  - Command-existence checks must derive the valid command set from the actual dispatch (this script + internal/cli/cli.go), never a hardcoded list that can itself drift.
 ---
 
 ## Status
 
-Complete. Homepage Compatibility & Requirements list Windows; install step 1
-points Windows users at GitHub Releases. Verified by rendering `index.php` and
-checking for the new strings.
+Complete and verified manually. Three checks over root `*.md`:
+
+1. **Command existence** — CLI invocations in fenced code blocks
+   (`php …/vibekb.php <sub>` and `vibekb <sub>`) must name a real subcommand.
+   PHP subs are parsed from this script's dispatch; Go subs from
+   `internal/cli/cli.go` (skipped if that source is absent).
+2. **Internal link resolution** — every relative `](target.md)` /
+   `](dir/)` link must resolve on disk.
+3. **Structure-block parity** — a fenced `.vibekb/` tree must match the real
+   top-level of `.vibekb/`.
+
+Definite errors (dead command, dead link, doc claims a dir that is gone) fail
+`check`, like broken file references. Softer signals (a real dir the doc omits)
+are warnings.
