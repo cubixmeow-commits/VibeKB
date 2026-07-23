@@ -14,7 +14,7 @@
         "source_repository": "https://github.com/cubixmeow-commits/VibeKB",
         "source_subpath": "",
         "source_branch": "main",
-        "source_commit": "683df05 (2026-07-23)",
+        "source_commit": "fd08afa (2026-07-23)",
         "analyzed": "2026-07-23",
         "verification_scope": "Homepage Windows install-copy honesty on branch cursor/homepage-windows-install-copy-fa94 vs main@683df05: rendered index.php confirms macOS/Linux/Windows platforms, Windows .exe Releases path, curl installer still macOS/Linux-only; php -l index.php; README Windows note; model change homepage-windows-install-copy linked. No install.sh or release.yml behaviour change.",
         "last_verified": "2026-07-23",
