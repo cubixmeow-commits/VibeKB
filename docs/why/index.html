@@ -177,6 +177,15 @@
                                             </li>
                                     <li class="why-item">
                         <div class="why-item__head">
+                            <h3><a href="../why/decisions/repository-safety-consolidation.html">VibeKB owns only .vibekb/; everything else is an adapter or managed block</a></h3>
+                            <div class="badge-row">
+                                                                <span class="badge badge--ok">Verified from source</span>                            </div>
+                        </div>
+                        <p>Installation consolidates the entire VibeKB-owned footprint under `.vibekb/` (runtime, reference, prompts, model). Files outside it are optional adapters — namespaced files VibeKB owns inside a shared tool directory, or a single clearly marked managed block inside a shared, user-owned file (AGENTS.md, CLAUDE.md). VibeKB never owns generic root files, and the payload manifest remaps embedded source paths to `.vibekb/`-relative destinations on install.</p>
+                                                    <p class="why-item__links"><a class="chip" href="../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../functionality/migrate-legacy-install.html">Migrate a legacy root-level install</a> <a class="chip" href="../functionality/uninstall-from-a-repository.html">Uninstall VibeKB from a repository</a> <a class="chip" href="../functionality/run-the-developer-cli.html">Run VibeKB from one developer CLI</a></p>
+                                            </li>
+                                    <li class="why-item">
+                        <div class="why-item__head">
                             <h3><a href="../why/decisions/two-modes-one-source.html">Two output modes over one source and one template set</a></h3>
                             <div class="badge-row">
                                                                 <span class="badge badge--ok">Verified from source</span>                            </div>
@@ -418,7 +427,7 @@
                     A living explanation generated from repository-owned content in <code>.vibekb/</code>.
                     <a href="../index.html">About VibeKB</a>
                 </p>
-                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 05:48 UTC · source commit a0d95aa (2026-07-23) · not auto-updating</p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 07:06 UTC · source commit a0d95aa (2026-07-23) · not auto-updating</p>
             </div>
         </footer>
     </div>

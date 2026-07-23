@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>VibeKB owns only .vibekb/; everything else is an adapter or managed block · VibeKB — VibeKB</title>
+    <meta name="description" content="A living explanation of what VibeKB currently does, how it works, what AI is changing, and why.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Web fonts are a progressive enhancement only. The stylesheet ships a
+         full system-font fallback stack, so the guide renders correctly with no
+         external CDN — required for offline and locked-down static hosting. -->
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/css/guide.css">
+</head>
+<body data-mode="static">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="app-shell">
+    <header class="site-header">
+        <div class="site-header__inner">
+            <a class="brand" href="../../index.html">
+                <span class="brand__mark">VibeKB</span>
+                <span class="brand__project">VibeKB</span>
+            </a>
+            <form class="site-search" role="search" action="../../search/index.html">
+                <label class="visually-hidden" for="site-search-input">Search guide</label>
+                <input id="site-search-input" name="q" type="search" placeholder="Search guide…" autocomplete="off">
+            </form>
+            <button
+                class="nav-toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="guide-sidebar"
+                hidden
+            >Menu</button>
+        </div>
+    </header>
+
+    <div class="nav-backdrop" id="nav-backdrop" hidden></div>
+
+    <aside class="sidebar" id="guide-sidebar" aria-label="Guide navigation">
+        <nav class="sidebar-nav" aria-label="Guide sections">
+            <p class="sidebar-nav__label" id="nav-primary-label">Primary</p>
+            <ul class="sidebar-nav__list" aria-labelledby="nav-primary-label">
+                                                        <li>
+                        <a href="../../index.html">
+                            Overview                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../../functionality/index.html">
+                            Functionality                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../../how-it-works/index.html">
+                            Architecture                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../../diagrams/index.html">
+                            Diagrams                        </a>
+                    </li>
+                                                        <li>
+                        <a href="../../current-work/index.html">
+                            Current work                        </a>
+                    </li>
+                            </ul>
+
+                            <p class="sidebar-nav__label" id="nav-explore-label">Explore</p>
+                <ul class="sidebar-nav__list sidebar-nav__list--secondary" aria-labelledby="nav-explore-label">
+                                                                    <li>
+                            <a href="../../data/index.html">
+                                Data &amp; storage                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../../files/index.html">
+                                Files that matter                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../../changes/index.html">
+                                Changes                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../../why/index.html" aria-current="page">
+                                Decisions &amp; rationale                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../../handoff/index.html">
+                                AI handoff                            </a>
+                        </li>
+                                                                    <li>
+                            <a href="../../reference/index.html">
+                                Reference                            </a>
+                        </li>
+                                    </ul>
+                    </nav>
+    </aside>
+
+    <div class="app-main">
+                    <p class="generated-notice" role="note">
+                Generated output — this is a static snapshot rendered from <code>.vibekb/</code>. The
+                <code>.vibekb/</code> content is the source of truth. See <a href="../../reference/index.html">Reference</a> for provenance.
+            </p>
+                
+        <main id="main" class="wrap">
+                <article class="view view-doc">
+        <p class="breadcrumb"><a href="../../why/index.html">← Decisions &amp; rationale</a></p>
+        <header class="page-head reading-column">
+            <p class="eyebrow">Decisions</p>
+            <h1>VibeKB owns only .vibekb/; everything else is an adapter or managed block</h1>
+            <p class="lede">Installation consolidates the entire VibeKB-owned footprint under `.vibekb/` (runtime, reference, prompts, model). Files outside it are optional adapters — namespaced files VibeKB owns inside a shared tool directory, or a single clearly marked managed block inside a shared, user-owned file (AGENTS.md, CLAUDE.md). VibeKB never owns generic root files, and the payload manifest remaps embedded source paths to `.vibekb/`-relative destinations on install.</p>
+            <div class="badge-row">
+                <span class="badge badge--info">accepted</span>                                                <span class="badge badge--ok">Verified from source</span>            </div>
+        </header>
+        <div class="detail-grid">
+            <div class="detail-main"><div class="prose reading-column"><h3>Context</h3>
+<p>The pre-2.0 installer wrote a large footprint into the <strong>target repository root</strong>:
+seven Markdown files (including <code>CLAUDE.md</code> and <code>AGENTS.md</code>, which are owned by
+the user and by coding agents), plus <code>guide/</code>, <code>tools/</code>, <code>template/</code>, <code>prompts/</code>,
+and <code>.cursor/</code>. It could create <code>CLAUDE.md</code>/<code>AGENTS.md</code> where none existed and
+overwrite them under <code>--force</code>. Users could reasonably fear running
+<code>vibekb install .</code> in an existing project — the audit is recorded in
+<code>docs/REPOSITORY_FOOTPRINT_AUDIT.md</code>.</p>
+<h3>Decision</h3>
+<p>Establish a three-category ownership model (see <code>docs/REPOSITORY_SAFETY.md</code>):</p>
+<ul>
+<li><strong>VibeKB-owned</strong> — everything under <code>.vibekb/</code>, plus namespaced adapters</li>
+</ul>
+<p>(<code>.cursor/rules/vibekb.mdc</code>, <code>.github/instructions/vibekb.instructions.md</code>).
+  Safe to create, refresh, and remove.</p>
+<ul>
+<li><strong>Shared</strong> — <code>AGENTS.md</code>, <code>CLAUDE.md</code>, and similar. VibeKB edits only a single</li>
+</ul>
+<p>marked managed block (<code>&lt;!-- VIBEKB:START v1 --&gt; … &lt;!-- VIBEKB:END --&gt;</code>),
+  preserving everything else byte-for-byte, idempotent, line-ending aware, with a
+  backup before the first edit. Malformed/duplicate markers are a reported
+  conflict, never a silent rewrite.</p>
+<ul>
+<li><strong>Repository-owned</strong> — never modified automatically.</li>
+</ul>
+<p>The payload manifest (<code>template/manifest.json</code>, schema 2) becomes a <code>map</code> of
+embedded <code>src</code> → target <code>dest</code>, so the binary still embeds VibeKB&#039;s own dev
+layout (<code>guide/</code>, <code>tools/</code>) but installs it under <code>.vibekb/runtime/</code>. The PHP core
+is made layout-aware (<code>guide/lib/workspace.php</code>) so it runs from either the
+self-hosted root layout or the consolidated <code>.vibekb/runtime/</code> layout.</p>
+<p>Default install favors safety: <code>.vibekb/</code> always; namespaced adapters only when
+that tool is already in use; a managed block in <code>AGENTS.md</code>/<code>CLAUDE.md</code> only if
+the file already exists. Flags: <code>--knowledge-only</code>/<code>--no-integrations</code>,
+<code>--integrate &lt;list&gt;</code>, <code>--dry-run</code>, a narrowed <code>--force</code>. A per-install manifest
+(<code>.vibekb/install.json</code>) records ownership, kind, hashes, and provenance so
+<code>migrate</code>, <code>doctor</code>, and <code>uninstall</code> are safe and repeatable.</p>
+<h3>Consequences</h3>
+<ul>
+<li><code>vibekb install .</code> is repository-safe and idempotent; the root is untouched by</li>
+</ul>
+<p>default.</p>
+<ul>
+<li>New commands: <code>vibekb migrate</code> (consolidate a legacy root install) and</li>
+</ul>
+<p><code>vibekb uninstall</code> (ownership-aware removal). <code>vibekb doctor</code> gains footprint
+  diagnostics.</p>
+<ul>
+<li>The installed runtime path moved to <code>.vibekb/runtime/tools/vibekb.php</code>; the Go</li>
+</ul>
+<p>CLI discovers it, and <code>phpcore</code> prefers it over the legacy <code>tools/vibekb.php</code>.</p>
+<ul>
+<li>VibeKB&#039;s own self-hosted repo keeps its root layout (marketing site, GitHub</li>
+</ul>
+<p>Pages <code>/docs</code>, Go embed source) — the remap applies only to target repos.</p></div></div>
+            <aside class="detail-rail" aria-label="Connections">
+                <div class="rail-card">
+                    <h2>Affects functionality</h2>
+                    <p><a class="chip" href="../../functionality/install-into-a-repository.html">Install VibeKB into a repository</a> <a class="chip" href="../../functionality/migrate-legacy-install.html">Migrate a legacy root-level install</a> <a class="chip" href="../../functionality/uninstall-from-a-repository.html">Uninstall VibeKB from a repository</a> <a class="chip" href="../../functionality/run-the-developer-cli.html">Run VibeKB from one developer CLI</a></p>
+                </div>
+                                    <div class="rail-card"><h2>Files</h2><p><code class="chip chip--file">template/manifest.json</code> <code class="chip chip--file">internal/installer/plan.go</code> <code class="chip chip--file">internal/installer/block.go</code> <code class="chip chip--file">internal/installer/apply.go</code> <code class="chip chip--file">internal/installer/state.go</code> <code class="chip chip--file">guide/lib/workspace.php</code></p></div>
+                            </aside>
+        </div>
+    </article>
+            </main>
+
+        <footer class="site-footer">
+            <div class="wrap site-footer__inner">
+                <p><strong>VibeKB</strong> — Understand what your software is doing.</p>
+                <p class="muted">
+                    A living explanation generated from repository-owned content in <code>.vibekb/</code>.
+                    <a href="../../index.html">About VibeKB</a>
+                </p>
+                <p class="muted site-footer__provenance">Static snapshot · generated 2026-07-23 07:06 UTC · source commit a0d95aa (2026-07-23) · not auto-updating</p>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script src="../../assets/js/guide.js" defer></script>
+</body>
+</html>

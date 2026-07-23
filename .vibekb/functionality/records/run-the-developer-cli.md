@@ -10,11 +10,11 @@ user_facing: true
 trigger: A developer runs `vibekb <command>` (e.g. `vibekb install`, `vibekb doctor`, `vibekb check`) — install from anywhere, model commands from inside a VibeKB repository.
 updated: 2026-07-23
 tags: [cli, go, developer-tool, delegation, native-install, distribution]
-files: [cmd/vibekb/main.go, internal/cli/cli.go, internal/cli/doctor.go, internal/cli/version.go, internal/phpcore/phpcore.go, internal/buildinfo/buildinfo.go, go.mod, .github/workflows/release.yml, RELEASE.md, install.sh, .htaccess]
+files: [cmd/vibekb/main.go, internal/cli/cli.go, internal/cli/doctor.go, internal/cli/version.go, internal/installer/doctor.go, internal/phpcore/phpcore.go, internal/buildinfo/buildinfo.go, go.mod, .github/workflows/release.yml, RELEASE.md, install.sh, .htaccess]
 reads: [tools/vibekb.php]
 writes: []
 config: []
-depends_on: [install-into-a-repository, bootstrap-workspace, validate-model, detect-drift, generate-static-snapshot]
+depends_on: [install-into-a-repository, migrate-legacy-install, uninstall-from-a-repository, bootstrap-workspace, validate-model, detect-drift, generate-static-snapshot]
 related_memory: [decision:go-front-end-php-core, decision:native-installer-embedded-payload, decision:two-modes-one-source, change:release-binaries-pipeline, change:website-curl-installer]
 ---
 
@@ -54,16 +54,22 @@ fails with a plain message telling the developer to install PHP 8.2+ or set
 
 ## Current behavior
 
-`cmd/vibekb` dispatches through `internal/cli`. `help`, `version`, `doctor`, and
-`install` are native Go — `install` runs entirely from the binary's embedded
-payload (see **Install VibeKB into a repository**) and launches no PHP. `status`,
-`check`, `affected`, `bootstrap`, `validate`, and `generate` are delegated to
-`tools/vibekb.php`. `internal/phpcore` performs discovery for the delegated
-commands: it walks up from the working directory to find the repository root (a
-directory holding `tools/vibekb.php` or `.vibekb/`) and resolves the PHP
-executable from `VIBEKB_PHP` or the usual names on `PATH`. Delegation runs `php
-<script> <subcommand> <args…>` with the repository as the working directory and
-stdio wired straight through, and returns the child process's exit code.
+`cmd/vibekb` dispatches through `internal/cli`. `help`, `version`, `doctor`,
+`install`, `migrate`, and `uninstall` are native Go — the installer family runs
+entirely from the binary's embedded payload (see **Install VibeKB into a
+repository**, **Migrate a legacy root-level install**, **Uninstall VibeKB from a
+repository**) and launches no PHP. `doctor` additionally reports repository
+footprint problems via `installer.DiagnoseRepo` (legacy layout, malformed managed
+blocks, missing authoritative files, manifest drift). `status`, `check`,
+`affected`, `bootstrap`, `validate`, and `generate` are delegated to the PHP core.
+`internal/phpcore` performs discovery for the delegated commands: it walks up from
+the working directory to find the repository root (a directory holding
+`.vibekb/runtime/tools/vibekb.php`, the legacy `tools/vibekb.php`, or `.vibekb/`),
+resolves the tools script (preferring the consolidated `.vibekb/runtime/` location
+via `ToolsScript`), and resolves the PHP executable from `VIBEKB_PHP` or the usual
+names on `PATH`. Delegation runs `php <script> <subcommand> <args…>` with the
+repository as the working directory and stdio wired straight through, and returns
+the child process's exit code.
 
 ## Honesty boundary
 

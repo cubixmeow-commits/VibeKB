@@ -19,9 +19,14 @@ declare(strict_types=1);
  * Usage: php tools/test-topology.php
  */
 
-$repoRoot = dirname(__DIR__);
-require_once $repoRoot . '/guide/lib/helpers.php';
-require_once $repoRoot . '/guide/lib/Content.php';
+$runtimeRoot = dirname(__DIR__);
+require_once $runtimeRoot . '/guide/lib/workspace.php';
+require_once $runtimeRoot . '/guide/lib/helpers.php';
+require_once $runtimeRoot . '/guide/lib/Content.php';
+
+// Content root is the active `.vibekb`; its parent is the project root.
+$contentRoot = vibekb_locate_content_root($runtimeRoot) ?? ($runtimeRoot . '/.vibekb');
+$repoRoot = dirname($contentRoot);
 
 $tmp = sys_get_temp_dir() . '/vibekb-topo-test-' . bin2hex(random_bytes(4));
 

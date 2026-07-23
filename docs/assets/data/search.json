@@ -50,10 +50,10 @@
     },
     {
         "title": "Install VibeKB into a repository",
-        "summary": "A fully native installer built into the `vibekb` Go binary. `vibekb install /path/to/repo` copies the VibeKB runtime and scaffolds a fresh, empty-but-valid `.vibekb/` workspace from files embedded in the binary — without executing PHP, without analysing the application, and without needing the source repository to remain on disk. PHP is required only to run the installed guide.",
+        "summary": "A fully native, repository-safe installer built into the `vibekb` Go binary. `vibekb install /path/to/repo` consolidates everything VibeKB owns under the target's `.vibekb/` (runtime, reference docs, prompts, and a fresh empty model) and integrates with shared files (AGENTS.md, CLAUDE.md) only through namespaced adapters or a single clearly marked managed block — nothing is written at the repository root by default. It runs from the binary's embedded payload without executing PHP; PHP is required only to run the installed guide.",
         "type": "functionality",
         "url": "../functionality/install-into-a-repository.html",
-        "body": "In one sentence vibekb install /path/to/repo prepares any repository for VibeKB — it copies the guide, the tools, the agent instructions, the VibeKB docs, and the starter definition, then lays down a fresh empty model — all from the binary's embedded payload, with no PHP process launched, and hands off to an AI agent to build the model. User experience A developer installs the CLI via the website curl fsSL https://iainreid.dev/vibekb/install.sh sh — or builds with go build o vibekb ./cmd/vibekb — and runs vibekb install /path/to/your/project . They see a plan what will be created, replaced, skipped, and that .vibekb/ is a fresh model , confirm, and get a verified installation with explicit next steps. dry run shows the full plan and changes nothing; yes runs non interactively; force overwr"
+        "body": "In one sentence vibekb install /path/to/repo prepares any repository for VibeKB by writing everything VibeKB owns under .vibekb/ — the guide, the tools, the reference docs, the integration prompt, and a fresh empty model — from the binary's embedded payload, integrating with shared files only through namespaced adapters or a marked managed block, and never touching the repository root by default. User experience A developer installs the CLI via the website curl fsSL https://iainreid.dev/vibekb/install.sh sh — or builds with go build o vibekb ./cmd/vibekb — and runs vibekb install /path/to/your/project . They see a plan what VibeKB owned files go under .vibekb/ , whether the model is created fresh or preserved, and which optional adapters apply , confirm, and get a verified installation wit"
     },
     {
         "title": "Load the living model",
@@ -61,6 +61,13 @@
         "type": "functionality",
         "url": "../functionality/load-living-model.html",
         "body": "In one sentence Content::load turns a directory of Markdown plus front matter records and small JSON manifests into a single, queryable software model — no database, no network, no build step. Current behavior Content is constructed with a content root by default the repository's own .vibekb/ ; an explicit VIBEKB CONTENT ROOT pointing at a .vibekb directory lets the same code preview a bundled example . load reads, in order: the manifest and its provenance; the four project documents; the functionality index and every functionality/records/ .md ; the system documents; the important files list; the diagrams index, records, and any explainable topology; every memory type; and the current work, handoff, and sessions. Records are keyed by id, with duplicate ids reported as issues rather than s"
+    },
+    {
+        "title": "Migrate a legacy root-level install",
+        "summary": "`vibekb migrate` consolidates a pre-2.0 root-level VibeKB install under `.vibekb/`. It installs the consolidated layout, converts a whole-file VibeKB CLAUDE.md/AGENTS.md into a managed block (preserving user-authored content), relocates the reference docs, and removes only root-level files it can positively identify as unmodified VibeKB content by content signature or byte-for-byte hash. Modified or ambiguous files are preserved and reported; backups are written under `.vibekb/backups/`.",
+        "type": "functionality",
+        "url": "../functionality/migrate-legacy-install.html",
+        "body": "In one sentence vibekb migrate moves an old root level VibeKB footprint into .vibekb/ without losing anything, converting shared docs to managed blocks and removing only files it can prove are unmodified VibeKB content. Current behavior Migration runs in a safe order: 1. Convert legacy shared docs first. If CLAUDE.md / AGENTS.md matches a legacy VibeKB whole file signature and has no managed block, it is backed up and replaced by a managed block; a user authored file is left in place a block is added later by the consolidation step, preserving its text . 2. Install the consolidated layout under .vibekb/ payload + adapters + model preserve/scaffold , writing .vibekb/install.json . 3. Relocate reference docs. Root PRODUCT.md , SCHEMA.md , INITIALIZE.md , MAINTENANCE.md , INSTALLER.md that ar"
     },
     {
         "title": "Parse records (front matter + Markdown)",
@@ -131,6 +138,13 @@
         "type": "functionality",
         "url": "../functionality/start-work-session.html",
         "body": "In one sentence One command answers \"where am I, what is in flight, what should I do next, and is the model still trustworthy?\" — the session start entry point of the VibeKB lifecycle. User experience An agent or human runs php tools/vibekb.php status . It prints: the source commit the model was reconciled against and when it was last verified; the active work/current.md objective and status; the handoff summary and its exact next recommended action; the validation error/warning counts; and a one line drift verdict in sync / N files changed since the recorded commit . It never modifies anything. Step by step flow 1. Load the model through Content the same loader the guide uses . 2. Read provenance from the manifest. 3. Read the current.md and handoff.md front matter and summaries. 4. Run t"
+    },
+    {
+        "title": "Uninstall VibeKB from a repository",
+        "summary": "`vibekb uninstall` removes VibeKB from a repository, ownership-aware. Driven by the `.vibekb/install.json` manifest, it deletes VibeKB-owned files (everything under `.vibekb/` and namespaced adapters) and strips only VibeKB's managed block from shared files (AGENTS.md, CLAUDE.md), preserving everything else. `--keep-knowledge` retains the model records; `--dry-run` previews.",
+        "type": "functionality",
+        "url": "../functionality/uninstall-from-a-repository.html",
+        "body": "In one sentence vibekb uninstall reverses an installation safely: it removes what VibeKB owns and strips only its managed block from shared files, leaving all of your own content intact. Current behavior Uninstall reads .vibekb/install.json . For each recorded shared file it removes only the managed block via the block engine , backing the file up under .vibekb/backups/ first; a shared file VibeKB created solely to hold its block is removed, while a file that pre existed VibeKB is kept. Namespaced adapters are removed and now empty parent directories tidied , unless the manifest marks them pre existing. Finally it removes .vibekb/ — or, with keep knowledge , removes only runtime/ , reference/ , prompts/ , generated/ , backups/ , and install.json , retaining the model records. Files with ma"
     },
     {
         "title": "Validate diagram topology",
@@ -432,6 +446,13 @@
         "type": "decision",
         "url": "../why/decisions/repository-owned-workflow.html",
         "body": "Context VibeKB must work with Claude Code, Cursor, Codex, and others. If each agent gets its own full copy of the instructions, the copies drift and the \"workflow\" becomes whichever file the current agent happened to read. Decision There is one canonical, repository owned operating document CLAUDE.md and one canonical toolchain entry point php tools/vibekb.php . Agent specific files — AGENTS.md , .cursor/rules/vibekb.mdc — are short and point at the canonical source rather than duplicating it. The lifecycle is executable the CLI , not just prose. Alternatives considered A large per agent instruction file each — rejected: guaranteed drift and duplicated maintenance. Prose only workflow, no tooling — rejected: prose alone gets skipped; the CLI makes the lifecycle low friction and discoverabl"
+    },
+    {
+        "title": "VibeKB owns only .vibekb/; everything else is an adapter or managed block",
+        "summary": "Installation consolidates the entire VibeKB-owned footprint under `.vibekb/` (runtime, reference, prompts, model). Files outside it are optional adapters — namespaced files VibeKB owns inside a shared tool directory, or a single clearly marked managed block inside a shared, user-owned file (AGENTS.md, CLAUDE.md). VibeKB never owns generic root files, and the payload manifest remaps embedded source paths to `.vibekb/`-relative destinations on install.",
+        "type": "decision",
+        "url": "../why/decisions/repository-safety-consolidation.html",
+        "body": "Context The pre 2.0 installer wrote a large footprint into the target repository root : seven Markdown files including CLAUDE.md and AGENTS.md , which are owned by the user and by coding agents , plus guide/ , tools/ , template/ , prompts/ , and .cursor/ . It could create CLAUDE.md / AGENTS.md where none existed and overwrite them under force . Users could reasonably fear running vibekb install . in an existing project — the audit is recorded in docs/REPOSITORY FOOTPRINT AUDIT.md . Decision Establish a three category ownership model see docs/REPOSITORY SAFETY.md : VibeKB owned — everything under .vibekb/ , plus namespaced adapters .cursor/rules/vibekb.mdc , .github/instructions/vibekb.instructions.md . Safe to create, refresh, and remove. Shared — AGENTS.md , CLAUDE.md , and similar. VibeK"
     },
     {
         "title": "Two output modes over one source and one template set",
@@ -840,17 +861,17 @@
         "body": "Mode A — the dynamic guide on shared hosting .cpanel.yml rsyncs the runtime paths index.php , assets/ , guide/ , .vibekb/ into a cPanel public folder and excludes development only paths tools/ , prompts/ , docs/ , authoring docs, examples/ . Query string routing means no .htaccess rewrite rules are needed and the app runs in a subfolder. .vibekb/ must deploy — it is the content. Mode B — the static snapshot php tools/generate static.php builds /docs ; publish it via GitHub Pages Settings → Pages → branch → /docs or any static host. Relative links make it work at a web root or under a repository subpath. No PHP, database, CDN, or network required. Deployment is part of the application Whenever repository structure, runtime folders, or deployment requirements change, .cpanel.yml and DEPLOYME"
     },
     {
-        "title": "Website curl installer as product entry point",
-        "summary": "Complete — install.sh + /install rewrite, homepage/docs updated; smoke-tested against v0.1.0.",
+        "title": "Repository-safety redesign of the installer footprint",
+        "summary": "Complete — audit, consolidated payload map, managed-block engine, safe install flags, install manifest, migration, uninstall, doctor footprint, layout-aware PHP, tests, and docs. Verified via go test + end-to-end install/uninstall/migrate and `php tools/vibekb.php check`.",
         "type": "current work",
         "url": "../current-work/index.html",
-        "body": "Status Complete. See handoff."
+        "body": "Status Complete. See handoff for the full summary, verification, and any residual limits."
     },
     {
         "title": "Current handoff",
-        "summary": "Product CLI install is now curl | sh from iainreid.dev/vibekb/install.sh (GitHub Releases behind the scenes). Homepage primary path updated. Next after deploy: confirm /install.sh and /install on the live host; then code signing.",
+        "summary": "Repository-safety redesign shipped. `vibekb install .` now writes everything VibeKB owns under `.vibekb/` and integrates with shared files (AGENTS.md, CLAUDE.md) only through namespaced adapters or a single marked managed block. New commands `migrate` and `uninstall`, a per-install manifest `.vibekb/install.json`, doctor footprint checks, and a layout-aware PHP core. Verified via go test + end-to-end runs + `check`.",
         "type": "handoff",
         "url": "../handoff/index.html",
-        "body": "Current state install.sh is the website installer macOS/Linux, arm64/amd64 → latest release asset → /usr/local/bin or ~/.local/bin → vibekb version . .htaccess rewrites /install to the same script. Homepage step 1 is the curl one liner; Releases is a secondary manual link. Docs README, INSTALLER, RELEASE, DEPLOYMENT, ARCHITECTURE match. Verification completed sh n install.sh End to end smoke against live v0.1.0 linux/amd64 into a temp dir; vibekb version OK Homepage render: curl command primary; no primary Download latest release CTA php tools/vibekb.php check + generate this commit Unresolved / next Live cPanel deploy must publish install.sh and .htaccess . Confirm both URLs on https://iainreid.dev/vibekb/ after deploy. Code signing remains the next hardening milestone; checksum verificat"
+        "body": "Current state Ownership model docs/REPOSITORY SAFETY.md : VibeKB owns only .vibekb/ plus namespaced adapters; shared files get a single <! VIBEKB:START v1 … <! VIBEKB:END managed block. Nothing at the repo root by default. Payload manifest template/manifest.json schema 2 is a src → dest map : the binary embeds VibeKB's dev layout but installs it under .vibekb/runtime/ , .vibekb/reference/ , .vibekb/prompts/ . Managed block engine internal/installer/block.go : insert/update/remove, idempotent, CRLF/LF and trailing newline aware, malformed/duplicate markers → reported conflict never a silent rewrite . Safe install installer.go / plan.go / apply.go : flags dry run , knowledge only / no integrations , integrate <list , narrowed force ; atomic writes; shared file backups under .vibekb/backups/ "
     }
 ]

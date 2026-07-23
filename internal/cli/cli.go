@@ -11,17 +11,18 @@ import (
 	"github.com/cubixmeow-commits/vibekb/internal/phpcore"
 )
 
-// delegatedCommands map a vibekb subcommand to the PHP script (relative to the
-// repository root) that owns its behaviour. These are the operations that touch
-// the content model; keeping one PHP implementation avoids a second, drift-prone
+// delegatedCommands are the subcommands whose behaviour is owned by the PHP
+// self-maintenance CLI. The script's location is discovered at runtime (it moved
+// under .vibekb/runtime/tools in consolidated installs), so we only track the
+// command names here; keeping one PHP implementation avoids a second, drift-prone
 // model loader in Go.
-var delegatedCommands = map[string]string{
-	"status":    "tools/vibekb.php",
-	"check":     "tools/vibekb.php",
-	"affected":  "tools/vibekb.php",
-	"bootstrap": "tools/vibekb.php",
-	"validate":  "tools/vibekb.php",
-	"generate":  "tools/vibekb.php",
+var delegatedCommands = map[string]bool{
+	"status":    true,
+	"check":     true,
+	"affected":  true,
+	"bootstrap": true,
+	"validate":  true,
+	"generate":  true,
 }
 
 // Run dispatches a vibekb invocation and returns a process exit code.
@@ -43,10 +44,14 @@ func Run(args []string) int {
 	case "install":
 		// Fully native: copies embedded payload and scaffolds .vibekb/ with no PHP.
 		return installer.Run(rest)
+	case "uninstall":
+		return installer.Uninstall(rest)
+	case "migrate":
+		return installer.Migrate(rest)
 	}
 
-	if script, ok := delegatedCommands[cmd]; ok {
-		return delegate(cmd, script, rest)
+	if delegatedCommands[cmd] {
+		return delegate(cmd, rest)
 	}
 
 	fmt.Fprintf(os.Stderr, "vibekb: unknown command %q\n\n", cmd)
@@ -56,10 +61,10 @@ func Run(args []string) int {
 
 // delegate forwards a model-semantic subcommand to the PHP self-maintenance CLI,
 // after confirming the environment can run it.
-func delegate(subcommand, script string, rest []string) int {
+func delegate(subcommand string, rest []string) int {
 	rt := phpcore.Discover()
-	if rt.RepoRoot == "" {
-		fmt.Fprintln(os.Stderr, "vibekb: not inside a VibeKB repository (no tools/vibekb.php or .vibekb/ found above the current directory).")
+	if rt.RepoRoot == "" || rt.ToolsScript == "" {
+		fmt.Fprintln(os.Stderr, "vibekb: not inside a VibeKB repository (no .vibekb/runtime/tools/vibekb.php or tools/vibekb.php found above the current directory).")
 		fmt.Fprintln(os.Stderr, "Run this from a repository where VibeKB is installed, or run `vibekb install` first.")
 		return 1
 	}
@@ -68,7 +73,7 @@ func delegate(subcommand, script string, rest []string) int {
 		return 1
 	}
 	// The PHP CLI expects its own subcommand as the first argument.
-	return rt.Delegate(script, append([]string{subcommand}, rest...))
+	return rt.Delegate(rt.ToolsScript, append([]string{subcommand}, rest...))
 }
 
 func reportMissingPHP(subcommand string) {
@@ -102,7 +107,12 @@ Model commands (delegated to the PHP core):
   generate            Regenerate the static /docs snapshot.
 
 Native install (no PHP required):
-  install [target]    Install VibeKB into a repository from the embedded payload.
+  install [target]    Install VibeKB into a repository (everything under .vibekb/).
+  migrate [target]    Consolidate a legacy root-level install under .vibekb/.
+  uninstall [target]  Remove VibeKB-owned files and managed blocks safely.
+
+Repository-safety: VibeKB owns only .vibekb/ plus namespaced adapters and clearly
+marked managed blocks. See docs/REPOSITORY_SAFETY.md.
 
 Run 'vibekb doctor' first if a delegated command reports a missing runtime.
 See ARCHITECTURE.md for how the Go front-end and the PHP core fit together.

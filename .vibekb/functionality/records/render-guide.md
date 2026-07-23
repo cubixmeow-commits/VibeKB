@@ -10,7 +10,7 @@ user_facing: true
 trigger: A browser requests guide/index.php (optionally with ?view= and ?id=).
 updated: 2026-07-22
 tags: [guide, routing, rendering, mode-a]
-files: [guide/index.php, guide/templates/layout.php, guide/lib/nav.php, guide/lib/UrlStrategy.php, guide/lib/helpers.php]
+files: [guide/index.php, guide/templates/layout.php, guide/lib/nav.php, guide/lib/UrlStrategy.php, guide/lib/helpers.php, guide/lib/workspace.php]
 reads: [.vibekb]
 writes: []
 config: [VIBEKB_DEV, VIBEKB_CONTENT_ROOT]

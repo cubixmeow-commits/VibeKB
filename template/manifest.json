@@ -1,68 +1,88 @@
 {
-  "template_version": "1.0.0",
+  "template_version": "2.0.0",
+  "schema_version": 2,
   "vibekb_content_model": "functionality-first",
-  "description": "Definition of a VibeKB installation: the VibeKB-owned runtime payload copied into a target repository, the project-owned paths the installer must never overwrite, and where the fresh starter model comes from. This file is the single source of truth for the installed file set — the native Go installer parses it (from its embedded copy) and the install.php compatibility wrapper defers to it. The set of installed files is declared here, not hard-coded in either installer.",
+  "home": ".vibekb",
+  "description": "Definition of a VibeKB installation. VibeKB owns .vibekb/ and nothing else outright: the runtime, reference docs, prompts, and starter model are all consolidated under .vibekb/ via the payload map below (src is repo-root-relative in VibeKB's own tree — what the binary embeds — and dest is where it is written in a target repository). Files outside .vibekb/ are optional adapters: 'namespaced' files VibeKB owns inside a shared tool directory, and 'managed-block' sections inserted into shared, user-owned files. This file is the single source of truth for the installed file set — the native Go installer parses it (from its embedded copy). See docs/REPOSITORY_SAFETY.md.",
   "payload": {
-    "note": "Repository-root-relative paths that belong to VibeKB. Copied on install and refreshed on upgrade. Directories are copied recursively. These are safe to overwrite when upgrading because they are VibeKB's runtime, not your application's code.",
-    "runtime": [
-      "guide",
-      "tools",
-      "template/starter"
-    ],
-    "agent": [
-      "prompts",
-      ".cursor"
-    ],
-    "docs": [
-      "CLAUDE.md",
-      "AGENTS.md",
-      "PRODUCT.md",
-      "SCHEMA.md",
-      "INITIALIZE.md",
-      "MAINTENANCE.md",
-      "INSTALLER.md"
+    "note": "VibeKB-owned, consolidated under .vibekb/. Copied on install and refreshed on upgrade. Directory srcs are copied recursively, preserving their internal structure under dest. These are safe to overwrite on upgrade because they are VibeKB's runtime and reference, not your application's code.",
+    "map": [
+      { "src": "guide",            "dest": ".vibekb/runtime/guide" },
+      { "src": "tools",            "dest": ".vibekb/runtime/tools" },
+      { "src": "template/starter", "dest": ".vibekb/runtime/template/starter" },
+      { "src": "prompts/INTEGRATE_VIBEKB.md", "dest": ".vibekb/prompts/INTEGRATE_VIBEKB.md" },
+      { "src": "template/integrations/WORKFLOW.md", "dest": ".vibekb/reference/WORKFLOW.md" },
+      { "src": "PRODUCT.md",     "dest": ".vibekb/reference/PRODUCT.md" },
+      { "src": "SCHEMA.md",      "dest": ".vibekb/reference/SCHEMA.md" },
+      { "src": "INITIALIZE.md",  "dest": ".vibekb/reference/INITIALIZE.md" },
+      { "src": "MAINTENANCE.md", "dest": ".vibekb/reference/MAINTENANCE.md" },
+      { "src": "INSTALLER.md",   "dest": ".vibekb/reference/INSTALLER.md" }
     ]
   },
-  "preserve": {
-    "note": "Project-owned knowledge. The installer creates it once (fresh) and NEVER overwrites it on upgrade unless explicitly forced.",
-    "paths": [
-      ".vibekb"
-    ]
+  "integrations": {
+    "note": "Optional adapters outside .vibekb/. 'namespaced' adapters are VibeKB-owned files that live inside a shared tool directory (safe to create and replace, never touching sibling files). 'managed-block' adapters edit a shared, user-owned file only inside a single marked block, preserving everything else byte-for-byte. Selection: by default a namespaced adapter installs only when its tool directory already exists, and a managed-block adapter applies only when its target file already exists; `--integrate <name,...>` forces specific adapters; `--no-integrations` / `--knowledge-only` skip them all.",
+    "adapters": {
+      "cursor": {
+        "type": "namespaced",
+        "src": "template/integrations/cursor.mdc",
+        "dest": ".cursor/rules/vibekb.mdc",
+        "detect": [".cursor"],
+        "default_when": "detected"
+      },
+      "copilot": {
+        "type": "namespaced",
+        "src": "template/integrations/vibekb.instructions.md",
+        "dest": ".github/instructions/vibekb.instructions.md",
+        "detect": [".github"],
+        "default_when": "detected"
+      },
+      "agents": {
+        "type": "managed-block",
+        "dest": "AGENTS.md",
+        "block_src": "template/integrations/agents-block.md",
+        "default_when": "exists"
+      },
+      "claude": {
+        "type": "managed-block",
+        "dest": "CLAUDE.md",
+        "block_src": "template/integrations/agents-block.md",
+        "default_when": "exists"
+      }
+    }
   },
-  "generated": {
-    "note": "Produced by `php tools/vibekb.php generate`, not by the installer. Not part of the payload.",
-    "paths": [
-      "docs"
-    ]
+  "block_markers": {
+    "note": "Managed-block delimiters inserted into shared files. The pair is matched on install to update in place; content outside it is never altered. version lets a future format change be detected and re-rendered.",
+    "start": "<!-- VIBEKB:START",
+    "start_suffix": "-->",
+    "end": "<!-- VIBEKB:END -->",
+    "version": 1
   },
-  "not_installed": {
-    "note": "Deliberately excluded from a target repository. The marketing homepage (index.php, assets/) would collide with the target application's own root; VibeKB's own model, examples, generated docs, host-specific deploy config, and the Go developer CLI (a separately distributed binary, not per-repo runtime) are VibeKB-repo-only.",
-    "paths": [
-      "index.php",
-      "assets",
-      ".vibekb",
-      "examples",
-      "docs",
-      ".cpanel.yml",
-      "DEPLOYMENT.md",
-      "TOKEN_ECONOMICS.md",
-      "BUILD_REPORT.md",
-      "ARCHITECTURE.md",
-      "RELEASE.md",
-      ".github",
-      "install.php",
-      "template/manifest.json",
-      "template/README.md",
-      "cmd",
-      "internal",
-      "go.mod",
-      "go.sum"
-    ]
+  "manifest_file": {
+    "note": "The installation manifest VibeKB writes to record ownership, provenance, and hashes so upgrades, doctor, migration, and uninstall are safe. Stores no absolute paths.",
+    "path": ".vibekb/install.json"
   },
   "starter_model": {
-    "note": "The fresh .vibekb/ workspace is produced from a single canonical, language-neutral definition under template/starter/ (a starter.json directory list plus a files/ tree with {{DATE}} and {{PROJECT_NAME_JSON}} tokens). template/starter/ IS installed into the target so `php tools/vibekb.php bootstrap` can repair the workspace from the same data the native Go installer embeds. There is no second, code-embedded starter copy: tools/lib/Starter.php reads these files, and the Go installer embeds them.",
+    "note": "The fresh .vibekb/ model is produced from a single canonical, language-neutral definition. In a target repository the definition is installed at .vibekb/runtime/template/starter so `php .vibekb/runtime/tools/vibekb.php bootstrap` can repair the workspace from the same data the native Go installer embeds. The model files land directly under .vibekb/ (root), NOT under runtime/.",
     "root": ".vibekb",
-    "definition": "template/starter",
+    "definition_src": "template/starter",
+    "definition_installed": ".vibekb/runtime/template/starter",
     "readers": ["tools/lib/Starter.php", "cmd/vibekb (embedded)"]
+  },
+  "legacy": {
+    "note": "Paths a pre-2.0 (root-level) VibeKB install placed in a target repository. Migration relocates recognised, unmodified copies under .vibekb/ and leaves anything ambiguous in place with a report. Never delete on filename alone.",
+    "root_docs": ["CLAUDE.md", "AGENTS.md", "PRODUCT.md", "SCHEMA.md", "INITIALIZE.md", "MAINTENANCE.md", "INSTALLER.md"],
+    "root_dirs": ["guide", "tools", "template", "prompts"],
+    "state_file": ".vibekb/.installer.json"
+  },
+  "not_installed": {
+    "note": "Deliberately excluded from a target repository. The marketing homepage (index.php, assets/) would collide with the target application's own root; VibeKB's own model, examples, generated docs, host-specific deploy config, and the Go developer CLI (a separately distributed binary) are VibeKB-repo-only.",
+    "paths": [
+      "index.php", "assets", ".vibekb", "examples", "docs", ".cpanel.yml",
+      "DEPLOYMENT.md", "TOKEN_ECONOMICS.md", "BUILD_REPORT.md", "ARCHITECTURE.md",
+      "RELEASE.md", ".github", "install.php", "template/manifest.json",
+      "template/README.md", "cmd", "internal", "go.mod", "go.sum",
+      "CLAUDE.md", "AGENTS.md", "PRODUCT.md", "SCHEMA.md", "INITIALIZE.md",
+      "MAINTENANCE.md", "INSTALLER.md"
+    ]
   }
 }

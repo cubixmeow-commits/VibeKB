@@ -32,11 +32,13 @@ binary from GitHub Releases, and places `vibekb` on your `PATH`. Prefer to insta
 manually? Download binaries from
 [GitHub Releases](https://github.com/cubixmeow-commits/VibeKB/releases/latest).
 
-The binary embeds the VibeKB runtime (`guide/`, `tools/`, `prompts/`, `.cursor/`,
-the VibeKB docs, and the starter definition). It copies that payload into your
-repository, scaffolds a fresh, empty-but-valid `.vibekb/` workspace, and verifies
-the result — **without touching your application's code, without analysing it, and
-without launching PHP.** Then open your project in a coding agent (Claude Code,
+The binary embeds the VibeKB runtime (guide, CLI, reference docs, prompt, and the
+starter definition). It installs that payload **entirely under `.vibekb/`**,
+scaffolds a fresh, empty-but-valid model, and verifies the result — **without
+touching your application's code, without writing anything at your repository
+root, without analysing it, and without launching PHP.** VibeKB owns only
+`.vibekb/`; it never replaces your `README`, `AGENTS.md`, or `CLAUDE.md` (see
+[docs/REPOSITORY_SAFETY.md](./docs/REPOSITORY_SAFETY.md)). Then open your project in a coding agent (Claude Code,
 Cursor, Codex, …) and ask it to *build the first VibeKB model using
 `prompts/INTEGRATE_VIBEKB.md`*.
 
