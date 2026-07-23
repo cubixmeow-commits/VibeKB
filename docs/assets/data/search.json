@@ -875,17 +875,17 @@
         "body": "Mode A — the dynamic guide on shared hosting .cpanel.yml rsyncs the runtime paths index.php , assets/ , guide/ , .vibekb/ into a cPanel public folder and excludes development only paths tools/ , prompts/ , docs/ , authoring docs, examples/ . Query string routing means no .htaccess rewrite rules are needed and the app runs in a subfolder. .vibekb/ must deploy — it is the content. Mode B — the static snapshot php tools/generate static.php builds /docs ; publish it via GitHub Pages Settings → Pages → branch → /docs or any static host. Relative links make it work at a web root or under a repository subpath. No PHP, database, CDN, or network required. Deployment is part of the application Whenever repository structure, runtime folders, or deployment requirements change, .cpanel.yml and DEPLOYME"
     },
     {
-        "title": "Homepage Windows install requirements honesty",
-        "summary": "Complete. Homepage and README name Windows as a manual Releases download path; curl | sh remains macOS/Linux-only. install.sh unchanged.",
+        "title": "Public website under /website/",
+        "summary": "Complete. A self-contained static site lives at /website/ (index.html + assets/{css,js,data}). The hero centrepiece is an interactive functionality map drawn from real model data; proof uses the real Stoppr integration audit. No application functionality changed; the site is a presentation surface.",
         "type": "current work",
         "url": "../current-work/index.html",
-        "body": "Status Complete. Homepage Compatibility & Requirements list Windows; install step 1 points Windows users at GitHub Releases. Verified by rendering index.php and checking for the new strings."
+        "body": "Status Complete. /website/ is a static, no build step site built around the Live Repository Map real areas/capabilities/edges from .vibekb/ , with the Stoppr integration audit as real proof. Verified across mobile/tablet/desktop in headless Chromium: interactive map ≥ 720px, accessible fallback below that and without JavaScript, no horizontal overflow, side panel shows real record data. php tools/vibekb.php check → OK. See the handoff for the \"not modelled as functionality\" decision."
     },
     {
         "title": "Current handoff",
-        "summary": "Homepage install/compatibility copy now names Windows as a manual GitHub Releases path; curl | sh remains macOS/Linux-only. Ready for review/merge.",
+        "summary": "Added a self-contained static marketing site under /website/, built around an interactive \"Live Repository Map\" drawn from VibeKB's own model. It is a presentation surface, not modelled application functionality. Ready for review.",
         "type": "handoff",
         "url": "../handoff/index.html",
-        "body": "Current state Homepage install and compatibility no longer imply Windows is unsupported. Windows binaries remain release assets for manual download only vibekb windows amd64.exe / vibekb windows arm64.exe . install.sh is unchanged still refuses Windows and points at Releases . Product version remains 0.2.0 already released on main ; this is a copy fix. Completed work Updated index.php Installing / Current Requirements / step 1 manual link. README notes Windows manual binaries. Model: change record homepage windows install copy , functionality UX text, important files purpose/test hint, handoff/current. Verification Rendered homepage HTML contains Windows platform line, .exe download instructions, and updated manual link; old “macOS or Linux arm64…” install card line removed. php l index.ph"
+        "body": "Current state New static site at /website/ index.html + assets/{css,js,data} . Plain HTML/CSS/vanilla JS, no build step, subpath safe, works without JavaScript. Its hero centrepiece is the Live Repository Map : an interactive SVG of VibeKB's own 8 functional areas and their relationships, drawn from real model data in website/assets/data/model.js . The existing PHP homepage index.php is unchanged. /website/ is a parallel, fully static presentation of the product; it does not replace index.php . Completed work website/assets/data/model.js — real areas/capabilities transcribed from .vibekb/functionality/ and the vibekb architecture topology; cross area edges derived from record depends on links. website/assets/js/map.js — the map progressive enhancement over an accessible fallback list , web"
     }
 ]

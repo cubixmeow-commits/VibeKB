@@ -1,23 +1,27 @@
 ---
 id: current-work
 type: work
-title: Homepage Windows install requirements honesty
-objective: Stop implying Windows is unsupported when release binaries already ship; clarify curl installer is macOS/Linux while Windows installs via GitHub Releases.
-summary: Complete. Homepage and README name Windows as a manual Releases download path; curl | sh remains macOS/Linux-only. install.sh unchanged.
-requested_by: User (mobile screenshot of #compatibility)
+title: Public website under /website/
+objective: Build the public website VibeKB deserves — a serious, original developer-tool site (not a generic AI SaaS page) whose signature visual is an interactive Live Repository Map generated from VibeKB's own model.
+summary: Complete. A self-contained static site lives at /website/ (index.html + assets/{css,js,data}). The hero centrepiece is an interactive functionality map drawn from real model data; proof uses the real Stoppr integration audit. No application functionality changed; the site is a presentation surface.
+requested_by: User (website design & positioning brief)
 status: complete
 verification_state: verified-from-source
 updated: 2026-07-23
-affected_functionality: [run-the-developer-cli, install-into-a-repository, initialize-in-a-repository, deploy-and-stay-portable]
-expected_files: [index.php, README.md, .vibekb/memory/changes/homepage-windows-install-copy.md, .vibekb/functionality/records/run-the-developer-cli.md, .vibekb/functionality/records/install-into-a-repository.md, .vibekb/functionality/records/initialize-in-a-repository.md, .vibekb/functionality/records/deploy-and-stay-portable.md, .vibekb/files/important-files.json, .vibekb/work/handoff.md, .vibekb/work/current.md]
-data_impact: None — marketing/onboarding copy only; installer and release assets unchanged.
+affected_functionality: []
+expected_files: [website/index.html, website/assets/css/site.css, website/assets/js/map.js, website/assets/js/site.js, website/assets/data/model.js, website/README.md, .vibekb/work/handoff.md, .vibekb/work/current.md]
+data_impact: None — new static marketing site; application code, installer, and .vibekb model of functionality are unchanged.
 risks:
-  - Do not claim a Windows curl/PowerShell installer exists; only manual .exe download is supported.
-  - Do not imply Winget or Authenticode signing.
+  - website/assets/data/model.js is a hand-maintained snapshot; refresh it when VibeKB's own model changes.
+  - Keep it a presentation surface — do not model the marketing site as application functionality (product is locked).
 ---
 
 ## Status
 
-Complete. Homepage Compatibility & Requirements list Windows; install step 1
-points Windows users at GitHub Releases. Verified by rendering `index.php` and
-checking for the new strings.
+Complete. `/website/` is a static, no-build-step site built around the Live
+Repository Map (real areas/capabilities/edges from `.vibekb/`), with the Stoppr
+integration audit as real proof. Verified across mobile/tablet/desktop in headless
+Chromium: interactive map ≥ 720px, accessible fallback below that and without
+JavaScript, no horizontal overflow, side panel shows real record data.
+`php tools/vibekb.php check` → OK. See the handoff for the "not modelled as
+functionality" decision.
